@@ -2,11 +2,18 @@
 
 Model::Model() { }
 
-Model::Model(const Model & other) { }
+Model::Model(const Model& other) { }
 
-Model::~Model() { 
+Model::~Model() { }
 
 bool Model::Start(OpenGL * openGL)
+{
+	BuildTriangle(openGL);
+
+	return true;
+}
+
+void Model::BuildTriangle(OpenGL* openGL)
 {
 	Vertex* vertices;
 	unsigned int* indices;
@@ -46,7 +53,7 @@ bool Model::Start(OpenGL * openGL)
 
 	// Setting the location and size of the attributes
 	openGL->glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	openGL->glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0); 
+	openGL->glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0);
 	openGL->glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	openGL->glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
 
@@ -57,8 +64,6 @@ bool Model::Start(OpenGL * openGL)
 	// Clearing from memeory
 	delete[]vertices; vertices = nullptr;
 	delete[]indices; indices = nullptr;
-
-	return true;
 }
 
 void Model::Stop(OpenGL * openGL)

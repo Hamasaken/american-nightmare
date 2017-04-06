@@ -12,7 +12,6 @@ Game::Game(const Game& other) { }
 
 Game::~Game() { }
 
-
 bool Game::Start(OpenGL* openGL, HWND hwnd)
 {
 	m_openGL = openGL;
@@ -46,7 +45,6 @@ bool Game::Start(OpenGL* openGL, HWND hwnd)
 void Game::SetStartVariables()
 {
 	m_camera->setPosition(glm::vec3(0, 0, 10.f));
-	m_camera->setRotation(glm::vec3(0, 0, 0));
 }
 
 void Game::Stop()

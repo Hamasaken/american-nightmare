@@ -10,6 +10,7 @@ public:
 	Model(const Model& other);
 	~Model();
 
+	void BuildTriangle(OpenGL* openGL);
 	bool Start(OpenGL* openGL);
 	void Stop(OpenGL* openGL);
 	void Draw(OpenGL* openGL);
