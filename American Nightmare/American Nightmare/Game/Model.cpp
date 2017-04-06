@@ -6,13 +6,6 @@ Model::Model(const Model& other) { }
 
 Model::~Model() { }
 
-bool Model::Start(OpenGL * openGL)
-{
-	BuildTriangle(openGL);
-
-	return true;
-}
-
 void Model::BuildTriangle(OpenGL* openGL)
 {
 	Vertex* vertices;
@@ -64,6 +57,12 @@ void Model::BuildTriangle(OpenGL* openGL)
 	// Clearing from memeory
 	delete[]vertices; vertices = nullptr;
 	delete[]indices; indices = nullptr;
+}
+
+bool LoadModel(OpenGL* openGL, std::string modelPath)
+{
+	// Load model from file
+	return true;
 }
 
 void Model::Stop(OpenGL * openGL)

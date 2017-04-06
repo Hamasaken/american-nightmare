@@ -27,7 +27,8 @@ bool Game::Start(OpenGL* openGL, HWND hwnd)
 	////////////////////////////////////////////////////////////
 	m_model = new Model();
 	if (m_model == nullptr) return false;
-	if (!m_model->Start(openGL)) return false;
+	m_model->BuildTriangle(openGL); // TEMP
+	// if (m_model->LoadModel(openGL, "Path/To/Model.file")) return false;
 
 	////////////////////////////////////////////////////////////
 	// Creating Shaders
