@@ -9,7 +9,7 @@ public:
 	Model();
 	Model(const Model& other);
 	~Model();
-	
+
 	////////////////////////////////////////////////////////////
 	// TEMPORARY FUNCTION, REPLACE THIS WITH LOADMODEL WHEN DONE
 	////////////////////////////////////////////////////////////
@@ -33,6 +33,8 @@ public:
 	void Draw(OpenGL* openGL);
 
 private:
+	sf::Sprite sprite;
+
 	unsigned int vertexArray;
 	unsigned int vertexBuffer;
 	unsigned int indexBuffer;

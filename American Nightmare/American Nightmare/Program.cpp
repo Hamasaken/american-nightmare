@@ -97,14 +97,14 @@ bool Program::Run()
 	{
 		// Windows sends messages direcly to callback function, but some are placed in queue. (keyboard/mouse inputs mostly)
 		// Each loop, we check if something is in the queue. If one is found, we translate it and dispatch it.
-		if (PeekMessage(&msg, NULL, NULL, NULL, PREMOVE))
+		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
 		{
 			TranslateMessage(&msg); // converts virtual keys messages to character input messages
 			DispatchMessage(&msg); // sends message of to window procedure 
 		}
 
 		// Checking to see if windows signals to quit
-		if (msg.message == WQUIT)
+		if (msg.message == WM_QUIT)
 			done = true;
 
 		// Updating everything
@@ -162,8 +162,8 @@ bool Program::StartWindow()
 	hwnd = NULL;
 
 	// Getting resolution from computer
-	screenSize.x = GetSystemMetrics(SCXSCREEN);
-	screenSize.y = GetSystemMetrics(SCYSCREEN);
+	screenSize.x = GetSystemMetrics(SM_CXSCREEN);
+	screenSize.y = GetSystemMetrics(SM_CYSCREEN);
 
 	// Fullscreen or not, different settings
 	if (FULL_SCREEN_ON)
@@ -174,7 +174,7 @@ bool Program::StartWindow()
 		dmScreenSettings.dmPelsWidth = (unsigned long)screenSize.x;
 		dmScreenSettings.dmPelsHeight = (unsigned long)screenSize.y;
 		dmScreenSettings.dmBitsPerPel = 64;
-		dmScreenSettings.dmFields = DBITSPERPEL | DPELSWIDTH | DPELSHEIGHT;
+		dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
 		// Change the display settings to full screen.
 		ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
@@ -188,8 +188,8 @@ bool Program::StartWindow()
 		screenSize = DEFAULT_SCREEN_SIZE;
 
 		// Placing the window in the center 
-		posX = (GetSystemMetrics(SCXSCREEN) - screenSize.x) / 2;
-		posY = (GetSystemMetrics(SCYSCREEN) - screenSize.y) / 2;
+		posX = (GetSystemMetrics(SM_CXSCREEN) - screenSize.x) / 2;
+		posY = (GetSystemMetrics(SM_CYSCREEN) - screenSize.y) / 2;
 	}
 
 	hwnd = CreateWindowEx(WS_EX_APPWINDOW, appName.c_str(), appName.c_str(), WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
@@ -250,7 +250,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM 
 	switch (umessage)
 	{
 		// Check if we're closed 
-	case WCLOSE:
+	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;
 

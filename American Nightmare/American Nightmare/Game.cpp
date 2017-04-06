@@ -14,7 +14,7 @@ Game::~Game() { }
 
 bool Game::Start(OpenGL* openGL, HWND hwnd)
 {
-	openGL = openGL;
+	this->openGL = openGL;
 
 	////////////////////////////////////////////////////////////
 	// Creating Camera
