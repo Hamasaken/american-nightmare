@@ -71,6 +71,8 @@ bool SolidShader::SetParameters(OpenGL* openGL, glm::mat4 world, glm::mat4 view,
 	location = openGL->glGetUniformLocation(m_shaderProgram, "projection");
 	if (location == -1) return false;
 	openGL->glUniformMatrix4fv(location, 1, transpose, glm::value_ptr(projection));
+
+	return true;
 }
 
 std::string SolidShader::getSource(std::string path)

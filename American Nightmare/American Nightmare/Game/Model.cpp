@@ -4,15 +4,15 @@ Model::Model() { }
 
 Model::Model(const Model & other) { }
 
-Model::~Model() { }
+Model::~Model() { 
 
 bool Model::Start(OpenGL * openGL)
 {
 	Vertex* vertices;
 	unsigned int* indices;
 
-	vertexCount = 6;
-	indexCount = 6;
+	vertexCount = 3;
+	indexCount = 3;
 	vertices = new Vertex[vertexCount];
 	indices = new unsigned int[indexCount];
 
@@ -23,14 +23,6 @@ bool Model::Start(OpenGL * openGL)
 	vertices[1].setColor(glm::vec3(1, 1, 0));
 	vertices[2].setPosition(glm::vec3(-1, -1, 0));
 	vertices[2].setColor(glm::vec3(0, 1, 1));
-	
-	// Triangle 2
-	vertices[3].setPosition(glm::vec3(0, 1, -2));
-	vertices[3].setColor(glm::vec3(1, 1, 1));
-	vertices[4].setPosition(glm::vec3(1, -1, -2));
-	vertices[4].setColor(glm::vec3(1, 1, 1));
-	vertices[5].setPosition(glm::vec3(-1, -1, -2));
-	vertices[5].setColor(glm::vec3(1, 1, 1));
 
 
 	for (int i = 0; i < indexCount; i++)

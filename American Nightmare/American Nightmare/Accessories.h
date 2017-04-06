@@ -2,8 +2,8 @@
 #define ACCESSORIES_H
 
 // Including various opengl math classes & functions
-#include <glm\glm.hpp>	
-#include <glm\mat4x4.hpp>		// 4x4 matrices
+#include <glm/glm.hpp>	
+#include <glm/mat4x4.hpp>		// 4x4 matrices
 #include <glm/gtc/matrix_transform.hpp>	// matrix stuff
 #include <glm/gtc/constants.hpp>	// pi
 #include <glm/gtc/type_ptr.hpp>		// value_ptr
