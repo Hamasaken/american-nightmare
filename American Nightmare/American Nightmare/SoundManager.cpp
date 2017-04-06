@@ -19,7 +19,8 @@ SoundManager::~SoundManager() { }
 sf::Sound SoundManager::loadSFX(std::string path)
 {
 	// Load a specific SFX
-	if (!buffer[nrOfSound].loadFromFile(path)) exit(52);
+	if (!buffer[nrOfSound].loadFromFile(path)) 
+		std::runtime_error("Could not load SFX from path: " + path);
 	else nrOfSound++;
 
 	return sf::Sound(buffer[nrOfSound - 1]);
@@ -78,29 +79,7 @@ void SoundManager::playSFX(SFX effect)
 	}
 }
 
-void SoundManager::playModifiedSFX(SFX effect, float volume)
-{
-	if (SFX_ON)
-	{
-		int nrOfSFX = static_cast<int>(effect);
-
-		sfx[nrOfSFX].setVolume(volume);
-		sfx[nrOfSFX].play();
-	}
-}
-
-void SoundManager::playPitchedSFX(SFX effect, float offset)
-{
-	if (SFX_ON)
-	{
-		int nrOfSFX = static_cast<int>(effect);
-
-		sfx[nrOfSFX].setPitch(getRandomFloat(1 - offset, 1 + offset));
-		sfx[nrOfSFX].play();
-	}
-}
-
-void SoundManager::playBothSFX(SFX effect, float volume, float offset)
+void SoundManager::playModifiedSFX(SFX effect, float volume, float offset)
 {
 	if (SFX_ON)
 	{
@@ -125,10 +104,13 @@ void SoundManager::playSong(SONG song)
 
 void SoundManager::switchToMusic(SONG song)
 {
-	if (int(song) != nrOfMusicPlayingCurrently)
+	if (MUSIC_ON)
 	{
-		pauseMusic();
-		playSong(song);
+		if (int(song) != nrOfMusicPlayingCurrently)
+		{
+			pauseMusic();
+			playSong(song);
+		}
 	}
 }
 
