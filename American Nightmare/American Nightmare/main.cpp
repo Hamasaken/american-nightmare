@@ -1,12 +1,11 @@
 #include <iostream>
+#include <string>
 
 int main()
 {
-	int i = 0; 
-
-	int j = 0;
-
-	int fuck = 0;
+	std::string test = "Testing again.";
+	std::string test2 = "Testing another time.";
+	std::string test3 = "Another time.";
 
 	return 0;
 }
