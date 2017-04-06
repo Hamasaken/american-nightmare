@@ -8,7 +8,7 @@ int main()
 	std::string test3 = "Another time.";
 	// test
 	// jnsd
-	/ ajsdnfjnsdf
+	// ajsdnfjnsdf
 
 	return 0;
 }
