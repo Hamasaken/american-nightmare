@@ -6,8 +6,8 @@
 
 // INCLUDES
 #include "Game.h"
-#include "Input.h"
 #include "OpenGL.h"
+#include <SFML\Window\Keyboard.hpp>
 
 // DEFINES
 #define APP_NAME		L"American Nightmare"
@@ -45,7 +45,6 @@ private:
 
 	OpenGL* m_openGL;
 	Game* m_game;
-	Input* m_input;
 	std::wstring m_appName;
 	HINSTANCE m_hInstance;
 	HWND m_hwnd;

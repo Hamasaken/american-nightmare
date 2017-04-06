@@ -3,7 +3,7 @@
 Program::Program()
 {
 	m_game = nullptr;
-	m_input = nullptr; 
+	m_openGL = nullptr;
 }
 
 Program::Program(const Program& other) { }
@@ -38,14 +38,6 @@ bool Program::Start()
 		return false;
 	}
 
-	////////////////////////////////////////////////////////////
-	// Starting Input Object
-	// - User Input, Mouse + Keyboard
-	////////////////////////////////////////////////////////////
-	m_input = new Input();
-	if (m_input == nullptr) return false;
-	m_input->Start();
-
 	// Setting self-pointer
 	pgr = this;
 
@@ -68,13 +60,6 @@ void Program::Stop()
 		m_openGL->Stop(m_hwnd);
 		delete m_openGL;
 		m_openGL = nullptr;
-	}
-
-	// Deleting input
-	if (m_input != nullptr)
-	{
-		delete m_input;
-		m_input = nullptr;
 	}
 
 	pgr = nullptr;
@@ -230,8 +215,8 @@ void Program::StopWindow()
 
 bool Program::Update() 
 {
-	// Getting input
-	if (!m_input->Update())
+	// Check if user exits
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
 		return false;
 
 	// Update game
