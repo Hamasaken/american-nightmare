@@ -13,42 +13,42 @@ void SolidShader::Start(OpenGL* openGL, HWND hwnd, std::string vs, std::string f
 	std::string fragmentShaderBuffer = getSource(fs);
 
 	// Create the shader variables
-	m_vertexShader = openGL->glCreateShader(GL_VERTEX_SHADER);
-	m_fragmentShader = openGL->glCreateShader(GL_FRAGMENT_SHADER);
+	vertexShader = openGL->glCreateShader(GL_VERTEX_SHADER);
+	fragmentShader = openGL->glCreateShader(GL_FRAGMENT_SHADER);
 
 	// Compile the files
-	m_vertexShader = compileShader(openGL, vertexShaderBuffer, GL_VERTEX_SHADER);
-	m_fragmentShader = compileShader(openGL, fragmentShaderBuffer, GL_FRAGMENT_SHADER);
+	vertexShader = compileShader(openGL, vertexShaderBuffer, GL_VERTEX_SHADER);
+	fragmentShader = compileShader(openGL, fragmentShaderBuffer, GL_FRAGMENT_SHADER);
 
 	// Create the program
-	m_shaderProgram = openGL->glCreateProgram();
+	shaderProgram = openGL->glCreateProgram();
 
 	// Attach shaders
-	openGL->glAttachShader(m_shaderProgram, m_vertexShader);
-	openGL->glAttachShader(m_shaderProgram, m_fragmentShader);
+	openGL->glAttachShader(shaderProgram, vertexShader);
+	openGL->glAttachShader(shaderProgram, fragmentShader);
 
 	// Attributes locations
-	openGL->glBindAttribLocation(m_shaderProgram, 0, "inputPosition");
-	openGL->glBindAttribLocation(m_shaderProgram, 1, "inputColor");
+	openGL->glBindAttribLocation(shaderProgram, 0, "inputPosition");
+	openGL->glBindAttribLocation(shaderProgram, 1, "inputColor");
 
 	// Link program
-	openGL->glLinkProgram(m_shaderProgram);
+	openGL->glLinkProgram(shaderProgram);
 }
 
 void SolidShader::Stop(OpenGL* openGL)
 {
 	// Detach and delete!
-	openGL->glDetachShader(m_shaderProgram, m_vertexShader);
-	openGL->glDetachShader(m_shaderProgram, m_fragmentShader);
-	openGL->glDeleteShader(m_vertexShader);
-	openGL->glDeleteShader(m_fragmentShader);
-	openGL->glDeleteProgram(m_shaderProgram);
+	openGL->glDetachShader(shaderProgram, vertexShader);
+	openGL->glDetachShader(shaderProgram, fragmentShader);
+	openGL->glDeleteShader(vertexShader);
+	openGL->glDeleteShader(fragmentShader);
+	openGL->glDeleteProgram(shaderProgram);
 }
 
 void SolidShader::SetShader(OpenGL* openGL)
 {
 	// Setting as active
-	openGL->glUseProgram(m_shaderProgram);
+	openGL->glUseProgram(shaderProgram);
 }
 
 bool SolidShader::SetParameters(OpenGL* openGL, glm::mat4 world, glm::mat4 view, glm::mat4 projection)
@@ -58,17 +58,17 @@ bool SolidShader::SetParameters(OpenGL* openGL, glm::mat4 world, glm::mat4 view,
 	GLboolean transpose = GL_FALSE;
 
 	// Loading world matrix (We first find the position and then put it in that position!)
-	location = openGL->glGetUniformLocation(m_shaderProgram, "world");
+	location = openGL->glGetUniformLocation(shaderProgram, "world");
 	if (location == -1) return false;
 	openGL->glUniformMatrix4fv(location, 1, transpose, glm::value_ptr(world));
 
 	// Loading view matrix
-	location = openGL->glGetUniformLocation(m_shaderProgram, "view");
+	location = openGL->glGetUniformLocation(shaderProgram, "view");
 	if (location == -1) return false;
 	openGL->glUniformMatrix4fv(location, 1, transpose, glm::value_ptr(view));
 
 	// Loading projection matrix
-	location = openGL->glGetUniformLocation(m_shaderProgram, "projection");
+	location = openGL->glGetUniformLocation(shaderProgram, "projection");
 	if (location == -1) return false;
 	openGL->glUniformMatrix4fv(location, 1, transpose, glm::value_ptr(projection));
 

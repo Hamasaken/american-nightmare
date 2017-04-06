@@ -2,10 +2,10 @@
 
 Game::Game()
 {
-	m_openGL = nullptr;
-	m_solidShader = nullptr;
-	m_model = nullptr;
-	m_camera = nullptr;
+	openGL = nullptr;
+	solidShader = nullptr;
+	model = nullptr;
+	camera = nullptr;
 }
 
 Game::Game(const Game& other) { }
@@ -14,29 +14,29 @@ Game::~Game() { }
 
 bool Game::Start(OpenGL* openGL, HWND hwnd)
 {
-	m_openGL = openGL;
+	openGL = openGL;
 
 	////////////////////////////////////////////////////////////
 	// Creating Camera
 	////////////////////////////////////////////////////////////
-	m_camera = new Camera();
-	if (m_camera == nullptr) return false;
+	camera = new Camera();
+	if (camera == nullptr) return false;
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
 	////////////////////////////////////////////////////////////
-	m_model = new Model();
-	if (m_model == nullptr) return false;
-	m_model->BuildTriangle(openGL); // TEMP
-	// if (m_model->LoadModel(openGL, "Path/To/Model.file")) return false;
+	model = new Model();
+	if (model == nullptr) return false;
+	model->BuildTriangle(openGL); // TEMP
+	// if (model->LoadModel(openGL, "Path/To/Model.file")) return false;
 
 	////////////////////////////////////////////////////////////
 	// Creating Shaders
 	////////////////////////////////////////////////////////////
 	std::string shaderPath = SHADER_PATH; 
-	m_solidShader = new SolidShader();
-	if (m_solidShader == nullptr) return false;
-	m_solidShader->Start(openGL, hwnd, shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
+	solidShader = new SolidShader();
+	if (solidShader == nullptr) return false;
+	solidShader->Start(openGL, hwnd, shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
 	
 	SetStartVariables();
 
@@ -45,33 +45,33 @@ bool Game::Start(OpenGL* openGL, HWND hwnd)
 
 void Game::SetStartVariables()
 {
-	m_camera->setPosition(glm::vec3(0, 0, 10.f));
+	camera->setPosition(glm::vec3(0, 0, 10.f));
 }
 
 void Game::Stop()
 {
 	// Deleting Camera
-	if (m_camera != nullptr) 
+	if (camera != nullptr) 
 	{
-		delete m_camera;
-		m_camera = nullptr;
+		delete camera;
+		camera = nullptr;
 	}
 
 	// Deleting models
-	if (m_model != nullptr) 
+	if (model != nullptr) 
 	{
-		m_model->Stop(m_openGL);
-		m_model = nullptr;
+		model->Stop(openGL);
+		model = nullptr;
 	}
 
 	// Deleting shaders
-	if (m_solidShader != nullptr) 
+	if (solidShader != nullptr) 
 	{
-		m_solidShader->Stop(m_openGL);
-		m_solidShader = nullptr;
+		solidShader->Stop(openGL);
+		solidShader = nullptr;
 	}
 
-	m_openGL = nullptr;
+	openGL = nullptr;
 }
 
 bool Game::Update()
@@ -85,21 +85,21 @@ bool Game::Update()
 bool Game::Draw()
 {
 	// Starting draw section
-	m_openGL->StartDraw(CLEAR_COLOR);
+	openGL->StartDraw(CLEAR_COLOR);
 
-	m_camera->buildViewMatrix();
+	camera->buildViewMatrix();
 
-	glm::mat4 world = m_openGL->getWorldMatrix();
-	glm::mat4 view = m_camera->getViewMatrix();
-	glm::mat4 projection = m_openGL->getProjectionMatrix();
+	glm::mat4 world = openGL->getWorldMatrix();
+	glm::mat4 view = camera->getViewMatrix();
+	glm::mat4 projection = openGL->getProjectionMatrix();
 
-	m_solidShader->SetShader(m_openGL);
-	m_solidShader->SetParameters(m_openGL, world, view, projection);
+	solidShader->SetShader(openGL);
+	solidShader->SetParameters(openGL, world, view, projection);
 
-	m_model->Draw(m_openGL);
+	model->Draw(openGL);
 
 	// Ending Draw section
-	m_openGL->EndDraw();
+	openGL->EndDraw();
 
 	return true;
 }

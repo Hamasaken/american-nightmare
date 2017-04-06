@@ -2,8 +2,8 @@
 
 OpenGL::OpenGL()
 {
-	m_deviceContext = nullptr;
-	m_renderingContext = nullptr;
+	deviceContext = nullptr;
+	renderingContext = nullptr;
 }
 
 OpenGL::OpenGL(const OpenGL & other) { }
@@ -168,8 +168,8 @@ bool OpenGL::StartOpenGL(HWND hwnd, glm::vec2 screenSize, float screenDepth, flo
 	int result;
 
 	// Getting the device context from active window
-	m_deviceContext = GetDC(hwnd);
-	if (m_deviceContext == nullptr) return false;
+	deviceContext = GetDC(hwnd);
+	if (deviceContext == nullptr) return false;
 
 	// Setting up settings and supports for different things.
 	// Feel free to change stuff
@@ -190,12 +190,12 @@ bool OpenGL::StartOpenGL(HWND hwnd, glm::vec2 screenSize, float screenDepth, flo
 	// Query the pixel format with the attributes, note: returns false if video card can't handle it
 	int pixelFormat;
 	UINT numFormats;
-	result = wglChoosePixelFormatARB(m_deviceContext, attributes, NULL, 1, &pixelFormat, &numFormats);
+	result = wglChoosePixelFormatARB(deviceContext, attributes, NULL, 1, &pixelFormat, &numFormats);
 	if (result != 1) return false;
 
 	// Setting the pixel format
 	PIXELFORMATDESCRIPTOR pixelFormatDescriptor;
-	result = SetPixelFormat(m_deviceContext, pixelFormat, &pixelFormatDescriptor);
+	result = SetPixelFormat(deviceContext, pixelFormat, &pixelFormatDescriptor);
 	if (result != 1) return false;
 
 	// Setting the current OpenGL version to the rendering context
@@ -205,11 +205,11 @@ bool OpenGL::StartOpenGL(HWND hwnd, glm::vec2 screenSize, float screenDepth, flo
 		WGL_CONTEXT_MINOR_VERSION_ARB, 0,	// Minor OpenGL version
 		NULL								// End
 	};
-	m_renderingContext = wglCreateContextAttribsARB(m_deviceContext, NULL, attributesVersion);
-	if (m_renderingContext == nullptr) return false;
+	renderingContext = wglCreateContextAttribsARB(deviceContext, NULL, attributesVersion);
+	if (renderingContext == nullptr) return false;
 
 	// Activating the rendering context
-	result = wglMakeCurrent(m_deviceContext, m_renderingContext);
+	result = wglMakeCurrent(deviceContext, renderingContext);
 	if (result != 1) return false;
 
 	// Setting various OpenGL settings, check header for variables
@@ -220,11 +220,11 @@ bool OpenGL::StartOpenGL(HWND hwnd, glm::vec2 screenSize, float screenDepth, flo
 	glCullFace(GL_BACK);							// GL_BACK is default, (backculling), we can also use GL_FRONT, and GL_FRONT_AND_BACK if needed
 
 	// Building a world matrix (just identity matrix)
-	m_worldMatrix = glm::mat4(1.f);
+	worldMatrix = glm::mat4(1.f);
 
 	// Building a projection matrix
 	float fov = glm::pi<float>() / 0.45f;
-	m_projectionMatrix = glm::perspective(fov, screenSize.x / screenSize.y, screenNear, screenDepth);
+	projectionMatrix = glm::perspective(fov, screenSize.x / screenSize.y, screenNear, screenDepth);
 
 	// Setting vSync on/off
 	result = (vSyncOn) ? wglSwapIntervalEXT(1) : wglSwapIntervalEXT(0);
@@ -236,18 +236,18 @@ bool OpenGL::StartOpenGL(HWND hwnd, glm::vec2 screenSize, float screenDepth, flo
 void OpenGL::Stop(HWND hwnd) 
 {
 	// Deleting the rendering context
-	if (m_renderingContext != nullptr) 
+	if (renderingContext != nullptr) 
 	{
 		wglMakeCurrent(NULL, NULL);
-		wglDeleteContext(m_renderingContext);
-		m_renderingContext = nullptr;
+		wglDeleteContext(renderingContext);
+		renderingContext = nullptr;
 	}
 	
 	// Deleting the device context
-	if (m_deviceContext != nullptr)
+	if (deviceContext != nullptr)
 	{
-		ReleaseDC(hwnd, m_deviceContext);
-		m_deviceContext = nullptr;
+		ReleaseDC(hwnd, deviceContext);
+		deviceContext = nullptr;
 	}
 }
 
@@ -262,7 +262,7 @@ void OpenGL::StartDraw(glm::vec4 color)
 	///////////////////////////////////////////////////////////////////////
 	// GL_COLOR_BUFFER_BIT		- Indicates that the buffers are using colors
 	// GL_DEPTH_BUFFER_BIT		- Indicates the depth buffer
-	// GL_ACCUM_BUFFER_BIT		- Indicates the accumulation buffer
+	// GL_ACCUBUFFER_BIT		- Indicates the accumulation buffer
 	// GL_STENCIL_BUFFER_BIT	- Indicates the stencil buffer
 	///////////////////////////////////////////////////////////////////////
 }
@@ -270,8 +270,8 @@ void OpenGL::StartDraw(glm::vec4 color)
 void OpenGL::EndDraw() 
 {
 	// Changing to back buffer since rendering is completed
-	SwapBuffers(m_deviceContext);
+	SwapBuffers(deviceContext);
 }
 
-glm::mat4 OpenGL::getWorldMatrix() { return m_worldMatrix; }
-glm::mat4 OpenGL::getProjectionMatrix() { return m_projectionMatrix; } 
+glm::mat4 OpenGL::getWorldMatrix() { return worldMatrix; }
+glm::mat4 OpenGL::getProjectionMatrix() { return projectionMatrix; } 

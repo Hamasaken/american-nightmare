@@ -2,8 +2,8 @@
 
 Program::Program()
 {
-	m_game = nullptr;
-	m_openGL = nullptr;
+	game = nullptr;
+	openGL = nullptr;
 }
 
 Program::Program(const Program& other) { }
@@ -13,13 +13,13 @@ Program::~Program() { }
 bool Program::Start()
 {
 	srand(time_t(NULL));
-	m_screenSize = DEFAULT_SCREEN_SIZE;
+	screenSize = DEFAULT_SCREEN_SIZE;
 
 	////////////////////////////////////////////////////////////
 	// Creating OpenGL Object, check StartWindow for more openGL initializing
 	////////////////////////////////////////////////////////////
-	m_openGL = new OpenGL();
-	if (m_openGL == nullptr) return false;
+	openGL = new OpenGL();
+	if (openGL == nullptr) return false;
 
 	////////////////////////////////////////////////////////////
 	// Creating a window for the program
@@ -31,11 +31,11 @@ bool Program::Start()
 	// Creating Grahpics Object
 	// - Updates & Renders Graphics
 	////////////////////////////////////////////////////////////
-	m_game = new Game();
-	if (m_game == nullptr) return false;
-	if (!m_game->Start(m_openGL, m_hwnd))
+	game = new Game();
+	if (game == nullptr) return false;
+	if (!game->Start(openGL, hwnd))
 	{
-		MessageBox(m_hwnd, L"Could not start Game class.", L"Woops", MB_OKCANCEL);
+		MessageBox(hwnd, L"Could not start Game class.", L"Woops", MB_OKCANCEL);
 		return false;
 	}
 
@@ -56,29 +56,29 @@ void Program::StartSFMLWindow()
 
 	sf::Uint32 style = (FULL_SCREEN_ON ? sf::Style::Fullscreen : sf::Style::Default);
 
-	sf::Window window(sf::VideoMode(m_screenSize.x, m_screenSize.y), m_appName, style, settings);
+	sf::Window window(sf::VideoMode(screenSize.x, screenSize.y), appName, style, settings);
 	window.setVerticalSyncEnabled(VSYNC_ON);
 
 	// How the fuck do I get the HWND
-	m_hwnd = window.getSystemHandle();
+	hwnd = window.getSystemHandle();
 }
 
 void Program::Stop()
 {
 	// Deleting graphics
-	if (m_game != nullptr)
+	if (game != nullptr)
 	{
-		m_game->Stop();
-		delete m_game;
-		m_game = nullptr;
+		game->Stop();
+		delete game;
+		game = nullptr;
 	}
 
 	// Deleting openGL
-	if (m_openGL != nullptr)
+	if (openGL != nullptr)
 	{
-		m_openGL->Stop(m_hwnd);
-		delete m_openGL;
-		m_openGL = nullptr;
+		openGL->Stop(hwnd);
+		delete openGL;
+		openGL = nullptr;
 	}
 
 	pgr = nullptr;
@@ -97,14 +97,14 @@ bool Program::Run()
 	{
 		// Windows sends messages direcly to callback function, but some are placed in queue. (keyboard/mouse inputs mostly)
 		// Each loop, we check if something is in the queue. If one is found, we translate it and dispatch it.
-		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
+		if (PeekMessage(&msg, NULL, NULL, NULL, PREMOVE))
 		{
 			TranslateMessage(&msg); // converts virtual keys messages to character input messages
 			DispatchMessage(&msg); // sends message of to window procedure 
 		}
 
 		// Checking to see if windows signals to quit
-		if (msg.message == WM_QUIT)
+		if (msg.message == WQUIT)
 			done = true;
 
 		// Updating everything
@@ -123,47 +123,47 @@ bool Program::StartWindow()
 	int posX, posY;
 
 	// Get instance of this program
-	m_hInstance = GetModuleHandle(NULL);
+	hInstance = GetModuleHandle(NULL);
 
 	// Application name
-	m_appName = APP_NAME;
+	appName = APP_NAME;
 
 	// Windows class setup, default settings
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	wc.lpfnWndProc = WndProc; // This is where we want the window messages to be sent to
 	wc.cbClsExtra = NULL;
 	wc.cbWndExtra = NULL;
-	wc.hInstance = m_hInstance;
+	wc.hInstance = hInstance;
 	wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
 	wc.hIconSm = wc.hIcon;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	wc.lpszMenuName = NULL;
-	wc.lpszClassName = m_appName.c_str();
+	wc.lpszClassName = appName.c_str();
 	wc.cbSize = sizeof(WNDCLASSEX);
 
 	// Register the windows class (!remember,  RegisterClassExA (expect msg's with ANSI), RegisterClass ExW for expecting msg's with Unicode)
 	RegisterClassEx(&wc);
 
 	// Creating the temp window
-	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_appName.c_str(), m_appName.c_str(), WS_POPUP,
-		0, 0, m_screenSize.x, m_screenSize.y, NULL, NULL, m_hInstance, NULL);
+	hwnd = CreateWindowEx(WS_EX_APPWINDOW, appName.c_str(), appName.c_str(), WS_POPUP,
+		0, 0, screenSize.x, screenSize.y, NULL, NULL, hInstance, NULL);
 
 	// Setting window as hidden for now
-	ShowWindow(m_hwnd, SW_HIDE);
-	if (!m_openGL->StartExtentions(m_hwnd))
+	ShowWindow(hwnd, SW_HIDE);
+	if (!openGL->StartExtentions(hwnd))
 	{
-		MessageBox(m_hwnd, L"Could not start openGL extentions.", L"Woops", MB_OKCANCEL);
+		MessageBox(hwnd, L"Could not start openGL extentions.", L"Woops", MB_OKCANCEL);
 		return false;
 	}
 
 	// Destroying tempwindow
-	DestroyWindow(m_hwnd);
-	m_hwnd = NULL;
+	DestroyWindow(hwnd);
+	hwnd = NULL;
 
 	// Getting resolution from computer
-	m_screenSize.x = GetSystemMetrics(SM_CXSCREEN);
-	m_screenSize.y = GetSystemMetrics(SM_CYSCREEN);
+	screenSize.x = GetSystemMetrics(SCXSCREEN);
+	screenSize.y = GetSystemMetrics(SCYSCREEN);
 
 	// Fullscreen or not, different settings
 	if (FULL_SCREEN_ON)
@@ -171,10 +171,10 @@ bool Program::StartWindow()
 		// If full screen set the screen to maximum size of the users desktop and 32bit.
 		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
 		dmScreenSettings.dmSize = sizeof(dmScreenSettings);
-		dmScreenSettings.dmPelsWidth = (unsigned long)m_screenSize.x;
-		dmScreenSettings.dmPelsHeight = (unsigned long)m_screenSize.y;
+		dmScreenSettings.dmPelsWidth = (unsigned long)screenSize.x;
+		dmScreenSettings.dmPelsHeight = (unsigned long)screenSize.y;
 		dmScreenSettings.dmBitsPerPel = 64;
-		dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+		dmScreenSettings.dmFields = DBITSPERPEL | DPELSWIDTH | DPELSHEIGHT;
 
 		// Change the display settings to full screen.
 		ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
@@ -185,27 +185,27 @@ bool Program::StartWindow()
 	else
 	{
 		// Setting to default for this application (graphicsclass.h)
-		m_screenSize = DEFAULT_SCREEN_SIZE;
+		screenSize = DEFAULT_SCREEN_SIZE;
 
 		// Placing the window in the center 
-		posX = (GetSystemMetrics(SM_CXSCREEN) - m_screenSize.x) / 2;
-		posY = (GetSystemMetrics(SM_CYSCREEN) - m_screenSize.y) / 2;
+		posX = (GetSystemMetrics(SCXSCREEN) - screenSize.x) / 2;
+		posY = (GetSystemMetrics(SCYSCREEN) - screenSize.y) / 2;
 	}
 
-	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_appName.c_str(), m_appName.c_str(), WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
-		posX, posY, m_screenSize.x, m_screenSize.y, NULL, NULL, m_hInstance, NULL);
+	hwnd = CreateWindowEx(WS_EX_APPWINDOW, appName.c_str(), appName.c_str(), WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
+		posX, posY, screenSize.x, screenSize.y, NULL, NULL, hInstance, NULL);
 
 	// Starting openGL now that extentions are in place
-	if (!m_openGL->StartOpenGL(m_hwnd, DEFAULT_SCREEN_SIZE, SCREEN_DEPTH, SCREEN_NEAR, VSYNC_ON))
+	if (!openGL->StartOpenGL(hwnd, DEFAULT_SCREEN_SIZE, SCREEN_DEPTH, SCREEN_NEAR, VSYNC_ON))
 	{
-		MessageBox(m_hwnd, L"Could not start OpenGL, check if video card supports it.", L"Woops", MB_OKCANCEL);
+		MessageBox(hwnd, L"Could not start OpenGL, check if video card supports it.", L"Woops", MB_OKCANCEL);
 		return false;
 	}
 
 	// Setting window to show and setting it as focus
-	ShowWindow(m_hwnd, SW_SHOW);
-	SetForegroundWindow(m_hwnd);
-	SetFocus(m_hwnd);
+	ShowWindow(hwnd, SW_SHOW);
+	SetForegroundWindow(hwnd);
+	SetFocus(hwnd);
 
 	// If the mouse should be hidden or not
 	ShowCursor(SHOW_CURSOR);
@@ -224,12 +224,12 @@ void Program::StopWindow()
 		ChangeDisplaySettings(NULL, NULL);
 
 	// Destroy window
-	DestroyWindow(m_hwnd);
-	m_hwnd = NULL;
+	DestroyWindow(hwnd);
+	hwnd = NULL;
 
 	// Unregister window & setting hinstance to 0
-	UnregisterClass(m_appName.c_str(), m_hInstance);
-	m_hInstance = NULL;
+	UnregisterClass(appName.c_str(), hInstance);
+	hInstance = NULL;
 }
 
 bool Program::Update()
@@ -239,7 +239,7 @@ bool Program::Update()
 		return false;
 
 	// Update game
-	if (!m_game->Update())
+	if (!game->Update())
 		return false;
 
 	return true;
@@ -250,7 +250,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM 
 	switch (umessage)
 	{
 		// Check if we're closed 
-	case WM_CLOSE:
+	case WCLOSE:
 		PostQuitMessage(0);
 		return 0;
 
