@@ -10,18 +10,33 @@ public:
 	Camera(const Camera& other);
 	~Camera();
 
+	////////////////////////////////////////////////////////////
+	// \brief Builds a view matrix with position and rotation
+	// \note Needs to be built every frame!
+	////////////////////////////////////////////////////////////
 	void buildViewMatrix();
-	void setPosition(glm::vec3 position);
-	void setRotation(glm::vec3 rotation);
 
+	////////////////////////////////////////////////////////////
+	// \brief Set a new postition of the camera
+	////////////////////////////////////////////////////////////
+	void setPosition(glm::vec3 position);
+
+	////////////////////////////////////////////////////////////
+	// \brief Gets the current view matrix
+	// \note Only call this after you've called builtViewMatrix
+	// \return The view matrix in 4x4
+	////////////////////////////////////////////////////////////
 	glm::mat4 getViewMatrix();
+
+	////////////////////////////////////////////////////////////
+	// \brief Gets the position of the camera
+	// \return Returns a vector 3x1
+	////////////////////////////////////////////////////////////
 	glm::vec3 getPosition();
-	glm::vec3 getRotation();
 
 private:
-	glm::mat4 viewMatrix;
-	glm::vec3 position;
-	glm::vec3 rotation;
+	glm::mat4 viewMatrix;	//< The camera's view matrix
+	glm::vec3 position;	//< Position of the camera
 };
 
 #endif // !CAMERA_H
