@@ -22,7 +22,6 @@ bool Input::Update()
 	{
 		return false;
 	}
-
 	return true;
 }
 
