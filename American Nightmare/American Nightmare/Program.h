@@ -7,6 +7,7 @@
 // INCLUDES
 #include "Game.h"
 #include "OpenGL.h"
+#include <SFML\Window.hpp>
 #include <SFML\Window\Keyboard.hpp>
 
 // DEFINES
@@ -37,12 +38,14 @@ public:
 private:
 	
 	// Initializing window
+	void StartSFMLWindow();
 	bool StartWindow();
 	void StopWindow();
 
 	// Updating everything
 	bool Update();
 
+	sf::Window* m_window;
 	OpenGL* m_openGL;
 	Game* m_game;
 	std::wstring m_appName;

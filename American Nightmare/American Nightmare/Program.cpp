@@ -25,6 +25,7 @@ bool Program::Start()
 	// Creating a window for the program
 	////////////////////////////////////////////////////////////
 	StartWindow();
+	// StartSFMLWindow();
 
 	////////////////////////////////////////////////////////////
 	// Creating Grahpics Object
@@ -44,7 +45,25 @@ bool Program::Start()
 	return true;
 }
 
-void Program::Stop() 
+void Program::StartSFMLWindow()
+{
+	sf::ContextSettings settings;
+	settings.depthBits = 24;
+	settings.stencilBits = 8;
+	settings.antialiasingLevel = 4;
+	settings.majorVersion = 3;
+	settings.minorVersion = 0;
+
+	sf::Uint32 style = (FULL_SCREEN_ON ? sf::Style::Fullscreen : sf::Style::Default);
+
+	sf::Window window(sf::VideoMode(m_screenSize.x, m_screenSize.y), m_appName, style, settings);
+	window.setVerticalSyncEnabled(VSYNC_ON);
+
+	// How the fuck do I get the HWND
+	m_hwnd = window.getSystemHandle();
+}
+
+void Program::Stop()
 {
 	// Deleting graphics
 	if (m_game != nullptr)
@@ -67,7 +86,7 @@ void Program::Stop()
 	StopWindow();
 }
 
-bool Program::Run() 
+bool Program::Run()
 {
 	// Making the msg spot in memory, filling it with zeros
 	MSG msg;
@@ -94,9 +113,9 @@ bool Program::Run()
 	}
 
 	return false;
-} 
+}
 
-bool Program::StartWindow() 
+bool Program::StartWindow()
 {
 	// We're using extended just in case I want to change window style some day 
 	WNDCLASSEX wc;
@@ -194,7 +213,7 @@ bool Program::StartWindow()
 	return true;
 }
 
-void Program::StopWindow() 
+void Program::StopWindow()
 {
 	// Showing the mouse cursor 
 	if (!SHOW_CURSOR)
@@ -211,9 +230,9 @@ void Program::StopWindow()
 	// Unregister window & setting hinstance to 0
 	UnregisterClass(m_appName.c_str(), m_hInstance);
 	m_hInstance = NULL;
-} 
+}
 
-bool Program::Update() 
+bool Program::Update()
 {
 	// Check if user exits
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
@@ -230,12 +249,12 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM 
 {
 	switch (umessage)
 	{
-	// Check if we're closed 
+		// Check if we're closed 
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;
 
-	// Other messages are being sent to our msg handler
+		// Other messages are being sent to our msg handler
 	default:
 		return DefWindowProc(hwnd, umessage, wparam, lparam);
 	}
