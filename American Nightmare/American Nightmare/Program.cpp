@@ -237,32 +237,6 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM 
 
 	// Other messages are being sent to our msg handler
 	default:
-		return pgr->MessageHandler(hwnd, umessage, wparam, lparam);
-	}
-}
-
-LRESULT CALLBACK Program::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
-{
-	switch (umsg)
-	{
-	// Key have been pressed
-	case WM_KEYDOWN:
-	{
-		m_input->ChangeKey((unsigned int)wparam, true);
-		return 0;
-	}
-
-	// Key have been released
-	case WM_KEYUP:
-	{
-		m_input->ChangeKey((unsigned int)wparam, false);
-		return 0;
-	}
-
-	// Any other messages send to the default message handler as our application won't make use of them.
-	default:
-	{
-		return DefWindowProc(hwnd, umsg, wparam, lparam);
-	}
+		return DefWindowProc(hwnd, umessage, wparam, lparam);
 	}
 }
