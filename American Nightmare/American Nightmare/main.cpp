@@ -1,14 +1,17 @@
-#include <iostream>
-#include <string>
+#include "Program.h"
 
-int main()
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCMDshow)
 {
-	std::string test = "Testing again.";
-	std::string test2 = "Testing another time.";
-	std::string test3 = "Another time.";
-	// test
-	// jnsd
-	// ajsdnfjnsdf
+	// Start the application class
+	Program *pgr = new Program();
+	if (pgr == nullptr) return NULL;
+	if (!pgr->Start()) return NULL;
 
-	return 0;
+	// Main Loop
+	while (pgr->Run());
+
+	// Delete everything
+	pgr->Stop();
+
+	return NULL;
 }
