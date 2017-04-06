@@ -10,10 +10,8 @@
 #include <glm/gtx/rotate_vector.hpp>	// rotating vectors and matrices
 
 // Including full smfl libary
-#include <SFML\Audio.hpp>
-#include <SFML\Graphics.hpp>
-#include <SFML\Window.hpp>
-#include <SFML\System.hpp>
+#include <SFML\Audio.hpp>		// Sound and SFX
+#include <SFML\Window\Keyboard.hpp>	// Input Keyboard	
 
 // Various includes
 #include <string>

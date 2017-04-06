@@ -33,8 +33,6 @@ public:
 	void Draw(OpenGL* openGL);
 
 private:
-	sf::Sprite sprite;
-
 	unsigned int vertexArray;
 	unsigned int vertexBuffer;
 	unsigned int indexBuffer;
