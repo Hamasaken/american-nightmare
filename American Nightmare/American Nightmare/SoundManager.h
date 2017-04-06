@@ -8,16 +8,16 @@
 #define PATH_TO_MUSIC	"../Zedit/Stuff/Sound/Music/"
 
 // The maximum capicity of SFX and Songs
-#define SFX_CAPACITY		50
-#define SONG_CAPACITY		50
+#define SFX_CAPACITY	50
+#define SONG_CAPACITY	50
 
 // Volume of Music and SFX
-#define VOLUME_MUSIC		20
-#define VOLUME_SFX			100
+#define VOLUME_MUSIC	20
+#define VOLUME_SFX	100
 
 // Turn Music & SFX on/off
-#define MUSIC_ON			false	
-#define SFX_ON				false
+#define MUSIC_ON	false	
+#define SFX_ON		false
 
 class SoundManager
 {
