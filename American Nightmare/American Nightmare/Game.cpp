@@ -33,9 +33,10 @@ bool Game::Start(OpenGL* openGL, HWND hwnd)
 	////////////////////////////////////////////////////////////
 	// Creating Shaders
 	////////////////////////////////////////////////////////////
+	std::string shaderPath = SHADER_PATH; 
 	m_solidShader = new SolidShader();
 	if (m_solidShader == nullptr) return false;
-	m_solidShader->Start(openGL, hwnd, "../Zedit/Stuff/Shaders/solid_vs.glsl", "../Zedit/Stuff/Shaders/solid_fs.glsl");
+	m_solidShader->Start(openGL, hwnd, shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
 	
 	SetStartVariables();
 
