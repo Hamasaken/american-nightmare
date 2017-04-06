@@ -98,10 +98,10 @@ public:
 	glm::mat4 getProjectionMatrix();
 
 private:
-	HDC m_deviceContext;
-	HGLRC m_renderingContext;
-	glm::mat4 m_worldMatrix;
-	glm::mat4 m_projectionMatrix;
+	HDC deviceContext;
+	HGLRC renderingContext;
+	glm::mat4 worldMatrix;
+	glm::mat4 projectionMatrix;
 
 	// Window Function Pointers for OpenGL
 	PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB;

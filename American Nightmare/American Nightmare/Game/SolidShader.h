@@ -23,9 +23,9 @@ private:
 	std::string getSource(std::string path);
 	GLuint compileShader(OpenGL* openGL, std::string text, GLenum type);
 
-	GLuint m_vertexShader;
-	GLuint m_fragmentShader;
-	GLuint m_shaderProgram;
+	GLuint vertexShader;
+	GLuint fragmentShader;
+	GLuint shaderProgram;
 };
 
 #endif // !SOLIDSHADER_H

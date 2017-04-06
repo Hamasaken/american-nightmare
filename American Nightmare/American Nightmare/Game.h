@@ -23,10 +23,10 @@ public:
 	bool Update();
 	bool Draw();
 private:
-	OpenGL* m_openGL;
-	SolidShader* m_solidShader;
-	Model* m_model;
-	Camera* m_camera;
+	OpenGL* openGL;
+	SolidShader* solidShader;
+	Model* model;
+	Camera* camera;
 };
 
 

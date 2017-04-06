@@ -1,5 +1,5 @@
-#ifndef PROGRAM_H
-#define PROGRAM_H
+#ifndef PROGRAH
+#define PROGRAH
 
 // PRE-PROCESS
 #define WIN32_LEAN_AND_MEAN // to exclude useless includes (for this project) to speed up things
@@ -45,17 +45,17 @@ private:
 	// Updating everything
 	bool Update();
 
-	sf::Window* m_window;
-	OpenGL* m_openGL;
-	Game* m_game;
-	std::wstring m_appName;
-	HINSTANCE m_hInstance;
-	HWND m_hwnd;
-	glm::vec2 m_screenSize;
+	sf::Window* window;
+	OpenGL* openGL;
+	Game* game;
+	std::wstring appName;
+	HINSTANCE hInstance;
+	HWND hwnd;
+	glm::vec2 screenSize;
 };
 
 // Window Proc Func
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 static Program* pgr = nullptr;
 
-#endif // !PROGRAM_H
+#endif // !PROGRAH
