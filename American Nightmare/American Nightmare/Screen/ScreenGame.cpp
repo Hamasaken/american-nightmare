@@ -38,7 +38,7 @@ bool ScreenGame::Start(OpenGL * openGL)
 	// Creating a simple floor object too see depth
 	floor = new Object();
 	if (floor == nullptr) return false;
-	if (!wall->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
+	if (!floor->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
 		return false;
 
 	////////////////////////////////////////////////////////////
