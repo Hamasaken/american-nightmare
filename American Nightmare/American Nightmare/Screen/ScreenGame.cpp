@@ -5,6 +5,7 @@ ScreenGame::ScreenGame() : Screen()
 	solidShader = nullptr;
 	player = nullptr;
 	wall = nullptr;
+	floor = nullptr;
 }
 
 ScreenGame::ScreenGame(const ScreenGame& other) { }
@@ -34,6 +35,12 @@ bool ScreenGame::Start(OpenGL * openGL)
 	if (!wall->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
 		return false;
 
+	// Creating a simple floor object too see depth
+	floor = new Object();
+	if (floor == nullptr) return false;
+	if (!wall->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
+		return false;
+
 	////////////////////////////////////////////////////////////
 	// Creating Shaders
 	////////////////////////////////////////////////////////////
@@ -57,6 +64,9 @@ void ScreenGame::SetStartVariables()
 
 	// Making wall big
 	wall->setScale(glm::vec3(8, 5, 3));
+
+	// Making floor object
+	floor->setScale(glm::vec3(10, 10, 0));
 }
 
 void ScreenGame::Update()
@@ -65,6 +75,9 @@ void ScreenGame::Update()
 	static int rotation = 0.f;
 	rotation += 0.05f;
 	wall->setRotation(glm::vec3(rotation, 0, 40));
+
+	// Temporary floor 
+	wall->setRotation(glm::vec3(0, 90, 0));
 
 	// Updating player
 	player->Update();
@@ -86,6 +99,9 @@ void ScreenGame::Draw()
 	// Drawing background wall
 	DrawObject(wall, solidShader);
 
+	// Drawing background wall
+	DrawObject(floor, solidShader);
+
 	// Drawing player
 	DrawObject(player, solidShader);
 
@@ -104,11 +120,25 @@ void ScreenGame::Stop()
 		solidShader = nullptr;
 	}
 
-	// Deleting model
+	// Deleting player
 	if (player != nullptr)
 	{
 		player->Stop();
 		player = nullptr;
+	}
+
+	// Deleting wall
+	if (wall != nullptr)
+	{
+		wall->Stop();
+		wall = nullptr;
+	}
+
+	// Deleting floor
+	if (floor != nullptr)
+	{
+		floor->Stop();
+		floor = nullptr;
 	}
 
 	// Removes Camera & openGL ptr
