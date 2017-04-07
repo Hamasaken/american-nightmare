@@ -56,6 +56,8 @@ void Object::Stop()
 	openGL = nullptr;
 }
 
+void Object::Update() { }
+
 void Object::Draw()
 {
 	model->Draw(openGL);
