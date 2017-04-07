@@ -35,6 +35,8 @@ protected:
 
 	////////////////////////////////////////////////////////////
 	// \brief Compiles the shader
+	// \param text The full text from the file
+	// \param type What type of file it is, vertex/fragment/etc
 	// \return Returns the id where it's stored in OpenGL
 	////////////////////////////////////////////////////////////
 	GLuint compileShader(OpenGL* openGL, std::string text, GLenum type);
