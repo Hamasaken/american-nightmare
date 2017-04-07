@@ -43,6 +43,7 @@ public:
 private:
 	SolidShader* solidShader;	//< Temporary Color Shader (Replace this with a shaderManager as fast as possible)
 	Player* player;			//< The player object
+	Object* wall;			//< Background Wall (Temporary, just to see the camera movement)
 };
 
 #endif // !SCREENGAME_H
