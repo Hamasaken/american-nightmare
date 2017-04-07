@@ -11,9 +11,9 @@ Kontroller
 WASD - Move Player Object (No physics yet.)
 ESQ - Exit
 
-/* Testing 
+Testing 
 QE - Rotate Player Object in X
 RT - Rotate Player Object in Y
 YU - Rotate Player Object in Z
-TG - Scale Player */
+TG - Scale Player
 
