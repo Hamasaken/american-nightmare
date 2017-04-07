@@ -10,14 +10,25 @@ public:
 	SolidShader(const SolidShader& other);
 	~SolidShader();
 
-	void Start(OpenGL* openGL, std::string vs, std::string fs);	// lazy ass std::runtime errors atm, change this into a bool function later
+	////////////////////////////////////////////////////////////
+	// \brief Loads shader, reads and compiles shader files
+	////////////////////////////////////////////////////////////
+	void Start(OpenGL* openGL, std::string vs, std::string fs);
+
+	////////////////////////////////////////////////////////////
+	// \brief Unloads shader
+	////////////////////////////////////////////////////////////
 	void Stop(OpenGL* openGL);
 
+	////////////////////////////////////////////////////////////
+	// \brief Update parameters
+	// \return Returns false if we can't find locations in vertexShader
+	////////////////////////////////////////////////////////////
 	bool SetParameters(OpenGL* openGL, glm::mat4 world, glm::mat4 view, glm::mat4 projection);
 
 private:
-	GLuint vertexShader;
-	GLuint fragmentShader;
+	GLuint vertexShader;	//< Vertex Shader
+	GLuint fragmentShader;	//< Fragment Shader
 };
 
 #endif // !SOLIDSHADER_H

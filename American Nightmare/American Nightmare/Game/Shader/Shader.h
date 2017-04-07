@@ -12,14 +12,31 @@ public:
 	Shader();
 	Shader(const Shader& other);
 	~Shader();
+	virtual void Stop(OpenGL* openGL) = 0;
 
+	////////////////////////////////////////////////////////////
+	// \brief Setting this shader as openGL currently active
+	////////////////////////////////////////////////////////////
 	void SetShader(OpenGL* openGL);
+
+	////////////////////////////////////////////////////////////
+	// \brief Function setting parameters into shaderprogram
+	////////////////////////////////////////////////////////////
 	virtual bool SetParameters(OpenGL* openGL, glm::mat4 world, glm::mat4 view, glm::mat4 projection) = 0;
 
 protected:
-	GLuint shaderProgram;
+	GLuint shaderProgram;	//< The Shader Program
 
+	////////////////////////////////////////////////////////////
+	// \brief Reads the file at path and returns string
+	// \return Returns the full file in text as a long string in one line
+	////////////////////////////////////////////////////////////
 	std::string getSource(std::string path);
+
+	////////////////////////////////////////////////////////////
+	// \brief Compiles the shader
+	// \return Returns the id where it's stored in OpenGL
+	////////////////////////////////////////////////////////////
 	GLuint compileShader(OpenGL* openGL, std::string text, GLenum type);
 };
 
