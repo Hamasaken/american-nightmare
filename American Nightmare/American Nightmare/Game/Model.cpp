@@ -6,6 +6,16 @@ Model::Model(const Model& other) { }
 
 Model::~Model() { }
 
+bool Model::Start(OpenGL * openGL, std::string modelPath)
+{
+	// Trying to load model
+//	if (!LoadModel(openGL, modelPath))
+//		return false;
+
+	return true;
+}
+
+// Temp function
 void Model::BuildTriangle(OpenGL* openGL)
 {
 	Vertex* vertices;
@@ -59,7 +69,7 @@ void Model::BuildTriangle(OpenGL* openGL)
 	delete[]indices; indices = nullptr;
 }
 
-bool LoadModel(OpenGL* openGL, std::string modelPath)
+bool Model::LoadModel(OpenGL* openGL, std::string modelPath)
 {
 	// Load model from file
 	return true;
