@@ -26,29 +26,39 @@ public:
 	Program(const Program& other);
 	~Program();
 
+	////////////////////////////////////////////////////////////
+	// \brief Starting window & then enters the game loop
+	////////////////////////////////////////////////////////////
 	bool Start();
+
+	////////////////////////////////////////////////////////////
+	// \brief Unloads everything in the program
+	////////////////////////////////////////////////////////////
 	void Stop();
 
-	// Game-loop function
+	////////////////////////////////////////////////////////////
+	// \brief Game loop function!
+	// \return Returns false when we exit in any way
+	////////////////////////////////////////////////////////////
 	bool Run();
 
 private:
 	
-	// Initializing window
+	// Windows
 	void StartSFMLWindow();
 	bool StartWindow();
 	void StopWindow();
 
-	// Updating everything
+	// Update
 	bool Update();
 
-	sf::Window* window;
-	OpenGL* openGL;
-	ScreenManager* screenManager;
-	std::wstring appName;
-	HINSTANCE hInstance;
-	HWND hwnd;
-	glm::vec2 screenSize;
+	sf::Window* window;		//< SFML window (not active atm)
+	OpenGL* openGL;			//< OpenGL pointer
+	ScreenManager* screenManager;	//< ScreenManager, hold everything game/meny based
+	std::wstring appName;		//< Application name
+	HINSTANCE hInstance;		//< hInstance
+	HWND hwnd;			//< Window created by StartWindow
+	glm::vec2 screenSize;		//< Screensize in (x,y)
 };
 
 // Window Proc Func
