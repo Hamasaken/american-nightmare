@@ -161,7 +161,7 @@
     <ClCompile Include="Game\Object.cpp" />
     <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\Shader\Shader.cpp" />
-    <ClCompile Include="Game\SolidShader.cpp" />
+    <ClCompile Include="Game\Shader\SolidShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OpenGL.cpp" />
     <ClCompile Include="Program.cpp" />
@@ -178,7 +178,7 @@
     <ClInclude Include="Game\Object.h" />
     <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Game\Shader\Shader.h" />
-    <ClInclude Include="Game\SolidShader.h" />
+    <ClInclude Include="Game\Shader\SolidShader.h" />
     <ClInclude Include="OpenGL.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="Screen\Screen.h" />
