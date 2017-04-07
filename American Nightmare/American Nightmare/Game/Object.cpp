@@ -13,8 +13,10 @@ Object::~Object() { }
 
 bool Object::Start(OpenGL* openGL, std::string modelName, std::string textureName)
 {
-	// Setting position at origin
+	// Setting starting variables
 	position = glm::vec3(0, 0, 0);
+	rotation = glm::vec3(0, 0, 0);
+	scale = glm::vec3(1, 1, 1);
 
 	// Grabbing the openGL ptr
 	this->openGL = openGL;
@@ -58,3 +60,11 @@ void Object::Draw()
 {
 	model->Draw(openGL);
 }
+
+void Object::setPosition(glm::vec3 position) { this->position = position; }
+glm::vec3 Object::getPosition() const { return position; }
+void Object::setRotation(glm::vec3 rotation) { this->rotation = rotation; }
+glm::vec3 Object::getRotation() const { return rotation; }
+glm::vec3 Object::getRotationInRadians() const { return glm::vec3(rotation * (3.141592654f / 180.0f)); }
+void Object::setScale(glm::vec3 scale) { this->scale = scale; }
+glm::vec3 Object::getScale() const { return scale; }

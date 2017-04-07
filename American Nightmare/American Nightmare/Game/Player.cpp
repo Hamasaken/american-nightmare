@@ -25,11 +25,13 @@ void Player::Update()
 
 void Player::Movement()
 {
+	// Temporary movement :)
+
 	// Horizontal
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) position.y += 0.25f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) position.y -= 0.25f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) position.y += 0.15f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) position.y -= 0.15f;
 
 	// Vertical
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) position.x += 0.25f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) position.x -= 0.25f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) position.x += 0.15f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) position.x -= 0.15f;
 }
