@@ -4,6 +4,7 @@ ScreenGame::ScreenGame() : Screen()
 {
 	solidShader = nullptr;
 	player = nullptr;
+	wall = nullptr;
 }
 
 ScreenGame::ScreenGame(const ScreenGame& other) { }
@@ -20,19 +21,30 @@ bool ScreenGame::Start(OpenGL * openGL)
 	////////////////////////////////////////////////////////////
 	std::string modelPath = MODEL_PATH;
 	std::string texturePath = TEXTURE_PATH;
+
+	// Creating the player object
 	player = new Player();
 	if (player == nullptr) return false;
 	if (!player->Start(openGL, modelPath + "model.m", texturePath + "texture.t")) 
+		return false;
+
+	// Creating a simple background wall
+	wall = new Object();
+	if (wall == nullptr) return false;
+	if (!wall->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
 		return false;
 
 	////////////////////////////////////////////////////////////
 	// Creating Shaders
 	////////////////////////////////////////////////////////////
 	std::string shaderPath = SHADER_PATH;
+
+	// Creating a simple color shader
 	solidShader = new SolidShader();
 	if (solidShader == nullptr) return false;
 	solidShader->Start(openGL, shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
 
+	// Setting startvariables
 	SetStartVariables();
 
 	return true;
@@ -42,6 +54,9 @@ void ScreenGame::SetStartVariables()
 {
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 10));
+
+	// Making wall big
+	wall->setScale(glm::vec3(2, 2, 2));
 }
 
 void ScreenGame::Update()
@@ -49,8 +64,11 @@ void ScreenGame::Update()
 	// Updating player
 	player->Update();
 
-	// Follows player
-	camera->smoothToPosition(glm::vec3(player->getPosition().x, player->getPosition().y, camera->getPosition().z));
+	// Moving the camera to follow player object
+	camera->smoothToPosition(glm::vec3(player->getPosition().x, player->getPosition().y, camera->getPosition().z));	
+	
+	// Building a new camera view matrix
+	camera->buildViewMatrix();
 }
 
 void ScreenGame::Draw()
@@ -60,8 +78,8 @@ void ScreenGame::Draw()
 	////////////////////////////////////////////////////////////
 	openGL->StartDraw(CLEAR_COLOR);
 
-	// Building a new camera view matrix
-	camera->buildViewMatrix();
+	// Drawing background wall
+	DrawObject(wall, solidShader);
 
 	// Drawing player
 	DrawObject(player, solidShader);
