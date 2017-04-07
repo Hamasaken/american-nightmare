@@ -33,3 +33,7 @@ RT - Rotate Player Object in Y
 YU - Rotate Player Object in Z
 
 TG - Scale Player
+
+F1 - Game Screen
+
+F2 - Start Meny Screen (Empty atm, but i can be used to reset Game Screen, by going to it and then back to gameScreen)
