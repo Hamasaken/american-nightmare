@@ -52,12 +52,6 @@ void ScreenGame::Update()
 
 void ScreenGame::Draw()
 {
-
-	// Getting matrices
-	glm::mat4 world = openGL->getWorldMatrix();
-	glm::mat4 view = camera->getViewMatrix();
-	glm::mat4 projection = openGL->getProjectionMatrix();
-
 	////////////////////////////////////////////////////////////
 	// Starting draw section
 	////////////////////////////////////////////////////////////
@@ -66,12 +60,8 @@ void ScreenGame::Draw()
 	// Building a new camera view matrix
 	camera->buildViewMatrix();
 
-	// Setting Shader
-	solidShader->SetShader(openGL);
-	solidShader->SetParameters(openGL, world, view, projection);
-
 	// Drawing player
-	player->Draw();
+	DrawObject(player, solidShader);
 
 	////////////////////////////////////////////////////////////
 	// Ending draw section
