@@ -44,10 +44,12 @@ public:
 	void setScale(glm::vec3 scale);
 	glm::vec3 getScale() const;
 
-protected:	// Note: Make this private when loadModel is implemented!
+protected:
 	glm::vec3 position;	//< Object position
 	glm::vec3 rotation;	//< Object rotation
 	glm::vec3 scale;	//< Object scale
+
+protected:	// Note: Make this private when loadModel is implemented!
 	OpenGL* openGL;		//< OpenGL functions ptr
 	Model* model;		//< This object's model
 	// Texture* texture;	//< This object's texture 
