@@ -197,7 +197,7 @@ bool Program::StartWindow()
 		posX, posY, screenSize.x, screenSize.y, NULL, NULL, hInstance, NULL);
 
 	// Starting openGL now that extentions are in place
-	if (!openGL->StartOpenGL(hwnd, DEFAULT_SCREEN_SIZE, SCREEN_DEPTH, SCREEN_NEAR, VSYNC_ON))
+	if (!openGL->StartOpenGL(hwnd, screenSize, SCREEN_DEPTH, SCREEN_NEAR, VSYNC_ON))
 	{
 		MessageBox(hwnd, L"Could not start OpenGL, check if video card supports it.", L"Woops", MB_OKCANCEL);
 		return false;
