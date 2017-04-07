@@ -63,7 +63,7 @@ void ScreenGame::Update()
 {
 	// Temporary spinning the background
 	static int rotation = 0.f;
-	rotation += 2.0f;
+	rotation += 0.05f;
 	wall->setRotation(glm::vec3(rotation, 0, 40));
 
 	// Updating player
