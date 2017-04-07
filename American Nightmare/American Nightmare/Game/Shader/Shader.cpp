@@ -20,7 +20,10 @@ std::string Shader::getSource(std::string path)
 	if (!file.is_open()) 
 		throw std::runtime_error("Could not read shader at: " + path);
 
+	// Reads full file into stream
 	sstream << file.rdbuf();
+
+	// Gets the stream as a string
 	source = sstream.str();
 
 	return source;
@@ -30,6 +33,7 @@ GLuint Shader::compileShader(OpenGL* openGL, std::string text, GLenum type)
 {
 	GLuint compiled = openGL->glCreateShader(type);
 
+	// Compile with openGL by putting in full string of file
 	const char* txt = text.c_str();
 	openGL->glShaderSource(compiled, 1, &txt, nullptr);
 	openGL->glCompileShader(compiled);
