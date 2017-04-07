@@ -16,6 +16,9 @@
 // Various includes
 #include <string>
 
+// Paths
+#define SHADER_PATH "Data/Graphics/Shaders/"
+
 // Vertex Struct for vertex buffers, etc
 struct Vertex
 {

@@ -1,0 +1,71 @@
+#ifndef SCREENMANAGER_H
+#define SCREENMANAGER_H
+
+#include "../OpenGL.h"
+#include "ScreenGame.h"
+#include "ScreenStart.h"
+
+#define START_STATE 0 // 0 = Game, 1 = Startmeny
+
+class ScreenManager
+{
+public:
+	enum State { Game, StartMeny, Options, Posters };
+	State currentState;
+
+	ScreenManager();
+	ScreenManager(const ScreenManager& other);
+	~ScreenManager();
+
+	////////////////////////////////////////////////////////////
+	// \brief Saves openGL ptr and starts the start screen
+	////////////////////////////////////////////////////////////
+	bool Start(HWND hwnd, OpenGL* openGL);
+
+	////////////////////////////////////////////////////////////
+	// \brief Unloads every screen
+	////////////////////////////////////////////////////////////
+	void Stop();
+
+	////////////////////////////////////////////////////////////
+	// \brief Starts the screen with the current state
+	// \return Returns false if the screen could not be started
+	////////////////////////////////////////////////////////////
+	bool StartCurrentScreen();
+
+	////////////////////////////////////////////////////////////
+	// \brief Unloads the current state
+	////////////////////////////////////////////////////////////
+	void StopCurrentScreen();
+
+	////////////////////////////////////////////////////////////
+	// \brief Will switch current state and it will also run the 
+	//	stop function for the current state and unload everything
+	//	it will do nothing if we are already in same state
+	// \return Returns true if the Start function of the new state worked
+	//	otherwise it returns false
+	////////////////////////////////////////////////////////////
+	bool goToState(State state);
+
+	////////////////////////////////////////////////////////////
+	// \brief Updates the active screen
+	////////////////////////////////////////////////////////////
+	void Update();
+
+	////////////////////////////////////////////////////////////
+	// \brief Draws the active screen
+	////////////////////////////////////////////////////////////
+	void Draw();
+
+	////////////////////////////////////////////////////////////
+	// \brief Returns the current screen
+	////////////////////////////////////////////////////////////
+	State getState();
+private:
+	HWND hwnd;			//< Saving the HWND for error msg boxes output
+	ScreenGame* screenGame;		//< The game screen
+	ScreenStart* screenStart;	//< The start meny screen
+	OpenGL* openGL;			//< OpenGL function ptr
+};
+
+#endif // !SCREENMANAGER_H

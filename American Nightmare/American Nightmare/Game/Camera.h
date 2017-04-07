@@ -1,7 +1,10 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "../Accessories.h"
+#include <glm/glm.hpp>	
+#include <glm/mat4x4.hpp>		// 4x4 matrices
+#include <glm/gtc/matrix_transform.hpp>	// matrix stuff
+#include <glm/gtx/rotate_vector.hpp>	// rotating vectors and matrices
 
 class Camera
 {

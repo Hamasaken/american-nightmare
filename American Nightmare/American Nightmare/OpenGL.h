@@ -144,8 +144,6 @@ public:
 	PFNGLDISABLEVERTEXATTRIBARRAYPROC glDisableVertexAttribArray;
 	PFNGLUNIFORM3FVPROC glUniform3fv;
 	PFNGLUNIFORM4FVPROC glUniform4fv;
-
 };
-
 
 #endif // !OPENGL_H

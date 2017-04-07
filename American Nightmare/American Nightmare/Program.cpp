@@ -2,7 +2,7 @@
 
 Program::Program()
 {
-	game = nullptr;
+	screenManager = nullptr;
 	openGL = nullptr;
 }
 
@@ -31,11 +31,11 @@ bool Program::Start()
 	// Creating Grahpics Object
 	// - Updates & Renders Graphics
 	////////////////////////////////////////////////////////////
-	game = new Game();
-	if (game == nullptr) return false;
-	if (!game->Start(openGL, hwnd))
+	screenManager = new ScreenManager();
+	if (screenManager == nullptr) return false;
+	if (!screenManager->Start(hwnd, openGL))
 	{
-		MessageBox(hwnd, L"Could not start Game class.", L"Woops", MB_OKCANCEL);
+		MessageBox(hwnd, L"Could not start ScreenManager class.", L"Woops", MB_OKCANCEL);
 		return false;
 	}
 
@@ -66,11 +66,11 @@ void Program::StartSFMLWindow()
 void Program::Stop()
 {
 	// Deleting graphics
-	if (game != nullptr)
+	if (screenManager != nullptr)
 	{
-		game->Stop();
-		delete game;
-		game = nullptr;
+		screenManager->Stop();
+		delete screenManager;
+		screenManager = nullptr;
 	}
 
 	// Deleting openGL
@@ -239,8 +239,10 @@ bool Program::Update()
 		return false;
 
 	// Update game
-	if (!game->Update())
-		return false;
+	screenManager->Update();
+
+	// Draw game
+	screenManager->Draw();
 
 	return true;
 }

@@ -6,7 +6,7 @@ SolidShader::SolidShader(const SolidShader& other) { }
 
 SolidShader::~SolidShader() { }
 
-void SolidShader::Start(OpenGL* openGL, HWND hwnd, std::string vs, std::string fs)
+void SolidShader::Start(OpenGL* openGL, std::string vs, std::string fs)
 {
 	// Reads the file and puts everything into buffer
 	std::string vertexShaderBuffer = getSource(vs);

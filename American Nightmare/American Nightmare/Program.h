@@ -5,7 +5,7 @@
 #define WIN32_LEAN_AND_MEAN // to exclude useless includes (for this project) to speed up things
 
 // INCLUDES
-#include "Game.h"
+#include "Screen\ScreenManager.h"
 #include "OpenGL.h"
 #include <SFML\Window.hpp>
 #include <SFML\Window\Keyboard.hpp>
@@ -32,9 +32,6 @@ public:
 	// Game-loop function
 	bool Run();
 
-	// Keyinput, etc
-	LRESULT CALLBACK MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam);
-
 private:
 	
 	// Initializing window
@@ -47,7 +44,7 @@ private:
 
 	sf::Window* window;
 	OpenGL* openGL;
-	Game* game;
+	ScreenManager* screenManager;
 	std::wstring appName;
 	HINSTANCE hInstance;
 	HWND hwnd;

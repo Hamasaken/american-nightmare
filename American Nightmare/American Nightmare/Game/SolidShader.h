@@ -13,7 +13,7 @@ public:
 	SolidShader(const SolidShader& other);
 	~SolidShader();
 
-	void Start(OpenGL* openGL, HWND hwnd, std::string vs, std::string fs);	// lazy ass std::runtime errors atm, change this into a bool function later
+	void Start(OpenGL* openGL, std::string vs, std::string fs);	// lazy ass std::runtime errors atm, change this into a bool function later
 	void Stop(OpenGL* openGL);
 
 	void SetShader(OpenGL* openGL);
