@@ -15,6 +15,8 @@ ESQ - Exit
 
 Testing 
 
+ZX - Move Player Object in Z
+
 QE - Rotate Player Object in X
 
 RT - Rotate Player Object in Y
