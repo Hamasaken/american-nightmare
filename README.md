@@ -13,7 +13,7 @@ https://www.dropbox.com/s/vdcg5puvjouj3ad/External.zip?dl=0
 
 
 
-Kontroller
+Controls:
 
 WASD - Move Player Object (No physics yet.)
 
@@ -22,7 +22,7 @@ ESQ - Exit
 
 
 
-Testing 
+Testing:
 
 ZX - Move Player Object in Z
 
