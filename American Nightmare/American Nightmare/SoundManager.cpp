@@ -19,7 +19,7 @@ SoundManager::~SoundManager() { }
 sf::Sound SoundManager::loadSFX(std::string path)
 {
 	// Load a specific SFX
-	if (!buffer[nrOfSound].loadFromFile(path)) 
+	if (!buffer[nrOfSound].loadFromFile(path))
 		std::runtime_error("Could not load SFX from path: " + path);
 	else nrOfSound++;
 
