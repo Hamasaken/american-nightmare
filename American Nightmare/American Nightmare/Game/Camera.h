@@ -25,6 +25,12 @@ public:
 	void setPosition(glm::vec3 position);
 
 	////////////////////////////////////////////////////////////
+	// \brief Moving to position with a smooth function
+	// \note Needs to be called multiple times to get effect
+	////////////////////////////////////////////////////////////
+	void smoothToPosition(glm::vec3 position);
+
+	////////////////////////////////////////////////////////////
 	// \brief Gets the current view matrix
 	// \note Only call this after you've called builtViewMatrix
 	// \return The view matrix in 4x4

@@ -6,7 +6,13 @@ Camera::Camera(const Camera& other) { }
 
 Camera::~Camera() { }
 
+
 void Camera::setPosition(glm::vec3 position) { this->position = position; }
+
+void Camera::smoothToPosition(glm::vec3 position)
+{
+	this->position += (position - this->position) * 0.1f;
+}
 
 glm::mat4 Camera::getViewMatrix() { return viewMatrix; }
 glm::vec3 Camera::getPosition() { return position; }
