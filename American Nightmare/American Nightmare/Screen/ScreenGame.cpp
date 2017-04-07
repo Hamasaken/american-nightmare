@@ -48,6 +48,9 @@ void ScreenGame::Update()
 {
 	// Updating player
 	player->Update();
+
+	// Follows player
+	camera->smoothToPosition(glm::vec3(player->getPosition().x, player->getPosition().y, camera->getPosition().z));
 }
 
 void ScreenGame::Draw()
