@@ -56,12 +56,16 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 10));
 
 	// Making wall big
-	wall->setScale(glm::vec3(5, 5, 3));
-	wall->setRotation(glm::vec3(45, 0, 40));
+	wall->setScale(glm::vec3(8, 5, 3));
 }
 
 void ScreenGame::Update()
 {
+	// Temporary spinning the background
+	static int rotation = 0.f;
+	rotation += 2.0f;
+	wall->setRotation(glm::vec3(rotation, 0, 40));
+
 	// Updating player
 	player->Update();
 

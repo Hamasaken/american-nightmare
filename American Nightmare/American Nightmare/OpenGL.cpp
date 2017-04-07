@@ -223,7 +223,7 @@ bool OpenGL::StartOpenGL(HWND hwnd, glm::vec2 screenSize, float screenDepth, flo
 	worldMatrix = glm::mat4(1.f);
 
 	// Building a projection matrix
-	float fov = glm::pi<float>() / 0.45f;
+	float fov = glm::pi<float>() / 0.40f;
 	projectionMatrix = glm::perspective(fov, screenSize.x / screenSize.y, screenNear, screenDepth);
 
 	// Setting vSync on/off
