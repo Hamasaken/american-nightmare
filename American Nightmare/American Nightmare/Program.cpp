@@ -146,7 +146,7 @@ bool Program::StartWindow()
 	RegisterClassEx(&wc);
 
 	// Creating the temp window
-	hwnd = CreateWindowEx(WS_EX_APPWINDOW, appName.c_str(), appName.c_str(), WS_POPUP,
+	hwnd = CreateWindowEx(WS_EX_APPWINDOW, appName.c_str(), appName.c_str(), WS_BORDER,
 		0, 0, screenSize.x, screenSize.y, NULL, NULL, hInstance, NULL);
 
 	// Setting window as hidden for now
@@ -192,7 +192,8 @@ bool Program::StartWindow()
 		posY = (GetSystemMetrics(SM_CYSCREEN) - screenSize.y) / 2;
 	}
 
-	hwnd = CreateWindowEx(WS_EX_APPWINDOW, appName.c_str(), appName.c_str(), WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
+	// Creating window
+	hwnd = CreateWindowEx(WS_EX_APPWINDOW, appName.c_str(), appName.c_str(), WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX,
 		posX, posY, screenSize.x, screenSize.y, NULL, NULL, hInstance, NULL);
 
 	// Starting openGL now that extentions are in place
