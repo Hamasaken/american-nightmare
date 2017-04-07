@@ -11,8 +11,6 @@
 #include "Accessories.h"	// Includes matrix math functions
 
 // DEFINES
-#define FOV		90
-#define MSAA	4
 #define DEPTH_BUFFER_CLEAR	1.f
 
 // OPENGL DEFINES
