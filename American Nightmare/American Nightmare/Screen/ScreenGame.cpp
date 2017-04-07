@@ -62,11 +62,10 @@ void ScreenGame::SetStartVariables()
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 10));
 
-	// Making wall big
+	// Making wall & floor bigger
 	wall->setScale(glm::vec3(8, 5, 3));
-
-	// Making floor object
 	floor->setScale(glm::vec3(10, 10, 0));
+	floor->setRotation(glm::vec3(0, 90, 0));
 }
 
 void ScreenGame::Update()
@@ -75,9 +74,6 @@ void ScreenGame::Update()
 	static int rotation = 0.f;
 	rotation += 0.05f;
 	wall->setRotation(glm::vec3(rotation, 0, 40));
-
-	// Temporary floor 
-	wall->setRotation(glm::vec3(0, 90, 0));
 
 	// Updating player
 	player->Update();
