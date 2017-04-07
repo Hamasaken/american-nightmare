@@ -3,7 +3,7 @@
 ScreenGame::ScreenGame() : Screen()
 {
 	solidShader = nullptr;
-	triangle = nullptr;
+	player = nullptr;
 }
 
 ScreenGame::ScreenGame(const ScreenGame& other) { }
@@ -18,8 +18,12 @@ bool ScreenGame::Start(OpenGL * openGL)
 	////////////////////////////////////////////////////////////
 	// Creating Models
 	////////////////////////////////////////////////////////////
-	triangle = new Model();
-	if (triangle == nullptr) return false;
+	std::string modelPath = MODEL_PATH;
+	std::string texturePath = TEXTURE_PATH;
+	player = new Player();
+	if (player == nullptr) return false;
+	if (!player->Start(openGL, modelPath + "model.m", texturePath + "texture.t")) 
+		return false;
 
 	////////////////////////////////////////////////////////////
 	// Creating Shaders
@@ -38,37 +42,40 @@ void ScreenGame::SetStartVariables()
 {
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 10));
-
-	triangle->BuildTriangle(openGL); // TEMP
-	 // if (model->LoadModel(openGL, "Path/To/Model.file")) return false;
 }
 
 void ScreenGame::Update()
 {
-	// Update Stuff
+	// Updating player
+	player->Update();
 }
 
 void ScreenGame::Draw()
 {
-	// Starting draw section
-	openGL->StartDraw(CLEAR_COLOR);
-
-	// Building a new camera view matrix
-	camera->buildViewMatrix();
 
 	// Getting matrices
 	glm::mat4 world = openGL->getWorldMatrix();
 	glm::mat4 view = camera->getViewMatrix();
 	glm::mat4 projection = openGL->getProjectionMatrix();
 
+	////////////////////////////////////////////////////////////
+	// Starting draw section
+	////////////////////////////////////////////////////////////
+	openGL->StartDraw(CLEAR_COLOR);
+
+	// Building a new camera view matrix
+	camera->buildViewMatrix();
+
 	// Setting Shader
 	solidShader->SetShader(openGL);
 	solidShader->SetParameters(openGL, world, view, projection);
 
-	// Drawing triangle
-	triangle->Draw(openGL);
+	// Drawing player
+	player->Draw();
 
-	// Ending Draw section
+	////////////////////////////////////////////////////////////
+	// Ending draw section
+	////////////////////////////////////////////////////////////
 	openGL->EndDraw();
 }
 
@@ -82,10 +89,10 @@ void ScreenGame::Stop()
 	}
 
 	// Deleting model
-	if (triangle != nullptr)
+	if (player != nullptr)
 	{
-		triangle->Stop(openGL);
-		triangle = nullptr;
+		player->Stop();
+		player = nullptr;
 	}
 
 	// Removes Camera & openGL ptr

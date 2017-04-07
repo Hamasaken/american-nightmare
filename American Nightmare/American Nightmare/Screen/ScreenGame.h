@@ -2,7 +2,7 @@
 #define SCREENGAME_H
 
 #include "Screen.h"
-#include "../Game/Model.h"
+#include "../Game/Player.h"
 #include "../Game/SolidShader.h"
 
 #define CLEAR_COLOR glm::vec4(0.1f, 0.1, 0.1, 1)
@@ -42,7 +42,7 @@ public:
 
 private:
 	SolidShader* solidShader;	//< Temporary Color Shader (Replace this with a shaderManager as fast as possible)
-	Model* triangle;		//< Temporary Triangle Model (Replace this with a levelManager as fast as possible)
+	Player* player;			//< The player object
 };
 
 #endif // !SCREENGAME_H
