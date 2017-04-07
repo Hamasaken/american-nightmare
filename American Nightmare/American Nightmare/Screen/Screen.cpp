@@ -38,6 +38,35 @@ bool Screen::Start(OpenGL* openGL)
 	return true;
 }
 
+void Screen::DrawObject(Object* object, SolidShader* shader)
+{
+	// Getting matrices
+	glm::mat4 world = openGL->getWorldMatrix();
+	glm::mat4 view = camera->getViewMatrix();
+	glm::mat4 projection = openGL->getProjectionMatrix();
+
+	// Positioning object
+	glm::vec3 pos = object->getPosition();
+	world = glm::translate(world, pos);
+
+	// Rotating object
+	glm::vec3 rot = object->getRotationInRadians();
+	world = glm::rotate(world, rot.x, glm::vec3(0, 0, 1));
+	world = glm::rotate(world, rot.y, glm::vec3(1, 0, 0));
+	world = glm::rotate(world, rot.z, glm::vec3(0, 1, 0));
+
+	// Scaling object
+	glm::vec3 scale = object->getScale();
+	world = glm::scale(world, scale);
+
+	// Setting shader as active and setting parameters
+	shader->SetShader(openGL);
+	shader->SetParameters(openGL, world, view, projection);
+
+	// Drawing object
+	object->Draw();
+}
+
 void Screen::Stop()
 {
 	// Deleting camera
