@@ -6,17 +6,6 @@ Player::Player(const Player & other) { }
 
 Player::~Player() { }
 
-bool Player::Start(OpenGL* openGL, std::string modelName, std::string textureName)
-{
-	if (!Object::Start(openGL, modelName, textureName))
-		return false;
-
-	// Temp function
-	model->BuildTriangle(openGL);
-
-	return true;
-}
-
 void Player::Update()
 {
 	// Updating movement
