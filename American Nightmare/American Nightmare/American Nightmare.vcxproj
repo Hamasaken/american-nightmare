@@ -156,23 +156,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\Model.cpp" />
+    <ClCompile Include="Game\Object.cpp" />
+    <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\SolidShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OpenGL.cpp" />
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Screen\Screen.cpp" />
+    <ClCompile Include="Screen\ScreenGame.cpp" />
+    <ClCompile Include="Screen\ScreenManager.cpp" />
+    <ClCompile Include="Screen\ScreenStart.cpp" />
     <ClCompile Include="SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Accessories.h" />
-    <ClInclude Include="Game.h" />
     <ClInclude Include="Game\Camera.h" />
     <ClInclude Include="Game\Model.h" />
+    <ClInclude Include="Game\Object.h" />
+    <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Game\SolidShader.h" />
     <ClInclude Include="OpenGL.h" />
     <ClInclude Include="Program.h" />
+    <ClInclude Include="Screen\Screen.h" />
+    <ClInclude Include="Screen\ScreenGame.h" />
+    <ClInclude Include="Screen\ScreenManager.h" />
+    <ClInclude Include="Screen\ScreenStart.h" />
     <ClInclude Include="SoundManager.h" />
   </ItemGroup>
   <ItemGroup>
