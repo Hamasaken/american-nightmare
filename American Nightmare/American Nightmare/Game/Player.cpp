@@ -29,11 +29,10 @@ void Player::Movement()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::G)) scale -= 0.025f;
 
 	// Rotation in X
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) rotation.x += 1.f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E)) rotation.x -= 1.f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) rotation.y += 1.f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) rotation.y -= 1.f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y)) rotation.z += 1.f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) rotation.z -= 1.f;
-
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) rotation.x += 2.f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E)) rotation.x -= 2.f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) rotation.y += 2.f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) rotation.y -= 2.f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y)) rotation.z += 2.f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) rotation.z -= 2.f;
 }
