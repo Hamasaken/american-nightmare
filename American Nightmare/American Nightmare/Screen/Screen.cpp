@@ -38,7 +38,7 @@ bool Screen::Start(OpenGL* openGL)
 	return true;
 }
 
-void Screen::DrawObject(Object* object, SolidShader* shader)
+void Screen::DrawObject(Object* object, Shader* shader)
 {
 	// Getting matrices
 	glm::mat4 world = openGL->getWorldMatrix();
