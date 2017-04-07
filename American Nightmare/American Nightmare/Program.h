@@ -12,9 +12,9 @@
 
 // DEFINES
 #define APP_NAME		L"American Nightmare"
-#define FULL_SCREEN_ON		false
+#define FULL_SCREEN_ON		true
 #define SHOW_CURSOR		true
-#define DEFAULT_SCREEN_SIZE	glm::vec2(800, 600)
+#define DEFAULT_SCREEN_SIZE	glm::vec2(1140, 800)
 #define SCREEN_DEPTH		50.f
 #define SCREEN_NEAR		0.1f
 #define VSYNC_ON		true
@@ -55,4 +55,4 @@ private:
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 static Program* pgr = nullptr;
 
-#endif // !PROGRAH
+#endif // !PROGRAM
