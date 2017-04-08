@@ -73,3 +73,5 @@ glm::vec3 Object::getRotation() const { return rotation; }
 glm::vec3 Object::getRotationInRadians() const { return glm::vec3(rotation * (3.141592654f / 180.0f)); }
 void Object::setScale(glm::vec3 scale) { this->scale = scale; }
 glm::vec3 Object::getScale() const { return scale; }
+void Object::setShader(GLuint shader) { this->shader = shader; }
+GLuint Object::getShader() const { return shader; }

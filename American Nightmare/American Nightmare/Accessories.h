@@ -41,4 +41,22 @@ struct Vertex
 	float r, g, b; 
 };
 
+struct VertexUV
+{
+	void setPosition(glm::vec3 position)
+	{
+		x = position.x;
+		y = position.y;
+		z = position.z;
+	}
+
+	void setUV(glm::vec2 uv)
+	{
+		u = uv.x;
+		v = uv.y;
+	}
+	float x, y, z;
+	float u, v;
+};
+
 #endif // !ACCESSORIES_H

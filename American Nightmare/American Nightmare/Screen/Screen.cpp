@@ -38,7 +38,7 @@ bool Screen::Start(OpenGL* openGL)
 	return true;
 }
 
-void Screen::DrawObject(Object* object, Shader* shader)
+void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 {
 	// Getting matrices
 	glm::mat4 world = openGL->getWorldMatrix();
@@ -60,8 +60,8 @@ void Screen::DrawObject(Object* object, Shader* shader)
 	world = glm::scale(world, scale);
 
 	// Setting shader as active and setting parameters
-	shader->SetShader(openGL);
-	shader->SetParameters(openGL, world, view, projection);
+	shaderManager->SetShader(openGL, object->getShader());
+	shaderManager->SetParameters(openGL, world, view, projection);
 
 	// Drawing object
 	object->Draw();

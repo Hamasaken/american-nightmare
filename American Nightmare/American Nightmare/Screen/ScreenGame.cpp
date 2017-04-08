@@ -2,7 +2,7 @@
 
 ScreenGame::ScreenGame() : Screen()
 {
-	solidShader = nullptr;
+	shaderManager = nullptr;
 	player = nullptr;
 	wall = nullptr;
 	floor = nullptr;
@@ -17,6 +17,17 @@ bool ScreenGame::Start(OpenGL * openGL)
 	// Starting Camera & getting openGL pointer
 	Screen::Start(openGL);
 
+
+	////////////////////////////////////////////////////////////
+	// Creating Shader Manager
+	////////////////////////////////////////////////////////////
+	std::string shaderPath = SHADER_PATH;
+	shaderManager = new ShaderManager();
+	if (shaderManager == nullptr) return false;
+
+	// Adding Shader Programs
+	shaderManager->AddShader(openGL, "solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
+
 	////////////////////////////////////////////////////////////
 	// Creating Models
 	////////////////////////////////////////////////////////////
@@ -28,28 +39,21 @@ bool ScreenGame::Start(OpenGL * openGL)
 	if (player == nullptr) return false;
 	if (!player->Start(openGL, modelPath + "model.m", texturePath + "texture.t")) 
 		return false;
+	player->setShader(shaderManager->GetShader("solid"));
 
 	// Creating a simple background wall
 	wall = new Object();
 	if (wall == nullptr) return false;
 	if (!wall->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
 		return false;
+	wall->setShader(shaderManager->GetShader("solid"));
 
 	// Creating a simple floor object too see depth
 	floor = new Object();
 	if (floor == nullptr) return false;
 	if (!floor->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
 		return false;
-
-	////////////////////////////////////////////////////////////
-	// Creating Shaders
-	////////////////////////////////////////////////////////////
-	std::string shaderPath = SHADER_PATH;
-
-	// Creating a simple color shader
-	solidShader = new SolidShader();
-	if (solidShader == nullptr) return false;
-	solidShader->Start(openGL, shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
+	floor->setShader(shaderManager->GetShader("solid"));
 
 	// Setting startvariables
 	SetStartVariables();
@@ -94,13 +98,13 @@ void ScreenGame::Draw()
 	openGL->StartDraw(CLEAR_COLOR);
 
 	// Drawing background wall
-	DrawObject(wall, solidShader);
+	DrawObject(wall, shaderManager);
 
 	// Drawing background wall
-	DrawObject(floor, solidShader);
+	DrawObject(floor, shaderManager);
 
 	// Drawing player
-	DrawObject(player, solidShader);
+	DrawObject(player, shaderManager);
 
 	////////////////////////////////////////////////////////////
 	// Ending draw section
@@ -111,16 +115,18 @@ void ScreenGame::Draw()
 void ScreenGame::Stop()
 {
 	// Deleting shaders
-	if (solidShader != nullptr)
+	if (shaderManager != nullptr)
 	{
-		solidShader->Stop(openGL);
-		solidShader = nullptr;
+		shaderManager->Stop(openGL);
+		delete shaderManager;
+		shaderManager = nullptr;
 	}
 
 	// Deleting player
 	if (player != nullptr)
 	{
 		player->Stop();
+		delete player;
 		player = nullptr;
 	}
 
@@ -128,6 +134,7 @@ void ScreenGame::Stop()
 	if (wall != nullptr)
 	{
 		wall->Stop();
+		delete wall;
 		wall = nullptr;
 	}
 
@@ -135,6 +142,7 @@ void ScreenGame::Stop()
 	if (floor != nullptr)
 	{
 		floor->Stop();
+		delete floor;
 		floor = nullptr;
 	}
 

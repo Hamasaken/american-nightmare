@@ -5,6 +5,7 @@
 #include "../Game/Camera.h"
 #include "../Game/Object.h"
 #include "../Game/Shader/Shader.h"	// temporary, replace this with abstract shader
+#include "../Game/Shader/ShaderManager.h"
 
 class Screen
 {
@@ -54,7 +55,7 @@ public:
 	// \brief Drawing a specific object on screen
 	// \note Replace the solid shader with an abstract "Shader" instead
 	////////////////////////////////////////////////////////////
-	void DrawObject(Object* object, Shader* shader);
+	void DrawObject(Object* object, ShaderManager* shader);
 
 protected:
 	Camera* camera;	//< Simple Camera object

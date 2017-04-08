@@ -43,11 +43,14 @@ public:
 	glm::vec3 getRotationInRadians() const;
 	void setScale(glm::vec3 scale);
 	glm::vec3 getScale() const;
+	void setShader(GLuint shader);
+	GLuint getShader() const;
 
 protected:
 	glm::vec3 position;	//< Object position
 	glm::vec3 rotation;	//< Object rotation
 	glm::vec3 scale;	//< Object scale
+	GLuint shader;		//< Identifier for shaderprogram to use when drawing
 
 protected:	// Note: Make this private when loadModel is implemented!
 	OpenGL* openGL;		//< OpenGL functions ptr
