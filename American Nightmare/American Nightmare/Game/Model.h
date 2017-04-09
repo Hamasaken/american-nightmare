@@ -19,6 +19,7 @@ public:
 	// TEMPORARY FUNCTION, REPLACE THIS WITH LOADMODEL WHEN DONE
 	////////////////////////////////////////////////////////////
 	void BuildTriangle(OpenGL* openGL);
+	void BuildQuad(OpenGL* openGL);
 	
 	////////////////////////////////////////////////////////////
 	// \brief Loads a model with vertices and normals and inserts into buffers

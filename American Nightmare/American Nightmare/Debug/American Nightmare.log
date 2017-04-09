@@ -1,3 +1,13 @@
-﻿  ScreenGame.cpp
+﻿  Object.cpp
+  Model.cpp
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  main.cpp
+  ScreenStart.cpp
+  ScreenManager.cpp
+  ScreenGame.cpp
+  Screen.cpp
+  Program.cpp
+  Player.cpp
   American Nightmare.vcxproj -> C:\Users\bjurRsson\Documents\GitHub\AmericanNightmare\american-nightmare\American Nightmare\Debug\American Nightmare.exe
   American Nightmare.vcxproj -> C:\Users\bjurRsson\Documents\GitHub\AmericanNightmare\american-nightmare\American Nightmare\Debug\American Nightmare.pdb (Full PDB)

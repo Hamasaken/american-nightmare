@@ -32,7 +32,8 @@ bool Object::Start(OpenGL* openGL, std::string modelName, std::string textureNam
 //	if (!texture->Start(textureName)) return false;
 
 	// TEMPORARY
-	model->BuildTriangle(openGL);
+	//model->BuildTriangle(openGL);
+	model->BuildQuad(openGL);
 
 	return true;
 }
