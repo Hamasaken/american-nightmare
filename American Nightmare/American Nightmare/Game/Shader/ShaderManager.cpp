@@ -39,6 +39,10 @@ void ShaderManager::AddShader(OpenGL* openGL, std::string name, std::string vs, 
 	openGL->glAttachShader(shaderProgram, vertexShader);
 	openGL->glAttachShader(shaderProgram, fragmentShader);
 
+	// Attributes locations
+	openGL->glBindAttribLocation(shaderProgram, 0, "inputPosition");
+	openGL->glBindAttribLocation(shaderProgram, 1, "inputColor");
+
 	// Link program
 	openGL->glLinkProgram(shaderProgram);
 
