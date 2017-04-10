@@ -133,5 +133,11 @@
     <None Include="Data\Graphics\Shaders\solid_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Data\Graphics\Shaders\texture_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\texture_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

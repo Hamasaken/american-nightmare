@@ -63,6 +63,12 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 	shaderManager->SetShader(openGL, object->getShader());
 	shaderManager->SetParameters(openGL, world, view, projection);
 
+	glEnable(GL_TEXTURE_2D);
+	openGL->glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, object->getTexture());
+
+	openGL->glUniform1i(openGL->glGetUniformLocation(object->getShader(), "texture"), 0);
+
 	// Drawing object
 	object->Draw();
 }

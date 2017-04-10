@@ -2,7 +2,7 @@
 #define OBJECT_H
 
 // Classes
-// #include "Texture.h"
+#include "SFML\Graphics.hpp"
 #include "Model.h"
 
 class Object
@@ -45,6 +45,7 @@ public:
 	glm::vec3 getScale() const;
 	void setShader(GLuint shader);
 	GLuint getShader() const;
+	GLuint getTexture() const;
 
 protected:
 	glm::vec3 position;	//< Object position
@@ -52,10 +53,12 @@ protected:
 	glm::vec3 scale;	//< Object scale
 	GLuint shader;		//< Identifier for shaderprogram to use when drawing
 
+	GLuint loadTexture(OpenGL* openGL, std::string inImage); //< 
+
 protected:	// Note: Make this private when loadModel is implemented!
 	OpenGL* openGL;		//< OpenGL functions ptr
 	Model* model;		//< This object's model
-	// Texture* texture;	//< This object's texture 
+	GLuint texture;	//< This object's texture 
 };
 
 

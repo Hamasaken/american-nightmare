@@ -31,9 +31,13 @@ bool Object::Start(OpenGL* openGL, std::string modelName, std::string textureNam
 //	if (texture == nullptr) return false;
 //	if (!texture->Start(textureName)) return false;
 
+	std::string texPath = TEXTURE_PATH;
+	texture = loadTexture(openGL, texPath + "gammal-dammsugare.jpg");
+
 	// TEMPORARY
 	//model->BuildTriangle(openGL);
-	model->BuildQuad(openGL);
+	//model->BuildQuad(openGL);
+	model->BuildQuadTexture(openGL);
 
 	return true;
 }
@@ -60,6 +64,42 @@ void Object::Stop()
 	openGL = nullptr;
 }
 
+GLuint Object::loadTexture(OpenGL* openGL, std::string inImage)
+{
+
+	sf::Image* sfImage = new sf::Image();
+	if (!sfImage->loadFromFile(inImage))
+	{
+		throw std::runtime_error("Could not load texture");
+	}
+
+	if (sfImage != nullptr)
+	{
+		GLuint glTexture;
+
+		glGenTextures(1, &glTexture);
+		glBindTexture(GL_TEXTURE_2D, glTexture);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, sfImage->getSize().x, sfImage->getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, sfImage->getPixelsPtr());
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		openGL->glGenerateMipmap(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		sfImage->~Image();
+		delete sfImage;
+
+		return glTexture;
+	}
+
+	return -1;
+}
+
 void Object::Update() { }
 
 void Object::Draw()
@@ -76,3 +116,4 @@ void Object::setScale(glm::vec3 scale) { this->scale = scale; }
 glm::vec3 Object::getScale() const { return scale; }
 void Object::setShader(GLuint shader) { this->shader = shader; }
 GLuint Object::getShader() const { return shader; }
+GLuint Object::getTexture() const {	return texture; }

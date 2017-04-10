@@ -26,7 +26,8 @@ bool ScreenGame::Start(OpenGL * openGL)
 	if (shaderManager == nullptr) return false;
 
 	// Adding Shader Programs
-	shaderManager->AddShader(openGL, "solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
+	//shaderManager->AddShader(openGL, "solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
+	shaderManager->AddShader(openGL, "texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
@@ -39,21 +40,21 @@ bool ScreenGame::Start(OpenGL * openGL)
 	if (player == nullptr) return false;
 	if (!player->Start(openGL, modelPath + "model.m", texturePath + "texture.t")) 
 		return false;
-	player->setShader(shaderManager->GetShader("solid"));
+	player->setShader(shaderManager->GetShader("texture"));
 
 	// Creating a simple background wall
 	wall = new Object();
 	if (wall == nullptr) return false;
 	if (!wall->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
 		return false;
-	wall->setShader(shaderManager->GetShader("solid"));
+	wall->setShader(shaderManager->GetShader("texture"));
 
 	// Creating a simple floor object too see depth
 	floor = new Object();
 	if (floor == nullptr) return false;
 	if (!floor->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
 		return false;
-	floor->setShader(shaderManager->GetShader("solid"));
+	floor->setShader(shaderManager->GetShader("texture"));
 
 	// Setting startvariables
 	SetStartVariables();

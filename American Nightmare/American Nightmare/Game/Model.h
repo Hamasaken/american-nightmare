@@ -20,6 +20,7 @@ public:
 	////////////////////////////////////////////////////////////
 	void BuildTriangle(OpenGL* openGL);
 	void BuildQuad(OpenGL* openGL);
+	void BuildQuadTexture(OpenGL* openGL);
 	
 	////////////////////////////////////////////////////////////
 	// \brief Loads a model with vertices and normals and inserts into buffers

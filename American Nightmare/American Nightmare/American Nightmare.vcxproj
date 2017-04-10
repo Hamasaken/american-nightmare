@@ -194,6 +194,8 @@
   <ItemGroup>
     <None Include="Data\Graphics\Shaders\solid_fs.glsl" />
     <None Include="Data\Graphics\Shaders\solid_vs.glsl" />
+    <None Include="Data\Graphics\Shaders\texture_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\texture_vs.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
