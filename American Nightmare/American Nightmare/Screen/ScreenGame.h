@@ -3,7 +3,8 @@
 
 #include "Screen.h"
 #include "../Game/Player.h"
-#include "../Game/Shader/SolidShader.h"
+#include "../Game/Shader/ShaderManager.h"
+#include "../Game/LevelManager.h"
 
 #define CLEAR_COLOR glm::vec4(0.1f, 0.1, 0.1, 1)
 
@@ -42,9 +43,8 @@ public:
 
 private:
 	ShaderManager* shaderManager;	//< Manager for shaderprograms
-	Player* player;					//< The player object
-	Object* wall;					//< Background Wall (Temporary, just to see the camera&player movement)
-	Object* floor;					//< Background Floor (Temporary, just to see the camera&player movement)
+	LevelManager* levelManager;	//< Manager for levels/maps
+	Player* player;			//< The player object
 };
 
 #endif // !SCREENGAME_H

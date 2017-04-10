@@ -3,9 +3,8 @@
 ScreenGame::ScreenGame() : Screen()
 {
 	shaderManager = nullptr;
+	levelManager = nullptr;
 	player = nullptr;
-	wall = nullptr;
-	floor = nullptr;
 }
 
 ScreenGame::ScreenGame(const ScreenGame& other) { }
@@ -16,7 +15,6 @@ bool ScreenGame::Start(OpenGL * openGL)
 {
 	// Starting Camera & getting openGL pointer
 	Screen::Start(openGL);
-
 
 	////////////////////////////////////////////////////////////
 	// Creating Shader Manager
@@ -38,10 +36,11 @@ bool ScreenGame::Start(OpenGL * openGL)
 	// Creating the player object
 	player = new Player();
 	if (player == nullptr) return false;
-	if (!player->Start(openGL, modelPath + "model.m", texturePath + "texture.t")) 
+	if (!player->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
 		return false;
 	player->setShader(shaderManager->GetShader("texture"));
 
+<<<<<<< HEAD
 	// Creating a simple background wall
 	wall = new Object();
 	if (wall == nullptr) return false;
@@ -55,6 +54,13 @@ bool ScreenGame::Start(OpenGL * openGL)
 	if (!floor->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
 		return false;
 	floor->setShader(shaderManager->GetShader("texture"));
+=======
+	// Creating a simple level
+	levelManager = new LevelManager();
+	if (levelManager == nullptr) return false;
+	if (!levelManager->Start(openGL))
+		return false;
+>>>>>>> origin/master
 
 	// Setting startvariables
 	SetStartVariables();
@@ -68,25 +74,22 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 10));
 
 	// Making wall & floor bigger
-	wall->setScale(glm::vec3(8, 5, 3));
-	wall->setRotation(glm::vec3(0, 0, 40));
-	wall->setPosition(glm::vec3(-2, 0, -10));
-
-	// Setting floor varaibles
-	floor->setScale(glm::vec3(15, 15, 0));;
-	floor->setPosition(glm::vec3(0, -10, 0));
-	floor->setRotation(glm::vec3(0.f, -90, 0.f));
+	levelManager->LoadLevel(shaderManager->GetShader("solid"), "0.lvl");
 }
 
 void ScreenGame::Update()
 {
+	sf::Time delta = sf::Time::Zero; // fix this, temporary
 
-	// Updating player
+					 // Updating player
 	player->Update();
 
+	// Updating map objects
+	levelManager->Update(delta);
+
 	// Moving the camera to follow player object
-	camera->smoothToPosition(glm::vec3(player->getPosition().x, player->getPosition().y, camera->getPosition().z));	
-	
+	camera->smoothToPosition(glm::vec3(player->getPosition().x, player->getPosition().y, camera->getPosition().z));
+
 	// Building a new camera view matrix
 	camera->buildViewMatrix();
 }
@@ -98,11 +101,9 @@ void ScreenGame::Draw()
 	////////////////////////////////////////////////////////////
 	openGL->StartDraw(CLEAR_COLOR);
 
-	// Drawing background wall
-	DrawObject(wall, shaderManager);
-
-	// Drawing background wall
-	DrawObject(floor, shaderManager);
+	// Drawing map
+	for (Object* object : levelManager->getMap())
+		DrawObject(object, shaderManager);
 
 	// Drawing player
 	DrawObject(player, shaderManager);
@@ -123,28 +124,20 @@ void ScreenGame::Stop()
 		shaderManager = nullptr;
 	}
 
+	// Deleting map
+	if (levelManager != nullptr)
+	{
+		levelManager->Stop();
+		delete levelManager;
+		levelManager = nullptr;
+	}
+
 	// Deleting player
 	if (player != nullptr)
 	{
 		player->Stop();
 		delete player;
 		player = nullptr;
-	}
-
-	// Deleting wall
-	if (wall != nullptr)
-	{
-		wall->Stop();
-		delete wall;
-		wall = nullptr;
-	}
-
-	// Deleting floor
-	if (floor != nullptr)
-	{
-		floor->Stop();
-		delete floor;
-		floor = nullptr;
 	}
 
 	// Removes Camera & openGL ptr

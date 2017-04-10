@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿  main.cpp
 c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\screen\screenstart.h(6): warning C4005: 'CLEAR_COLOR': macro redefinition
   c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\screen\screengame.h(8): note: see previous definition of 'CLEAR_COLOR'
@@ -33,3 +34,14 @@ c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nig
   Object.cpp
   American Nightmare.vcxproj -> C:\Users\Emanuel\Source\Repos\american-nightmare\American Nightmare\Debug\American Nightmare.exe
   American Nightmare.vcxproj -> C:\Users\Emanuel\Source\Repos\american-nightmare\American Nightmare\Debug\American Nightmare.pdb (Full PDB)
+=======
+﻿  LevelManager.cpp
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  main.cpp
+  ScreenManager.cpp
+  ScreenGame.cpp
+  Program.cpp
+  American Nightmare.vcxproj -> C:\Users\Simon\Source\Repos\american-nightmare\American Nightmare\Debug\American Nightmare.exe
+  American Nightmare.vcxproj -> C:\Users\Simon\Source\Repos\american-nightmare\American Nightmare\Debug\American Nightmare.pdb (Full PDB)
+>>>>>>> origin/master
