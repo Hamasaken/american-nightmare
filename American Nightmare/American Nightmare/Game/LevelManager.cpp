@@ -18,6 +18,15 @@ bool LevelManager::Start(OpenGL* openGL)
 
 void LevelManager::Stop()
 {
+	// Removes openGL pointer
+	this->openGL =nullptr;
+
+	// Unloads the map objects
+	StopMap();
+}
+
+void LevelManager::StopMap()
+{
 	// Unloads every object in map
 	for (Object* object : map)
 	{
@@ -33,7 +42,7 @@ void LevelManager::Stop()
 bool LevelManager::LoadLevel(GLuint shader, std::string levelFile)
 {
 	// Deleting current level
-	Stop();
+	StopMap();
 
 	// Gettings paths to files
 	std::string modelPath = MODEL_PATH;
@@ -65,13 +74,6 @@ void LevelManager::Update(sf::Time delta)
 	// Updating every object on map
 	for (Object* object : map)
 		object->Update();
-}
-
-void LevelManager::Draw()
-{
-	// Drawing whole map
-	for (Object* object : map)
-		object->Draw();
 }
 
 std::vector<Object*> LevelManager::getMap()
