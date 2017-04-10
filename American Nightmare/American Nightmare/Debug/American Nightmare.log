@@ -1,17 +1,17 @@
-<<<<<<< HEAD
 ﻿  main.cpp
 c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\screen\screenstart.h(6): warning C4005: 'CLEAR_COLOR': macro redefinition
-  c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\screen\screengame.h(8): note: see previous definition of 'CLEAR_COLOR'
+  c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\screen\screengame.h(9): note: see previous definition of 'CLEAR_COLOR'
   SoundManager.cpp
 c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\soundmanager.cpp(40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\soundmanager.cpp(56): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   ScreenStart.cpp
   ScreenManager.cpp
 c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\screen\screenstart.h(6): warning C4005: 'CLEAR_COLOR': macro redefinition
-  c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\screen\screengame.h(8): note: see previous definition of 'CLEAR_COLOR'
+  c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\screen\screengame.h(9): note: see previous definition of 'CLEAR_COLOR'
+  ScreenGame.cpp
   Program.cpp
 c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\screen\screenstart.h(6): warning C4005: 'CLEAR_COLOR': macro redefinition
-  c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\screen\screengame.h(8): note: see previous definition of 'CLEAR_COLOR'
+  c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\screen\screengame.h(9): note: see previous definition of 'CLEAR_COLOR'
 c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\program.cpp(59): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
 c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\program.cpp(150): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\program.cpp(165): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
@@ -24,24 +24,13 @@ c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nig
 c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\game\shader\shadermanager.cpp(153): warning C4018: '<': signed/unsigned mismatch
   Shader.cpp
   Player.cpp
-  Camera.cpp
   Generating Code...
   Skipping... (no relevant changes detected)
-  OpenGL.cpp
-  Model.cpp
-  ScreenGame.cpp
   Screen.cpp
+  OpenGL.cpp
   Object.cpp
+  Model.cpp
+  LevelManager.cpp
+  Camera.cpp
   American Nightmare.vcxproj -> C:\Users\Emanuel\Source\Repos\american-nightmare\American Nightmare\Debug\American Nightmare.exe
   American Nightmare.vcxproj -> C:\Users\Emanuel\Source\Repos\american-nightmare\American Nightmare\Debug\American Nightmare.pdb (Full PDB)
-=======
-﻿  LevelManager.cpp
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  main.cpp
-  ScreenManager.cpp
-  ScreenGame.cpp
-  Program.cpp
-  American Nightmare.vcxproj -> C:\Users\Simon\Source\Repos\american-nightmare\American Nightmare\Debug\American Nightmare.exe
-  American Nightmare.vcxproj -> C:\Users\Simon\Source\Repos\american-nightmare\American Nightmare\Debug\American Nightmare.pdb (Full PDB)
->>>>>>> origin/master

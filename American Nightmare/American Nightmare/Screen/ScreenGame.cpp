@@ -40,27 +40,11 @@ bool ScreenGame::Start(OpenGL * openGL)
 		return false;
 	player->setShader(shaderManager->GetShader("texture"));
 
-<<<<<<< HEAD
-	// Creating a simple background wall
-	wall = new Object();
-	if (wall == nullptr) return false;
-	if (!wall->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
-		return false;
-	wall->setShader(shaderManager->GetShader("texture"));
-
-	// Creating a simple floor object too see depth
-	floor = new Object();
-	if (floor == nullptr) return false;
-	if (!floor->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
-		return false;
-	floor->setShader(shaderManager->GetShader("texture"));
-=======
 	// Creating a simple level
 	levelManager = new LevelManager();
 	if (levelManager == nullptr) return false;
 	if (!levelManager->Start(openGL))
 		return false;
->>>>>>> origin/master
 
 	// Setting startvariables
 	SetStartVariables();
@@ -74,7 +58,7 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 10));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(shaderManager->GetShader("solid"), "0.lvl");
+	levelManager->LoadLevel(shaderManager->GetShader("texture"), "0.lvl");
 }
 
 void ScreenGame::Update()
