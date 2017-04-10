@@ -1,30 +1,30 @@
 #ifndef LEVELMANAGER_H
 #define LEVELMANAGER_H
 
-#include Object.h
-#include ShaderShader.h
-#include vector
+#include "Object.h"
+#include "../Game/Shader/Shader.h"
+#include <vector>
 
 class LevelManager
 {
-public
+public:
 	LevelManager();
 	LevelManager(const LevelManager& other);
 	~LevelManager();
 
-	bool Start(OpenGL openGL);
+	bool Start(OpenGL* openGL);
 	void Stop();
 
-	bool LoadLevel(GLuint shader, stdstring levelFile);
+	bool LoadLevel(GLuint shader, std::string levelFile);
 
-	void Update(sfTime delta);
+	void Update(sf::Time delta);
 	void Draw();
 
-	stdvectorObject getMap();
+	std::vector<Object*> getMap();
 
-private
-	OpenGL openGL;
-	stdvectorObject map;
+private:
+	OpenGL* openGL;
+	std::vector<Object*> map;
 };
 
 
