@@ -10,6 +10,8 @@ bool LevelManager::Start(OpenGL* openGL)
 {
 	// Getting openGL ptr
 	this->openGL = openGL;
+	if (openGL == nullptr)
+		return false;
 
 	return true;
 }
@@ -19,14 +21,20 @@ void LevelManager::Stop()
 	// Unloads every object in map
 	for (Object* object : map)
 	{
-		object->Stop();
-		delete object;
-		object = nullptr;
+		if (object != nullptr)
+		{
+			object->Stop();
+			delete object;
+			object = nullptr;
+		}
 	}
 }
 
 bool LevelManager::LoadLevel(GLuint shader, std::string levelFile)
 {
+	// Deleting current level
+	Stop();
+
 	// Gettings paths to files
 	std::string modelPath = MODEL_PATH;
 	std::string texturePath = TEXTURE_PATH;
