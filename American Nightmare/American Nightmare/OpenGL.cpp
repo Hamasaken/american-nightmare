@@ -218,6 +218,7 @@ bool OpenGL::StartOpenGL(HWND hwnd, glm::vec2 screenSize, float screenDepth, flo
 	glFrontFace(GL_CW);								// ClockWise = CW, CounterClockWise = CCW
 	glEnable(GL_CULL_FACE);							// Enable Culling
 	glCullFace(GL_BACK);							// GL_BACK is default, (backculling), we can also use GL_FRONT, and GL_FRONT_AND_BACK if needed
+	glEnable(GL_DEPTH_TEST);						// Enable Depth test
 
 	// Building a world matrix (just identity matrix)
 	worldMatrix = glm::mat4(1.f);

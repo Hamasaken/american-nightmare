@@ -1,5 +1,6 @@
-﻿  Object.cpp
-  Model.cpp
+﻿  OpenGL.cpp
+c:\users\emanuel\source\repos\american-nightmare\american nightmare\american nightmare\opengl.cpp(216): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+  Camera.cpp
   Generating Code...
   American Nightmare.vcxproj -> C:\Users\Emanuel\Source\Repos\american-nightmare\American Nightmare\Debug\American Nightmare.exe
   American Nightmare.vcxproj -> C:\Users\Emanuel\Source\Repos\american-nightmare\American Nightmare\Debug\American Nightmare.pdb (Full PDB)
