@@ -1,7 +1,6 @@
 #ifndef PARTICLEMANAGER_H
 #define PARTICLEMANAGER_H
 
-#include "../Accessories.h"
 #include "ParticleEmitter.h"
 
 class ParticleManager
@@ -14,7 +13,7 @@ public:
 	bool Start();
 	void Stop();
 
-	void Explosion(ParticleType type, glm::vec3 position, glm::vec3 color, int amount);
+	void Explosion(ParticleEmitter::ParticleType type, glm::vec3 position, glm::vec3 color, int amount);
 
 	void Update(sf::Time delta);
 	

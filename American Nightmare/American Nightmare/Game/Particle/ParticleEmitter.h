@@ -1,10 +1,16 @@
 #ifndef PARTICLEEMITTER_H
 #define PARTICLEEMITTER_H
 
+#include "../../Accessories.h"
 
 class ParticleEmitter
 {
 public:
+	enum ParticleType
+	{
+		PIXEL
+	};
+
 	struct Particle
 	{
 		Particle(glm::vec3 position, glm::vec3 color)
@@ -36,8 +42,6 @@ public:
 	ParticleEmitter();
 	ParticleEmitter(const ParticleEmitter& other);
 	~ParticleEmitter();
-
-	void CreateParticles
 
 	void Update(sf::Time delta)
 	{
