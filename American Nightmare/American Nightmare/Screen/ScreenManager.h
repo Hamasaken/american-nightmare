@@ -1,11 +1,11 @@
 #ifndef SCREENMANAGER_H
 #define SCREENMANAGER_H
 
-#include "../OpenGL.h"
 #include "ScreenGame.h"
 #include "ScreenStart.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
+#include <Windows.h>
 
 #define START_STATE 0 // 0 = Game, 1 = Startmeny
 

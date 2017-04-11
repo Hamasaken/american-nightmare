@@ -1,6 +1,9 @@
 #ifndef ACCESSORIES_H
 #define ACCESSORIES_H
 
+#include <Windows.h>
+#include <GL/glew.h>
+
 // Including various opengl math classes & functions
 #include <glm/glm.hpp>	
 #include <glm/mat4x4.hpp>		// 4x4 matrices

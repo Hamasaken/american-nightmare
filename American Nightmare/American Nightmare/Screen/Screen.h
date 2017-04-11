@@ -1,11 +1,9 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
-#include "../OpenGL.h"
 #include "../Game/Camera.h"
 #include "../Game/Object.h"
 #include "../Game/Shader/ShaderManager.h"
-#include "../Accessories.h"
 
 class Screen
 {

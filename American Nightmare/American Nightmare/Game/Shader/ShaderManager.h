@@ -1,9 +1,8 @@
 #ifndef SHADERMANAGER_H
 #define SHADERMANAGER_H
 
-#include "../../OpenGL.h"
+#include "..\..\Accessories.h"
 #include <fstream>
-#include <string>
 #include <sstream>
 #include <vector>
 

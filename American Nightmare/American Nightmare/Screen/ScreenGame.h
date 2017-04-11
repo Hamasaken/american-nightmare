@@ -3,7 +3,6 @@
 
 #include "Screen.h"
 #include "../Game/Player.h"
-#include "../Game/Shader/ShaderManager.h"
 #include "../Game/LevelManager.h"
 
 #define CLEAR_COLOR glm::vec4(0.1f, 0.1, 0.1, 1)

@@ -1,7 +1,7 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include "../OpenGL.h"
+#include "..\Accessories.h"
 
 class Model
 {
