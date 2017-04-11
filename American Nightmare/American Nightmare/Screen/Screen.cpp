@@ -4,7 +4,6 @@ Screen::Screen()
 {	
 	// Setting ptr's to nullptr
 	camera = nullptr;
-	openGL = nullptr;
 }
 
 Screen::Screen(const Screen & other) { }
@@ -13,23 +12,26 @@ Screen::~Screen() { }
 
 bool Screen::Restart()
 {
-	// Saving pointer to openGL
-	OpenGL* ptr = openGL;
 
 	// Unload everything
 	Stop();
 
 	// Trying to restart
-	if (!Start(ptr))
+	if (!Start())
 		return false;
 
 	return true;
 }
 
-bool Screen::Start(OpenGL* openGL)
+bool Screen::Start()
 {
-	// Saving OpenGL ptr
-	this->openGL = openGL;
+
+	// Building a world matrix (just identity matrix)
+	worldMatrix = glm::mat4(1.f);
+
+	// Building a projection matrix
+	float fov = glm::pi<float>() / 0.40f;
+	projectionMatrix = glm::perspective(fov, 1920.f / 1080.f, 0.1f, 50.f);
 
 	// Creating Camera Object
 	camera = new Camera();
@@ -41,9 +43,9 @@ bool Screen::Start(OpenGL* openGL)
 void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 {
 	// Getting matrices
-	glm::mat4 world = openGL->getWorldMatrix();
+	glm::mat4 world = worldMatrix;
 	glm::mat4 view = camera->getViewMatrix();
-	glm::mat4 projection = openGL->getProjectionMatrix();
+	glm::mat4 projection = projectionMatrix;
 
 	// Positioning object
 	glm::vec3 pos = object->getPosition();
@@ -60,14 +62,14 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 	world = glm::scale(world, scale);
 
 	// Setting shader as active and setting parameters
-	shaderManager->SetShader(openGL, object->getShader());
-	shaderManager->SetParameters(openGL, world, view, projection);
+	shaderManager->SetShader(object->getShader());
+	shaderManager->SetParameters(world, view, projection);
 
 	glEnable(GL_TEXTURE_2D);
-	openGL->glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, object->getTexture());
 
-	openGL->glUniform1i(openGL->glGetUniformLocation(object->getShader(), "texture"), 0);
+	glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
 
 	// Drawing object
 	object->Draw();
@@ -81,7 +83,4 @@ void Screen::Stop()
 		delete camera;
 		camera = nullptr;
 	}
-
-	// Removing our openGL ptr
-	openGL = nullptr;
 }

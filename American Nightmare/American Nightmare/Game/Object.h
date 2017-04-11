@@ -16,7 +16,7 @@ public:
 	// \brief Loads both a model & texture
 	// \return Returns false if one or both fails
 	////////////////////////////////////////////////////////////
-	virtual bool Start(OpenGL* openGL, std::string modelName, std::string textureName);
+	virtual bool Start(std::string modelName, std::string textureName);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads both model & texture
@@ -53,10 +53,10 @@ protected:
 	glm::vec3 scale;	//< Object scale
 	GLuint shader;		//< Identifier for shaderprogram to use when drawing
 
-	GLuint loadTexture(OpenGL* openGL, std::string inImage); //< 
+	GLuint loadTexture(std::string inImage); //< 
 
 protected:	// Note: Make this private when loadModel is implemented!
-	OpenGL* openGL;		//< OpenGL functions ptr
+	;		//< OpenGL functions ptr
 	Model* model;		//< This object's model
 	GLuint texture;	//< This object's texture 
 };

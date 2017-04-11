@@ -2,7 +2,6 @@
 
 Object::Object()
 { 
-	openGL = nullptr;
 	model = nullptr;
 //	texture = nullptr;
 }
@@ -11,33 +10,29 @@ Object::Object(const Object& other) { }
 
 Object::~Object() { }
 
-bool Object::Start(OpenGL* openGL, std::string modelName, std::string textureName)
+bool Object::Start(std::string modelName, std::string textureName)
 {
 	// Setting starting variables
 	position = glm::vec3(0, 0, 0);
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(1, 1, 1);
 
-	// Grabbing the openGL ptr
-	this->openGL = openGL;
-
 	// Creating model
 	model = new Model();
 	if (model == nullptr) return false;
-	if (!model->Start(openGL, modelName)) return false;
+	if (!model->Start(modelName)) return false;
 	
 	// Creating texture
 //	texture = new Texture();
 //	if (texture == nullptr) return false;
 //	if (!texture->Start(textureName)) return false;
 
-	std::string texPath = TEXTURE_PATH;
-	texture = loadTexture(openGL, texPath + "gammal-dammsugare.jpg");
+	texture = loadTexture(textureName);
 
 	// TEMPORARY
 	//model->BuildTriangle(openGL);
 	//model->BuildQuad(openGL);
-	model->BuildQuadTexture(openGL);
+	model->BuildQuadTexture();
 
 	return true;
 }
@@ -47,7 +42,7 @@ void Object::Stop()
 	// Unloading the model
 	if (model != nullptr)
 	{ 
-		model->Stop(openGL);
+		model->Stop();
 		delete model;
 		model = nullptr;
 	}
@@ -59,12 +54,9 @@ void Object::Stop()
 //		delete texture;
 //		texture = nullptr;
 //	}
-
-	// Removing the ptr to openGL functions
-	openGL = nullptr;
 }
 
-GLuint Object::loadTexture(OpenGL* openGL, std::string inImage)
+GLuint Object::loadTexture(std::string inImage)
 {
 
 	sf::Image* sfImage = new sf::Image();
@@ -88,7 +80,29 @@ GLuint Object::loadTexture(OpenGL* openGL, std::string inImage)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		openGL->glGenerateMipmap(GL_TEXTURE_2D);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		GLuint glTextureSub;
+		void *subPixels = nullptr;
+
+		/*glTextureSubImage2D(glTexture, 0, sfImage->getSize().x / 4, sfImage->getSize().y / 4, sfImage->getSize().x / 2, sfImage->getSize().y / 2,
+			GL_RGBA, GL_UNSIGNED_BYTE, subPixels);
+
+
+
+		glGenTextures(1, &glTextureSub);
+		glBindTexture(GL_TEXTURE_2D, glTextureSub);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, sfImage->getSize().x / 2, sfImage->getSize().y / 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, subPixels);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		glGenerateMipmap(GL_TEXTURE_2D);*/
+
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		sfImage->~Image();
@@ -104,7 +118,7 @@ void Object::Update() { }
 
 void Object::Draw()
 {
-	model->Draw(openGL);
+	model->Draw();
 }
 
 void Object::setPosition(glm::vec3 position) { this->position = position; }

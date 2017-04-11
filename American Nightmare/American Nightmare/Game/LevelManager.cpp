@@ -6,21 +6,14 @@ LevelManager::LevelManager(const LevelManager & other) { }
 
 LevelManager::~LevelManager() { }
 
-bool LevelManager::Start(OpenGL* openGL)
+bool LevelManager::Start()
 {
-	// Getting openGL ptr
-	this->openGL = openGL;
-	if (openGL == nullptr)
-		return false;
 
 	return true;
 }
 
 void LevelManager::Stop()
 {
-	// Removes openGL pointer
-	this->openGL =nullptr;
-
 	// Unloads the map objects
 	StopMap();
 }
@@ -53,7 +46,7 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelFile)
 	{
 		map.push_back(new Object());
 		if (map[i] == nullptr) return false;
-		if (!map[i]->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
+		if (!map[i]->Start(modelPath + "model.m", texturePath + "gammal-dammsugare.jpg"))
 			return false;
 		map[i]->setShader(shader);
 	}

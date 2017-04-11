@@ -2,7 +2,6 @@
 #define LEVELMANAGER_H
 
 #include "Object.h"
-#include "../Game/Shader/Shader.h"
 #include <vector>
 
 class LevelManager
@@ -16,7 +15,7 @@ public:
 	// \brief Starts class, gets the openGL ptr
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(OpenGL* openGL);
+	bool Start();
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -48,7 +47,7 @@ public:
 	std::vector<Object*> getMap();
 
 private:
-	OpenGL* openGL;			//< OpenGL ptr
+	;			//< OpenGL ptr
 	std::vector<Object*> map;	//< Vector with level specific objects
 };
 

@@ -11,11 +11,10 @@ ScreenManager::ScreenManager(const ScreenManager & other) { }
 
 ScreenManager::~ScreenManager() { }
 
-bool ScreenManager::Start(HWND hwnd, OpenGL * openGL)
+bool ScreenManager::Start(HWND hwnd)
 {
 	// Get parameters
 	this->hwnd = hwnd;
-	this->openGL = openGL;
 
 	// Setting start screen
 	currentState = State(START_STATE);
@@ -52,7 +51,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::Game: 
 		screenGame = new ScreenGame();
 		if (screenGame == nullptr) return false;
-		if (!screenGame->Start(openGL))
+		if (!screenGame->Start())
 		{
 			MessageBox(hwnd, L"Could not start Game Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
@@ -61,7 +60,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::StartMeny:
 		screenStart = new ScreenStart();
 		if (screenStart == nullptr) return false;
-		if (!screenStart->Start(openGL))
+		if (!screenStart->Start())
 		{
 			MessageBox(hwnd, L"Could not start Start Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
@@ -123,13 +122,21 @@ void ScreenManager::Update()
 	}
 }
 
-void ScreenManager::Draw()
+void ScreenManager::Draw(SDL_Window* window, glm::vec4 color)
 {
+	// Clearing the screen to the clear color
+	glClearColor(0.f, 0.f, 0.f, 1.f);
+
+	// Cleaning screen & depth buffers
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	switch (currentState)
 	{
 	case State::Game: screenGame->Draw(); break;
 	case State::StartMeny: screenStart->Draw(); break;
 	}
+
+	SDL_GL_SwapWindow(window);
 }
 
 ScreenManager::State ScreenManager::getState()

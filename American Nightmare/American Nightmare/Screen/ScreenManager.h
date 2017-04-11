@@ -4,6 +4,8 @@
 #include "../OpenGL.h"
 #include "ScreenGame.h"
 #include "ScreenStart.h"
+#include <SDL.h>
+#include <SDL_opengl.h>
 
 #define START_STATE 0 // 0 = Game, 1 = Startmeny
 
@@ -20,7 +22,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Saves openGL ptr and starts the start screen
 	////////////////////////////////////////////////////////////
-	bool Start(HWND hwnd, OpenGL* openGL);
+	bool Start(HWND hwnd);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads every screen
@@ -55,7 +57,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Draws the active screen
 	////////////////////////////////////////////////////////////
-	void Draw();
+	void Draw(SDL_Window* window, glm::vec4 color);
 
 	////////////////////////////////////////////////////////////
 	// \brief Returns the current screen
@@ -65,7 +67,6 @@ private:
 	HWND hwnd;			//< Saving the HWND for error msg boxes output
 	ScreenGame* screenGame;		//< The game screen
 	ScreenStart* screenStart;	//< The start meny screen
-	OpenGL* openGL;			//< OpenGL function ptr
 };
 
 #endif // !SCREENMANAGER_H

@@ -4,8 +4,8 @@
 #include "../OpenGL.h"
 #include "../Game/Camera.h"
 #include "../Game/Object.h"
-#include "../Game/Shader/Shader.h"	// temporary, replace this with abstract shader
 #include "../Game/Shader/ShaderManager.h"
+#include "../Accessories.h"
 
 class Screen
 {
@@ -18,7 +18,7 @@ public:
 	// \brief Loads all needed objects, also runs SetStartVariables
 	// \return Returrns true if every object could be created
 	////////////////////////////////////////////////////////////
-	virtual bool Start(OpenGL* openGL);
+	virtual bool Start();
 	
 	////////////////////////////////////////////////////////////
 	// \brief A combined function that runs both Stop & Start
@@ -59,7 +59,9 @@ public:
 
 protected:
 	Camera* camera;	//< Simple Camera object
-	OpenGL* openGL;	//< Ptr to OpenGL functions
+
+	glm::mat4 worldMatrix;
+	glm::mat4 projectionMatrix;
 };
 
 #endif // !SCREEN_H

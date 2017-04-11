@@ -6,7 +6,7 @@ Model::Model(const Model& other) { }
 
 Model::~Model() { }
 
-bool Model::Start(OpenGL * openGL, std::string modelPath)
+bool Model::Start(std::string modelPath)
 {
 	// Trying to load model
 //	if (!LoadModel(openGL, modelPath))
@@ -16,7 +16,7 @@ bool Model::Start(OpenGL * openGL, std::string modelPath)
 }
 
 // Temp function
-void Model::BuildTriangle(OpenGL* openGL)
+void Model::BuildTriangle()
 {
 	Vertex* vertices;
 	unsigned int* indices;
@@ -39,30 +39,30 @@ void Model::BuildTriangle(OpenGL* openGL)
 		indices[i] = i;
 
 	// Creating the vertex buffer that will hold the buffers
-	openGL->glGenVertexArrays(1, &vertexArray);
-	openGL->glBindVertexArray(vertexArray);
+	glGenVertexArrays(1, &vertexArray);
+	glBindVertexArray(vertexArray);
 
 	// Generating buffers
-	openGL->glGenBuffers(1, &indexBuffer);
-	openGL->glGenBuffers(1, &vertexBuffer);
+	glGenBuffers(1, &indexBuffer);
+	glGenBuffers(1, &vertexBuffer);
 
 	// Binding the vertex buffer and putting in data
-	openGL->glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	openGL->glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertexCount, vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertexCount, vertices, GL_STATIC_DRAW);
 
 	// Enable both vertex posiiton & color
-	openGL->glEnableVertexAttribArray(0);
-	openGL->glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 
 	// Setting the location and size of the attributes
-	openGL->glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	openGL->glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0);
-	openGL->glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	openGL->glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
 
 	// Binding the index buffer and putting in data
-	openGL->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-	openGL->glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indexCount, indices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indexCount, indices, GL_STATIC_DRAW);
 
 	// Clearing from memeory
 	delete[]vertices; vertices = nullptr;
@@ -70,7 +70,7 @@ void Model::BuildTriangle(OpenGL* openGL)
 }
 
 // Temp function
-void Model::BuildQuad(OpenGL* openGL)
+void Model::BuildQuad()
 {
 	Vertex* vertices;
 	unsigned int* indices;
@@ -102,30 +102,30 @@ void Model::BuildQuad(OpenGL* openGL)
 	indices[5] = 2;
 
 	// Creating the vertex buffer that will hold the buffers
-	openGL->glGenVertexArrays(1, &vertexArray);
-	openGL->glBindVertexArray(vertexArray);
+	glGenVertexArrays(1, &vertexArray);
+	glBindVertexArray(vertexArray);
 
 	// Generating buffers
-	openGL->glGenBuffers(1, &indexBuffer);
-	openGL->glGenBuffers(1, &vertexBuffer);
+	glGenBuffers(1, &indexBuffer);
+	glGenBuffers(1, &vertexBuffer);
 
 	// Binding the vertex buffer and putting in data
-	openGL->glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	openGL->glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertexCount, vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertexCount, vertices, GL_STATIC_DRAW);
 
 	// Enable both vertex posiiton & color
-	openGL->glEnableVertexAttribArray(0);
-	openGL->glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 
 	// Setting the location and size of the attributes
-	openGL->glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	openGL->glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0);
-	openGL->glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	openGL->glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
 
 	// Binding the index buffer and putting in data
-	openGL->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-	openGL->glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indexCount, indices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indexCount, indices, GL_STATIC_DRAW);
 
 	// Clearing from memeory
 	delete[]vertices; vertices = nullptr;
@@ -134,7 +134,7 @@ void Model::BuildQuad(OpenGL* openGL)
 
 
 // Temp function
-void Model::BuildQuadTexture(OpenGL* openGL)
+void Model::BuildQuadTexture()
 {
 	VertexUV* vertices;
 	unsigned int* indices;
@@ -166,65 +166,63 @@ void Model::BuildQuadTexture(OpenGL* openGL)
 	indices[5] = 2;
 
 	// Creating the vertex buffer that will hold the buffers
-	openGL->glGenVertexArrays(1, &vertexArray);
-	openGL->glBindVertexArray(vertexArray);
+	glGenVertexArrays(1, &vertexArray);
+	glBindVertexArray(vertexArray);
 
 	// Generating buffers
-	openGL->glGenBuffers(1, &indexBuffer);
-	openGL->glGenBuffers(1, &vertexBuffer);
+	glGenBuffers(1, &indexBuffer);
+	glGenBuffers(1, &vertexBuffer);
 
 	// Binding the vertex buffer and putting in data
-	openGL->glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	openGL->glBufferData(GL_ARRAY_BUFFER, sizeof(VertexUV) * vertexCount, vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexUV) * vertexCount, vertices, GL_STATIC_DRAW);
 
 	// Enable both vertex posiiton & color
-	openGL->glEnableVertexAttribArray(0);
-	openGL->glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 
 	// Setting the location and size of the attributes
-	openGL->glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	openGL->glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(VertexUV), 0);
-	openGL->glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	openGL->glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(VertexUV), (unsigned char*)(3 * sizeof(float)));
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(VertexUV), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(VertexUV), (unsigned char*)(3 * sizeof(float)));
 
 	// Binding the index buffer and putting in data
-	openGL->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-	openGL->glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indexCount, indices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indexCount, indices, GL_STATIC_DRAW);
 
 	// Clearing from memeory
 	delete[]vertices; vertices = nullptr;
 	delete[]indices; indices = nullptr;
 }
 
-bool Model::LoadModel(OpenGL* openGL, std::string modelPath)
+bool Model::LoadModel(std::string modelPath)
 {
 	// Load model from file
 	return true;
 }
 
-void Model::Stop(OpenGL * openGL)
+void Model::Stop()
 {
 	// Disable the attributes
-	openGL->glBindVertexArray(vertexArray);
-	openGL->glDisableVertexAttribArray(0);
-	openGL->glDisableVertexAttribArray(1);
+	glBindVertexArray(vertexArray);
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
 
 	// Deleteing buffers
-	openGL->glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	openGL->glDeleteBuffers(1, &vertexBuffer);
-	openGL->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-	openGL->glDeleteBuffers(1, &indexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glDeleteBuffers(1, &vertexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glDeleteBuffers(1, &indexBuffer);
 
 	// Deleting vertex array
-	openGL->glBindVertexArray(vertexArray);
-	openGL->glDeleteVertexArrays(1, &vertexArray);
+	glBindVertexArray(vertexArray);
+	glDeleteVertexArrays(1, &vertexArray);
 }
 
-void Model::Draw(OpenGL * openGL)
+void Model::Draw()
 {
-	openGL->glBindVertexArray(vertexArray);
-
-
+	glBindVertexArray(vertexArray);
 
 	// Render vertex buffer using index buffer
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);

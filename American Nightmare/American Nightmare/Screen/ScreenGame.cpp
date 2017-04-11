@@ -11,10 +11,10 @@ ScreenGame::ScreenGame(const ScreenGame& other) { }
 
 ScreenGame::~ScreenGame() { }
 
-bool ScreenGame::Start(OpenGL * openGL)
+bool ScreenGame::Start()
 {
 	// Starting Camera & getting openGL pointer
-	Screen::Start(openGL);
+	Screen::Start();
 
 	////////////////////////////////////////////////////////////
 	// Creating Shader Manager
@@ -24,8 +24,8 @@ bool ScreenGame::Start(OpenGL * openGL)
 	if (shaderManager == nullptr) return false;
 
 	// Adding Shader Programs
-	//shaderManager->AddShader(openGL, "solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
-	shaderManager->AddShader(openGL, "texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
+	//shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
+	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
@@ -36,14 +36,14 @@ bool ScreenGame::Start(OpenGL * openGL)
 	// Creating the player object
 	player = new Player();
 	if (player == nullptr) return false;
-	if (!player->Start(openGL, modelPath + "model.m", texturePath + "texture.t"))
+	if (!player->Start(modelPath + "model.m", texturePath + "gammal-dammsugare.jpg"))
 		return false;
 	player->setShader(shaderManager->GetShader("texture"));
 
 	// Creating a simple level
 	levelManager = new LevelManager();
 	if (levelManager == nullptr) return false;
-	if (!levelManager->Start(openGL))
+	if (!levelManager->Start())
 		return false;
 
 	// Setting startvariables
@@ -80,22 +80,12 @@ void ScreenGame::Update()
 
 void ScreenGame::Draw()
 {
-	////////////////////////////////////////////////////////////
-	// Starting draw section
-	////////////////////////////////////////////////////////////
-	openGL->StartDraw(CLEAR_COLOR);
-
 	// Drawing map
 	for (Object* object : levelManager->getMap())
 		DrawObject(object, shaderManager);
 
 	// Drawing player
 	DrawObject(player, shaderManager);
-
-	////////////////////////////////////////////////////////////
-	// Ending draw section
-	////////////////////////////////////////////////////////////
-	openGL->EndDraw();
 }
 
 void ScreenGame::Stop()
@@ -103,7 +93,7 @@ void ScreenGame::Stop()
 	// Deleting shaders
 	if (shaderManager != nullptr)
 	{
-		shaderManager->Stop(openGL);
+		shaderManager->Stop();
 		delete shaderManager;
 		shaderManager = nullptr;
 	}

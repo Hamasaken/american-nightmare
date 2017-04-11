@@ -9,9 +9,9 @@ ScreenStart::ScreenStart(const ScreenStart& other) { }
 
 ScreenStart::~ScreenStart() { }
 
-bool ScreenStart::Start(OpenGL * openGL)
+bool ScreenStart::Start()
 {
-	Screen::Start(openGL);
+	Screen::Start();
 
 	// Loading GUI
 	// --
@@ -34,14 +34,10 @@ void ScreenStart::Update()
 
 void ScreenStart::Draw()
 {
-	// Starting draw section
-	openGL->StartDraw(CLEAR_COLOR);
 	camera->buildViewMatrix();
 
 	// - Drawing buttons
 
-	// Ending Draw section
-	openGL->EndDraw();
 }
 
 void ScreenStart::Stop()

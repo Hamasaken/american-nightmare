@@ -4,6 +4,13 @@ OpenGL::OpenGL()
 {
 	deviceContext = nullptr;
 	renderingContext = nullptr;
+
+	glewExperimental = GL_TRUE;
+
+	if (glewInit() != GLEW_OK)
+	{
+		throw std::runtime_error("");
+	}
 }
 
 OpenGL::OpenGL(const OpenGL & other) { }
@@ -12,6 +19,7 @@ OpenGL::~OpenGL() { }
 
 bool OpenGL::StartExtentions(HWND hwnd) 
 {
+
 	// Creating some temp contexts
 	HDC tempDeviceContext = nullptr;
 	HGLRC tempRenderContext = nullptr;
@@ -34,8 +42,14 @@ bool OpenGL::StartExtentions(HWND hwnd)
 	error = wglMakeCurrent(tempDeviceContext, tempRenderContext);
 	if (error != 1) return false;
 
-	// Getting every function pointer
-	if (!LoadExtentions()) return false;
+	wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
+	if (!wglChoosePixelFormatARB) return false;
+
+	wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
+	if (!wglCreateContextAttribsARB) return false;
+
+	wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+	if (!wglSwapIntervalEXT) return false;
 
 	// We can now remove the temporary contexts
 	wglMakeCurrent(NULL, NULL);
@@ -47,120 +61,7 @@ bool OpenGL::StartExtentions(HWND hwnd)
 	return true;
 }
 
-bool OpenGL::LoadExtentions() 
-{
-	// Getting pointers to functions
 
-	wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
-	if (!wglChoosePixelFormatARB) return false;
-
-	wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
-	if (!wglCreateContextAttribsARB) return false;
-
-	wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
-	if (!wglSwapIntervalEXT) return false;
-
-	glAttachShader = (PFNGLATTACHSHADERPROC)wglGetProcAddress("glAttachShader");
-	if (!glAttachShader) return false;
-
-	glBindBuffer = (PFNGLBINDBUFFERPROC)wglGetProcAddress("glBindBuffer");
-	if (!glBindBuffer) return false;
-
-	glBindVertexArray = (PFNGLBINDVERTEXARRAYPROC)wglGetProcAddress("glBindVertexArray");
-	if (!glBindVertexArray) return false;
-
-	glBufferData = (PFNGLBUFFERDATAPROC)wglGetProcAddress("glBufferData");
-	if (!glBufferData) return false;
-
-	glCompileShader = (PFNGLCOMPILESHADERPROC)wglGetProcAddress("glCompileShader");
-	if (!glCompileShader) return false;
-
-	glCreateProgram = (PFNGLCREATEPROGRAMPROC)wglGetProcAddress("glCreateProgram");
-	if (!glCreateProgram) return false;
-
-	glCreateShader = (PFNGLCREATESHADERPROC)wglGetProcAddress("glCreateShader");
-	if (!glCreateShader) return false;
-
-	glDeleteBuffers = (PFNGLDELETEBUFFERSPROC)wglGetProcAddress("glDeleteBuffers");
-	if (!glDeleteBuffers) return false;
-
-	glDeleteProgram = (PFNGLDELETEPROGRAMPROC)wglGetProcAddress("glDeleteProgram");
-	if (!glDeleteProgram) return false;
-
-	glDeleteShader = (PFNGLDELETESHADERPROC)wglGetProcAddress("glDeleteShader");
-	if (!glDeleteShader) return false;
-
-	glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSPROC)wglGetProcAddress("glDeleteVertexArrays");
-	if (!glDeleteVertexArrays) return false;
-
-	glDetachShader = (PFNGLDETACHSHADERPROC)wglGetProcAddress("glDetachShader");
-	if (!glDetachShader) return false;
-
-	glEnableVertexAttribArray = (PFNGLENABLEVERTEXATTRIBARRAYPROC)wglGetProcAddress("glEnableVertexAttribArray");
-	if (!glEnableVertexAttribArray) return false;
-
-	glGenBuffers = (PFNGLGENBUFFERSPROC)wglGetProcAddress("glGenBuffers");
-	if (!glGenBuffers) return false;
-
-	glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC)wglGetProcAddress("glGenVertexArrays");
-	if (!glGenVertexArrays) return false;
-
-	glGetAttribLocation = (PFNGLGETATTRIBLOCATIONPROC)wglGetProcAddress("glGetAttribLocation");
-	if (!glGetAttribLocation) return false;
-
-	glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC)wglGetProcAddress("glGetProgramInfoLog");
-	if (!glGetProgramInfoLog) return false;
-
-	glGetProgramiv = (PFNGLGETPROGRAMIVPROC)wglGetProcAddress("glGetProgramiv");
-	if (!glGetProgramiv) return false;
-
-	glGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC)wglGetProcAddress("glGetShaderInfoLog");
-	if (!glGetShaderInfoLog) return false;
-
-	glGetShaderiv = (PFNGLGETSHADERIVPROC)wglGetProcAddress("glGetShaderiv");
-	if (!glGetShaderiv) return false;
-
-	glLinkProgram = (PFNGLLINKPROGRAMPROC)wglGetProcAddress("glLinkProgram");
-	if (!glLinkProgram) return false;
-
-	glShaderSource = (PFNGLSHADERSOURCEPROC)wglGetProcAddress("glShaderSource");
-	if (!glShaderSource) return false;
-
-	glUseProgram = (PFNGLUSEPROGRAMPROC)wglGetProcAddress("glUseProgram");
-	if (!glUseProgram) return false;
-
-	glVertexAttribPointer = (PFNGLVERTEXATTRIBPOINTERPROC)wglGetProcAddress("glVertexAttribPointer");
-	if (!glVertexAttribPointer) return false;
-
-	glBindAttribLocation = (PFNGLBINDATTRIBLOCATIONPROC)wglGetProcAddress("glBindAttribLocation");
-	if (!glBindAttribLocation) return false;
-
-	glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC)wglGetProcAddress("glGetUniformLocation");
-	if (!glGetUniformLocation) return false;
-
-	glUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC)wglGetProcAddress("glUniformMatrix4fv");
-	if (!glUniformMatrix4fv) return false;
-
-	glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
-	if (!glActiveTexture) return false;
-
-	glUniform1i = (PFNGLUNIFORM1IPROC)wglGetProcAddress("glUniform1i");
-	if (!glUniform1i) return false;
-
-	glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)wglGetProcAddress("glGenerateMipmap");
-	if (!glGenerateMipmap) return false;
-
-	glDisableVertexAttribArray = (PFNGLDISABLEVERTEXATTRIBARRAYPROC)wglGetProcAddress("glDisableVertexAttribArray");
-	if (!glDisableVertexAttribArray) return false;
-
-	glUniform3fv = (PFNGLUNIFORM3FVPROC)wglGetProcAddress("glUniform3fv");
-	if (!glUniform3fv) return false;
-
-	glUniform4fv = (PFNGLUNIFORM4FVPROC)wglGetProcAddress("glUniform4fv");
-	if (!glUniform4fv) return false;
-
-	return true;
-}
 
 bool OpenGL::StartOpenGL(HWND hwnd, glm::vec2 screenSize, float screenDepth, float screenNear, bool vSyncOn) 
 {
@@ -212,9 +113,11 @@ bool OpenGL::StartOpenGL(HWND hwnd, glm::vec2 screenSize, float screenDepth, flo
 	result = wglMakeCurrent(deviceContext, renderingContext);
 	if (result != 1) return false;
 
+	
+
 	// Setting various OpenGL settings, check header for variables
 	glViewport(0, 0, screenSize.x, screenSize.y);
-	glClearDepth(DEPTH_BUFFER_CLEAR);				// Threshold for depthbuffer to clear
+	glClearDepth(1.f);				// Threshold for depthbuffer to clear
 	glFrontFace(GL_CW);								// ClockWise = CW, CounterClockWise = CCW
 	glEnable(GL_CULL_FACE);							// Enable Culling
 	glCullFace(GL_BACK);							// GL_BACK is default, (backculling), we can also use GL_FRONT, and GL_FRONT_AND_BACK if needed

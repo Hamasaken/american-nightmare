@@ -6,18 +6,23 @@
 
 // INCLUDES
 #include "Screen\ScreenManager.h"
-#include "OpenGL.h"
 #include <SFML\Window.hpp>
 #include <SFML\Window\Keyboard.hpp>
+#include <GL/glew.h>
+#include <SDL.h>
+#include <SDL_opengl.h>
+#include <SDL_syswm.h>
+
 
 // DEFINES
-#define APP_NAME		L"American Nightmare"
+#define APP_NAME		"American Nightmare"
 #define FULL_SCREEN_ON		true
-#define SHOW_CURSOR		true
-#define DEFAULT_SCREEN_SIZE	glm::vec2(1140, 800)
+#define SHOW_CURSOR			true
+#define DEFAULT_SCREEN_SIZE	glm::vec2(1920, 1080)
 #define SCREEN_DEPTH		50.f
-#define SCREEN_NEAR		0.1f
-#define VSYNC_ON		true
+#define SCREEN_NEAR			0.1f
+#define VSYNC_ON			true
+#define DEPTH_BUFFER_CLEAR	1.f
 
 class Program
 {
@@ -45,19 +50,18 @@ public:
 private:
 	
 	// Windows
-	void StartSFMLWindow();
-	bool StartWindow();
+	void StartSDLWindow();
 	void StopWindow();
 
 	// Update
 	bool Update();
 
-	sf::Window* window;		//< SFML window (not active atm)
-	OpenGL* openGL;			//< OpenGL pointer
+	SDL_Window* window;		//< SDL window
+	SDL_GLContext context;
 	ScreenManager* screenManager;	//< ScreenManager, hold everything game/meny based
-	std::wstring appName;		//< Application name
+	std::string appName;		//< Application name
 	HINSTANCE hInstance;		//< hInstance
-	HWND hwnd;			//< Window created by StartWindow
+	HWND hwnd;					//< Windowhandle from SDL window
 	glm::vec2 screenSize;		//< Screensize in (x,y)
 };
 

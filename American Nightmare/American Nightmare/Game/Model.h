@@ -13,31 +13,31 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Loads the modelfile and makes vertices & indices
 	////////////////////////////////////////////////////////////
-	bool Start(OpenGL* openGL, std::string modelPath);
+	bool Start(std::string modelPath);
 
 	////////////////////////////////////////////////////////////
 	// TEMPORARY FUNCTION, REPLACE THIS WITH LOADMODEL WHEN DONE
 	////////////////////////////////////////////////////////////
-	void BuildTriangle(OpenGL* openGL);
-	void BuildQuad(OpenGL* openGL);
-	void BuildQuadTexture(OpenGL* openGL);
+	void BuildTriangle();
+	void BuildQuad();
+	void BuildQuadTexture();
 	
 	////////////////////////////////////////////////////////////
 	// \brief Loads a model with vertices and normals and inserts into buffers
 	// \param path The file in question
 	// \return Returns false if the file could not be found or not read
 	////////////////////////////////////////////////////////////
-	bool LoadModel(OpenGL* openGL, std::string modelPath);
+	bool LoadModel(std::string modelPath);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads everything
 	////////////////////////////////////////////////////////////
-	void Stop(OpenGL* openGL);
+	void Stop();
 
 	////////////////////////////////////////////////////////////
 	// \brief Binds the vertex array to openGL and draws it
 	////////////////////////////////////////////////////////////
-	void Draw(OpenGL* openGL);
+	void Draw();
 
 private:
 	unsigned int vertexArray;
