@@ -48,10 +48,12 @@ void Program::StartSDLWindow()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
+	// Creating window
 	window = SDL_CreateWindow(appName.c_str(), 0, 0, screenSize.x, screenSize.y, SDL_WINDOW_OPENGL);
 
 	context = SDL_GL_CreateContext(window);
 
+	// Activate v-sync
 	SDL_GL_SetSwapInterval(1);
 
 	// Getting Windowhandl
