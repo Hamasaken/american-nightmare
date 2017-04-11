@@ -13,14 +13,17 @@ public:
 	bool Start();
 	void Stop();
 
+	void MakeVertices();
 	void Explosion(ParticleEmitter::ParticleType type, glm::vec3 position, glm::vec3 color, int amount);
 
 	void Update(sf::Time delta);
-	
-	std::vector<Vertex> getParticlesAsVertices();
+	void Draw();
 
 private:
 	std::vector<ParticleEmitter> emitters;
+	unsigned int vertexArray;
+	unsigned int vertexBuffer;
+	int vertexCount;
 };
 
 #endif // !PARTICLEMANAGER_H
