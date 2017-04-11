@@ -10,9 +10,6 @@ Put in: "Source\Repos\american-nightmare\American Nightmare\"
 https://www.dropbox.com/s/vdcg5puvjouj3ad/External.zip?dl=0
 
 
-
-
-
 Controls:
 
 WASD - Move Player Object (No physics yet.)
