@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Game\Shader">
       <UniqueIdentifier>{01c8bf55-5672-4ab5-a4fe-df3b211a4343}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\Particle">
+      <UniqueIdentifier>{7f7902e1-417a-42f3-b55f-128ec3b34cfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Particle">
+      <UniqueIdentifier>{002173d1-fca1-4999-81e8-2bf79afc5e3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -72,6 +78,12 @@
     <ClCompile Include="Game\LevelManager.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Particle\ParticleEmitter.cpp">
+      <Filter>Source Files\Game\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Particle\ParticleManager.cpp">
+      <Filter>Source Files\Game\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h">
@@ -112,6 +124,12 @@
     </ClInclude>
     <ClInclude Include="Game\LevelManager.h">
       <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Particle\ParticleEmitter.h">
+      <Filter>Header Files\Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Particle\ParticleManager.h">
+      <Filter>Header Files\Game\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
