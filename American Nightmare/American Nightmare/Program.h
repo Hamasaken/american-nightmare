@@ -65,8 +65,4 @@ private:
 	glm::vec2 screenSize;		//< Screensize in (x,y)
 };
 
-// Window Proc Func
-static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
-static Program* pgr = nullptr;
-
 #endif // !PROGRAM

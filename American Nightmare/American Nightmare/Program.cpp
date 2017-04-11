@@ -32,9 +32,6 @@ bool Program::Start()
 		return false;
 	}
 
-	// Setting self-pointer
-	pgr = this;
-
 	return true;
 }
 
@@ -51,9 +48,11 @@ void Program::StartSDLWindow()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-	window = SDL_CreateWindow(appName.c_str(), 30, 60, screenSize.x, screenSize.y, SDL_WINDOW_OPENGL);
+	window = SDL_CreateWindow(appName.c_str(), 0, 0, screenSize.x, screenSize.y, SDL_WINDOW_OPENGL);
 
 	context = SDL_GL_CreateContext(window);
+
+	SDL_GL_SetSwapInterval(1);
 
 	// Getting Windowhandl
 	SDL_SysWMinfo systemInfo;
@@ -90,8 +89,6 @@ void Program::Stop()
 		screenManager = nullptr;
 	}
 
-	pgr = nullptr;
-
 	StopWindow();
 }
 
@@ -100,21 +97,17 @@ bool Program::Run()
 	// Making the msg spot in memory, filling it with zeros
 	MSG msg;
 	ZeroMemory(&msg, sizeof(MSG));
+	SDL_Event event;
 
 	bool done = false;
 	while (!done)
 	{
-		// Windows sends messages direcly to callback function, but some are placed in queue. (keyboard/mouse inputs mostly)
-		// Each loop, we check if something is in the queue. If one is found, we translate it and dispatch it.
-		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
-		{
-			TranslateMessage(&msg); // converts virtual keys messages to character input messages
-			DispatchMessage(&msg); // sends message of to window procedure 
-		}
 
-		// Checking to see if windows signals to quit
-		if (msg.message == WM_QUIT)
-			done = true;
+		while (SDL_PollEvent(&event))
+		{
+			if (event.type == SDL_QUIT)
+				done = true;
+		}
 
 		// Updating everything
 		if (!Update())
@@ -149,19 +142,4 @@ bool Program::Update()
 	screenManager->Draw(window, glm::vec4(0.15f, 0.15f, 0.15f, 1.f));
 
 	return true;
-}
-
-static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
-{
-	switch (umessage)
-	{
-		// Check if we're closed 
-	case WM_CLOSE:
-		PostQuitMessage(0);
-		return 0;
-
-		// Other messages are being sent to our msg handler
-	default:
-		return DefWindowProc(hwnd, umessage, wparam, lparam);
-	}
 }
