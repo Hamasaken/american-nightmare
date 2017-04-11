@@ -49,8 +49,6 @@ public:
 			particle.update(delta);
 	}
 
-private:
-
 	ParticleType type;
 	std::vector<Particle> particles;
 };
