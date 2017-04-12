@@ -2,7 +2,12 @@
 #define SCREENCUTSCENE_H
 
 #include "Screen.h"
+#include <SFML\Window\Keyboard.hpp>
+#include <SFML\Config.hpp>
+#include <SFML\Graphics.hpp>
 #include <sfeMovie\Movie.hpp>
+#include <iostream>
+#include <algorithm>
 
 #define CLEAR_COLOR glm::vec4(0.1f, 0.25, 0.1, 1)
 
@@ -29,6 +34,11 @@ public:
 	bool StartCutscene(std::string movieName);
 
 	////////////////////////////////////////////////////////////
+	// \brief Skipping cutscene 
+	////////////////////////////////////////////////////////////
+	void SkipCutscene();
+
+	////////////////////////////////////////////////////////////
 	// \brief Initializing starting variables
 	////////////////////////////////////////////////////////////
 	void SetStartVariables();
@@ -42,6 +52,12 @@ public:
 	// \brief Drawing cutscene on screen
 	////////////////////////////////////////////////////////////
 	void Draw();
+
+private:
+	sfe::Movie movie;
+	sf::Image frame;
+	GLuint texture;
+	Model* model;
 };
 
 #endif //!SCREENCUTSCENE
