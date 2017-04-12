@@ -145,5 +145,14 @@
     <None Include="Data\Graphics\Shaders\texture_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Data\Graphics\Shaders\particle_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_gs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

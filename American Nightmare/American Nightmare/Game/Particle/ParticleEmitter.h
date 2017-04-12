@@ -43,12 +43,22 @@ public:
 	ParticleEmitter(const ParticleEmitter& other);
 	~ParticleEmitter();
 
+	void CreateParticles(glm::vec3 position, glm::vec3 color, int amount);
+
 	void Update(sf::Time delta)
 	{
 		for (Particle& particle : particles)
 			particle.update(delta);
 	}
 
+	void setType(ParticleType type);
+	ParticleType getType();
+	int getNumberOfParticles();
+	
+
+	std::vector<Vertex> getParticlesAsVertices();
+
+private:
 	ParticleType type;
 	std::vector<Particle> particles;
 };
