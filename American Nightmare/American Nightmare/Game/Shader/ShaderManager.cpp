@@ -89,14 +89,14 @@ void ShaderManager::AddShader(std::string name, std::string vs, std::string gs, 
 	glDeleteShader(fragmentShader);
 }
 
-void ShaderManager::SetShader(GLuint shaderProgram)
+void ShaderManager::setShader(GLuint shaderProgram)
 {
 	// Setting shader program
 	glUseProgram(shaderProgram);
 	currentShaderProgram = shaderProgram;
 }
 
-bool ShaderManager::SetShader(std::string name)
+bool ShaderManager::setShader(std::string name)
 {
 	// Setting shader program
 
@@ -112,12 +112,12 @@ bool ShaderManager::SetShader(std::string name)
 	return false;
 }
 
-GLuint ShaderManager::GetShader() const
+GLuint ShaderManager::getShader() const
 {
 	return currentShaderProgram;
 }
 
-GLuint ShaderManager::GetShader(std::string name) const
+GLuint ShaderManager::getShader(std::string name) const
 {
 	return findShader(name);
 }

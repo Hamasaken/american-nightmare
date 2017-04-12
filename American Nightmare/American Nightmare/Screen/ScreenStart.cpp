@@ -27,7 +27,7 @@ void ScreenStart::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 10));
 }
 
-void ScreenStart::Update()
+void ScreenStart::Update(GLint deltaT)
 {
 	// Checking button stuff and that stuff 
 }

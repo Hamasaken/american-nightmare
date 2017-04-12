@@ -107,9 +107,15 @@ bool Program::Run()
 	ZeroMemory(&msg, sizeof(MSG));
 	SDL_Event event;
 
+	GLint deltaT = 0;
+	Uint32 lastFrameTime = 0;
+
 	bool done = false;
 	while (!done)
 	{
+		Uint32 currentTime = SDL_GetPerformanceCounter();
+		deltaT = ((currentTime - lastFrameTime) * 1000) / SDL_GetPerformanceFrequency();
+		lastFrameTime = currentTime;
 
 		while (SDL_PollEvent(&event))
 		{
@@ -118,7 +124,7 @@ bool Program::Run()
 		}
 
 		// Updating everything
-		if (!Update())
+		if (!Update(deltaT))
 			done = true;
 	}
 
@@ -137,14 +143,14 @@ void Program::StopWindow()
 	SDL_Quit();
 }
 
-bool Program::Update()
+bool Program::Update(GLint deltaT)
 {
 	// Check if user exits
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
 		return false;
 
 	// Update game
-	screenManager->Update();
+	screenManager->Update(deltaT);
 
 	// Draw game
 	screenManager->Draw(window, glm::vec4(0.15f, 0.15f, 0.15f, 1.f));

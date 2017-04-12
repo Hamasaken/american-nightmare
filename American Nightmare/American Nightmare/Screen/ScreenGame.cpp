@@ -24,8 +24,9 @@ bool ScreenGame::Start()
 	if (shaderManager == nullptr) return false;
 
 	// Adding Shader Programs
-	//shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
+	shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
 	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
+	shaderManager->AddShader("texture_animation", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_fs.glsl");
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
@@ -36,9 +37,10 @@ bool ScreenGame::Start()
 	// Creating the player object
 	player = new Player();
 	if (player == nullptr) return false;
-	if (!player->Start(modelPath + "model.m", texturePath + "gammal-dammsugare.jpg"))
+	if (!player->Start(modelPath + "model.m", texturePath + "testanimation.png"))
 		return false;
-	player->setShader(shaderManager->GetShader("texture"));
+	player->setShader(shaderManager->getShader("texture_animation"));
+	player->AddAnimation(player->getTexture(), "");
 
 	// Creating a simple level
 	levelManager = new LevelManager();
@@ -58,18 +60,16 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 10));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(shaderManager->GetShader("texture"), "0.lvl");
+	levelManager->LoadLevel(shaderManager->getShader("solid"), "0.lvl");
 }
 
-void ScreenGame::Update()
+void ScreenGame::Update(GLint deltaT)
 {
-	sf::Time delta = sf::Time::Zero; // fix this, temporary
-
 					 // Updating player
-	player->Update();
+	player->Update(deltaT);
 
 	// Updating map objects
-	levelManager->Update(delta);
+	levelManager->Update(deltaT);
 
 	// Moving the camera to follow player object
 	camera->smoothToPosition(glm::vec3(player->getPosition().x, player->getPosition().y, camera->getPosition().z));

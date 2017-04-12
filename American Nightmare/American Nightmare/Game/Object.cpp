@@ -93,7 +93,7 @@ GLuint Object::loadTexture(std::string inImage)
 	return -1;
 }
 
-void Object::Update() { }
+void Object::Update(GLint deltaT) { }
 
 void Object::Draw()
 {

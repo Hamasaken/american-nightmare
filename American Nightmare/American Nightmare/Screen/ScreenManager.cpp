@@ -107,7 +107,7 @@ bool ScreenManager::goToState(State state)
 	return true;
 }
 
-void ScreenManager::Update()
+void ScreenManager::Update(GLint deltaT)
 {
 	// Temporary state switching
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F1))		{ goToState(Game); }
@@ -117,8 +117,8 @@ void ScreenManager::Update()
 
 	switch (currentState)
 	{
-	case State::Game: screenGame->Update(); break;
-	case State::StartMeny: screenStart->Update(); break;
+	case State::Game: screenGame->Update(deltaT); break;
+	case State::StartMeny: screenStart->Update(deltaT); break;
 	}
 }
 

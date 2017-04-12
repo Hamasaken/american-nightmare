@@ -62,7 +62,7 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 	world = glm::scale(world, scale);
 
 	// Setting shader as active and setting parameters
-	shaderManager->SetShader(object->getShader());
+	shaderManager->setShader(object->getShader());
 	shaderManager->SetParameters(world, view, projection);
 
 	glEnable(GL_TEXTURE_2D);
@@ -70,6 +70,19 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 	glBindTexture(GL_TEXTURE_2D, object->getTexture());
 
 	glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
+
+	if (dynamic_cast<Player*>(object))
+	{
+		Player* tempPlayer = dynamic_cast<Player*>(object);
+		Animation::FrameUV* tempFrameUV = tempPlayer->GetCurrentFrameUV();
+		glUniform2f(glGetUniformLocation(tempPlayer->getShader(), "uvTopLeft"), tempFrameUV->uvTopLeft.x, tempFrameUV->uvTopLeft.y);
+		glUniform2f(glGetUniformLocation(tempPlayer->getShader(), "uvTopRight"), tempFrameUV->uvTopRight.x, tempFrameUV->uvTopRight.y);
+		glUniform2f(glGetUniformLocation(tempPlayer->getShader(), "uvBotLeft"), tempFrameUV->uvBotLeft.x, tempFrameUV->uvBotLeft.y);
+		glUniform2f(glGetUniformLocation(tempPlayer->getShader(), "uvBotRight"), tempFrameUV->uvBotRight.x, tempFrameUV->uvBotRight.y);
+
+		printf("TopLeft: %f %f\n", tempFrameUV->uvBotLeft.x, tempFrameUV->uvBotLeft.y);
+	}
+	
 
 	// Drawing object
 	object->Draw();

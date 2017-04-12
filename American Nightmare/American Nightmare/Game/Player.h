@@ -1,16 +1,16 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "Object.h"
+#include "Animation.h"
 
-class Player : public Object
+class Player : public Animation
 {
 public:
 	Player();
 	Player(const Player& other);
 	~Player();
 
-	void Update();
+	void Update(GLint deltaT);
 
 	////////////////////////////////////////////////////////////
 	// \brief Gets input from user and moves accordingly

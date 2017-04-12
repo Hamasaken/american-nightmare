@@ -1,15 +1,17 @@
 #include "Player.h"
 
-Player::Player() : Object() { }
+Player::Player() : Animation() { }
 
 Player::Player(const Player & other) { }
 
 Player::~Player() { }
 
-void Player::Update()
+void Player::Update(GLint deltaT)
 {
 	// Updating movement
 	Movement();
+
+	updateAnimation(deltaT);
 }
 
 void Player::Movement()

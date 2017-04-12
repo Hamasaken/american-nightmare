@@ -62,11 +62,11 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelFile)
 	return true;
 }
 
-void LevelManager::Update(sf::Time delta)
+void LevelManager::Update(GLint deltaT)
 {
 	// Updating every object on map
 	for (Object* object : map)
-		object->Update();
+		object->Update(deltaT);
 }
 
 std::vector<Object*> LevelManager::getMap()

@@ -54,7 +54,7 @@ private:
 	void StopWindow();
 
 	// Update
-	bool Update();
+	bool Update(GLint deltaT);
 
 	SDL_Window* window;		//< SDL window
 	SDL_GLContext context;

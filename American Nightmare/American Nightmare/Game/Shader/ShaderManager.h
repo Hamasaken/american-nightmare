@@ -19,10 +19,10 @@ public:
 	void AddShader(std::string name, std::string vs, std::string fs);
 	void AddShader(std::string name, std::string vs, std::string gs, std::string fs);
 
-	void SetShader(GLuint shaderProgram);
-	bool SetShader(std::string name);
-	GLuint GetShader() const;
-	GLuint GetShader(std::string name) const;
+	void setShader(GLuint shaderProgram);
+	bool setShader(std::string name);
+	GLuint getShader() const;
+	GLuint getShader(std::string name) const;
 
 	bool SetParameters(glm::mat4 world, glm::mat4 view, glm::mat4 projection);
 

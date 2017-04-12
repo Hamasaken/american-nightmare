@@ -3,6 +3,8 @@
 
 #include "../Game/Camera.h"
 #include "../Game/Object.h"
+#include "../Game/Player.h"
+#include "../Game/Animation.h"
 #include "../Game/Shader/ShaderManager.h"
 
 class Screen
@@ -42,7 +44,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Updating the screen
 	////////////////////////////////////////////////////////////
-	virtual void Update() = 0;
+	virtual void Update(GLint deltaT) = 0;
 
 	////////////////////////////////////////////////////////////
 	// \brief Drawing everything on screen
