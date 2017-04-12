@@ -22,6 +22,7 @@
 // Paths
 #define SHADER_PATH "Data/Graphics/Shaders/"
 #define MODEL_PATH "Data/Graphics/Models/"
+#define CUTSCENE_PATH "Data/Graphics/Cutscenes/"
 #define TEXTURE_PATH "Data/Graphics/Textures/"
 
 // Vertex Struct for vertex buffers, etc

@@ -3,6 +3,7 @@
 
 #include "ScreenGame.h"
 #include "ScreenStart.h"
+#include "ScreenCutscene.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <Windows.h>
@@ -12,7 +13,7 @@
 class ScreenManager
 {
 public:
-	enum State { Game, StartMeny, Options, Posters };
+	enum State { Game, StartMeny, Options, Cutscene, Posters };
 	State currentState;
 
 	ScreenManager();
@@ -67,6 +68,7 @@ private:
 	HWND hwnd;			//< Saving the HWND for error msg boxes output
 	ScreenGame* screenGame;		//< The game screen
 	ScreenStart* screenStart;	//< The start meny screen
+	ScreenCutscene* screenCutscene; //< The screen for cutscenes
 };
 
 #endif // !SCREENMANAGER_H

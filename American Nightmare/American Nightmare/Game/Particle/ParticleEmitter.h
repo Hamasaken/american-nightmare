@@ -3,6 +3,10 @@
 
 #include "../../Accessories.h"
 
+#define VELOCITY (rand() % 16000 - 8000) / 10000.f
+#define VELOCITY_FALL_OFF 0.08f
+#define PARTICLE_LIFETIME (rand() % 50000) / 2500.f
+
 class ParticleEmitter
 {
 public:
@@ -17,13 +21,21 @@ public:
 		{
 			this->position = position;
 			this->color = color;
+			this->lifeTime = PARTICLE_LIFETIME;
+			this->isDead = false;
 
-			velocity = glm::vec3((rand() % 1000) / 1000.f, (rand() % 1000) / 1000.f, (rand() % 1000) / 1000.f);
+			velocity = glm::vec3(VELOCITY, VELOCITY, VELOCITY);
 		}
 
-		virtual void update(sf::Time delta) 
+		virtual void update(GLfloat delta) 
 		{
-			position += velocity * delta.asSeconds();
+		//	lifeTime -= delta;
+			lifeTime -= 0.1f;
+			if (lifeTime < NULL)
+				isDead = true;
+
+			velocity += (glm::vec3(0, 0, 0) - velocity) * VELOCITY_FALL_OFF;
+			position += velocity; // * delta.asSeconds();
 		}
 
 		Vertex getAsVertex()
@@ -34,6 +46,8 @@ public:
 			return v;
 		}
 
+		bool isDead;
+		GLfloat lifeTime;
 		glm::vec3 color;
 		glm::vec3 position;
 		glm::vec3 velocity;
@@ -45,11 +59,7 @@ public:
 
 	void CreateParticles(glm::vec3 position, glm::vec3 color, int amount);
 
-	void Update(sf::Time delta)
-	{
-		for (Particle& particle : particles)
-			particle.update(delta);
-	}
+	void Update(GLfloat delta);
 
 	void setType(ParticleType type);
 	ParticleType getType();

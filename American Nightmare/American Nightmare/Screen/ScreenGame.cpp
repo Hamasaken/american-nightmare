@@ -2,6 +2,7 @@
 
 ScreenGame::ScreenGame() : Screen()
 {
+	particleManager = nullptr;
 	shaderManager = nullptr;
 	levelManager = nullptr;
 	player = nullptr;
@@ -17,6 +18,15 @@ bool ScreenGame::Start()
 	Screen::Start();
 
 	////////////////////////////////////////////////////////////
+	// Creating Particle Manager
+	////////////////////////////////////////////////////////////
+	particleManager = new ParticleManager();
+	if (particleManager == nullptr) return false;
+	if (!particleManager->Start())
+		return false;
+	particleManager->Explosion(ParticleEmitter::PIXEL, glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), 1000);
+
+	////////////////////////////////////////////////////////////
 	// Creating Shader Manager
 	////////////////////////////////////////////////////////////
 	std::string shaderPath = SHADER_PATH;
@@ -26,7 +36,7 @@ bool ScreenGame::Start()
 	// Adding Shader Programs
 	shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
 	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
-	shaderManager->AddShader("texture_animation", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_fs.glsl");
+	shaderManager->AddShader("particle", shaderPath + "particle_vs.glsl", shaderPath + "particle_gs.glsl", shaderPath + "particle_fs.glsl");
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
@@ -37,10 +47,9 @@ bool ScreenGame::Start()
 	// Creating the player object
 	player = new Player();
 	if (player == nullptr) return false;
-	if (!player->Start(modelPath + "model.m", texturePath + "testanimation.png"))
+	if (!player->Start(modelPath + "model.m", texturePath + "gammal-dammsugare.jpg"))
 		return false;
-	player->setShader(shaderManager->getShader("texture_animation"));
-	player->AddAnimation(player->getTexture(), "");
+	player->setShader(shaderManager->GetShader("texture"));
 
 	// Creating a simple level
 	levelManager = new LevelManager();
@@ -60,16 +69,23 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 10));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(shaderManager->getShader("solid"), "0.lvl");
+	levelManager->LoadLevel(shaderManager->GetShader("texture"), "0.lvl");
 }
 
-void ScreenGame::Update(GLint deltaT)
+void ScreenGame::Update()
 {
-					 // Updating player
-	player->Update(deltaT);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
+		particleManager->Explosion(ParticleEmitter::PIXEL, player->getPosition(), glm::vec3((rand() % 1000) / 1000.f, (rand() % 1000) / 1000.f, (rand() % 1000) / 1000.f), 100);
+
+	// Updating particles effects
+	GLfloat delta = 0.1f;
+	particleManager->Update(delta);
+					 
+	// Updating player
+	player->Update();
 
 	// Updating map objects
-	levelManager->Update(deltaT);
+	levelManager->Update(delta);
 
 	// Moving the camera to follow player object
 	camera->smoothToPosition(glm::vec3(player->getPosition().x, player->getPosition().y, camera->getPosition().z));
@@ -86,10 +102,23 @@ void ScreenGame::Draw()
 
 	// Drawing player
 	DrawObject(player, shaderManager);
+
+	// Drawing vertices
+	shaderManager->SetParameters(worldMatrix, camera->getViewMatrix(), projectionMatrix);
+	shaderManager->SetShader("particle");
+	particleManager->Draw();
 }
 
 void ScreenGame::Stop()
 {
+	// Deleting particles
+	if (particleManager != nullptr)
+	{
+		particleManager->Stop();
+		delete particleManager;
+		particleManager = nullptr;
+	}
+
 	// Deleting shaders
 	if (shaderManager != nullptr)
 	{

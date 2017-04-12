@@ -5,6 +5,7 @@ ScreenManager::ScreenManager()
 	// Setting every screen as nullptrs
 	screenGame = nullptr;
 	screenStart = nullptr;
+	screenCutscene = nullptr;
 }
 
 ScreenManager::ScreenManager(const ScreenManager & other) { }
@@ -34,13 +35,22 @@ void ScreenManager::Stop()
 	if (screenGame != nullptr) 
 	{
 		screenGame->Stop();
+		delete screenGame;
 		screenGame = nullptr;
 	}
 
 	if (screenStart != nullptr)
 	{
 		screenStart->Stop();
+		delete screenStart;
 		screenStart = nullptr;
+	}
+
+	if (screenCutscene != nullptr)
+	{
+		screenCutscene->Stop();
+		delete screenCutscene;
+		screenCutscene = nullptr;
 	}
 }
 
@@ -63,6 +73,15 @@ bool ScreenManager::StartCurrentScreen()
 		if (!screenStart->Start())
 		{
 			MessageBox(hwnd, L"Could not start Start Screen class.", L"Woops", MB_OKCANCEL);
+			return false;
+		}
+		break;
+	case State::Cutscene:
+		screenCutscene = new ScreenCutscene();
+		if (screenCutscene == nullptr) return false;
+		if (!screenCutscene->Start())
+		{
+			MessageBox(hwnd, L"Could not start Cutscene Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
 		}
 		break;
@@ -89,6 +108,13 @@ void ScreenManager::StopCurrentScreen()
 			screenStart = nullptr;
 		}
 		break;
+	case State::Cutscene:
+		if (screenCutscene != nullptr)
+		{
+			screenCutscene->Stop();
+			screenCutscene = nullptr;
+		}
+		break;
 	}
 }
 
@@ -113,12 +139,14 @@ void ScreenManager::Update(GLint deltaT)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F1))		{ goToState(Game); }
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F2))	{ goToState(StartMeny); }
 //	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F3))	{ goToState(Options); }
-//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F4))	{ goToState(Posters); }
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F4))	{ goToState(Cutscene); }
+//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F5))	{ goToState(Posters); }
 
 	switch (currentState)
 	{
 	case State::Game: screenGame->Update(deltaT); break;
 	case State::StartMeny: screenStart->Update(deltaT); break;
+	case State::Cutscene: screenCutscene->Update(deltaT); break;
 	}
 }
 
@@ -134,6 +162,7 @@ void ScreenManager::Draw(SDL_Window* window, glm::vec4 color)
 	{
 	case State::Game: screenGame->Draw(); break;
 	case State::StartMeny: screenStart->Draw(); break;
+	case State::Cutscene: screenCutscene->Draw(); break;
 	}
 
 	SDL_GL_SwapWindow(window);
