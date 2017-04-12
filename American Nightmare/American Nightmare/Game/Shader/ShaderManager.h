@@ -37,7 +37,7 @@ private:
 		ShaderProgram(const ShaderProgram& shader) : name(shader.name), id(shader.id) {}
 	};
 
-	GLuint findShader(std::string name) const;
+	GLint findShader(std::string name) const;
 	std::string getSource(std::string path);
 	GLuint compileShader(std::string text, GLenum type);
 

@@ -2,6 +2,7 @@
 
 ScreenGame::ScreenGame() : Screen()
 {
+	particleManager = nullptr;
 	shaderManager = nullptr;
 	levelManager = nullptr;
 	player = nullptr;
@@ -17,6 +18,15 @@ bool ScreenGame::Start()
 	Screen::Start();
 
 	////////////////////////////////////////////////////////////
+	// Creating Particle Manager
+	////////////////////////////////////////////////////////////
+	particleManager = new ParticleManager();
+	if (particleManager == nullptr) return false;
+	if (!particleManager->Start())
+		return false;
+	particleManager->Explosion(ParticleEmitter::PIXEL, glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), 1000);
+
+	////////////////////////////////////////////////////////////
 	// Creating Shader Manager
 	////////////////////////////////////////////////////////////
 	std::string shaderPath = SHADER_PATH;
@@ -24,8 +34,9 @@ bool ScreenGame::Start()
 	if (shaderManager == nullptr) return false;
 
 	// Adding Shader Programs
-	//shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
+	shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
 	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
+	shaderManager->AddShader("particle", shaderPath + "particle_vs.glsl", shaderPath + "particle_gs.glsl", shaderPath + "particle_fs.glsl");
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
@@ -63,9 +74,14 @@ void ScreenGame::SetStartVariables()
 
 void ScreenGame::Update()
 {
-	sf::Time delta = sf::Time::Zero; // fix this, temporary
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
+		particleManager->Explosion(ParticleEmitter::PIXEL, player->getPosition(), glm::vec3((rand() % 1000) / 1000.f, (rand() % 1000) / 1000.f, (rand() % 1000) / 1000.f), 100);
 
-					 // Updating player
+	// Updating particles effects
+	GLfloat delta = 0.1f;
+	particleManager->Update(delta);
+					 
+	// Updating player
 	player->Update();
 
 	// Updating map objects
@@ -86,10 +102,23 @@ void ScreenGame::Draw()
 
 	// Drawing player
 	DrawObject(player, shaderManager);
+
+	// Drawing vertices
+	shaderManager->SetParameters(worldMatrix, camera->getViewMatrix(), projectionMatrix);
+	shaderManager->SetShader("particle");
+	particleManager->Draw();
 }
 
 void ScreenGame::Stop()
 {
+	// Deleting particles
+	if (particleManager != nullptr)
+	{
+		particleManager->Stop();
+		delete particleManager;
+		particleManager = nullptr;
+	}
+
 	// Deleting shaders
 	if (shaderManager != nullptr)
 	{

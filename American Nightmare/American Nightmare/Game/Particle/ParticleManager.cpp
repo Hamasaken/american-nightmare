@@ -8,14 +8,20 @@ ParticleManager::~ParticleManager() { }
 
 bool ParticleManager::Start()
 {
-	Explosion(ParticleEmitter::PIXEL, glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), 1000);
-
 	return true;
 }
 
 void ParticleManager::Stop() 
 {
 	// Erasing everything in vector
+	for (int i = 0; i < emitters.size(); i++)
+	{
+		if (emitters[i] != nullptr)
+		{
+			delete emitters[i];
+			emitters[i] = nullptr;
+		}
+	}
 	emitters.clear();
 
 	// Disable the attributes
@@ -34,13 +40,25 @@ void ParticleManager::Stop()
 
 void ParticleManager::MakeVertices()
 {
+	// Clearing previous stuff
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glDeleteBuffers(1, &vertexBuffer);
+	glBindVertexArray(vertexArray);
+	glDeleteVertexArrays(1, &vertexArray);
+	vertices.clear();
+
 	// Creating the vertices
-	std::vector<Vertex> vertices;
-	for (ParticleEmitter& emitter : emitters)
+	for (ParticleEmitter* emitter : emitters)
 	{
-		std::vector<Vertex> emitterVertices = emitter.getParticlesAsVertices();
+		std::vector<Vertex> emitterVertices = emitter->getParticlesAsVertices();
 		vertices.insert(vertices.end(), emitterVertices.begin(), emitterVertices.end());
 	}
+
+	// Getting the number of vertices
+	vertexCount = vertices.size();
+
+	// If the emitters are active but empty
+	if (vertexCount == 0) return;
 
 	// Creating the vertex buffer that will hold the buffers
 	glGenVertexArrays(1, &vertexArray);
@@ -62,30 +80,27 @@ void ParticleManager::MakeVertices()
 	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
-
-	// Clearing from memeory
-	vertices.clear();
 }
 
 void ParticleManager::Explosion(ParticleEmitter::ParticleType type, glm::vec3 position, glm::vec3 color, int amount)
 {
 	// Creating a emmiter with a specific type
-	ParticleEmitter emitter;
-	emitter.setType(type);
+	ParticleEmitter* emitter = new ParticleEmitter();
+	emitter->setType(type);
 
 	// Creating particles with inputted variables into emitter
-	emitter.CreateParticles(position, color, amount);
+	emitter->CreateParticles(position, color, amount);
 
 	// Pushing new emitter into vector
 	emitters.push_back(emitter);
 }
 
-void ParticleManager::Update(sf::Time delta)
+void ParticleManager::Update(GLfloat delta)
 {
 	for (int i = 0; i < int(emitters.size()); i++)
 	{
 	//	if (!emitter.isComplete())
-			emitters[i].Update(delta);
+			emitters[i]->Update(delta);
 	//	else 
 	//		emitters.erase(emitter);
 	}
@@ -100,5 +115,5 @@ void ParticleManager::Draw()
 	glBindVertexArray(vertexArray);
 
 	// Render vertex buffer using index buffer
-	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+	glDrawArrays(GL_POINTS, 0, vertexCount);
 }

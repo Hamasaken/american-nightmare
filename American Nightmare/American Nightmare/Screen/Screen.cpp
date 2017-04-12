@@ -70,7 +70,7 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 	glBindTexture(GL_TEXTURE_2D, object->getTexture());
 
 	glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
-
+	
 	// Drawing object
 	object->Draw();
 }

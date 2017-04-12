@@ -16,11 +16,12 @@ public:
 	void MakeVertices();
 	void Explosion(ParticleEmitter::ParticleType type, glm::vec3 position, glm::vec3 color, int amount);
 
-	void Update(sf::Time delta);
+	void Update(GLfloat delta);
 	void Draw();
 
 private:
-	std::vector<ParticleEmitter> emitters;
+	std::vector<Vertex> vertices;
+	std::vector<ParticleEmitter*> emitters;
 	unsigned int vertexArray;
 	unsigned int vertexBuffer;
 	int vertexCount;

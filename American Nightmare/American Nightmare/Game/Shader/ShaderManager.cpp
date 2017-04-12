@@ -64,10 +64,12 @@ void ShaderManager::AddShader(std::string name, std::string vs, std::string gs, 
 
 	// Create the shader variables
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	GLuint geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
 	// Compile the files
 	vertexShader = compileShader(vertexShaderBuffer, GL_VERTEX_SHADER);
+	geometryShader = compileShader(geometryShaderBuffer, GL_GEOMETRY_SHADER);
 	fragmentShader = compileShader(fragmentShaderBuffer, GL_FRAGMENT_SHADER);
 
 	// Create the program
@@ -75,7 +77,12 @@ void ShaderManager::AddShader(std::string name, std::string vs, std::string gs, 
 
 	// Attach shaders
 	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, geometryShader);
 	glAttachShader(shaderProgram, fragmentShader);
+
+	// Attributes locations
+	glBindAttribLocation(shaderProgram, 0, "inputPosition");
+	glBindAttribLocation(shaderProgram, 1, "inputColor");
 
 	// Link program
 	glLinkProgram(shaderProgram);
@@ -84,8 +91,10 @@ void ShaderManager::AddShader(std::string name, std::string vs, std::string gs, 
 	shaderList.push_back(ShaderProgram(name, shaderProgram));
 
 	glDetachShader(shaderProgram, vertexShader);
+	glDetachShader(shaderProgram, geometryShader);
 	glDetachShader(shaderProgram, fragmentShader);
 	glDeleteShader(vertexShader);
+	glDeleteShader(geometryShader);
 	glDeleteShader(fragmentShader);
 }
 
@@ -146,9 +155,9 @@ bool ShaderManager::SetParameters(glm::mat4 world, glm::mat4 view, glm::mat4 pro
 	return true;
 }
 
-GLuint ShaderManager::findShader(std::string name) const
+GLint ShaderManager::findShader(std::string name) const
 {
-	GLuint shaderProgram = -1;
+	GLint shaderProgram = -1;
 
 	for (int i = 0; i < shaderList.size() && shaderProgram == -1; i++)
 	{

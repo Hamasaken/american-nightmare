@@ -8,14 +8,22 @@ ParticleEmitter::~ParticleEmitter() { }
 
 void ParticleEmitter::CreateParticles(glm::vec3 position, glm::vec3 color, int amount)
 {
-
+	for (int i = 0; i < amount; i++)
+	{
+		Particle particle(position, color);
+		particles.push_back(particle);
+	}
 }
 
-void ParticleEmitter::setType(ParticleType type) { this->type = type; }
-
-ParticleEmitter::ParticleType ParticleEmitter::getType() { return type; }
-
-int ParticleEmitter::getNumberOfParticles() { return particles.size(); }
+void ParticleEmitter::Update(GLfloat delta)
+{
+	for (int i = 0; i < particles.size(); i++)
+	{
+		particles[i].update(delta);
+		if (particles[i].isDead)
+			particles.erase(particles.begin() + i);
+	}
+}
 
 std::vector<Vertex> ParticleEmitter::getParticlesAsVertices() 
 {
@@ -31,3 +39,7 @@ std::vector<Vertex> ParticleEmitter::getParticlesAsVertices()
 
 	return vertices;
 }
+
+void ParticleEmitter::setType(ParticleType type) { this->type = type; }
+ParticleEmitter::ParticleType ParticleEmitter::getType() { return type; }
+int ParticleEmitter::getNumberOfParticles() { return particles.size(); }

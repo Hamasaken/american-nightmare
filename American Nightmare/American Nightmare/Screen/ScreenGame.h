@@ -4,6 +4,7 @@
 #include "Screen.h"
 #include "../Game/Player.h"
 #include "../Game/LevelManager.h"
+#include "../Game/Particle/ParticleManager.h"
 
 #define CLEAR_COLOR glm::vec4(0.1f, 0.1, 0.1, 1)
 
@@ -41,9 +42,10 @@ public:
 	void Draw();
 
 private:
-	ShaderManager* shaderManager;	//< Manager for shaderprograms
-	LevelManager* levelManager;	//< Manager for levels/maps
-	Player* player;			//< The player object
+	ParticleManager* particleManager;	//< Manager for particle effects
+	ShaderManager* shaderManager;		//< Manager for shaderprograms
+	LevelManager* levelManager;		//< Manager for levels/maps
+	Player* player;				//< The player object
 };
 
 #endif // !SCREENGAME_H

@@ -2,7 +2,7 @@
 
 // Input
 in vec3 inputPosition;
-in vec2 inputColor;
+in vec3 inputColor;
 
 // Output
 out vec3 color;
@@ -15,7 +15,7 @@ uniform mat4 projection;
 void main(void)
 {
 	// Setting color
-	textureUV = inputTextureUV;
+	color = inputColor;
 
 	// Setting vertex position according to matrices
 	gl_Position = world * vec4(inputPosition, 1.f);
