@@ -45,11 +45,16 @@ void Program::StartSDLWindow()
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 4);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
 	// Creating window
-	window = SDL_CreateWindow(appName.c_str(), 0, 0, screenSize.x, screenSize.y, SDL_WINDOW_OPENGL);
+	if (FULL_SCREEN_ON) {
+		window = SDL_CreateWindow(appName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_OPENGL);
+	}
+	else {
+		window = SDL_CreateWindow(appName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenSize.x, screenSize.y, SDL_WINDOW_OPENGL);
+	}
 
 	context = SDL_GL_CreateContext(window);
 
@@ -68,6 +73,7 @@ void Program::StartSDLWindow()
 	// Initialize GLEW
 	if (glewInit() != GLEW_OK)
 	{
+		printf("%s", glewGetErrorString(glewInit()));
 		throw std::runtime_error("Could not initialize GLEW");
 		return;
 	}

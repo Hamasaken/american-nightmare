@@ -82,27 +82,6 @@ GLuint Object::loadTexture(std::string inImage)
 
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		GLuint glTextureSub;
-		void *subPixels = nullptr;
-
-		/*glTextureSubImage2D(glTexture, 0, sfImage->getSize().x / 4, sfImage->getSize().y / 4, sfImage->getSize().x / 2, sfImage->getSize().y / 2,
-			GL_RGBA, GL_UNSIGNED_BYTE, subPixels);
-
-
-
-		glGenTextures(1, &glTextureSub);
-		glBindTexture(GL_TEXTURE_2D, glTextureSub);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, sfImage->getSize().x / 2, sfImage->getSize().y / 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, subPixels);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		glGenerateMipmap(GL_TEXTURE_2D);*/
-
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		sfImage->~Image();

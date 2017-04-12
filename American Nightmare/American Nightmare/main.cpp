@@ -1,6 +1,6 @@
 #include "Program.h"
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCMDshow)
+int main(int argc, char *argv[])
 {
 	// Start the application class
 	Program *pgr = new Program();

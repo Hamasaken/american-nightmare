@@ -95,7 +95,7 @@
       <AdditionalIncludeDirectories>..\External\SFML\SFML-32\include;..\External\glew\include;..\External\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>sfml-window-d.lib;sfml-audio-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;glew32.lib;SDL2.lib;SDL2main.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\External\SFML\SFML-32\lib;..\External\glew\lib\Release\Win32;..\External\SDL2\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
