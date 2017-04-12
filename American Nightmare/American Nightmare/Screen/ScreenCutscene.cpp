@@ -38,13 +38,13 @@ bool ScreenCutscene::StartCutscene(std::string movieName)
 
 	std::cout << "Loading movie file: " << cutScenePath + movieName << std::endl;
 
-	if (!movie.openFromFile(cutScenePath + movieName))
+	/*if (!movie.openFromFile(cutScenePath + movieName))
 	{
 
-	}
+	}*/
 
-	movie.setPosition(0, 0);
-	movie.play();
+	//movie.setPosition(0, 0);
+	//movie.play();
 
 	return true;
 }
@@ -58,15 +58,15 @@ void ScreenCutscene::SetStartVariables()
 	StartCutscene("nope.mp4");
 }
 
-void ScreenCutscene::Update()
+void ScreenCutscene::Update(GLint deltaT)
 {
 	// Just temporary keyboundings
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) Restart();
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) SkipCutscene();
 
 	// Getting the current frame as an sf::Image
-	sf::Texture texture = movie.getCurrentImage();
-	frame = texture.copyToImage();
+	//sf::Texture texture = movie.getCurrentImage();
+	//frame = texture.copyToImage();
 }
 
 void ScreenCutscene::SkipCutscene()

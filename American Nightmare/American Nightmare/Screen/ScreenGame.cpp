@@ -47,9 +47,10 @@ bool ScreenGame::Start()
 	// Creating the player object
 	player = new Player();
 	if (player == nullptr) return false;
-	if (!player->Start(modelPath + "model.m", texturePath + "gammal-dammsugare.jpg"))
+	if (!player->Start(modelPath + "model.m", texturePath + "testanimation.png"))
 		return false;
-	player->setShader(shaderManager->GetShader("texture"));
+	player->setShader(shaderManager->getShader("texture_animation"));
+	player->AddAnimation(player->getTexture(), "");
 
 	// Creating a simple level
 	levelManager = new LevelManager();
@@ -69,10 +70,10 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 10));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(shaderManager->GetShader("texture"), "0.lvl");
+	levelManager->LoadLevel(shaderManager->getShader("texture"), "0.lvl");
 }
 
-void ScreenGame::Update()
+void ScreenGame::Update(GLint deltaT)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
 		particleManager->Explosion(ParticleEmitter::PIXEL, player->getPosition(), glm::vec3((rand() % 1000) / 1000.f, (rand() % 1000) / 1000.f, (rand() % 1000) / 1000.f), 100);
@@ -82,7 +83,7 @@ void ScreenGame::Update()
 	particleManager->Update(delta);
 					 
 	// Updating player
-	player->Update();
+	player->Update(deltaT);
 
 	// Updating map objects
 	levelManager->Update(delta);
@@ -105,7 +106,7 @@ void ScreenGame::Draw()
 
 	// Drawing vertices
 	shaderManager->SetParameters(worldMatrix, camera->getViewMatrix(), projectionMatrix);
-	shaderManager->SetShader("particle");
+	shaderManager->setShader("particle");
 	particleManager->Draw();
 }
 

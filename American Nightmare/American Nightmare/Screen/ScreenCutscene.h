@@ -5,7 +5,7 @@
 #include <SFML\Window\Keyboard.hpp>
 #include <SFML\Config.hpp>
 #include <SFML\Graphics.hpp>
-#include <sfeMovie\Movie.hpp>
+//#include <sfeMovie\Movie.hpp>
 #include <iostream>
 #include <algorithm>
 
@@ -46,7 +46,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Checks if cutscene is getting skipped or finished
 	////////////////////////////////////////////////////////////
-	void Update();
+	void Update(GLint deltaT);
 
 	////////////////////////////////////////////////////////////
 	// \brief Drawing cutscene on screen
@@ -54,7 +54,7 @@ public:
 	void Draw();
 
 private:
-	sfe::Movie movie;
+	//sfe::Movie movie;
 	sf::Image frame;
 	GLuint texture;
 	Model* model;
