@@ -80,7 +80,7 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 		glUniform2f(glGetUniformLocation(tempPlayer->getShader(), "uvBotLeft"), tempFrameUV->uvBotLeft.x, tempFrameUV->uvBotLeft.y);
 		glUniform2f(glGetUniformLocation(tempPlayer->getShader(), "uvBotRight"), tempFrameUV->uvBotRight.x, tempFrameUV->uvBotRight.y);
 
-		printf("TopLeft: %f %f\n", tempFrameUV->uvBotLeft.x, tempFrameUV->uvBotLeft.y);
+//		printf("TopLeft: %f %f\n", tempFrameUV->uvBotLeft.x, tempFrameUV->uvBotLeft.y);
 	}
 	
 	// Drawing object
