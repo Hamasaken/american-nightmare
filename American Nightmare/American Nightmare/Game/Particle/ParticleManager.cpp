@@ -80,10 +80,10 @@ void ParticleManager::MakeVertices()
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
 }
 
-void ParticleManager::Explosion(ParticleEmitter::ParticleType type, glm::vec3 position, glm::vec3 color, int amount)
+void ParticleManager::Explosion(ParticleEmitter::ParticleType type, glm::vec3 position, glm::vec4 color, int amount)
 {
 	// Creating a emmiter with a specific type
 	ParticleEmitter* emitter = new ParticleEmitter();

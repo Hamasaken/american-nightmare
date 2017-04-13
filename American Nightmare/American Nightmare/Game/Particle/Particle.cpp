@@ -6,7 +6,7 @@ Particle::Particle(const Particle & other) { }
 
 Particle::~Particle() { }
 
-void Particle::Start(glm::vec3 position, glm::vec3 color)
+void Particle::Start(glm::vec3 position, glm::vec4 color)
 {
 	// Setting parameters
 	isDead = false;

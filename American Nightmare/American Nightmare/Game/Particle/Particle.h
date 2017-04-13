@@ -19,7 +19,7 @@ public:
 	// \param position The starting position of the particle
 	// \param color The starting color of the particle
 	////////////////////////////////////////////////////////////
-	virtual void Start(glm::vec3 position, glm::vec3 color);
+	virtual void Start(glm::vec3 position, glm::vec4 color);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads stuff inside the particle

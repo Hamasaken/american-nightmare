@@ -38,14 +38,15 @@ struct Vertex
 		z = position.z; 
 	}
 
-	void setColor(glm::vec3 color)
+	void setColor(glm::vec4 color)
 	{
 		r = color.r;
 		g = color.g;
 		b = color.b;
+		a = color.a;
 	}
 	float x, y, z;
-	float r, g, b; 
+	float r, g, b, a; 
 };
 
 struct VertexUV

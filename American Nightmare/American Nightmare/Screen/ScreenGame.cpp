@@ -27,8 +27,8 @@ bool ScreenGame::Start()
 	// Adding Shader Programs
 	shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
 	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
-	shaderManager->AddShader("particle", shaderPath + "particle_vs.glsl", shaderPath + "particle_gs.glsl", shaderPath + "particle_fs.glsl");
 	shaderManager->AddShader("texture_animation", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_fs.glsl");
+	shaderManager->AddShader("particle", shaderPath + "particle_vs.glsl", shaderPath + "particle_gs.glsl", shaderPath + "particle_fs.glsl");
 
 	////////////////////////////////////////////////////////////
 	// Creating Particle Manager
@@ -78,7 +78,7 @@ void ScreenGame::Update(GLint deltaT)
 {
 	// Temporary for testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
-		particleManager->Explosion(ParticleEmitter::PIXEL, player->getPosition(), glm::vec3((rand() % 1000) / 1000.f, (rand() % 1000) / 1000.f, (rand() % 1000) / 1000.f), 100);
+		particleManager->Explosion(ParticleEmitter::PIXEL, player->getPosition(), glm::vec4(randBetweenF(0, 1), randBetweenF(0, 1), randBetweenF(0, 1), randBetweenF(0, 1)), 100);
 
 	// Updating particles effects
 	particleManager->Update(deltaT);
@@ -106,8 +106,8 @@ void ScreenGame::Draw()
 	DrawObject(player, shaderManager);
 
 	// Drawing vertices
-	shaderManager->SetParameters(worldMatrix, camera->getViewMatrix(), projectionMatrix);
 	shaderManager->setShader(particleManager->getShader());
+	shaderManager->SetParameters(worldMatrix, camera->getViewMatrix(), projectionMatrix);
 	particleManager->Draw();
 }
 

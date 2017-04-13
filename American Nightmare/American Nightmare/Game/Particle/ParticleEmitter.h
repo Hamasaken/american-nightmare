@@ -15,7 +15,7 @@ public:
 	ParticleEmitter(const ParticleEmitter& other);
 	~ParticleEmitter();
 
-	void CreateParticles(glm::vec3 position, glm::vec3 color, int amount);
+	void CreateParticles(glm::vec3 position, glm::vec4 color, int amount);
 
 	void Stop();
 

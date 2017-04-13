@@ -6,7 +6,7 @@ ParticleEmitter::ParticleEmitter(const ParticleEmitter & other) { }
 
 ParticleEmitter::~ParticleEmitter() { }
 
-void ParticleEmitter::CreateParticles(glm::vec3 position, glm::vec3 color, int amount)
+void ParticleEmitter::CreateParticles(glm::vec3 position, glm::vec4 color, int amount)
 {
 	this->position = position;
 

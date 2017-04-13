@@ -28,12 +28,11 @@ void Model::BuildTriangle()
 
 	// Triangle
 	vertices[0].setPosition(glm::vec3(0, 1, 0));
-	vertices[0].setColor(glm::vec3(1, 0, 1));
+	vertices[0].setColor(glm::vec4(1, 0, 1, 1));
 	vertices[1].setPosition(glm::vec3(1, -1, 0));
-	vertices[1].setColor(glm::vec3(1, 1, 0));
+	vertices[1].setColor(glm::vec4(1, 1, 0, 1));
 	vertices[2].setPosition(glm::vec3(-1, -1, 0));
-	vertices[2].setColor(glm::vec3(0, 1, 1));
-
+	vertices[2].setColor(glm::vec4(0, 1, 1, 1));
 
 	for (int i = 0; i < indexCount; i++)
 		indices[i] = i;
@@ -58,7 +57,7 @@ void Model::BuildTriangle()
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
 
 	// Binding the index buffer and putting in data
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -82,14 +81,13 @@ void Model::BuildQuad()
 
 	// Quad
 	vertices[0].setPosition(glm::vec3(-1, 1, 0));
-	vertices[0].setColor(glm::vec3(1, 0, 0));
+	vertices[0].setColor(glm::vec4(1, 0, 0, 1));
 	vertices[1].setPosition(glm::vec3(1, 1, 0));
-	vertices[1].setColor(glm::vec3(0, 1, 0));
+	vertices[1].setColor(glm::vec4(0, 1, 0, 1));
 	vertices[2].setPosition(glm::vec3(1, -1, 0));
-	vertices[2].setColor(glm::vec3(0, 0, 1));
+	vertices[2].setColor(glm::vec4(0, 0, 1, 1));
 	vertices[3].setPosition(glm::vec3(-1, -1, 0));
-	vertices[3].setColor(glm::vec3(1, 1, 1));
-
+	vertices[3].setColor(glm::vec4(1, 1, 1, 1));
 
 	//for (int i = 0; i < indexCount; i++)
 	//	indices[i] = i;
@@ -121,7 +119,7 @@ void Model::BuildQuad()
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
 
 	// Binding the index buffer and putting in data
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);

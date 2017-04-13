@@ -1,7 +1,10 @@
 #version 400
 
 // Input
-in vec3 color;
+in fData
+{
+    vec4 color;
+}frag;  
 
 // Output
 out vec4 outputColor;
@@ -9,5 +12,5 @@ out vec4 outputColor;
 void main(void)
 {
 	// Setting 
-	outputColor = vec4(color, 1.f);
+	outputColor = frag.color;
 }
