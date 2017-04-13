@@ -21,6 +21,12 @@ public:
 	void BuildTriangle();
 	void BuildQuad();
 	void BuildQuadTexture();
+
+
+	////////////////////////////////////////////////////////////
+	// \brief Loads the modelfile and makes vertices & indices
+	////////////////////////////////////////////////////////////
+	void BuildQuad(glm::vec3 position, glm::vec2 size);
 	
 	////////////////////////////////////////////////////////////
 	// \brief Loads a model with vertices and normals and inserts into buffers

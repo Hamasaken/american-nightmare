@@ -56,8 +56,7 @@ protected:
 	GLuint loadTexture(std::string inImage); //< 
 
 protected:	// Note: Make this private when loadModel is implemented!
-	;		//< OpenGL functions ptr
-	Model* model;		//< This object's model
+	Model* model;	//< This object's model
 	GLuint texture;	//< This object's texture 
 };
 

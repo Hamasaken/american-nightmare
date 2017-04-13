@@ -194,6 +194,67 @@ void Model::BuildQuadTexture()
 	delete[]indices; indices = nullptr;
 }
 
+void Model::BuildQuad(glm::vec3 position, glm::vec2 size)
+{
+	Vertex* vertices;
+	unsigned int* indices;
+
+	vertexCount = 4;
+	indexCount = 6;
+	vertices = new Vertex[vertexCount];
+	indices = new unsigned int[indexCount];
+
+	// Quad
+	vertices[0].setPosition(glm::vec3(-1, 1, 0));
+	vertices[0].setColor(glm::vec4(1, 0, 0, 1));
+
+	vertices[1].setPosition(glm::vec3(1, 1, 0));
+	vertices[1].setColor(glm::vec4(0, 1, 0, 1));
+
+	vertices[2].setPosition(glm::vec3(1, -1, 0));
+	vertices[2].setColor(glm::vec4(0, 0, 1, 1));
+
+	vertices[3].setPosition(glm::vec3(-1, -1, 0));
+	vertices[3].setColor(glm::vec4(1, 1, 1, 1));
+
+	indices[0] = 0;
+	indices[1] = 2;
+	indices[2] = 3;
+	indices[3] = 0;
+	indices[4] = 1;
+	indices[5] = 2;
+
+	// Creating the vertex buffer that will hold the buffers
+	glGenVertexArrays(1, &vertexArray);
+	glBindVertexArray(vertexArray);
+
+	// Generating buffers
+	glGenBuffers(1, &indexBuffer);
+	glGenBuffers(1, &vertexBuffer);
+
+	// Binding the vertex buffer and putting in data
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertexCount, vertices, GL_STATIC_DRAW);
+
+	// Enable both vertex posiiton & color
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+
+	// Setting the location and size of the attributes
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
+
+	// Binding the index buffer and putting in data
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indexCount, indices, GL_STATIC_DRAW);
+
+	// Clearing from memeory
+	delete[]vertices; vertices = nullptr;
+	delete[]indices; indices = nullptr;
+}
+
 bool Model::LoadModel(std::string modelPath)
 {
 	// Load model from file
