@@ -52,7 +52,7 @@ bool ScreenGame::Start(glm::vec2 screenSize)
 	if (!player->Start(modelPath + "model.m", texturePath + "testanimation.png"))
 		return false;
 	player->setShader(shaderManager->getShader("texture_animation"));
-	player->AddAnimation(player->getTexture(), animationPath + "testanimations.txt");
+	player->AddAnimation(player->getTexture(), animationPath + "testanimation.txt");
 
 	// Creating a simple level
 	levelManager = new LevelManager();
