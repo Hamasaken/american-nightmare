@@ -155,14 +155,14 @@
     <ClInclude Include="Game\Animation.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Screen\ScreenCutscene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Particle\Particle.h">
       <Filter>Header Files\Game\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Game\GUI\Button.h">
       <Filter>Header Files\Game\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen\ScreenCutscene.h">
+      <Filter>Header Files\Screen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

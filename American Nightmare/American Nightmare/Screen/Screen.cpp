@@ -12,7 +12,6 @@ Screen::~Screen() { }
 
 bool Screen::Restart()
 {
-
 	// Unload everything
 	Stop();
 
@@ -25,7 +24,6 @@ bool Screen::Restart()
 
 bool Screen::Start()
 {
-
 	// Building a world matrix (just identity matrix)
 	worldMatrix = glm::mat4(1.f);
 
