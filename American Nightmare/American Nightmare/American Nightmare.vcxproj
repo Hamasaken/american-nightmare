@@ -164,6 +164,7 @@
     <ClCompile Include="Game\LevelManager.cpp" />
     <ClCompile Include="Game\Model.cpp" />
     <ClCompile Include="Game\Object.cpp" />
+    <ClCompile Include="Game\Particle\Particle.cpp" />
     <ClCompile Include="Game\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Game\Particle\ParticleManager.cpp" />
     <ClCompile Include="Game\Player.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="Game\LevelManager.h" />
     <ClInclude Include="Game\Model.h" />
     <ClInclude Include="Game\Object.h" />
+    <ClInclude Include="Game\Particle\Particle.h" />
     <ClInclude Include="Game\Particle\ParticleEmitter.h" />
     <ClInclude Include="Game\Particle\ParticleManager.h" />
     <ClInclude Include="Game\Player.h" />

@@ -18,6 +18,7 @@ void ParticleManager::Stop()
 	{
 		if (emitters[i] != nullptr)
 		{
+			emitters[i]->Stop();
 			delete emitters[i];
 			emitters[i] = nullptr;
 		}
