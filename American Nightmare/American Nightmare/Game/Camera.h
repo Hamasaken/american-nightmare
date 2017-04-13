@@ -6,7 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>	// matrix stuff
 #include <glm/gtx/rotate_vector.hpp>	// rotating vectors and matrices
 
-#define CAMERA_SPEED 0.05f
+#define CAMERA_SPEED 0.09f
 
 class Camera
 {

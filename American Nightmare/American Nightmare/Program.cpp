@@ -85,6 +85,8 @@ void Program::StartSDLWindow()
 	glEnable(GL_CULL_FACE);							// Enable Culling
 	glCullFace(GL_BACK);							// GL_BACK is default, (backculling), we can also use GL_FRONT, and GL_FRONT_AND_BACK if needed
 	glEnable(GL_DEPTH_TEST);						// Enable Depth test
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 }
 
 void Program::Stop()

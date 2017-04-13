@@ -35,6 +35,8 @@ public:
 	// \return Returns false if the map could not be loaded, otherwise true
 	////////////////////////////////////////////////////////////
 	bool LoadLevel(GLuint shader, std::string levelFile);
+	void LoadTempLevel(GLuint shader);
+
 
 	////////////////////////////////////////////////////////////
 	// \brief Updates every object on map

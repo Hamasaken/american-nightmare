@@ -41,25 +41,38 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelFile)
 	std::string modelPath = MODEL_PATH;
 	std::string texturePath = TEXTURE_PATH;
 
+	LoadTempLevel(shader);
+
+	return true;
+}
+
+void LevelManager::LoadTempLevel(GLuint shader)
+{
+	// Gettings paths to files
+	std::string modelPath = MODEL_PATH;
+	std::string texturePath = TEXTURE_PATH;
+
 	// TEMPORARY 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		map.push_back(new Object());
-		if (map[i] == nullptr) return false;
-		if (!map[i]->Start(modelPath + "model.m", texturePath + "gammal-dammsugare.jpg"))
-			return false;
 		map[i]->setShader(shader);
 	}
+
+	map[0]->Start(modelPath + "model.m", texturePath + "gammal-dammsugare.jpg");
+	map[1]->Start(modelPath + "model.m", texturePath + "temp_ground.jpg");
+	map[2]->Start(modelPath + "model.m", texturePath + "temp_background.jpg");
 
 	// TEMPORARY SHOWCASE MAP
 	map[0]->setScale(glm::vec3(8, 5, 3));
 	map[0]->setRotation(glm::vec3(0, 0, 40));
 	map[0]->setPosition(glm::vec3(-2, 0, -10));
-	map[1]->setScale(glm::vec3(15, 15, 0));;
-	map[1]->setPosition(glm::vec3(0, -10, 0));
+	map[1]->setScale(glm::vec3(60, 100, 0));;
+	map[1]->setPosition(glm::vec3(0, -2, 0));
 	map[1]->setRotation(glm::vec3(0.f, -90, 0.f));
-
-	return true;
+	map[2]->setScale(glm::vec3(60, 15, 0));;
+	map[2]->setPosition(glm::vec3(0, 13, -10));
+	map[2]->setRotation(glm::vec3(0.f, 0.f, 0.f));
 }
 
 void LevelManager::Update(GLint deltaT)

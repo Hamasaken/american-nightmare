@@ -70,6 +70,9 @@ void ScreenGame::SetStartVariables()
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 10));
 
+	// Backing the player up a little to the screen
+	player->setPosition(glm::vec3(0, 0, 18.f));
+
 	// Making wall & floor bigger
 	levelManager->LoadLevel(shaderManager->getShader("texture"), "0.lvl");
 }
