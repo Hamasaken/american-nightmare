@@ -95,12 +95,12 @@ void ParticleManager::Explosion(ParticleEmitter::ParticleType type, glm::vec3 po
 	emitters.push_back(emitter);
 }
 
-void ParticleManager::Update(GLfloat delta)
+void ParticleManager::Update(GLfloat deltaT)
 {
 	for (int i = 0; i < int(emitters.size()); i++)
 	{
 	//	if (!emitter.isComplete())
-			emitters[i]->Update(delta);
+			emitters[i]->Update(deltaT);
 	//	else 
 	//		emitters.erase(emitter);
 	}

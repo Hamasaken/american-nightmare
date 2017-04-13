@@ -25,6 +25,9 @@
 #define CUTSCENE_PATH "Data/Graphics/Cutscenes/"
 #define TEXTURE_PATH "Data/Graphics/Textures/"
 
+// Functions
+float randBetweenF(float low, float high);
+
 // Vertex Struct for vertex buffers, etc
 struct Vertex
 {

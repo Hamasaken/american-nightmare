@@ -15,11 +15,11 @@ void ParticleEmitter::CreateParticles(glm::vec3 position, glm::vec3 color, int a
 	}
 }
 
-void ParticleEmitter::Update(GLfloat delta)
+void ParticleEmitter::Update(GLfloat deltaT)
 {
 	for (int i = 0; i < particles.size(); i++)
 	{
-		particles[i].update(delta);
+		particles[i].update(deltaT);
 		if (particles[i].isDead)
 			particles.erase(particles.begin() + i);
 	}
@@ -28,13 +28,9 @@ void ParticleEmitter::Update(GLfloat delta)
 std::vector<Vertex> ParticleEmitter::getParticlesAsVertices() 
 {
 	std::vector<Vertex> vertices;
-
-	Vertex v;
 	for (Particle& p : particles)
 	{
-		v.setColor(p.color);
-		v.setPosition(p.position);
-		vertices.push_back(v);
+		vertices.push_back(p.getAsVertex());
 	}
 
 	return vertices;
