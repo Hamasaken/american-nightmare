@@ -9,9 +9,9 @@ ScreenStart::ScreenStart(const ScreenStart& other) { }
 
 ScreenStart::~ScreenStart() { }
 
-bool ScreenStart::Start()
+bool ScreenStart::Start(glm::vec2 screenSize)
 {
-	Screen::Start();
+	Screen::Start(screenSize);
 
 	////////////////////////////////////////////////////////////
 	// Creating Shader Manager

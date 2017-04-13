@@ -16,7 +16,7 @@ bool Screen::Restart()
 	Stop();
 
 	// Trying to restart
-	if (!Start())
+	if (!Start(screenSize))
 		return false;
 
 	return true;
