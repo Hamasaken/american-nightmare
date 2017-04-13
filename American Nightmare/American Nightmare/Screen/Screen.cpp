@@ -12,19 +12,20 @@ Screen::~Screen() { }
 
 bool Screen::Restart()
 {
-
 	// Unload everything
 	Stop();
 
 	// Trying to restart
-	if (!Start())
+	if (!Start(screenSize))
 		return false;
 
 	return true;
 }
 
-bool Screen::Start()
+bool Screen::Start(glm::vec2 screenSize)
 {
+	// Getting screensize
+	this->screenSize = screenSize;
 
 	// Building a world matrix (just identity matrix)
 	worldMatrix = glm::mat4(1.f);

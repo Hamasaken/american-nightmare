@@ -194,7 +194,7 @@ void Model::BuildQuadTexture()
 	delete[]indices; indices = nullptr;
 }
 
-void Model::BuildQuad(glm::vec3 position, glm::vec2 size)
+void Model::BuildQuad(glm::vec3 position, glm::vec4 color, glm::vec2 size)
 {
 	Vertex* vertices;
 	unsigned int* indices;
@@ -205,17 +205,14 @@ void Model::BuildQuad(glm::vec3 position, glm::vec2 size)
 	indices = new unsigned int[indexCount];
 
 	// Quad
-	vertices[0].setPosition(glm::vec3(-1, 1, 0));
-	vertices[0].setColor(glm::vec4(1, 0, 0, 1));
-
-	vertices[1].setPosition(glm::vec3(1, 1, 0));
-	vertices[1].setColor(glm::vec4(0, 1, 0, 1));
-
-	vertices[2].setPosition(glm::vec3(1, -1, 0));
-	vertices[2].setColor(glm::vec4(0, 0, 1, 1));
-
-	vertices[3].setPosition(glm::vec3(-1, -1, 0));
-	vertices[3].setColor(glm::vec4(1, 1, 1, 1));
+	vertices[0].setPosition(glm::vec3(-size.x + position.x, size.y + position.y, position.z));
+	vertices[0].setColor(color);
+	vertices[1].setPosition(glm::vec3(size.x + position.x, size.y + position.y, position.z));
+	vertices[1].setColor(color);
+	vertices[2].setPosition(glm::vec3(size.x + position.x, -size.y + position.y, position.z));
+	vertices[2].setColor(color);
+	vertices[3].setPosition(glm::vec3(-size.x + position.x, -size.y + position.y, position.z));
+	vertices[3].setColor(color);
 
 	indices[0] = 0;
 	indices[1] = 2;

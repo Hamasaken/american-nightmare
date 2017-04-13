@@ -13,7 +13,6 @@ Program::~Program() { }
 bool Program::Start()
 {
 	srand(time_t(NULL));
-	screenSize = DEFAULT_SCREEN_SIZE;
 
 	////////////////////////////////////////////////////////////
 	// Creating a window for the program
@@ -26,7 +25,7 @@ bool Program::Start()
 	////////////////////////////////////////////////////////////
 	screenManager = new ScreenManager();
 	if (screenManager == nullptr) return false;
-	if (!screenManager->Start(hwnd))
+	if (!screenManager->Start(screenSize, hwnd))
 	{
 		MessageBox(hwnd, L"Could not start ScreenManager class.", L"Woops", MB_OKCANCEL);
 		return false;
@@ -51,6 +50,7 @@ void Program::StartSDLWindow()
 	// Creating window
 	if (FULL_SCREEN_ON) {
 		window = SDL_CreateWindow(appName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_OPENGL);
+		SDL_GetWindowSize(window, (int*)&screenSize.x, (int*)&screenSize.y);
 	}
 	else {
 		window = SDL_CreateWindow(appName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenSize.x, screenSize.y, SDL_WINDOW_OPENGL);

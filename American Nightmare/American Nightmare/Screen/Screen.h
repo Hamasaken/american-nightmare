@@ -18,7 +18,7 @@ public:
 	// \brief Loads all needed objects, also runs SetStartVariables
 	// \return Returrns true if every object could be created
 	////////////////////////////////////////////////////////////
-	virtual bool Start();
+	virtual bool Start(glm::vec2 screenSize);
 	
 	////////////////////////////////////////////////////////////
 	// \brief A combined function that runs both Stop & Start
@@ -60,6 +60,7 @@ public:
 protected:
 	Camera* camera;	//< Simple Camera object
 
+	glm::vec2 screenSize;
 	glm::mat4 worldMatrix;
 	glm::mat4 projectionMatrix;
 };

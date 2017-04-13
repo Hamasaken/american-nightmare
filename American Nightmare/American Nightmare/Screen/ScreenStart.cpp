@@ -9,12 +9,27 @@ ScreenStart::ScreenStart(const ScreenStart& other) { }
 
 ScreenStart::~ScreenStart() { }
 
-bool ScreenStart::Start()
+bool ScreenStart::Start(glm::vec2 screenSize)
 {
-	Screen::Start();
+	Screen::Start(screenSize);
 
-	// Loading GUI
-	// --
+	////////////////////////////////////////////////////////////
+	// Creating Shader Manager
+	////////////////////////////////////////////////////////////
+	std::string shaderPath = SHADER_PATH;
+	shaderManager = new ShaderManager();
+	if (shaderManager == nullptr) return false;
+
+	// Adding Shader Programs
+	shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
+
+	////////////////////////////////////////////////////////////
+	// Creating Meny Buttons
+	////////////////////////////////////////////////////////////
+	button = new Button();
+	if (button == nullptr) return false;
+	if (!button->Start(glm::vec2(-10, 0), glm::vec2(1, 1))) return false;
+	button->setShader(shaderManager->getShader("solid"));
 
 	SetStartVariables();
 
@@ -29,21 +44,27 @@ void ScreenStart::SetStartVariables()
 
 void ScreenStart::Update(GLint deltaT)
 {
-	// Checking button stuff and that stuff 
+	button->Update(deltaT);
 }
 
 void ScreenStart::Draw()
 {
+	// Getting view matrix from camera
 	camera->buildViewMatrix();
 
-	// - Drawing buttons
-
+	// Drawing button
+	DrawObject(button, shaderManager);
 }
 
 void ScreenStart::Stop()
 {
-	// Delete GUI
-	// --
+	// Deleting button
+	if (button != nullptr)
+	{
+		button->Stop();
+		delete button;
+		button = nullptr;
+	}
 
 	// Deletes Camera & OpenGL ptr
 	Screen::Stop();

@@ -2,6 +2,7 @@
 #define SCREENSTART_H
 
 #include "Screen.h"
+#include "../Game/GUI/Button.h"
 
 #define CLEAR_COLOR glm::vec4(0.25f, 0.1, 0.1, 1)
 
@@ -15,7 +16,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Loads Screen specific things like buttons/logo
 	////////////////////////////////////////////////////////////
-	bool Start();
+	bool Start(glm::vec2 screenSize);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads Screen specific things like buttons/logo
@@ -36,6 +37,10 @@ public:
 	// \brief Draw full start meny
 	////////////////////////////////////////////////////////////
 	void Draw();
+
+private:
+	ShaderManager* shaderManager;
+	Button* button;
 };
 
 #endif // !SCREENSTART_H

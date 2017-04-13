@@ -23,7 +23,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Saves openGL ptr and starts the start screen
 	////////////////////////////////////////////////////////////
-	bool Start(HWND hwnd);
+	bool Start(glm::vec2 screenSize, HWND hwnd);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads every screen
@@ -65,6 +65,7 @@ public:
 	////////////////////////////////////////////////////////////
 	State getState();
 private:
+	glm::vec2 screenSize;		//< The current screenSize
 	HWND hwnd;			//< Saving the HWND for error msg boxes output
 	ScreenGame* screenGame;		//< The game screen
 	ScreenStart* screenStart;	//< The start meny screen

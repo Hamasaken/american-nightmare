@@ -12,10 +12,11 @@ ScreenManager::ScreenManager(const ScreenManager & other) { }
 
 ScreenManager::~ScreenManager() { }
 
-bool ScreenManager::Start(HWND hwnd)
+bool ScreenManager::Start(glm::vec2 screenSize, HWND hwnd)
 {
 	// Get parameters
 	this->hwnd = hwnd;
+	this->screenSize = screenSize;
 
 	// Setting start screen
 	currentState = State(START_STATE);
@@ -61,7 +62,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::Game: 
 		screenGame = new ScreenGame();
 		if (screenGame == nullptr) return false;
-		if (!screenGame->Start())
+		if (!screenGame->Start(screenSize))
 		{
 			MessageBox(hwnd, L"Could not start Game Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
@@ -70,7 +71,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::StartMeny:
 		screenStart = new ScreenStart();
 		if (screenStart == nullptr) return false;
-		if (!screenStart->Start())
+		if (!screenStart->Start(screenSize))
 		{
 			MessageBox(hwnd, L"Could not start Start Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
@@ -79,7 +80,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::Cutscene:
 		screenCutscene = new ScreenCutscene();
 		if (screenCutscene == nullptr) return false;
-		if (!screenCutscene->Start())
+		if (!screenCutscene->Start(screenSize))
 		{
 			MessageBox(hwnd, L"Could not start Cutscene Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
