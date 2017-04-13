@@ -19,7 +19,11 @@ public:
 	void Update(GLfloat delta);
 	void Draw();
 
+	GLuint getShader();
+	void setShader(GLuint shader);
+
 private:
+	GLuint shader;
 	std::vector<Vertex> vertices;
 	std::vector<ParticleEmitter*> emitters;
 	unsigned int vertexArray;

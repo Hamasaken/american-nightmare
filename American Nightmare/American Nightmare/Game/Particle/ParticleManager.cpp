@@ -117,3 +117,7 @@ void ParticleManager::Draw()
 	// Render vertex buffer using index buffer
 	glDrawArrays(GL_POINTS, 0, vertexCount);
 }
+
+GLuint ParticleManager::getShader() { return shader; }
+
+void ParticleManager::setShader(GLuint shader) { this->shader = shader; }

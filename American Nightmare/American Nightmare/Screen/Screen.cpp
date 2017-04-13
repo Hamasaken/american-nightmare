@@ -83,7 +83,6 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 		printf("TopLeft: %f %f\n", tempFrameUV->uvBotLeft.x, tempFrameUV->uvBotLeft.y);
 	}
 	
-
 	// Drawing object
 	object->Draw();
 }

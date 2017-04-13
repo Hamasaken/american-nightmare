@@ -18,15 +18,6 @@ bool ScreenGame::Start()
 	Screen::Start();
 
 	////////////////////////////////////////////////////////////
-	// Creating Particle Manager
-	////////////////////////////////////////////////////////////
-	particleManager = new ParticleManager();
-	if (particleManager == nullptr) return false;
-	if (!particleManager->Start())
-		return false;
-	particleManager->Explosion(ParticleEmitter::PIXEL, glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), 1000);
-
-	////////////////////////////////////////////////////////////
 	// Creating Shader Manager
 	////////////////////////////////////////////////////////////
 	std::string shaderPath = SHADER_PATH;
@@ -38,6 +29,15 @@ bool ScreenGame::Start()
 	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
 	shaderManager->AddShader("particle", shaderPath + "particle_vs.glsl", shaderPath + "particle_gs.glsl", shaderPath + "particle_fs.glsl");
 	shaderManager->AddShader("texture_animation", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_fs.glsl");
+
+	////////////////////////////////////////////////////////////
+	// Creating Particle Manager
+	////////////////////////////////////////////////////////////
+	particleManager = new ParticleManager();
+	if (particleManager == nullptr) return false;
+	if (!particleManager->Start())
+		return false;
+	particleManager->setShader(shaderManager->getShader("particle"));
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
@@ -76,18 +76,18 @@ void ScreenGame::SetStartVariables()
 
 void ScreenGame::Update(GLint deltaT)
 {
+	// Temporary for testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
 		particleManager->Explosion(ParticleEmitter::PIXEL, player->getPosition(), glm::vec3((rand() % 1000) / 1000.f, (rand() % 1000) / 1000.f, (rand() % 1000) / 1000.f), 100);
 
 	// Updating particles effects
-	GLfloat delta = 0.1f;
-	particleManager->Update(delta);
+	particleManager->Update(deltaT);
 					 
 	// Updating player
 	player->Update(deltaT);
 
 	// Updating map objects
-	levelManager->Update(delta);
+	levelManager->Update(deltaT);
 
 	// Moving the camera to follow player object
 	camera->smoothToPosition(glm::vec3(player->getPosition().x, player->getPosition().y, camera->getPosition().z));
@@ -107,7 +107,7 @@ void ScreenGame::Draw()
 
 	// Drawing vertices
 	shaderManager->SetParameters(worldMatrix, camera->getViewMatrix(), projectionMatrix);
-	shaderManager->setShader("particle");
+	shaderManager->setShader(particleManager->getShader());
 	particleManager->Draw();
 }
 
