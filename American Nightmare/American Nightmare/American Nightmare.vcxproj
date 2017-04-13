@@ -161,6 +161,7 @@
     <ClCompile Include="Accessories.cpp" />
     <ClCompile Include="Game\Animation.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
+    <ClCompile Include="Game\GUI\Button.cpp" />
     <ClCompile Include="Game\LevelManager.cpp" />
     <ClCompile Include="Game\Model.cpp" />
     <ClCompile Include="Game\Object.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Accessories.h" />
     <ClInclude Include="Game\Animation.h" />
     <ClInclude Include="Game\Camera.h" />
+    <ClInclude Include="Game\GUI\Button.h" />
     <ClInclude Include="Game\LevelManager.h" />
     <ClInclude Include="Game\Model.h" />
     <ClInclude Include="Game\Object.h" />

@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Game\Particle">
       <UniqueIdentifier>{002173d1-fca1-4999-81e8-2bf79afc5e3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\GUI">
+      <UniqueIdentifier>{827a261e-5b70-4af5-b6ce-52cc49acfc8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\GUI">
+      <UniqueIdentifier>{242b8bb1-a7ae-43ce-bcbf-e06390de2c90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -96,6 +102,9 @@
     <ClCompile Include="Game\Particle\Particle.cpp">
       <Filter>Source Files\Game\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GUI\Button.cpp">
+      <Filter>Source Files\Game\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h">
@@ -151,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="Game\Particle\Particle.h">
       <Filter>Header Files\Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GUI\Button.h">
+      <Filter>Header Files\Game\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
