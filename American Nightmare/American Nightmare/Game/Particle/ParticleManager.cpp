@@ -83,7 +83,7 @@ void ParticleManager::MakeVertices()
 	glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
 }
 
-void ParticleManager::Explosion(ParticleEmitter::ParticleType type, glm::vec3 position, glm::vec4 color, int amount)
+void ParticleManager::Effect(ParticleEmitter::ParticleType type, glm::vec3 position, glm::vec4 color, int amount)
 {
 	// Creating a emmiter with a specific type
 	ParticleEmitter* emitter = new ParticleEmitter();
@@ -100,10 +100,14 @@ void ParticleManager::Update(GLfloat deltaT)
 {
 	for (int i = 0; i < int(emitters.size()); i++)
 	{
-	//	if (!emitter.isComplete())
+		if (!emitters[i]->getIsComplete())
 			emitters[i]->Update(deltaT);
-	//	else 
-	//		emitters.erase(emitter);
+		else
+		{
+			emitters[i]->Stop();
+			delete emitters[i];
+			emitters.erase(emitters.begin() + i);
+		}
 	}
 
 	// Updating vertices and vertexarray

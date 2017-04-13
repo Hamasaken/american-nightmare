@@ -14,7 +14,7 @@ public:
 	void Stop();
 
 	void MakeVertices();
-	void Explosion(ParticleEmitter::ParticleType type, glm::vec3 position, glm::vec4 color, int amount);
+	void Effect(ParticleEmitter::ParticleType type, glm::vec3 position, glm::vec4 color, int amount);
 
 	void Update(GLfloat deltaT);
 	void Draw();
