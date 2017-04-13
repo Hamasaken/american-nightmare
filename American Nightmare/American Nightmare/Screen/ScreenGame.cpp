@@ -44,6 +44,7 @@ bool ScreenGame::Start()
 	////////////////////////////////////////////////////////////
 	std::string modelPath = MODEL_PATH;
 	std::string texturePath = TEXTURE_PATH;
+	std::string animationPath = ANIMATION_PATH;
 
 	// Creating the player object
 	player = new Player();
@@ -51,7 +52,7 @@ bool ScreenGame::Start()
 	if (!player->Start(modelPath + "model.m", texturePath + "testanimation.png"))
 		return false;
 	player->setShader(shaderManager->getShader("texture_animation"));
-	player->AddAnimation(player->getTexture(), "");
+	player->AddAnimation(player->getTexture(), animationPath + "testanimations.txt");
 
 	// Creating a simple level
 	levelManager = new LevelManager();

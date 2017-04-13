@@ -1,0 +1,4 @@
+name testanimation
+tf 27
+dim 7 4
+fps 48

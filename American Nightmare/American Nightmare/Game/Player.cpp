@@ -21,8 +21,16 @@ void Player::Movement()
 	// Positioning
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) position.y += 0.15f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) position.y -= 0.15f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) position.x += 0.15f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) position.x -= 0.15f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+	{
+		position.x += 0.15f;
+		directionIsRight = true;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+	{
+		position.x -= 0.15f;
+		directionIsRight = false;
+	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) position.z += 0.15f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) position.z -= 0.15f;
 

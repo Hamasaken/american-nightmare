@@ -16,24 +16,37 @@ uniform vec2 uvTopLeft;
 uniform vec2 uvTopRight;
 uniform vec2 uvBotLeft;
 uniform vec2 uvBotRight;
+uniform bool isRight;
 
 void main(void)
 {
 	if(inputPosition.x == -1.f && inputPosition.y == 1.f)
 	{
-		textureUV = uvTopLeft;
+		if(isRight)
+			textureUV = uvTopLeft;
+		else
+			textureUV = uvTopRight;
 	}
 	else if(inputPosition.x == 1.f && inputPosition.y == 1.f)
 	{
-		textureUV = uvTopRight;
+		if(isRight)
+			textureUV = uvTopRight;
+		else
+			textureUV = uvTopLeft;
 	}
 	else if(inputPosition.x == -1.f && inputPosition.y == -1.f)
 	{
-		textureUV = uvBotLeft;
+		if(isRight)
+			textureUV = uvBotLeft;
+		else
+			textureUV = uvBotRight;
 	}
 	else
 	{
-		textureUV = uvBotRight;
+		if(isRight)
+			textureUV = uvBotRight;
+		else
+			textureUV = uvBotLeft;
 	}
 
 	// Setting vertex position according to matrices

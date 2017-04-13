@@ -7,6 +7,7 @@ Animation::Animation() : Object()
 	currentFrameUV.uvTopRight = glm::vec2();
 	currentFrameUV.uvBotLeft = glm::vec2();
 	currentFrameUV.uvBotRight = glm::vec2();
+	bool directionisRight = true;
 }
 
 Animation::Animation(const Animation& other) {}
@@ -15,31 +16,80 @@ Animation::~Animation() {}
 
 void Animation::AddAnimation(GLuint texture, std::string animationFile)
 {
-	AnimationSegment tempAnimation = AnimationSegment();
+	AnimationSegment tempAnimation;
 
-	// Temporary, load from animationFile
-	tempAnimation.name = "test";
-	tempAnimation.textureID = texture;
-	tempAnimation.totalFrames = 27;
-	tempAnimation.dimensions.x = 7;
-	tempAnimation.dimensions.y = 4;
-	tempAnimation.currentDir = right;
-	tempAnimation.fps = 48;
-	tempAnimation.currentFrame = 0;
+	// Loading animation
+	if (!loadAnimation(tempAnimation, animationFile, texture)) {	return; }
 
+	// Check if animation already exists
 	if (findAnimation(tempAnimation.name) != -1)
 	{
-		printf("Animation already exists: %s", tempAnimation.name);
+		printf("Animation already exists: %s\n", tempAnimation.name);
 		return;
 	}
 
+	// Adding animation to list
 	animationList.push_back(tempAnimation);
 
+	// If this is the first animation, set current animation to this animation.
 	if (currentAnimation == nullptr)
 	{
 		currentAnimation = &(animationList[0]);
 	}
+}
 
+bool Animation::loadAnimation(AnimationSegment &aniSeg, std::string animationFile, GLuint texture)
+{
+	std::ifstream in(animationFile);
+
+	if (!in.is_open())
+	{
+		printf("Animation file did not load : %s\n", animationFile);
+		return false;
+	}
+
+	AnimationSegment tempAnimation;
+	tempAnimation.textureID = texture;
+	tempAnimation.currentFrame = 0;
+
+	char buffer[64];
+
+	// Loading in animation to tempAnimation
+	while (!in.eof())
+	{
+		in.getline(buffer, 64);
+
+		if (buffer[0] == '/' && buffer[1] == '/') {}
+
+		else if (buffer[0] == 'n' && buffer[1] == 'a' && buffer[2] == 'm' && buffer[3] == 'e')
+		{
+			char nameBuffer[64];
+			sscanf(buffer, "name %s", &nameBuffer);
+			tempAnimation.name = nameBuffer;
+		}
+		else if (buffer[0] == 't' && buffer[1] == 'f')
+		{
+			GLint tempTF;
+			sscanf_s(buffer, "tf %d", &tempTF);
+			tempAnimation.totalFrames = tempTF;
+		}
+		else if (buffer[0] == 'd' && buffer[1] == 'i' && buffer[2] == 'm')
+		{
+			GLint tempDX;
+			GLint tempDY;
+			sscanf_s(buffer, "dim %d %d", &tempDX, &tempDY);
+			tempAnimation.dimensions = glm::vec2(tempDX, tempDY);
+		}
+		else if (buffer[0] == 'f' && buffer[1] == 'p' && buffer[2] && 's')
+		{
+			GLint tempFPS;
+			sscanf_s(buffer, "fps %d", &tempFPS);
+			tempAnimation.fps = tempFPS;
+		}
+	}
+
+	aniSeg = tempAnimation;
+	return true;
 }
 
 GLint Animation::findAnimation(std::string name) const
@@ -76,19 +126,17 @@ void Animation::updateAnimation(GLfloat deltaT)
 	// Check if currentAnimation is set
 	if (currentAnimation == nullptr)
 	{
-		printf("No animation is set");
+		printf("No animation is set\n");
 		return;
 	}
 
 	// Get current frame
 	currentAnimation->currentFrame += 0.001 * deltaT * currentAnimation->fps;
 
-	//printf("currentFrame: %f\n", currentAnimation->currentFrame);
-
 	// If current frame is above total amount of frames - reset to 0
-	if (currentAnimation->currentFrame >= currentAnimation->totalFrames)
+	while (currentAnimation->currentFrame >= currentAnimation->totalFrames)
 	{
-		currentAnimation->currentFrame = 0.f;
+		currentAnimation->currentFrame -= currentAnimation->totalFrames;
 	}
 
 	// Get size of each frame in 0-1 coords
@@ -98,10 +146,6 @@ void Animation::updateAnimation(GLfloat deltaT)
 	GLint currentRow = (int)currentAnimation->currentFrame / (int)currentAnimation->dimensions.x;
 	GLint currentCol = (int)currentAnimation->currentFrame % (int)currentAnimation->dimensions.x;
 
-	//printf("currentCol: %d", currentCol);
-
-	//printf("currentFrame: %f\n", currentAnimation->currentFrame);
-
 	// Get offset in 0-1 coords for current frame
 	glm::vec2 offset = glm::vec2(frameSize.x * currentCol, 1 - (frameSize.y * currentRow));
 
@@ -110,12 +154,8 @@ void Animation::updateAnimation(GLfloat deltaT)
 	currentFrameUV.uvBotRight = glm::vec2(offset.x + frameSize.x, offset.y - frameSize.y);
 	currentFrameUV.uvTopRight = glm::vec2(offset.x + frameSize.x, offset.y);
 	currentFrameUV.uvTopLeft = offset;
-
-
-
 }
 
-Animation::FrameUV* Animation::GetCurrentFrameUV()
-{
-	return &currentFrameUV;
-}
+Animation::FrameUV* Animation::GetCurrentFrameUV() { return &currentFrameUV; }
+
+bool Animation::isDirectionRight() { return directionIsRight; }
