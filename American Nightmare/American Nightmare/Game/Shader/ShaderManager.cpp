@@ -155,6 +155,39 @@ bool ShaderManager::SetParameters(glm::mat4 world, glm::mat4 view, glm::mat4 pro
 	return true;
 }
 
+bool ShaderManager::SetParametersAnimated(Animation* character)
+{
+	GLuint location = NULL;
+	Animation::FrameUV* tempFrameUV = character->GetCurrentFrameUV();
+
+	// Loading top left uv
+	location = glGetUniformLocation(character->getShader(), "uvTopLeft");
+	if (location == -1) return false;
+	glUniform2f(location, tempFrameUV->uvTopLeft.x, tempFrameUV->uvTopLeft.y);
+
+	// Loading top right uv
+	location = glGetUniformLocation(character->getShader(), "uvTopRight");
+	if (location == -1) return false;
+	glUniform2f(location, tempFrameUV->uvTopRight.x, tempFrameUV->uvTopRight.y);
+
+	// Loading bot left uv
+	location = glGetUniformLocation(character->getShader(), "uvBotLeft");
+	if (location == -1) return false;
+	glUniform2f(location, tempFrameUV->uvBotLeft.x, tempFrameUV->uvBotLeft.y);
+
+	// Loading bot right uv
+	location = glGetUniformLocation(character->getShader(), "uvBotRight");
+	if (location == -1) return false;
+	glUniform2f(location, tempFrameUV->uvBotRight.x, tempFrameUV->uvBotRight.y);
+
+	// Loading direction of animation
+	location = glGetUniformLocation(character->getShader(), "isRight");
+	if (location == -1) return false;
+	glUniform1i(location, character->isDirectionRight());
+
+	return true;
+}
+
 GLint ShaderManager::findShader(std::string name) const
 {
 	GLint shaderProgram = -1;

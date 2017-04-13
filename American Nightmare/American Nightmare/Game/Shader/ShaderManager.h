@@ -2,6 +2,7 @@
 #define SHADERMANAGER_H
 
 #include "..\..\Accessories.h"
+#include "..\Animation.h"
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -25,6 +26,7 @@ public:
 	GLuint getShader(std::string name) const;
 
 	bool SetParameters(glm::mat4 world, glm::mat4 view, glm::mat4 projection);
+	bool SetParametersAnimated(Animation* character);
 
 private:
 	struct ShaderProgram

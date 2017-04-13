@@ -72,15 +72,11 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 
 	glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
 
-	if (dynamic_cast<Player*>(object))
+	// If object is animated, set additional parameters
+	if (dynamic_cast<Animation*>(object))
 	{
-		Player* tempPlayer = dynamic_cast<Player*>(object);
-		Animation::FrameUV* tempFrameUV = tempPlayer->GetCurrentFrameUV();
-		glUniform2f(glGetUniformLocation(tempPlayer->getShader(), "uvTopLeft"), tempFrameUV->uvTopLeft.x, tempFrameUV->uvTopLeft.y);
-		glUniform2f(glGetUniformLocation(tempPlayer->getShader(), "uvTopRight"), tempFrameUV->uvTopRight.x, tempFrameUV->uvTopRight.y);
-		glUniform2f(glGetUniformLocation(tempPlayer->getShader(), "uvBotLeft"), tempFrameUV->uvBotLeft.x, tempFrameUV->uvBotLeft.y);
-		glUniform2f(glGetUniformLocation(tempPlayer->getShader(), "uvBotRight"), tempFrameUV->uvBotRight.x, tempFrameUV->uvBotRight.y);
-		glUniform1i(glGetUniformLocation(tempPlayer->getShader(), "isRight"), tempPlayer->isDirectionRight());
+		Animation* tempCharacter = dynamic_cast<Animation*>(object);
+		shaderManager->SetParametersAnimated(tempCharacter);
 	}
 	
 	// Drawing object

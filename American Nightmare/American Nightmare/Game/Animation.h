@@ -31,6 +31,7 @@ protected:
 	bool directionIsRight;
 private:
 
+	// Holds information about a single animation (for exmaple a jumping animation)
 	struct AnimationSegment
 	{
 		std::string name;

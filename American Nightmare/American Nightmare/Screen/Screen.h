@@ -3,7 +3,6 @@
 
 #include "../Game/Camera.h"
 #include "../Game/Object.h"
-#include "../Game/Player.h"
 #include "../Game/Animation.h"
 #include "../Game/Shader/ShaderManager.h"
 
