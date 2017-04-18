@@ -3,6 +3,10 @@ BTH - Litet Spelprojekt Grupp 4
 
 Nothing to see here ¯|_(ツ)_/¯
 
+Release Version 18/4
+
+https://www.dropbox.com/s/4owcfrhdxwl5rvm/American%20Nightmare%20-%20Release.zip?dl=0
+
 External (Libaries & Includes)
 
 Put in: "Source\Repos\american-nightmare\American Nightmare\"
