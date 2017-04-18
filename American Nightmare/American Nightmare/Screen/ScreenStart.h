@@ -40,7 +40,10 @@ public:
 
 private:
 	ShaderManager* shaderManager;
-	Button* button;
+	Button* start;
+	Button* posters;
+	Button* options;
+	Button* exit;
 };
 
 #endif // !SCREENSTART_H

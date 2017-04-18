@@ -23,6 +23,11 @@ public:
 	bool Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f));
 
 	////////////////////////////////////////////////////////////
+	// \brief Checking if mouse pointer is inside button
+	////////////////////////////////////////////////////////////
+	bool isMouseInside();
+
+	////////////////////////////////////////////////////////////
 	// \brief Updates button by checking if mouse is hovering/pressing/releasing
 	// \param deltaT The time between each frame in milliseconds
 	////////////////////////////////////////////////////////////

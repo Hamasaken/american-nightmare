@@ -9,7 +9,7 @@ Button::~Button() { }
 bool Button::Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, glm::vec4 color)
 {
 	// Setting starting variables and inserting parameters
-	this->position = glm::vec3(position.x, position.y, 1.f);
+	this->position = glm::vec3(position.x / (20.f / 1.11777), - position.y / (20.f / 1.12), 0.f);
 	this->rotation = glm::vec3(0, 0, 0);
 	this->scale = glm::vec3(1, 1, 1);
 	this->screenSize = screenSize;
@@ -25,9 +25,30 @@ bool Button::Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, glm
 	return true;
 }
 
+bool Button::isMouseInside()
+{
+	glm::vec2 mousePosition = glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+	return (mousePosition.x > position.x && mousePosition.x < position.x + size.x &&
+		mousePosition.y > position.y && mousePosition.y < position.y + size.y);
+}
+
 void Button::Update(GLint deltaT)
 {
 	// Checking if pressed or not
+	if (state == State::Pressed)
+	{
+		if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			state = isMouseInside() ? State::Released : State::Nothing;
+	}
+	else
+	{
+		if (isMouseInside())
+		{
+			state = sf::Mouse::isButtonPressed(sf::Mouse::Left) ? State::Pressed : State::Hovering;
+		}
+		else
+			state = State::Nothing;
+	}
 }
 
 void Button::UpdateQuad()
