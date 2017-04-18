@@ -50,11 +50,14 @@ void Program::StartSDLWindow()
 	// Creating window
 	if (FULL_SCREEN_ON) {
 		window = SDL_CreateWindow(appName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_OPENGL);
-		SDL_GetWindowSize(window, (int*)&screenSize.x, (int*)&screenSize.y);
+		screenSize.x = GetSystemMetrics(SM_CXSCREEN);
+		screenSize.y = GetSystemMetrics(SM_CYSCREEN);
 	}
 	else {
 		window = SDL_CreateWindow(appName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenSize.x, screenSize.y, SDL_WINDOW_OPENGL);
 	}
+
+
 
 	context = SDL_GL_CreateContext(window);
 
