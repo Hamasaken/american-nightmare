@@ -16,7 +16,7 @@
 
 // DEFINES
 #define APP_NAME		"American Nightmare"
-#define FULL_SCREEN_ON		true
+#define FULL_SCREEN_ON		false
 #define SHOW_CURSOR			true
 #define DEFAULT_SCREEN_SIZE	glm::vec2(1280, 720)
 #define SCREEN_DEPTH		50.f
