@@ -194,7 +194,7 @@ void Model::BuildQuadTexture()
 	delete[]indices; indices = nullptr;
 }
 
-void Model::BuildQuad(glm::vec3 position, glm::vec4 color, glm::vec2 size)
+void Model::BuildQuad(glm::vec2 screenSize, glm::vec3 position, glm::vec4 color, glm::vec2 size)
 {
 	Vertex* vertices;
 	unsigned int* indices;
@@ -204,14 +204,27 @@ void Model::BuildQuad(glm::vec3 position, glm::vec4 color, glm::vec2 size)
 	vertices = new Vertex[vertexCount];
 	indices = new unsigned int[indexCount];
 
+	float NDCX = 20.f;
+	float NDCY = 20.f;
+	float screenX = -1;
+	float screenY = -1;
+	glm::vec3 pos = position;
+	glm::vec2 siz = size;
+
+	float left, right, top, bottom;
+	left = (screenX);
+	right = left + siz.x;
+	top = (screenY);
+	bottom = top - siz.y;
+
 	// Quad
-	vertices[0].setPosition(glm::vec3(-size.x + position.x, size.y + position.y, position.z));
+	vertices[0].setPosition(glm::vec3(left, top, position.z));
 	vertices[0].setColor(color);
-	vertices[1].setPosition(glm::vec3(size.x + position.x, size.y + position.y, position.z));
+	vertices[1].setPosition(glm::vec3(right, top, position.z));
 	vertices[1].setColor(color);
-	vertices[2].setPosition(glm::vec3(size.x + position.x, -size.y + position.y, position.z));
+	vertices[2].setPosition(glm::vec3(right, bottom, position.z));
 	vertices[2].setColor(color);
-	vertices[3].setPosition(glm::vec3(-size.x + position.x, -size.y + position.y, position.z));
+	vertices[3].setPosition(glm::vec3(left, bottom, position.z));
 	vertices[3].setColor(color);
 
 	indices[0] = 0;

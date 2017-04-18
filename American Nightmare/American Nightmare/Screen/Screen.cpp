@@ -32,7 +32,7 @@ bool Screen::Start(glm::vec2 screenSize)
 
 	// Building a projection matrix
 	float fov = glm::pi<float>() / 0.40f;
-	projectionMatrix = glm::perspective(fov, 1920.f / 1080.f, 0.1f, 50.f);
+	projectionMatrix = glm::perspective(fov, screenSize.x / screenSize.y, 0.1f, 50.f);
 
 	// Creating Camera Object
 	camera = new Camera();

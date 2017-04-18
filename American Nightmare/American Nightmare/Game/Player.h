@@ -16,6 +16,9 @@ public:
 	// \brief Gets input from user and moves accordingly
 	////////////////////////////////////////////////////////////
 	void Movement();
+
+private:
+	glm::vec2 velocity;
 };
 
 #endif // !PLAYER_H

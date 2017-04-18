@@ -17,9 +17,17 @@ void Player::Update(GLint deltaT)
 void Player::Movement()
 {
 	// Temporary movement & rotation & scaling for testing :)
+	velocity.y -= 0.05f;
+
+	position += glm::vec3(velocity, 0);
+
+	if (position.y < 0.f)
+		position.y = 0.f;
+
+	// Jumping
 
 	// Positioning
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) position.y += 0.15f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) velocity.y = 0.5f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) position.y -= 0.15f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{

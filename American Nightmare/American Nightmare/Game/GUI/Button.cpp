@@ -6,12 +6,13 @@ Button::Button(const Button & other) { }
 
 Button::~Button() { }
 
-bool Button::Start(glm::vec2 position, glm::vec2 size, glm::vec4 color)
+bool Button::Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, glm::vec4 color)
 {
 	// Setting starting variables and inserting parameters
-	this->position = glm::vec3(position.x, position.y, 0);
+	this->position = glm::vec3(position.x, position.y, 1.f);
 	this->rotation = glm::vec3(0, 0, 0);
 	this->scale = glm::vec3(1, 1, 1);
+	this->screenSize = screenSize;
 	this->size = size;
 	this->color = color;
 
@@ -32,7 +33,7 @@ void Button::Update(GLint deltaT)
 void Button::UpdateQuad()
 {
 	// Updating vertices with new variables
-	model->BuildQuad(this->position, color, size);
+	model->BuildQuad(screenSize, this->position, color, size);
 }
 
 void Button::setState(State state) { this->state = state; }

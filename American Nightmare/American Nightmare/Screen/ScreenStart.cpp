@@ -28,7 +28,7 @@ bool ScreenStart::Start(glm::vec2 screenSize)
 	////////////////////////////////////////////////////////////
 	button = new Button();
 	if (button == nullptr) return false;
-	if (!button->Start(glm::vec2(-10, 0), glm::vec2(1, 1))) return false;
+	if (!button->Start(screenSize, glm::vec2(0, 0), glm::vec2(25, 25))) return false;
 	button->setShader(shaderManager->getShader("solid"));
 
 	SetStartVariables();
