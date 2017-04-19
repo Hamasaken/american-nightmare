@@ -210,29 +210,42 @@ void Model::BuildQuad(glm::vec2 screenSize, glm::vec3 position, glm::vec4 color,
 	vertices = new Vertex[vertexCount];
 	indices = new unsigned int[indexCount];
 
+	// Screen Aspect
 	float NDCX = 20.f;
 	float NDCY = 20.f;
-	float screenX = -1;
-	float screenY = -1;
-	glm::vec3 pos = position;
-	glm::vec2 siz = size;
 
+	// Changing size and position variables with screen aspect
+	glm::vec3 pos = glm::vec3((position.x / NDCX), position.y / NDCY, position.z);;
+ 	glm::vec2 dimensions = glm::vec2(size.x / NDCX, size.y / NDCY);
+
+	// The position on screen if 0,0 is lower left corner
+	float screenX = 0 - (screenSize.x / NDCX * 1.115) / 2;
+	float screenY = 0 + (screenSize.y / NDCY * 1.115) / 2;
+
+	// The positions of the vertices
 	float left, right, top, bottom;
 	left = (screenX);
-	right = left + siz.x;
+	right = left + dimensions.x;
 	top = (screenY);
-	bottom = top - siz.y;
+	bottom = top - dimensions.y;
 
-	// Quad
+	// Top left
 	vertices[0].setPosition(glm::vec3(left, top, position.z));
 	vertices[0].setColor(color);
+
+	// Top right
 	vertices[1].setPosition(glm::vec3(right, top, position.z));
 	vertices[1].setColor(color);
+
+	// Right bottom
 	vertices[2].setPosition(glm::vec3(right, bottom, position.z));
 	vertices[2].setColor(color);
+
+	// Left Bottom
 	vertices[3].setPosition(glm::vec3(left, bottom, position.z));
 	vertices[3].setColor(color);
 
+	// Creating indices
 	indices[0] = 0;
 	indices[1] = 2;
 	indices[2] = 3;

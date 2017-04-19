@@ -46,10 +46,11 @@ public:
 	bool getIsDead();
 
 private:
-	bool isDead;		//< If the particle is dead and should be removed
-	GLfloat lifeTime;	//< How much time the particle have left
-	Vertex vertex;		//< The position and color of the particle
-	glm::vec3 velocity;	//< The current velocity of the particle
+	bool isDead;			//< If the particle is dead and should be removed
+	GLfloat lifeTimeStart;	//< How much time the particle started with
+	GLfloat lifeTime;		//< How much time the particle have left
+	Vertex vertex;			//< The position and color of the particle
+	glm::vec3 velocity;		//< The current velocity of the particle
 };
 
 #endif // !PARTICLE_H

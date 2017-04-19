@@ -1,9 +1,6 @@
 #include "ScreenStart.h"
 
-ScreenStart::ScreenStart() : Screen()
-{
-
-}
+ScreenStart::ScreenStart() : Screen() { }
 
 ScreenStart::ScreenStart(const ScreenStart& other) { }
 
@@ -26,10 +23,32 @@ bool ScreenStart::Start(glm::vec2 screenSize)
 	////////////////////////////////////////////////////////////
 	// Creating Meny Buttons
 	////////////////////////////////////////////////////////////
-	button = new Button();
-	if (button == nullptr) return false;
-	if (!button->Start(screenSize, glm::vec2(0, 0), glm::vec2(25, 25))) return false;
-	button->setShader(shaderManager->getShader("solid"));
+	start = new Button();
+	if (start == nullptr) return false;
+	if (!start->Start(screenSize, glm::vec2(20, 20), glm::vec2(200, 50), glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
+	start->setShader(shaderManager->getShader("solid"));
+//	start->setText("Start");
+
+	// Poster Button
+	posters = new Button();
+	if (posters == nullptr) return false;
+	if (!posters->Start(screenSize, glm::vec2(20, 90), glm::vec2(200, 50))) return false;
+	posters->setShader(shaderManager->getShader("solid"));
+	//	posters->setText("Posters");
+
+	// Options Button
+	options = new Button();
+	if (options == nullptr) return false;
+	if (!options->Start(screenSize, glm::vec2(20, 160), glm::vec2(200, 50))) return false;
+	options->setShader(shaderManager->getShader("solid"));
+	//	options->setText("Options");
+
+	// Exit Button
+	exit = new Button();
+	if (exit == nullptr) return false;
+	if (!exit->Start(screenSize, glm::vec2(20, 230), glm::vec2(200, 50), glm::vec4(1.f, 0.8f, 0.8f, 1.f))) return false;
+	exit->setShader(shaderManager->getShader("solid"));
+	//	exit->setText("Exit");
 
 	SetStartVariables();
 
@@ -39,12 +58,16 @@ bool ScreenStart::Start(glm::vec2 screenSize)
 void ScreenStart::SetStartVariables()
 {
 	// Backing the camera a little bit backwards
-	camera->setPosition(glm::vec3(0, 0, 10));
+	camera->setPosition(glm::vec3(0, 0, 0));
 }
 
 void ScreenStart::Update(GLint deltaT)
 {
-	button->Update(deltaT);
+	// Drawing Buttons
+	start->Update(deltaT);
+	posters->Update(deltaT);
+	options->Update(deltaT);
+	exit->Update(deltaT);
 }
 
 void ScreenStart::Draw()
@@ -53,17 +76,39 @@ void ScreenStart::Draw()
 	camera->buildViewMatrix();
 
 	// Drawing button
-	DrawObject(button, shaderManager);
+	DrawObject(start, shaderManager);
+	DrawObject(posters, shaderManager);
+	DrawObject(options, shaderManager);
+	DrawObject(exit, shaderManager);
 }
 
 void ScreenStart::Stop()
 {
-	// Deleting button
-	if (button != nullptr)
+	// Deleting buttons
+	if (start != nullptr)
 	{
-		button->Stop();
-		delete button;
-		button = nullptr;
+		start->Stop();
+		delete start;
+		start = nullptr;
+	}
+	if (posters != nullptr)
+	{
+		posters->Stop();
+		delete posters;
+		posters = nullptr;
+	}
+	if (options != nullptr)
+	{
+		options->Stop();
+		delete options;
+		options = nullptr;
+	}
+
+	if (exit != nullptr)
+	{
+		exit->Stop();
+		delete exit;
+		exit = nullptr;
 	}
 
 	// Deletes Camera & OpenGL ptr

@@ -3,6 +3,12 @@ BTH - Litet Spelprojekt Grupp 4
 
 Nothing to see here ¯|_(ツ)_/¯
 
+Runnable .exe Release Version 18/4
+
+OpenGL version 4.4: 
+OpenGL version 3.0: https://www.dropbox.com/s/zbvh3bl5fkkzouh/American%20Nightmare.zip?dl=0
+
+
 External (Libaries & Includes)
 
 Put in: "Source\Repos\american-nightmare\American Nightmare\"
