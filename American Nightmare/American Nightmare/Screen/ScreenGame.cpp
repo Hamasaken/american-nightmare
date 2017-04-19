@@ -107,13 +107,23 @@ void ScreenGame::Update(GLint deltaT)
 
 void ScreenGame::Draw()
 {
-	// Drawing map
+	// Bind DR frame buffer
 	glDisable(GL_BLEND);
 	glBindFramebuffer(GL_FRAMEBUFFER, drRendering.getDRFBO());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Drawing map
 	for (Object* object : levelManager->getMap())
 		DrawObject(object, shaderManager);
+
+	// Transfer deferred rendering depth buffer to forward rendering
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, drRendering.getDRFBO());
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBlitFramebuffer(0, 0, screenSize.x, screenSize.y, 0, 0, screenSize.x, screenSize.y, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+	// Unbind DR frame buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// DR: Light pass
 	DrawObjectLightPass(&drRendering, shaderManager);
 	glEnable(GL_BLEND);
 
