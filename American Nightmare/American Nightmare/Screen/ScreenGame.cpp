@@ -107,8 +107,10 @@ void ScreenGame::Update(GLint deltaT)
 
 void ScreenGame::Draw()
 {
-	// Bind DR frame buffer
+	// Disable Blend for DR
 	glDisable(GL_BLEND);
+
+	// Bind DR frame buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, drRendering.getDRFBO());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -123,9 +125,15 @@ void ScreenGame::Draw()
 	// Unbind DR frame buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	// DR: Light pass
-	DrawObjectLightPass(&drRendering, shaderManager);
+	// Reenable Blend
 	glEnable(GL_BLEND);
+
+	// DR: Light pass
+	for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
+		DrawObjectLightPass(&drRendering, shaderManager, light);
+
+	//DrawObjectLightPass(&drRendering, shaderManager, glm::vec4(-20, 5, 5, 1));
+	//DrawObjectLightPass(&drRendering, shaderManager, glm::vec4(20, 5, 5, 1));
 
 	// Drawing player
 	DrawObject(player, shaderManager);

@@ -83,9 +83,8 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 	object->Draw();
 }
 
-void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager)
+void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, LightManager::PointLight* light)
 {
-	glClear(GL_COLOR_BUFFER_BIT);
 
 	Model* model = drRendering->getFinalRenderQuad();
 
@@ -110,7 +109,11 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drDiffuse"), 3);
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drSpecular"), 4);
 
-	glUniform4f(glGetUniformLocation(shaderManager->getShader("deferred_final"), "viewPos"), camera->getPosition().x, camera->getPosition().y, camera->getPosition().z, 1.f);
+	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "viewPos"), camera->getPosition().x, camera->getPosition().y, camera->getPosition().z, 1.f);
+	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightPos"), light->position.x, light->position.y, light->position.z, light->position.z);
+	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightDiffuse"), light->diffuse.x, light->diffuse.y, light->diffuse.z, light->diffuse.w);
+	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightSpecular"), light->specular.x, light->specular.y, light->specular.z, light->specular.w);
+
 
 	glDisable(GL_DEPTH_TEST);
 

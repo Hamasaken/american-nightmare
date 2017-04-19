@@ -8,6 +8,7 @@ LevelManager::~LevelManager() { }
 
 bool LevelManager::Start()
 {
+	lightManager = new LightManager();
 	return true;
 }
 
@@ -15,6 +16,8 @@ void LevelManager::Stop()
 {
 	// Unloads the map objects
 	StopMap();
+	lightManager->Clear();
+	delete lightManager;
 }
 
 void LevelManager::StopMap()
@@ -72,6 +75,9 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	map[2]->setScale(glm::vec3(60, 15, 0));;
 	map[2]->setPosition(glm::vec3(0, 13, -10));
 	map[2]->setRotation(glm::vec3(0.f, 0.f, 0.f));
+
+	lightManager->AddPointLight(glm::vec4(-20, 5, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
+	lightManager->AddPointLight(glm::vec4(+20, 5, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
 }
 
 void LevelManager::Update(GLint deltaT)
@@ -84,4 +90,9 @@ void LevelManager::Update(GLint deltaT)
 std::vector<Object*> LevelManager::getMap()
 {
 	return map;
+}
+
+const LightManager* LevelManager::getLightManager() const
+{
+	return lightManager;
 }

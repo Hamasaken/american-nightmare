@@ -1,8 +1,9 @@
 #version 430 core
 
 // Uniform
-//uniform vec4 lightPosition;
-//uniform vec4 lightColor;
+uniform vec4 lightPos;
+uniform vec4 lightDiffuse;
+uniform vec4 lightSpecular;
 uniform vec4 viewPos;
 
 uniform sampler2D drPosition;
@@ -36,10 +37,9 @@ void main () {
     vec3 bufferNormal = -texture2D(drNormal, textureUV).rgb;
     vec4 bufferAmb = texture2D(drAmbient, textureUV);
 	vec4 bufferDif = texture2D(drDiffuse, textureUV);
-    //vec4 bufferSpec = texture2D(drSpecular, textureUV);
-	vec4 bufferSpec = vec4(0, 0, 0, 1);
+    vec4 bufferSpec = texture2D(drSpecular, textureUV);
 
-	fragment_color = ads(vec4(0.f, 5.f, 5.f, 1.f), vec4(1.f, 1.f, 1.f, 1.f), fragPos, bufferNormal, bufferAmb, bufferDif, bufferSpec);
+	fragment_color = ads(lightPos, vec4(1, 1, 1, 1), fragPos, bufferNormal, bufferAmb, bufferDif, bufferSpec);
 
 	//fragment_color = texture2D(drPosition, textureUV);
 }

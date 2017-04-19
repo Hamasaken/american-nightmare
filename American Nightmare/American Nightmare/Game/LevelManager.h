@@ -2,6 +2,7 @@
 #define LEVELMANAGER_H
 
 #include "Object.h"
+#include "LightManager.h"
 #include <vector>
 
 class LevelManager
@@ -48,8 +49,12 @@ public:
 	///////////////////////////////////////////////////////////
 	std::vector<Object*> getMap();
 
+	const LightManager* getLightManager() const;
+
 private:
 	std::vector<Object*> map;	//< Vector with level specific objects
+
+	LightManager* lightManager;
 };
 
 
