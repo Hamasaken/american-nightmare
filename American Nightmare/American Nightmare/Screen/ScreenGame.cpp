@@ -132,9 +132,6 @@ void ScreenGame::Draw()
 	for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
 		DrawObjectLightPass(&drRendering, shaderManager, light);
 
-	//DrawObjectLightPass(&drRendering, shaderManager, glm::vec4(-20, 5, 5, 1));
-	//DrawObjectLightPass(&drRendering, shaderManager, glm::vec4(20, 5, 5, 1));
-
 	// Drawing player
 	DrawObject(player, shaderManager);
 
