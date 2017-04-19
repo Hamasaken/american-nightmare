@@ -78,9 +78,46 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 		Animation* tempCharacter = dynamic_cast<Animation*>(object);
 		shaderManager->SetParametersAnimated(tempCharacter);
 	}
-	
+
 	// Drawing object
 	object->Draw();
+}
+
+void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager)
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	Model* model = drRendering->getFinalRenderQuad();
+
+	// Setting shader as active and setting parameters
+	shaderManager->setShader(drRendering->getLightShader());
+
+	glEnable(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, drRendering->getDRPosition());
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, drRendering->getDRNormal());
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, drRendering->getDRAmbient());
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, drRendering->getDRDiffuse());
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, drRendering->getDRSpecular());
+
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drPosition"), 0);
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drNormal"), 1);
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drAmbient"), 2);
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drDiffuse"), 3);
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drSpecular"), 4);
+
+	glUniform4f(glGetUniformLocation(shaderManager->getShader("deferred_final"), "viewPos"), camera->getPosition().x, camera->getPosition().y, camera->getPosition().z, 1.f);
+
+	glDisable(GL_DEPTH_TEST);
+
+	// Drawing object
+	model->Draw();
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Screen::Stop()

@@ -8,7 +8,6 @@ LevelManager::~LevelManager() { }
 
 bool LevelManager::Start()
 {
-
 	return true;
 }
 

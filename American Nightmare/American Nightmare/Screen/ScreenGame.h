@@ -2,6 +2,7 @@
 #define SCREENGAME_H
 
 #include "Screen.h"
+#include "Rendering/DeferredRendering.h"
 #include "../Game/Player.h"
 #include "../Game/LevelManager.h"
 #include "../Game/Particle/ParticleManager.h"
@@ -44,8 +45,9 @@ public:
 private:
 	ParticleManager* particleManager;	//< Manager for particle effects
 	ShaderManager* shaderManager;		//< Manager for shaderprograms
-	LevelManager* levelManager;		//< Manager for levels/maps
-	Player* player;				//< The player object
+	LevelManager* levelManager;			//< Manager for levels/maps
+	DeferredRendering drRendering;		//< Holds framebuffer for deferred rendering
+	Player* player;						//< The player object
 };
 
 #endif // !SCREENGAME_H

@@ -49,7 +49,6 @@ public:
 	std::vector<Object*> getMap();
 
 private:
-	;			//< OpenGL ptr
 	std::vector<Object*> map;	//< Vector with level specific objects
 };
 

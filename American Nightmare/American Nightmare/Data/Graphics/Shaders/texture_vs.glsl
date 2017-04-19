@@ -1,8 +1,8 @@
 #version 400
 
 // Input
-in vec3 inputPosition;
-in vec2 inputTextureUV;
+layout(location = 0) in vec3 inputPosition;
+layout(location = 1) in vec2 inputTextureUV;
 
 // Output
 out vec2 textureUV;

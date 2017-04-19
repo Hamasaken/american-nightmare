@@ -81,8 +81,8 @@ void ShaderManager::AddShader(std::string name, std::string vs, std::string gs, 
 	glAttachShader(shaderProgram, fragmentShader);
 
 	// Attributes locations
-	glBindAttribLocation(shaderProgram, 0, "inputPosition");
-	glBindAttribLocation(shaderProgram, 1, "inputColor");
+	//glBindAttribLocation(shaderProgram, 0, "inputPosition");
+	//glBindAttribLocation(shaderProgram, 1, "inputColor");
 
 	// Link program
 	glLinkProgram(shaderProgram);
