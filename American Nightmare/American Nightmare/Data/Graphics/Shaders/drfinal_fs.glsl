@@ -28,7 +28,7 @@ vec4 ads(vec4 lightPosition, vec4 lightColor, vec3 inFragPos, vec3 inNormal, vec
 	float specular = pow(max(dot(viewDir, reflectDir), 0.f), 32);
 	vec4 specularLight = specular * inSpecular;
 
-	return lightColor * (inAmbient * 0.1 + diffuseLight + specularLight);
+	return lightColor * (inAmbient * 0.1 + diffuseLight * lightDiffuse + specularLight * lightSpecular);
 }
 
 void main () {

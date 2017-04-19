@@ -76,8 +76,8 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	map[2]->setPosition(glm::vec3(0, 13, -10));
 	map[2]->setRotation(glm::vec3(0.f, 0.f, 0.f));
 
-	lightManager->AddPointLight(glm::vec4(-20, 5, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
-	lightManager->AddPointLight(glm::vec4(+20, 5, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
+	lightManager->AddPointLight(glm::vec4(-20, 5, 5, 1), glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
+	lightManager->AddPointLight(glm::vec4(+20, 5, 5, 1), glm::vec4(0, 0, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
 }
 
 void LevelManager::Update(GLint deltaT)
