@@ -25,37 +25,39 @@ bool ScreenStart::Start(glm::vec2 screenSize, SoundManager* soundManager)
 	// Creating Meny Buttons
 	////////////////////////////////////////////////////////////
 	std::string texturePath = TEXTURE_PATH;
+	std::string fontPath = FONT_PATH;
+
 	start = new Button();
 	if (start == nullptr) return false;
 	if (!start->Start(screenSize, glm::vec2(20, 190), glm::vec2(200, 50), texturePath + "gammal-dammsugare.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
-	if (!start->StartText("framd.ttf", 40)) return false;
+	if (!start->StartText(fontPath + "framd.ttf", 40)) return false;
 	start->setShader(shaderManager->getShader("solid"));
 
 	// Poster Button
 	posters = new Button();
 	if (posters == nullptr) return false;
 	if (!posters->Start(screenSize, glm::vec2(20, 260), glm::vec2(200, 50), texturePath + "temp_ground.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
-	if (!posters->StartText("framd.ttf", 40)) return false;
+	if (!posters->StartText(fontPath + "framd.ttf", 40)) return false;
 	posters->setShader(shaderManager->getShader("texture"));
 
 	// Options Button
 	options = new Button();
 	if (options == nullptr) return false;
 	if (!options->Start(screenSize, glm::vec2(20, 330), glm::vec2(200, 50), texturePath + "gammal-dammsugare.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
-	if (!options->StartText("framd.ttf", 40)) return false;
+	if (!options->StartText(fontPath + "framd.ttf", 40)) return false;
 	options->setShader(shaderManager->getShader("texture"));
 
 	// Exit Button
 	exit = new Button();
 	if (exit == nullptr) return false;
 	if (!exit->Start(screenSize, glm::vec2(20, 400), glm::vec2(200, 50), texturePath + "temp_ground.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
-	if (!exit->StartText("framd.ttf", 40)) return false;
+	if (!exit->StartText(fontPath + "framd.ttf", 40)) return false;
 	exit->setShader(shaderManager->getShader("texture"));
 
 	// Logo Text
 	logo = new Text();
 	if (logo == nullptr) return false;
-	if (!logo->Start(screenSize, "framd.ttf", 90, glm::vec3(290, 20, 0))) return false;
+	if (!logo->Start(screenSize, fontPath+ "framd.ttf", 90, glm::vec3(290, 20, 0))) return false;
 	logo->setShader(shaderManager->getShader("texture"));
 
 	// Setting starting variables

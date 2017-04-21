@@ -44,8 +44,7 @@ bool Text::LoadFont(std::string fontName, float characterSize)
 {
 	// Open Font
 	font = nullptr;
-	std::string fontPath = FONT_PATH;
-	font = TTF_OpenFont((fontPath + fontName).c_str(), characterSize);
+	font = TTF_OpenFont((fontName).c_str(), characterSize);
 	if (font == nullptr)
 		return false;
 }
