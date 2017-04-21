@@ -72,12 +72,84 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 
 	glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
 
-	// If object is animated, set additional parameters
-	if (dynamic_cast<Animation*>(object))
-	{
-		Animation* tempCharacter = dynamic_cast<Animation*>(object);
-		shaderManager->SetParametersAnimated(tempCharacter);
-	}
+	// Drawing object
+	object->Draw();
+}
+
+void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, LightManager::PointLight* light)
+{
+	// Getting matrices
+	glm::mat4 world = worldMatrix;
+	glm::mat4 view = camera->getViewMatrix();
+	glm::mat4 projection = projectionMatrix;
+
+	// Positioning object
+	glm::vec3 pos = animatedObj->getPosition();
+	world = glm::translate(world, pos);
+
+	// Rotating object
+	glm::vec3 rot = animatedObj->getRotationInRadians();
+	world = glm::rotate(world, rot.x, glm::vec3(0, 0, 1));
+	world = glm::rotate(world, rot.y, glm::vec3(1, 0, 0));
+	world = glm::rotate(world, rot.z, glm::vec3(0, 1, 0));
+
+	// Scaling object
+	glm::vec3 scale = animatedObj->getScale();
+	world = glm::scale(world, scale);
+
+	// Setting shader as active and setting parameters
+	shaderManager->setShader(animatedObj->getShader());
+	shaderManager->SetParameters(world, view, projection);
+	shaderManager->SetParametersAnimated(animatedObj);
+
+	glEnable(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, animatedObj->getTexture());
+
+	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "texture"), 0);
+
+	//glActiveTexture(GL_TEXTURE1);
+	//glBindTexture(GL_TEXTURE_2D, object->getAnimationNormal());
+
+	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "viewPos"), camera->getPosition().x, camera->getPosition().y, camera->getPosition().z, 1.f);
+	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "lightPos"), light->position.x, light->position.y, light->position.z, light->position.z);
+	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "lightDiffuse"), light->diffuse.x, light->diffuse.y, light->diffuse.z, light->diffuse.w);
+	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "lightSpecular"), light->specular.x, light->specular.y, light->specular.z, light->specular.w);
+
+	// Drawing object
+	animatedObj->Draw();
+}
+
+void Screen::DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager)
+{
+	// Getting matrices
+	glm::mat4 world = worldMatrix;
+	glm::mat4 view = camera->getViewMatrix();
+	glm::mat4 projection = projectionMatrix;
+
+	// Positioning object
+	glm::vec3 pos = object->getPosition();
+	world = glm::translate(world, pos);
+
+	// Rotating object
+	glm::vec3 rot = object->getRotationInRadians();
+	world = glm::rotate(world, rot.x, glm::vec3(0, 0, 1));
+	world = glm::rotate(world, rot.y, glm::vec3(1, 0, 0));
+	world = glm::rotate(world, rot.z, glm::vec3(0, 1, 0));
+
+	// Scaling object
+	glm::vec3 scale = object->getScale();
+	world = glm::scale(world, scale);
+
+	// Setting shader as active and setting parameters
+	shaderManager->setShader(object->getShader());
+	shaderManager->SetParameters(world, view, projection);
+
+	glEnable(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, object->getTexture());
+
+	glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
 
 	// Drawing object
 	object->Draw();

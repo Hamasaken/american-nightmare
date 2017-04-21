@@ -1,11 +1,14 @@
-#version 400
+#version 430
 
 // Input
 in vec3 inputPosition;
 in vec2 inputTextureUV;
+in vec3 inputNormal;
 
 // Output
 out vec2 textureUV;
+out vec3 position;
+out vec3 normalw;
 
 // Uniform
 uniform mat4 world;
@@ -50,7 +53,7 @@ void main(void)
 	}
 
 	// Setting vertex position according to matrices
-	gl_Position = world * vec4(inputPosition, 1.f);
-	gl_Position = view * gl_Position;
-	gl_Position = projection * gl_Position;
+	position = vec3(world * vec4(inputPosition, 1.f));
+	normalw = vec3(world * vec4(inputNormal, 1.f));
+	gl_Position = projection * view * world * vec4(inputPosition, 1.f);
 }

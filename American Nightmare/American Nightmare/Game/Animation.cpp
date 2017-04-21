@@ -156,6 +156,9 @@ void Animation::updateAnimation(GLfloat deltaT)
 	currentFrameUV.uvTopLeft = offset;
 }
 
-Animation::FrameUV* Animation::GetCurrentFrameUV() { return &currentFrameUV; }
+Animation::FrameUV* Animation::getCurrentFrameUV() { return &currentFrameUV; }
+
+GLuint Animation::getAnimationTexture() const { return currentAnimation->textureID; }
+GLuint Animation::getAnimationNormal() const { return currentAnimation->normalID; }
 
 bool Animation::isDirectionRight() { return directionIsRight; }
