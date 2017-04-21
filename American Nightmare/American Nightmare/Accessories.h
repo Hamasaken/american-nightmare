@@ -29,6 +29,7 @@
 
 // Functions
 float randBetweenF(float low, float high);
+glm::vec3 fromScreenToWorld(glm::vec2 position);
 
 // Vertex Struct for vertex buffers, etc
 struct Vertex

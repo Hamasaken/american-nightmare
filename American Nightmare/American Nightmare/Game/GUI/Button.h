@@ -2,8 +2,6 @@
 #define BUTTON_H
 
 #include "../Object.h"
-#include "Text.h"
-#include "SDL_ttf.h"
 
 struct Button : Object
 {
@@ -19,12 +17,11 @@ public:
 	// \brief Starts a button
 	// \param position Position of the center position of the button (0, 0 is lower left corner)
 	// \param size Size of the button & quad
+	// \param textureName The texture of this button (no path needed)
 	// \param color Color of the full quad, default as white
-	// \param fontName Name of file containing the font (only .ttf's), can be left as nothing
-	// \param characterSize Size of the font
 	// \return Returns false if model or font could not be created
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f), std::string fontName = "", float characterSize = 30);
+	bool Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, std::string textureName, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f));
 
 	////////////////////////////////////////////////////////////
 	// \brief Checking if mouse pointer is inside button
@@ -47,7 +44,6 @@ public:
 	void setSize(glm::vec2 size);
 	void setColor(glm::vec4 color);
 	State getState();
-	Text* getText();
 	glm::vec2 getSize();
 	glm::vec4 getColor();
 
@@ -57,7 +53,6 @@ private:
 	////////////////////////////////////////////////////////////
 	void UpdateQuad();
 
-	Text* text;				//< Text object, carries text information and font
 	glm::vec2 screenSize;	//< The screensize of the screen
 	glm::vec2 size;			//< Size of the button in (width, height)
 	glm::vec4 color;		//< Color of the button

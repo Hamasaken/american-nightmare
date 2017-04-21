@@ -21,6 +21,8 @@ bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize
 	if (!LoadFont(fontName, characterSize))
 		return false;
 
+	CreateText("Default");
+
 	return true;
 }
 
