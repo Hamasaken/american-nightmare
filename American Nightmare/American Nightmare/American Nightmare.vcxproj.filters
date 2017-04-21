@@ -108,6 +108,9 @@
     <ClCompile Include="Game\LightManager.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GUI\Text.cpp">
+      <Filter>Source Files\Game\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h">
@@ -169,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="Game\LightManager.h">
       <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GUI\Text.h">
+      <Filter>Header Files\Game\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

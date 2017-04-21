@@ -69,7 +69,7 @@ bool ScreenGame::Start(glm::vec2 screenSize)
 void ScreenGame::SetStartVariables()
 {
 	// Backing the camera a little bit backwards
-	camera->setPosition(glm::vec3(0, 0, 10));
+	camera->setPosition(glm::vec3(0, 0, 20));
 
 	// Backing the player up a little to the screen
 	player->setPosition(glm::vec3(0, 0, 18.f));

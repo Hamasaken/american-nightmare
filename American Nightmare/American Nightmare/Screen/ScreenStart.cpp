@@ -19,37 +19,41 @@ bool ScreenStart::Start(glm::vec2 screenSize)
 
 	// Adding Shader Programs
 	shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
+	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
 
 	////////////////////////////////////////////////////////////
 	// Creating Meny Buttons
 	////////////////////////////////////////////////////////////
 	start = new Button();
 	if (start == nullptr) return false;
-	if (!start->Start(screenSize, glm::vec2(20, 20), glm::vec2(200, 50), glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
-	start->setShader(shaderManager->getShader("solid"));
-//	start->setText("Start");
+	if (!start->Start(screenSize, glm::vec2(20, 20), glm::vec2(200, 50), glm::vec4(0.8f, 1.f, 0.8f, 1.f), "framd.ttf")) return false;
+	start->setShader(shaderManager->getShader("texture"));
 
 	// Poster Button
 	posters = new Button();
 	if (posters == nullptr) return false;
-	if (!posters->Start(screenSize, glm::vec2(20, 90), glm::vec2(200, 50))) return false;
-	posters->setShader(shaderManager->getShader("solid"));
-	//	posters->setText("Posters");
+	if (!posters->Start(screenSize, glm::vec2(20, 90), glm::vec2(200, 50), glm::vec4(0.8f, 1.f, 0.8f, 1.f), "framd.ttf")) return false;
+	posters->setShader(shaderManager->getShader("texture"));
 
 	// Options Button
 	options = new Button();
 	if (options == nullptr) return false;
-	if (!options->Start(screenSize, glm::vec2(20, 160), glm::vec2(200, 50))) return false;
-	options->setShader(shaderManager->getShader("solid"));
-	//	options->setText("Options");
+	if (!options->Start(screenSize, glm::vec2(20, 160), glm::vec2(200, 50), glm::vec4(0.8f, 1.f, 0.8f, 1.f), "framd.ttf")) return false;
+	options->setShader(shaderManager->getShader("texture"));
 
 	// Exit Button
 	exit = new Button();
 	if (exit == nullptr) return false;
-	if (!exit->Start(screenSize, glm::vec2(20, 230), glm::vec2(200, 50), glm::vec4(1.f, 0.8f, 0.8f, 1.f))) return false;
-	exit->setShader(shaderManager->getShader("solid"));
-	//	exit->setText("Exit");
+	if (!exit->Start(screenSize, glm::vec2(20, 230), glm::vec2(200, 50), glm::vec4(0.8f, 1.f, 0.8f, 1.f), "framd.ttf")) return false;
+	exit->setShader(shaderManager->getShader("texture"));
 
+	// Logo Text
+	logo = new Text();
+	if (logo == nullptr) return false;
+	if (!logo->Start(screenSize, "framd.ttf", 40, glm::vec3(20, 300, 0))) return false;
+	logo->setShader(shaderManager->getShader("texture"));
+
+	// Setting starting variables
 	SetStartVariables();
 
 	return true;
@@ -59,6 +63,16 @@ void ScreenStart::SetStartVariables()
 {
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 0));
+	
+	// Creating Logo Text
+	start->getText()->CreateText("Start", glm::vec4(1.f, 0.6f, 0.3f, 1.f));
+	posters->getText()->CreateText("Posters", glm::vec4(1.f, 0.6f, 0.3f, 1.f));
+	options->getText()->CreateText("Options", glm::vec4(1.f, 0.6f, 0.3f, 1.f));
+	exit->getText()->CreateText("Exit", glm::vec4(1.f, 0.6f, 0.3f, 1.f));
+	logo->CreateText("American Nightmare", glm::vec4(1.f, 0.6f, 0.3f, 1.f));
+
+	// Creating Button Texts
+	logo->setString("Logo");
 }
 
 void ScreenStart::Update(GLint deltaT)
@@ -80,6 +94,7 @@ void ScreenStart::Draw()
 	DrawObject(posters, shaderManager);
 	DrawObject(options, shaderManager);
 	DrawObject(exit, shaderManager);
+	DrawObject(logo, shaderManager);
 }
 
 void ScreenStart::Stop()
@@ -109,6 +124,14 @@ void ScreenStart::Stop()
 		exit->Stop();
 		delete exit;
 		exit = nullptr;
+	}
+
+	// Deleting texts
+	if (logo != nullptr)
+	{
+		logo->Stop();
+		delete logo;
+		logo = nullptr;
 	}
 
 	// Deletes Camera & OpenGL ptr

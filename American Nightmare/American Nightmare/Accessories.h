@@ -24,6 +24,7 @@
 #define MODEL_PATH "Data/Graphics/Models/"
 #define CUTSCENE_PATH "Data/Graphics/Cutscenes/"
 #define TEXTURE_PATH "Data/Graphics/Textures/"
+#define FONT_PATH "Data/Graphics/Fonts/"
 #define ANIMATION_PATH "Data/Graphics/Animations/"
 
 // Functions
