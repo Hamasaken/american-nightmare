@@ -8,7 +8,7 @@ Button::~Button() { }
 
 bool Button::Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, std::string textureName, glm::vec4 color)
 {
-	Object::Start("", textureName);
+	//Object::Start("", textureName);
 
 	// Setting starting variables and inserting parameters
 	this->position = fromScreenToWorld(position);
