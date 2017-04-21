@@ -161,6 +161,7 @@
     <ClCompile Include="Accessories.cpp" />
     <ClCompile Include="Game\Animation.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
+    <ClCompile Include="Game\Frustum.cpp" />
     <ClCompile Include="Game\GUI\Button.cpp" />
     <ClCompile Include="Game\GUI\Text.cpp" />
     <ClCompile Include="Game\LevelManager.cpp" />
@@ -171,6 +172,7 @@
     <ClCompile Include="Game\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Game\Particle\ParticleManager.cpp" />
     <ClCompile Include="Game\Player.cpp" />
+    <ClCompile Include="Game\QuadTree.cpp" />
     <ClCompile Include="Game\Shader\ShaderManager.cpp" />
     <ClCompile Include="Game\MaterialManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -187,6 +189,7 @@
     <ClInclude Include="Accessories.h" />
     <ClInclude Include="Game\Animation.h" />
     <ClInclude Include="Game\Camera.h" />
+    <ClInclude Include="Game\Frustum.h" />
     <ClInclude Include="Game\GUI\Button.h" />
     <ClInclude Include="Game\GUI\Text.h" />
     <ClInclude Include="Game\LevelManager.h" />
@@ -197,6 +200,7 @@
     <ClInclude Include="Game\Particle\ParticleEmitter.h" />
     <ClInclude Include="Game\Particle\ParticleManager.h" />
     <ClInclude Include="Game\Player.h" />
+    <ClInclude Include="Game\QuadTree.h" />
     <ClInclude Include="Game\Shader\ShaderManager.h" />
     <ClInclude Include="Game\MaterialManager.h" />
     <ClInclude Include="Program.h" />
