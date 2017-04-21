@@ -28,10 +28,10 @@ sf::Sound SoundManager::loadSFX(std::string path)
 
 void SoundManager::loadSFXs()
 {
-	std::string pathToFolder = PATH_TO_SFX;
+	std::string pathToFolder = SFX_PATH;
 
 	// Load every SFX here
-	sfx[JUMP] = loadSFX(pathToFolder + "jump.wav");
+//	sfx[SFX_PROP] = loadSFX(pathToFolder + "sfx.wav");
 	// SFX 2
 	// SFX 3
 
@@ -42,10 +42,10 @@ void SoundManager::loadSFXs()
 
 void SoundManager::loadSongs()
 {
-	std::string pathToFolder = PATH_TO_MUSIC;
+	std::string pathToFolder = MUSIC_PATH;
 
 	// Load all songs here
-	song[ROARING_20].openFromFile(pathToFolder + "roaring_20s.ogg");
+//	song[MUSIC_PROP].openFromFile(pathToFolder + "music.ogg");
 	// SONG 2
 	// SONG 3
 

@@ -26,6 +26,8 @@
 #define TEXTURE_PATH "Data/Graphics/Textures/"
 #define FONT_PATH "Data/Graphics/Fonts/"
 #define ANIMATION_PATH "Data/Graphics/Animations/"
+#define SFX_PATH "Data/Sound/SFX/"
+#define MUSIC_PATH "Data/Sound/Music/"
 
 // Functions
 float randBetweenF(float low, float high);

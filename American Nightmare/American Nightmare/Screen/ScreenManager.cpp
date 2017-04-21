@@ -21,6 +21,10 @@ bool ScreenManager::Start(glm::vec2 screenSize, HWND hwnd)
 	// Setting start screen
 	currentState = State(START_STATE);
 
+	// Starting sound manager
+	soundManager = new SoundManager();
+	if (soundManager == nullptr) return false;
+
 	// Trying to initialize start screen
 	if (!StartCurrentScreen()) 
 		return false;

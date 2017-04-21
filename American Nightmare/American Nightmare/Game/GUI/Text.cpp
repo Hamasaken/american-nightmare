@@ -13,6 +13,10 @@ bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize
 	this->scale = scale;
 	this->screenSize = screenSize;
 
+	// Creating a empty model class
+	model = new Model();
+	if (model == nullptr) return false;
+
 	// Loading font, setting default variables
 	if (!LoadFont(fontName, characterSize))
 		return false;
