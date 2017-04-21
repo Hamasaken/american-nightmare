@@ -1,0 +1,95 @@
+#include "Text.h"
+
+Text::Text() { }
+
+Text::Text(const Text & other) { }
+
+Text::~Text() { }
+
+bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+{
+	this->position = glm::vec3(position.x / (20.f / 1.11777), -position.y / (20.f / 1.12), 0.f);
+	this->rotation = rotation;
+	this->scale = scale;
+	this->screenSize = screenSize;
+
+	// Load Model
+	model = new Model();
+	if (model == nullptr) return false;
+
+	// Loading font, setting default variables
+	if (!LoadFont(fontName, characterSize))
+		return false;
+
+	return true;
+}
+
+void Text::Stop()
+{
+	// Unloads model
+	Object::Stop();
+
+	// Unload Font
+	if (font != nullptr)
+	{
+		TTF_CloseFont(font);
+		font = nullptr;
+	}
+}
+
+bool Text::LoadFont(std::string fontName, float characterSize)
+{
+	// Open Font
+	font = nullptr;
+	std::string fontPath = FONT_PATH;
+	font = TTF_OpenFont((fontPath + fontName).c_str(), characterSize);
+	if (font == nullptr)
+		return false;
+}
+
+void Text::CreateText(std::string text, glm::vec4 color)
+{
+	// Saving parameters
+	this->text = text;
+	this->color = color;
+
+	// Text Color
+	SDL_Color clr = { color.r * 255.f, color.g * 255.f, color.b * 255.f, color.a * 255.f};
+
+	// Create Surface
+	SDL_Surface* surface;
+	surface = TTF_RenderText_Blended(font, text.c_str(), clr);
+	size = glm::vec2(surface->w, surface->h);
+
+	// Create OpenGL Texture
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
+
+	// Setting some important parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	// Unbinding
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	// Deleting surface
+	SDL_FreeSurface(surface);
+
+	// Creating quad for this text
+	model->BuildQuad(screenSize, position, color, size);
+}
+
+void Text::Draw()
+{
+	Object::Draw();
+}
+
+std::string Text::getString() { return text; }
+glm::vec2 Text::getSize() { return size; }
+glm::vec4 Text::getColor() { return color; }
+void Text::setString(std::string text) { this->text = text; CreateText(text, color); }
+void Text::setColor(glm::vec4 color) { this->color = color; CreateText(text, color); }

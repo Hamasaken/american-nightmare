@@ -3,6 +3,7 @@
 
 #include "Screen.h"
 #include "../Game/GUI/Button.h"
+#include "../Game/GUI/Text.h"
 
 #define CLEAR_COLOR glm::vec4(0.25f, 0.1, 0.1, 1)
 
@@ -44,6 +45,7 @@ private:
 	Button* posters;
 	Button* options;
 	Button* exit;
+	Text* logo;
 };
 
 #endif // !SCREENSTART_H

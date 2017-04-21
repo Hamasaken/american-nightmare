@@ -42,6 +42,10 @@ void Program::StartSDLWindow()
 	// Initialize SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
 
+	// Initialize SDL text
+	if (TTF_Init() == -1)
+		std::runtime_error("Could not start SDL-TTF, Check your External Folder! Updated Version on Github ReadMe File.");
+
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 4);
@@ -145,6 +149,7 @@ void Program::StopWindow()
 	// Destroy window
 	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(window);
+	TTF_Quit();
 	SDL_Quit();
 }
 

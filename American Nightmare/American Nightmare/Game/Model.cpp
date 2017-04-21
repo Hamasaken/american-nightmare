@@ -202,12 +202,12 @@ void Model::BuildQuadTexture()
 
 void Model::BuildQuad(glm::vec2 screenSize, glm::vec3 position, glm::vec4 color, glm::vec2 size)
 {
-	Vertex* vertices;
+	VertexUV* vertices;
 	unsigned int* indices;
 
 	vertexCount = 4;
 	indexCount = 6;
-	vertices = new Vertex[vertexCount];
+	vertices = new VertexUV[vertexCount];
 	indices = new unsigned int[indexCount];
 
 	// Screen Aspect
@@ -218,7 +218,7 @@ void Model::BuildQuad(glm::vec2 screenSize, glm::vec3 position, glm::vec4 color,
 	glm::vec3 pos = glm::vec3((position.x / NDCX), position.y / NDCY, position.z);;
  	glm::vec2 dimensions = glm::vec2(size.x / NDCX, size.y / NDCY);
 
-	// The position on screen if 0,0 is lower left corner
+	// The position on screen if 0,0 is upper left corner
 	float screenX = 0 - (screenSize.x / NDCX * 1.115) / 2;
 	float screenY = 0 + (screenSize.y / NDCY * 1.115) / 2;
 
@@ -231,19 +231,19 @@ void Model::BuildQuad(glm::vec2 screenSize, glm::vec3 position, glm::vec4 color,
 
 	// Top left
 	vertices[0].setPosition(glm::vec3(left, top, position.z));
-	vertices[0].setColor(color);
+	vertices[0].setUV(glm::vec2(0, 1));
 
 	// Top right
 	vertices[1].setPosition(glm::vec3(right, top, position.z));
-	vertices[1].setColor(color);
+	vertices[1].setUV(glm::vec2(1, 1));
 
 	// Right bottom
 	vertices[2].setPosition(glm::vec3(right, bottom, position.z));
-	vertices[2].setColor(color);
+	vertices[2].setUV(glm::vec2(1, 0));
 
 	// Left Bottom
 	vertices[3].setPosition(glm::vec3(left, bottom, position.z));
-	vertices[3].setColor(color);
+	vertices[3].setUV(glm::vec2(0, 0));
 
 	// Creating indices
 	indices[0] = 0;
@@ -263,7 +263,7 @@ void Model::BuildQuad(glm::vec2 screenSize, glm::vec3 position, glm::vec4 color,
 
 	// Binding the vertex buffer and putting in data
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertexCount, vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexUV) * vertexCount, vertices, GL_STATIC_DRAW);
 
 	// Enable both vertex posiiton & color
 	glEnableVertexAttribArray(0);
@@ -271,9 +271,9 @@ void Model::BuildQuad(glm::vec2 screenSize, glm::vec3 position, glm::vec4 color,
 
 	// Setting the location and size of the attributes
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(VertexUV), 0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(VertexUV), (unsigned char*)(3 * sizeof(float)));
 
 	// Binding the index buffer and putting in data
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
