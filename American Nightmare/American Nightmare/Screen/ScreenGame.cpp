@@ -28,6 +28,7 @@ bool ScreenGame::Start(glm::vec2 screenSize)
 	shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
 	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
 	shaderManager->AddShader("texture_animation", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_fs.glsl");
+	shaderManager->AddShader("texture_animation_normal", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_animation_fs.glsl");
 	shaderManager->AddShader("particle", shaderPath + "particle_vs.glsl", shaderPath + "particle_gs.glsl", shaderPath + "particle_fs.glsl");
 	shaderManager->AddShader("deferred", shaderPath + "dr_vs.glsl", shaderPath + "dr_fs.glsl");
 	shaderManager->AddShader("deferred_final", shaderPath + "drfinal_vs.glsl", shaderPath + "drfinal_fs.glsl");
@@ -56,7 +57,7 @@ bool ScreenGame::Start(glm::vec2 screenSize)
 	if (player == nullptr) return false;
 	if (!player->Start(modelPath + "model.m", texturePath + "testanimation.png"))
 		return false;
-	player->setShader(shaderManager->getShader("texture_animation"));
+	player->setShader(shaderManager->getShader("texture_animation_normal"));
 	player->AddAnimation(player->getTexture(), animationPath + "testanimation.txt");
 
 	// Creating a simple level
@@ -116,7 +117,7 @@ void ScreenGame::Draw()
 
 	// Drawing map
 	for (Object* object : levelManager->getMap())
-		DrawObject(object, shaderManager);
+		DrawObjectGeometryPass(object, shaderManager);
 
 	// Transfer deferred rendering depth buffer to forward rendering
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, drRendering.getDRFBO());
@@ -133,7 +134,10 @@ void ScreenGame::Draw()
 		DrawObjectLightPass(&drRendering, shaderManager, light);
 
 	// Drawing player
-	DrawObject(player, shaderManager);
+	for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
+		DrawObjectAnimation(player, shaderManager, light);
+
+	//DrawObjectAnimation(player, shaderManager, levelManager->getLightManager()->getPointLightList()[0]);
 
 	// Drawing vertices
 	shaderManager->setShader(particleManager->getShader());

@@ -57,6 +57,8 @@ public:
 	// \note Replace the solid shader with an abstract "Shader" instead
 	////////////////////////////////////////////////////////////
 	void DrawObject(Object* object, ShaderManager* shaderManager);
+	void DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, LightManager::PointLight* light);
+	void DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager);
 	void DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, LightManager::PointLight* light);
 
 protected:

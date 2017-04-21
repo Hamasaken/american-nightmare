@@ -215,6 +215,7 @@
     <None Include="Data\Graphics\Shaders\particle_vs.glsl" />
     <None Include="Data\Graphics\Shaders\solid_fs.glsl" />
     <None Include="Data\Graphics\Shaders\solid_vs.glsl" />
+    <None Include="Data\Graphics\Shaders\texture_animation_fs.glsl" />
     <None Include="Data\Graphics\Shaders\texture_animation_vs.glsl" />
     <None Include="Data\Graphics\Shaders\texture_fs.glsl" />
     <None Include="Data\Graphics\Shaders\texture_vs.glsl" />

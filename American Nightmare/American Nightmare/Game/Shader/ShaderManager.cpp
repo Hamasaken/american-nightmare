@@ -158,7 +158,7 @@ bool ShaderManager::SetParameters(glm::mat4 world, glm::mat4 view, glm::mat4 pro
 bool ShaderManager::SetParametersAnimated(Animation* character)
 {
 	GLuint location = NULL;
-	Animation::FrameUV* tempFrameUV = character->GetCurrentFrameUV();
+	Animation::FrameUV* tempFrameUV = character->getCurrentFrameUV();
 
 	// Loading top left uv
 	location = glGetUniformLocation(character->getShader(), "uvTopLeft");

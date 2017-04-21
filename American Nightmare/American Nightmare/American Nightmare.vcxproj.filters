@@ -226,5 +226,8 @@
     <None Include="Data\Graphics\Shaders\drfinal_fs.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Data\Graphics\Shaders\texture_animation_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

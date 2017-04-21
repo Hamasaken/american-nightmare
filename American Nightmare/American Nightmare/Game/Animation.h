@@ -22,7 +22,9 @@ public:
 	};
 
 	void AddAnimation(GLuint texture, std::string animationFile);
-	FrameUV* GetCurrentFrameUV();
+	FrameUV* getCurrentFrameUV();
+	GLuint getAnimationTexture() const;
+	GLuint getAnimationNormal() const;
 	bool isDirectionRight();
 
 protected:
@@ -36,16 +38,17 @@ private:
 	{
 		std::string name;
 		GLuint textureID;
+		GLuint normalID;
 		GLint totalFrames;
 		glm::vec2 dimensions;
 		GLint fps;
 		GLfloat currentFrame;
 
-		AnimationSegment() : name("undefined"), textureID(-1), totalFrames(0), dimensions(glm::vec2()), fps(0), currentFrame(0.f) {}
-		AnimationSegment(std::string inName, GLuint inTextureID, GLint inTotalFrames, glm::vec2 inDimensions, GLint infps, GLfloat inCurrentFrame) 
-			: name(inName), textureID(inTextureID), totalFrames(inTotalFrames), dimensions(inDimensions), fps(infps), currentFrame(inCurrentFrame) {}
+		AnimationSegment() : name("undefined"), textureID(-1), normalID(-1), totalFrames(0), dimensions(glm::vec2()), fps(0), currentFrame(0.f) {}
+		AnimationSegment(std::string inName, GLuint inTextureID, GLuint inNormalID, GLint inTotalFrames, glm::vec2 inDimensions, GLint infps, GLfloat inCurrentFrame) 
+			: name(inName), textureID(inTextureID), normalID(inNormalID), totalFrames(inTotalFrames), dimensions(inDimensions), fps(infps), currentFrame(inCurrentFrame) {}
 		AnimationSegment(const AnimationSegment& aniSeg) 
-			: name(aniSeg.name), textureID(aniSeg.textureID), totalFrames(aniSeg.totalFrames), dimensions(aniSeg.dimensions), fps(aniSeg.fps), currentFrame(aniSeg.currentFrame) {}
+			: name(aniSeg.name), textureID(aniSeg.textureID), normalID(aniSeg.normalID), totalFrames(aniSeg.totalFrames), dimensions(aniSeg.dimensions), fps(aniSeg.fps), currentFrame(aniSeg.currentFrame) {}
 	};
 
 	GLint findAnimation(std::string name) const;
