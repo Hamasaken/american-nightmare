@@ -2,14 +2,16 @@
 
 SoundManager::SoundManager()
 {
-	listener.setGlobalVolume(100);
+//	listener.setGlobalVolume(100);
 	volumeEffect = VOLUME_SFX;
 	volumeMusic = VOLUME_MUSIC;
 
 	nrOfSound = NULL;
 
-	loadSFXs();
-	loadSongs();
+	printf("%s", "Just ignore this for now, ok?\n");
+
+//	loadSFXs();
+//	loadSongs();
 }
 
 SoundManager::SoundManager(const SoundManager& other) { }

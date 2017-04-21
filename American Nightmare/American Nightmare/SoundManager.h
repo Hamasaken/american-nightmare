@@ -2,6 +2,7 @@
 #define SOUNDMANAGER_H
 
 #include "Accessories.h"
+#include <SFML\Audio.hpp>
 
 // The maximum capicity of SFX and Songs
 #define SFX_CAPACITY	50

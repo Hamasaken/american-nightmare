@@ -6,9 +6,9 @@ ScreenStart::ScreenStart(const ScreenStart& other) { }
 
 ScreenStart::~ScreenStart() { }
 
-bool ScreenStart::Start(glm::vec2 screenSize)
+bool ScreenStart::Start(glm::vec2 screenSize, SoundManager* soundManager)
 {
-	Screen::Start(screenSize);
+	Screen::Start(screenSize, soundManager);
 
 	////////////////////////////////////////////////////////////
 	// Creating Shader Manager

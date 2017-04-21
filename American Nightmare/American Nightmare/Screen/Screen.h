@@ -7,6 +7,7 @@
 #include "../Game/Shader/ShaderManager.h"
 #include "Rendering/DeferredRendering.h"
 #include "../Game/LightManager.h"
+#include "../SoundManager.h"
 
 class Screen
 {
@@ -19,7 +20,7 @@ public:
 	// \brief Loads all needed objects, also runs SetStartVariables
 	// \return Returrns true if every object could be created
 	////////////////////////////////////////////////////////////
-	virtual bool Start(glm::vec2 screenSize);
+	virtual bool Start(glm::vec2 screenSize, SoundManager* soundManager);
 	
 	////////////////////////////////////////////////////////////
 	// \brief A combined function that runs both Stop & Start
@@ -63,6 +64,7 @@ public:
 
 protected:
 	Camera* camera;	//< Simple Camera object
+	SoundManager* soundManager; // Sound Manager
 
 	glm::vec2 screenSize;
 	glm::mat4 worldMatrix;

@@ -12,10 +12,10 @@ ScreenGame::ScreenGame(const ScreenGame& other) { }
 
 ScreenGame::~ScreenGame() { }
 
-bool ScreenGame::Start(glm::vec2 screenSize)
+bool ScreenGame::Start(glm::vec2 screenSize, SoundManager* soundManager)
 {
 	// Starting Camera & getting openGL pointer
-	Screen::Start(screenSize);
+	Screen::Start(screenSize, soundManager);
 
 	////////////////////////////////////////////////////////////
 	// Creating Shader Manager

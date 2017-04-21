@@ -66,7 +66,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::Game: 
 		screenGame = new ScreenGame();
 		if (screenGame == nullptr) return false;
-		if (!screenGame->Start(screenSize))
+		if (!screenGame->Start(screenSize, soundManager))
 		{
 			MessageBox(hwnd, L"Could not start Game Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
@@ -75,7 +75,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::StartMeny:
 		screenStart = new ScreenStart();
 		if (screenStart == nullptr) return false;
-		if (!screenStart->Start(screenSize))
+		if (!screenStart->Start(screenSize, soundManager))
 		{
 			MessageBox(hwnd, L"Could not start Start Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
@@ -84,7 +84,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::Cutscene:
 		screenCutscene = new ScreenCutscene();
 		if (screenCutscene == nullptr) return false;
-		if (!screenCutscene->Start(screenSize))
+		if (!screenCutscene->Start(screenSize, soundManager))
 		{
 			MessageBox(hwnd, L"Could not start Cutscene Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
