@@ -78,9 +78,49 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 		Animation* tempCharacter = dynamic_cast<Animation*>(object);
 		shaderManager->SetParametersAnimated(tempCharacter);
 	}
-	
+
 	// Drawing object
 	object->Draw();
+}
+
+void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, LightManager::PointLight* light)
+{
+
+	Model* model = drRendering->getFinalRenderQuad();
+
+	// Setting shader as active and setting parameters
+	shaderManager->setShader(drRendering->getLightShader());
+
+	glEnable(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, drRendering->getDRPosition());
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, drRendering->getDRNormal());
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, drRendering->getDRAmbient());
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, drRendering->getDRDiffuse());
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, drRendering->getDRSpecular());
+
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drPosition"), 0);
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drNormal"), 1);
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drAmbient"), 2);
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drDiffuse"), 3);
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drSpecular"), 4);
+
+	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "viewPos"), camera->getPosition().x, camera->getPosition().y, camera->getPosition().z, 1.f);
+	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightPos"), light->position.x, light->position.y, light->position.z, light->position.z);
+	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightDiffuse"), light->diffuse.x, light->diffuse.y, light->diffuse.z, light->diffuse.w);
+	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightSpecular"), light->specular.x, light->specular.y, light->specular.z, light->specular.w);
+
+
+	glDisable(GL_DEPTH_TEST);
+
+	// Drawing object
+	model->Draw();
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Screen::Stop()

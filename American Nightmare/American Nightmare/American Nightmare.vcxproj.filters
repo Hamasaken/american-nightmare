@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Game\GUI">
       <UniqueIdentifier>{242b8bb1-a7ae-43ce-bcbf-e06390de2c90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Screen\Rendering">
+      <UniqueIdentifier>{43462526-e108-4698-b382-5aa993388283}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Screen\Rendering">
+      <UniqueIdentifier>{deb09880-4ba2-461b-9b88-f1c3e3d2b280}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -107,6 +113,9 @@
     </ClCompile>
     <ClCompile Include="Game\LightManager.cpp">
       <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen\Rendering\DeferredRendering.cpp">
+      <Filter>Source Files\Screen\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="Game\GUI\Text.cpp">
       <Filter>Source Files\Game\GUI</Filter>
@@ -176,6 +185,9 @@
     <ClInclude Include="Game\GUI\Text.h">
       <Filter>Header Files\Game\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Screen\Rendering\DeferredRendering.h">
+      <Filter>Header Files\Screen\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Graphics\Shaders\solid_fs.glsl">
@@ -200,6 +212,18 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Data\Graphics\Shaders\texture_animation_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\dr_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\dr_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\drfinal_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\drfinal_fs.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

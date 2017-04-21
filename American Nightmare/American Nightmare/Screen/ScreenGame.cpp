@@ -29,6 +29,11 @@ bool ScreenGame::Start(glm::vec2 screenSize)
 	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
 	shaderManager->AddShader("texture_animation", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_fs.glsl");
 	shaderManager->AddShader("particle", shaderPath + "particle_vs.glsl", shaderPath + "particle_gs.glsl", shaderPath + "particle_fs.glsl");
+	shaderManager->AddShader("deferred", shaderPath + "dr_vs.glsl", shaderPath + "dr_fs.glsl");
+	shaderManager->AddShader("deferred_final", shaderPath + "drfinal_vs.glsl", shaderPath + "drfinal_fs.glsl");
+
+	// Initialize Deferred Rendering
+	drRendering.Start(screenSize, shaderManager->getShader("deferred_final"));
 
 	////////////////////////////////////////////////////////////
 	// Creating Particle Manager
@@ -69,13 +74,13 @@ bool ScreenGame::Start(glm::vec2 screenSize)
 void ScreenGame::SetStartVariables()
 {
 	// Backing the camera a little bit backwards
-	camera->setPosition(glm::vec3(0, 0, 20));
+	camera->setPosition(glm::vec3(0, 0, 40));
 
 	// Backing the player up a little to the screen
 	player->setPosition(glm::vec3(0, 0, 18.f));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(shaderManager->getShader("texture"), "0.lvl");
+	levelManager->LoadLevel(shaderManager->getShader("deferred"), "0.lvl");
 }
 
 void ScreenGame::Update(GLint deltaT)
@@ -102,9 +107,30 @@ void ScreenGame::Update(GLint deltaT)
 
 void ScreenGame::Draw()
 {
+	// Disable Blend for DR
+	glDisable(GL_BLEND);
+
+	// Bind DR frame buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, drRendering.getDRFBO());
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	// Drawing map
 	for (Object* object : levelManager->getMap())
 		DrawObject(object, shaderManager);
+
+	// Transfer deferred rendering depth buffer to forward rendering
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, drRendering.getDRFBO());
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBlitFramebuffer(0, 0, screenSize.x, screenSize.y, 0, 0, screenSize.x, screenSize.y, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+	// Unbind DR frame buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// Reenable Blend
+	glEnable(GL_BLEND);
+
+	// DR: Light pass
+	for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
+		DrawObjectLightPass(&drRendering, shaderManager, light);
 
 	// Drawing player
 	DrawObject(player, shaderManager);

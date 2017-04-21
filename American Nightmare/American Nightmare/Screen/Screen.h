@@ -5,6 +5,8 @@
 #include "../Game/Object.h"
 #include "../Game/Animation.h"
 #include "../Game/Shader/ShaderManager.h"
+#include "Rendering/DeferredRendering.h"
+#include "../Game/LightManager.h"
 
 class Screen
 {
@@ -54,7 +56,8 @@ public:
 	// \brief Drawing a specific object on screen
 	// \note Replace the solid shader with an abstract "Shader" instead
 	////////////////////////////////////////////////////////////
-	void DrawObject(Object* object, ShaderManager* shader);
+	void DrawObject(Object* object, ShaderManager* shaderManager);
+	void DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, LightManager::PointLight* light);
 
 protected:
 	Camera* camera;	//< Simple Camera object

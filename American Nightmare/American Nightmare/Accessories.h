@@ -65,8 +65,17 @@ struct VertexUV
 		u = uv.x;
 		v = uv.y;
 	}
+
+	void setNormal(glm::vec3 normal)
+	{
+		nx = normal.x;
+		ny = normal.y;
+		nz = normal.z;
+	}
+
 	float x, y, z;
 	float u, v;
+	float nx, ny, nz;
 };
 
 #endif // !ACCESSORIES_H

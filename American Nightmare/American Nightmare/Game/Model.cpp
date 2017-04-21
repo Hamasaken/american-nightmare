@@ -143,14 +143,18 @@ void Model::BuildQuadTexture()
 	indices = new unsigned int[indexCount];
 
 	// Quad
-	vertices[0].setPosition(glm::vec3(-1, 1, 0));	// left top
+	vertices[0].setPosition(glm::vec3(-1, 1, 0));
 	vertices[0].setUV(glm::vec2(0, 1));
-	vertices[1].setPosition(glm::vec3(1, 1, 0));	// right top
+	vertices[0].setNormal(glm::vec3(0, 0, 1));
+	vertices[1].setPosition(glm::vec3(1, 1, 0));
 	vertices[1].setUV(glm::vec2(1, 1));
-	vertices[2].setPosition(glm::vec3(1, -1, 0));	// right bottom
+	vertices[1].setNormal(glm::vec3(0, 0, 1));
+	vertices[2].setPosition(glm::vec3(1, -1, 0));
 	vertices[2].setUV(glm::vec2(1, 0));
-	vertices[3].setPosition(glm::vec3(-1, -1, 0));	// left bottom
+	vertices[2].setNormal(glm::vec3(0, 0, 1));
+	vertices[3].setPosition(glm::vec3(-1, -1, 0));
 	vertices[3].setUV(glm::vec2(0, 0));
+	vertices[3].setNormal(glm::vec3(0, 0, 1));
 
 
 	//for (int i = 0; i < indexCount; i++)
@@ -184,6 +188,8 @@ void Model::BuildQuadTexture()
 	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(VertexUV), 0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(VertexUV), (unsigned char*)(3 * sizeof(float)));
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glVertexAttribPointer(2, 3, GL_FLOAT, false, sizeof(VertexUV), (unsigned char*)(5 * sizeof(float)));
 
 	// Binding the index buffer and putting in data
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
