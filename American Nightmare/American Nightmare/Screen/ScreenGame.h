@@ -47,7 +47,6 @@ private:
 	ShaderManager* shaderManager;		//< Manager for shaderprograms
 	LevelManager* levelManager;			//< Manager for levels/maps
 	DeferredRendering drRendering;		//< Holds framebuffer for deferred rendering
-	Player* player;						//< The player object
 };
 
 #endif // !SCREENGAME_H

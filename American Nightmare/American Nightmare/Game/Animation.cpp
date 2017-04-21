@@ -14,12 +14,12 @@ Animation::Animation(const Animation& other) {}
 
 Animation::~Animation() {}
 
-void Animation::AddAnimation(GLuint texture, std::string animationFile)
+void Animation::AddAnimation(const MaterialManager::Material* material, GLuint normalMap, std::string animationFile)
 {
 	AnimationSegment tempAnimation;
 
 	// Loading animation
-	if (!loadAnimation(tempAnimation, animationFile, texture)) {	return; }
+	if (!loadAnimation(tempAnimation, animationFile)) { return; }
 
 	// Check if animation already exists
 	if (findAnimation(tempAnimation.name) != -1)
@@ -27,6 +27,9 @@ void Animation::AddAnimation(GLuint texture, std::string animationFile)
 		printf("Animation already exists: %s\n", tempAnimation.name);
 		return;
 	}
+
+	tempAnimation.material = material;
+	tempAnimation.normalID = normalMap;
 
 	// Adding animation to list
 	animationList.push_back(tempAnimation);
@@ -38,7 +41,7 @@ void Animation::AddAnimation(GLuint texture, std::string animationFile)
 	}
 }
 
-bool Animation::loadAnimation(AnimationSegment &aniSeg, std::string animationFile, GLuint texture)
+bool Animation::loadAnimation(AnimationSegment &aniSeg, std::string animationFile)
 {
 	std::ifstream in(animationFile);
 
@@ -49,7 +52,6 @@ bool Animation::loadAnimation(AnimationSegment &aniSeg, std::string animationFil
 	}
 
 	AnimationSegment tempAnimation;
-	tempAnimation.textureID = texture;
 	tempAnimation.currentFrame = 0;
 
 	char buffer[64];
@@ -158,7 +160,7 @@ void Animation::updateAnimation(GLfloat deltaT)
 
 Animation::FrameUV* Animation::getCurrentFrameUV() { return &currentFrameUV; }
 
-GLuint Animation::getAnimationTexture() const { return currentAnimation->textureID; }
+GLuint Animation::getAnimationTexture() const { return currentAnimation->material->getTextureID(); }
 GLuint Animation::getAnimationNormal() const { return currentAnimation->normalID; }
 
 bool Animation::isDirectionRight() { return directionIsRight; }

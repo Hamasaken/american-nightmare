@@ -16,7 +16,8 @@ in vec2 textureUV;
 
 layout(location = 0) out vec4 fragment_color;
 
-vec4 ads(vec4 lightPosition, vec4 lightColor, vec3 inFragPos, vec3 inNormal, vec4 inAmbient, vec4 inDiffuse, vec4 inSpecular) {
+vec4 ads(vec4 lightPosition, vec4 lightColor, vec3 inFragPos, vec3 inNormal, vec4 inAmbient, vec4 inDiffuse, vec4 inSpecular) 
+{
 	vec3 normal = normalize(inNormal);
 
 	vec3 lightDir = normalize(lightPosition.xyz - inFragPos);

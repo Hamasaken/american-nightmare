@@ -10,7 +10,7 @@ Object::Object(const Object& other) { }
 
 Object::~Object() { }
 
-bool Object::Start(std::string modelName, std::string textureName)
+bool Object::Start(std::string modelName, const MaterialManager::Material* material)
 {
 	// Setting starting variables
 	position = glm::vec3(0, 0, 0);
@@ -27,7 +27,7 @@ bool Object::Start(std::string modelName, std::string textureName)
 //	if (texture == nullptr) return false;
 //	if (!texture->Start(textureName)) return false;
 
-	texture = loadTexture(textureName);
+	this->material = material;
 
 	// TEMPORARY
 	//model->BuildTriangle(openGL);
@@ -56,43 +56,6 @@ void Object::Stop()
 //	}
 }
 
-GLuint Object::loadTexture(std::string inImage)
-{
-
-	sf::Image* sfImage = new sf::Image();
-	if (!sfImage->loadFromFile(inImage))
-	{
-		throw std::runtime_error("Could not load texture");
-	}
-
-	if (sfImage != nullptr)
-	{
-		GLuint glTexture;
-
-		glGenTextures(1, &glTexture);
-		glBindTexture(GL_TEXTURE_2D, glTexture);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, sfImage->getSize().x, sfImage->getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, sfImage->getPixelsPtr());
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glBindTexture(GL_TEXTURE_2D, 0);
-
-		sfImage->~Image();
-		delete sfImage;
-
-		return glTexture;
-	}
-
-	return -1;
-}
-
 void Object::Update(GLint deltaT) { }
 
 void Object::Draw()
@@ -110,3 +73,4 @@ glm::vec3 Object::getScale() const { return scale; }
 void Object::setShader(GLuint shader) { this->shader = shader; }
 GLuint Object::getShader() const { return shader; }
 GLuint Object::getTexture() const {	return texture; }
+GLuint Object::getTextureID() const { return material->getTextureID(); }

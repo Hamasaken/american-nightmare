@@ -21,7 +21,7 @@ public:
 		glm::vec2 uvBotRight;
 	};
 
-	void AddAnimation(GLuint texture, std::string animationFile);
+	void AddAnimation(const MaterialManager::Material* Material, GLuint normalMap, std::string animationFile);
 	FrameUV* getCurrentFrameUV();
 	GLuint getAnimationTexture() const;
 	GLuint getAnimationNormal() const;
@@ -37,22 +37,22 @@ private:
 	struct AnimationSegment
 	{
 		std::string name;
-		GLuint textureID;
+		const MaterialManager::Material* material;
 		GLuint normalID;
 		GLint totalFrames;
 		glm::vec2 dimensions;
 		GLint fps;
 		GLfloat currentFrame;
 
-		AnimationSegment() : name("undefined"), textureID(-1), normalID(-1), totalFrames(0), dimensions(glm::vec2()), fps(0), currentFrame(0.f) {}
-		AnimationSegment(std::string inName, GLuint inTextureID, GLuint inNormalID, GLint inTotalFrames, glm::vec2 inDimensions, GLint infps, GLfloat inCurrentFrame) 
-			: name(inName), textureID(inTextureID), normalID(inNormalID), totalFrames(inTotalFrames), dimensions(inDimensions), fps(infps), currentFrame(inCurrentFrame) {}
+		AnimationSegment() : name("undefined"), material(nullptr), normalID(-1), totalFrames(0), dimensions(glm::vec2()), fps(0), currentFrame(0.f) {}
+		AnimationSegment(std::string inName, const MaterialManager::Material* inMaterial, GLuint inNormalID, GLint inTotalFrames, glm::vec2 inDimensions, GLint infps, GLfloat inCurrentFrame)
+			: name(inName), material(inMaterial), normalID(inNormalID), totalFrames(inTotalFrames), dimensions(inDimensions), fps(infps), currentFrame(inCurrentFrame) {}
 		AnimationSegment(const AnimationSegment& aniSeg) 
-			: name(aniSeg.name), textureID(aniSeg.textureID), normalID(aniSeg.normalID), totalFrames(aniSeg.totalFrames), dimensions(aniSeg.dimensions), fps(aniSeg.fps), currentFrame(aniSeg.currentFrame) {}
+			: name(aniSeg.name), material(aniSeg.material), normalID(aniSeg.normalID), totalFrames(aniSeg.totalFrames), dimensions(aniSeg.dimensions), fps(aniSeg.fps), currentFrame(aniSeg.currentFrame) {}
 	};
 
 	GLint findAnimation(std::string name) const;
-	bool loadAnimation(AnimationSegment &aniSeg, std::string animationFile, GLuint texture);
+	bool loadAnimation(AnimationSegment &aniSeg, std::string animationFile);
 
 	std::vector<AnimationSegment> animationList;
 	AnimationSegment* currentAnimation;

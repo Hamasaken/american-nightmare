@@ -1,0 +1,4 @@
+name testanimationnormalmap
+tf 32
+dim 5 7
+fps 48

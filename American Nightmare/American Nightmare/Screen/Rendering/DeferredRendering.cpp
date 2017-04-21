@@ -23,7 +23,7 @@ void DeferredRendering::Stop()
 	textureList[3] = drDiffuse;
 	textureList[4] = drSpecular;
 
-	glDeleteTextures(1, textureList);
+	glDeleteTextures(5, textureList);
 
 	delete[] textureList;
 }

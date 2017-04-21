@@ -5,7 +5,6 @@ ScreenGame::ScreenGame() : Screen()
 	particleManager = nullptr;
 	shaderManager = nullptr;
 	levelManager = nullptr;
-	player = nullptr;
 }
 
 ScreenGame::ScreenGame(const ScreenGame& other) { }
@@ -48,22 +47,11 @@ bool ScreenGame::Start(glm::vec2 screenSize)
 	////////////////////////////////////////////////////////////
 	// Creating Models
 	////////////////////////////////////////////////////////////
-	std::string modelPath = MODEL_PATH;
-	std::string texturePath = TEXTURE_PATH;
-	std::string animationPath = ANIMATION_PATH;
-
-	// Creating the player object
-	player = new Player();
-	if (player == nullptr) return false;
-	if (!player->Start(modelPath + "model.m", texturePath + "testanimation.png"))
-		return false;
-	player->setShader(shaderManager->getShader("texture_animation_normal"));
-	player->AddAnimation(player->getTexture(), animationPath + "testanimation.txt");
 
 	// Creating a simple level
 	levelManager = new LevelManager();
 	if (levelManager == nullptr) return false;
-	if (!levelManager->Start())
+	if (!levelManager->Start(shaderManager->getShader("texture_animation_normal")))
 		return false;
 
 	// Setting startvariables
@@ -77,9 +65,6 @@ void ScreenGame::SetStartVariables()
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 40));
 
-	// Backing the player up a little to the screen
-	player->setPosition(glm::vec3(0, 0, 18.f));
-
 	// Making wall & floor bigger
 	levelManager->LoadLevel(shaderManager->getShader("deferred"), "0.lvl");
 }
@@ -88,19 +73,16 @@ void ScreenGame::Update(GLint deltaT)
 {
 	// Temporary for testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
-		particleManager->Effect(ParticleEmitter::TRIANGLE, player->getPosition(), glm::vec4(randBetweenF(0, 1), randBetweenF(0, 1), randBetweenF(0, 1), randBetweenF(0, 1)), 100);
+		particleManager->Effect(ParticleEmitter::TRIANGLE, levelManager->getPlayer()->getPosition(), glm::vec4(randBetweenF(0, 1), randBetweenF(0, 1), randBetweenF(0, 1), randBetweenF(0, 1)), 100);
 
 	// Updating particles effects
 	particleManager->Update(deltaT);
-					 
-	// Updating player
-	player->Update(deltaT);
 
 	// Updating map objects
 	levelManager->Update(deltaT);
 
 	// Moving the camera to follow player object
-	camera->smoothToPosition(glm::vec3(player->getPosition().x, player->getPosition().y, camera->getPosition().z));
+	camera->smoothToPosition(glm::vec3(levelManager->getPlayer()->getPosition().x, levelManager->getPlayer()->getPosition().y, camera->getPosition().z));
 
 	// Building a new camera view matrix
 	camera->buildViewMatrix();
@@ -135,8 +117,7 @@ void ScreenGame::Draw()
 
 	// Drawing player
 	for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
-		DrawObjectAnimation(player, shaderManager, light);
-
+		DrawObjectAnimation(levelManager->getPlayer(), shaderManager, light);
 	//DrawObjectAnimation(player, shaderManager, levelManager->getLightManager()->getPointLightList()[0]);
 
 	// Drawing vertices
@@ -169,14 +150,6 @@ void ScreenGame::Stop()
 		levelManager->Stop();
 		delete levelManager;
 		levelManager = nullptr;
-	}
-
-	// Deleting player
-	if (player != nullptr)
-	{
-		player->Stop();
-		delete player;
-		player = nullptr;
 	}
 
 	// Removes Camera & openGL ptr

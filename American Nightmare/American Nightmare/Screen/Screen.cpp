@@ -104,15 +104,15 @@ void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderMa
 
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, animatedObj->getTexture());
+	glBindTexture(GL_TEXTURE_2D, animatedObj->getTextureID());
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, animatedObj->getAnimationNormal());
 
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "texture"), 0);
-
-	//glActiveTexture(GL_TEXTURE1);
-	//glBindTexture(GL_TEXTURE_2D, object->getAnimationNormal());
+	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "normal"), 1);
 
 	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "viewPos"), camera->getPosition().x, camera->getPosition().y, camera->getPosition().z, 1.f);
-	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "lightPos"), light->position.x, light->position.y, light->position.z, light->position.z);
+	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "lightPos"), light->position.x, light->position.y, light->position.z, light->position.w);
 	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "lightDiffuse"), light->diffuse.x, light->diffuse.y, light->diffuse.z, light->diffuse.w);
 	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "lightSpecular"), light->specular.x, light->specular.y, light->specular.z, light->specular.w);
 
@@ -147,7 +147,7 @@ void Screen::DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager
 
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, object->getTexture());
+	glBindTexture(GL_TEXTURE_2D, object->getTextureID());
 
 	glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
 
@@ -182,7 +182,7 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drSpecular"), 4);
 
 	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "viewPos"), camera->getPosition().x, camera->getPosition().y, camera->getPosition().z, 1.f);
-	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightPos"), light->position.x, light->position.y, light->position.z, light->position.z);
+	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightPos"), light->position.x, light->position.y, light->position.z, light->position.w);
 	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightDiffuse"), light->diffuse.x, light->diffuse.y, light->diffuse.z, light->diffuse.w);
 	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightSpecular"), light->specular.x, light->specular.y, light->specular.z, light->specular.w);
 

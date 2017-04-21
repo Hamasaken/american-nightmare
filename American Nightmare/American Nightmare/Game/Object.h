@@ -3,6 +3,7 @@
 
 // Classes
 #include "SFML\Graphics.hpp"
+#include "MaterialManager.h"
 #include "Model.h"
 
 class Object
@@ -16,7 +17,7 @@ public:
 	// \brief Loads both a model & texture
 	// \return Returns false if one or both fails
 	////////////////////////////////////////////////////////////
-	virtual bool Start(std::string modelName, std::string textureName);
+	virtual bool Start(std::string modelName, const MaterialManager::Material* material);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads both model & texture
@@ -46,6 +47,7 @@ public:
 	void setShader(GLuint shader);
 	GLuint getShader() const;
 	GLuint getTexture() const;
+	GLuint getTextureID() const;
 
 protected:
 	glm::vec3 position;	//< Object position
@@ -53,11 +55,10 @@ protected:
 	glm::vec3 scale;	//< Object scale
 	GLuint shader;		//< Identifier for shaderprogram to use when drawing
 
-	GLuint loadTexture(std::string inImage); //< 
-
 protected:	// Note: Make this private when loadModel is implemented!
 	Model* model;	//< This object's model
 	GLuint texture;	//< This object's texture 
+	const MaterialManager::Material* material; //< This object's material
 };
 
 

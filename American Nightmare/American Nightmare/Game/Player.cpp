@@ -31,12 +31,12 @@ void Player::Movement()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
 		position.x += 0.15f;
-		directionIsRight = true;
+		directionIsRight = false;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 	{
 		position.x -= 0.15f;
-		directionIsRight = false;
+		directionIsRight = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) position.z += 0.15f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) position.z -= 0.15f;

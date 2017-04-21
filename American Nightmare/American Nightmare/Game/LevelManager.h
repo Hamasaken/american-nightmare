@@ -1,7 +1,7 @@
 #ifndef LEVELMANAGER_H
 #define LEVELMANAGER_H
 
-#include "Object.h"
+#include "Player.h"
 #include "LightManager.h"
 #include <vector>
 
@@ -16,7 +16,7 @@ public:
 	// \brief Starts class, gets the openGL ptr
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start();
+	bool Start(GLuint playerShader);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -50,11 +50,14 @@ public:
 	std::vector<Object*> getMap();
 
 	const LightManager* getLightManager() const;
+	Player* getPlayer();
 
 private:
 	std::vector<Object*> map;	//< Vector with level specific objects
+	Player* player;				//< The player object
 
 	LightManager* lightManager;
+	MaterialManager materialManager;
 };
 
 
