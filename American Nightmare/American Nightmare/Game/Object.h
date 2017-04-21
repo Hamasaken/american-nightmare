@@ -43,7 +43,7 @@ public:
 	glm::vec3 getRotationInRadians() const;
 	void setScale(glm::vec3 scale);
 	glm::vec3 getScale() const;
-	void setShader(GLuint shader);
+	virtual void setShader(GLuint shader);
 	GLuint getShader() const;
 	GLuint getTexture() const;
 

@@ -2,6 +2,7 @@
 #define BUTTON_H
 
 #include "../Object.h"
+#include "Text.h"
 
 struct Button : Object
 {
@@ -24,6 +25,13 @@ public:
 	bool Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, std::string textureName, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f));
 
 	////////////////////////////////////////////////////////////
+	// \brief Starts text on the button
+	// \param fontName Full path to the font file
+	// \param characterSize The size of each character
+	////////////////////////////////////////////////////////////
+	bool StartText(std::string fontName, float characterSize);
+
+	////////////////////////////////////////////////////////////
 	// \brief Checking if mouse pointer is inside button
 	////////////////////////////////////////////////////////////
 	bool isMouseInside();
@@ -39,6 +47,9 @@ public:
 	////////////////////////////////////////////////////////////
 	void Draw();
 
+	// Overdrivven set shader to also set text shader
+	void setShader(GLuint shader);
+
 	// Set & Get functions
 	void setState(State state);
 	void setSize(glm::vec2 size);
@@ -53,6 +64,7 @@ private:
 	////////////////////////////////////////////////////////////
 	void UpdateQuad();
 
+	Text* text;				//< Optional text object
 	glm::vec2 screenSize;	//< The screensize of the screen
 	glm::vec2 size;			//< Size of the button in (width, height)
 	glm::vec4 color;		//< Color of the button

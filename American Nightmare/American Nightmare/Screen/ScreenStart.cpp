@@ -27,25 +27,29 @@ bool ScreenStart::Start(glm::vec2 screenSize, SoundManager* soundManager)
 	std::string texturePath = TEXTURE_PATH;
 	start = new Button();
 	if (start == nullptr) return false;
-	if (!start->Start(screenSize, glm::vec2(20, 20), glm::vec2(200, 50), texturePath + "gammal-dammsugare.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
+	if (!start->Start(screenSize, glm::vec2(20, 190), glm::vec2(200, 50), texturePath + "gammal-dammsugare.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
+	start->StartText("framd.ttf", 40);
 	start->setShader(shaderManager->getShader("solid"));
 
 	// Poster Button
 	posters = new Button();
 	if (posters == nullptr) return false;
-	if (!posters->Start(screenSize, glm::vec2(20, 90), glm::vec2(200, 50), texturePath + "gammal-dammsugare.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
+	if (!posters->Start(screenSize, glm::vec2(20, 260), glm::vec2(200, 50), texturePath + "temp_ground.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
+	posters->StartText("framd.ttf", 40);
 	posters->setShader(shaderManager->getShader("texture"));
 
 	// Options Button
 	options = new Button();
 	if (options == nullptr) return false;
-	if (!options->Start(screenSize, glm::vec2(20, 160), glm::vec2(200, 50), texturePath + "gammal-dammsugare.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
+	if (!options->Start(screenSize, glm::vec2(20, 330), glm::vec2(200, 50), texturePath + "gammal-dammsugare.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
+	options->StartText("framd.ttf", 40);
 	options->setShader(shaderManager->getShader("texture"));
 
 	// Exit Button
 	exit = new Button();
 	if (exit == nullptr) return false;
-	if (!exit->Start(screenSize, glm::vec2(20, 230), glm::vec2(200, 50), texturePath + "gammal-dammsugare.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
+	if (!exit->Start(screenSize, glm::vec2(20, 400), glm::vec2(200, 50), texturePath + "temp_ground.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
+	exit->StartText("framd.ttf", 40);
 	exit->setShader(shaderManager->getShader("texture"));
 
 	// Logo Text
