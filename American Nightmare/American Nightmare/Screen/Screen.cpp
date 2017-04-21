@@ -16,16 +16,17 @@ bool Screen::Restart()
 	Stop();
 
 	// Trying to restart
-	if (!Start(screenSize))
+	if (!Start(screenSize, soundManager))
 		return false;
 
 	return true;
 }
 
-bool Screen::Start(glm::vec2 screenSize)
+bool Screen::Start(glm::vec2 screenSize, SoundManager* soundManager)
 {
 	// Getting screensize
 	this->screenSize = screenSize;
+	this->soundManager = soundManager;
 
 	// Building a world matrix (just identity matrix)
 	worldMatrix = glm::mat4(1.f);

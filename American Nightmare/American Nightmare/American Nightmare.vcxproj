@@ -214,6 +214,9 @@
     <None Include="Data\Graphics\Shaders\dr_fs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_fs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_gs.glsl" />
+    <None Include="Data\Graphics\Shaders\particle_light_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\particle_light_gs.glsl" />
+    <None Include="Data\Graphics\Shaders\particle_light_vs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_vs.glsl" />
     <None Include="Data\Graphics\Shaders\solid_fs.glsl" />
     <None Include="Data\Graphics\Shaders\solid_vs.glsl" />

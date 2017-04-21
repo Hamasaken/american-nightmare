@@ -4,6 +4,7 @@
 #include "ScreenGame.h"
 #include "ScreenStart.h"
 #include "ScreenCutscene.h"
+#include "../SoundManager.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <Windows.h>
@@ -65,10 +66,11 @@ public:
 	////////////////////////////////////////////////////////////
 	State getState();
 private:
-	glm::vec2 screenSize;		//< The current screenSize
-	HWND hwnd;			//< Saving the HWND for error msg boxes output
-	ScreenGame* screenGame;		//< The game screen
-	ScreenStart* screenStart;	//< The start meny screen
+	glm::vec2 screenSize;			//< The current screenSize
+	HWND hwnd;						//< Saving the HWND for error msg boxes output
+	SoundManager* soundManager;		//< Manages the sfx and music
+	ScreenGame* screenGame;			//< The game screen
+	ScreenStart* screenStart;		//< The start meny screen
 	ScreenCutscene* screenCutscene; //< The screen for cutscenes
 };
 

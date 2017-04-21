@@ -13,7 +13,7 @@
 #include <glm/gtx/rotate_vector.hpp>	// rotating vectors and matrices
 
 // Including full smfl libary
-#include <SFML\Audio.hpp>		// Sound and SFX
+#include <SFML\Audio.hpp>			// Sound and SFX
 #include <SFML\Window\Keyboard.hpp>	// Input Keyboard	
 
 // Various includes
@@ -26,9 +26,13 @@
 #define TEXTURE_PATH "Data/Graphics/Textures/"
 #define FONT_PATH "Data/Graphics/Fonts/"
 #define ANIMATION_PATH "Data/Graphics/Animations/"
+#define SFX_PATH "Data/Sound/SFX/"
+#define MUSIC_PATH "Data/Sound/Music/"
 
 // Functions
 float randBetweenF(float low, float high);
+glm::vec3 fromScreenToWorld(glm::vec2 position, glm::vec2 screenSize, glm::mat4 world, glm::mat4 projection);
+glm::vec3 fromScreenToWorld(glm::vec2 position);
 
 // Vertex Struct for vertex buffers, etc
 struct Vertex

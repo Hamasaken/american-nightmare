@@ -10,9 +10,9 @@ ScreenCutscene::ScreenCutscene(const ScreenCutscene& other) { }
 
 ScreenCutscene::~ScreenCutscene() { }
 
-bool ScreenCutscene::Start(glm::vec2 screenSize)
+bool ScreenCutscene::Start(glm::vec2 screenSize, SoundManager* soundManager)
 {
-	Screen::Start(screenSize);
+	Screen::Start(screenSize, soundManager);
 
 	////////////////////////////////////////////////////////////
 	// Starting Model Class

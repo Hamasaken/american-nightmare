@@ -8,18 +8,21 @@ Text::~Text() { }
 
 bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
-	this->position = glm::vec3(position.x / (20.f / 1.11777), -position.y / (20.f / 1.12), 0.f);
+	this->position = fromScreenToWorld(position);
 	this->rotation = rotation;
 	this->scale = scale;
 	this->screenSize = screenSize;
 
-	// Load Model
+	// Creating a empty model class
 	model = new Model();
 	if (model == nullptr) return false;
 
 	// Loading font, setting default variables
 	if (!LoadFont(fontName, characterSize))
 		return false;
+
+	// Creating a default string 
+	CreateText("Default");
 
 	return true;
 }
@@ -41,8 +44,7 @@ bool Text::LoadFont(std::string fontName, float characterSize)
 {
 	// Open Font
 	font = nullptr;
-	std::string fontPath = FONT_PATH;
-	font = TTF_OpenFont((fontPath + fontName).c_str(), characterSize);
+	font = TTF_OpenFont((fontName).c_str(), characterSize);
 	if (font == nullptr)
 		return false;
 }

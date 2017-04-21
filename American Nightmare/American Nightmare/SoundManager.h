@@ -2,10 +2,7 @@
 #define SOUNDMANAGER_H
 
 #include "Accessories.h"
-
-// Path to files
-#define PATH_TO_SFX	"../Zedit/Stuff/Sound/SFX/"
-#define PATH_TO_MUSIC	"../Zedit/Stuff/Sound/Music/"
+#include <SFML\Audio.hpp>
 
 // The maximum capicity of SFX and Songs
 #define SFX_CAPACITY	50
@@ -15,7 +12,7 @@
 #define VOLUME_MUSIC	20
 #define VOLUME_SFX	100
 
-// Turn Music & SFX on/off
+// Turn Music & SFX on/off for testing
 #define MUSIC_ON	false	
 #define SFX_ON		false
 
@@ -25,13 +22,13 @@ public:
 	// Put sfx names here, and then load them in the loadSFXs function
 	enum SFX
 	{
-		JUMP
+		SFX_PROP
 	};
 
 	// Put song names here, and then load them in the loadSongs functions
 	enum SONG
 	{
-		ROARING_20
+		MUSIC_PROP
 	};
 
 	SoundManager();

@@ -13,7 +13,6 @@
 #include <SDL_opengl.h>
 #include <SDL_syswm.h>
 
-
 // DEFINES
 #define APP_NAME		"American Nightmare"
 #define FULL_SCREEN_ON		false
