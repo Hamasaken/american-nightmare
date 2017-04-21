@@ -8,7 +8,7 @@ Text::~Text() { }
 
 bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
-	this->position = glm::vec3(position.x / (20.f / 1.11777), -position.y / (20.f / 1.12), 0.f);
+	this->position = fromScreenToWorld(position);
 	this->rotation = rotation;
 	this->scale = scale;
 	this->screenSize = screenSize;
