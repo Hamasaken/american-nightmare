@@ -8,8 +8,6 @@ SoundManager::SoundManager()
 
 	nrOfSound = NULL;
 
-	printf("%s", "Just ignore this for now, ok?\n");
-
 //	loadSFXs();
 //	loadSongs();
 }

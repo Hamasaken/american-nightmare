@@ -30,6 +30,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, SoundManager* soundManager)
 	shaderManager->AddShader("texture_animation", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_fs.glsl");
 	shaderManager->AddShader("texture_animation_normal", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_animation_fs.glsl");
 	shaderManager->AddShader("particle", shaderPath + "particle_vs.glsl", shaderPath + "particle_gs.glsl", shaderPath + "particle_fs.glsl");
+	shaderManager->AddShader("particle_light", shaderPath + "particle_light_vs.glsl", shaderPath + "particle_light_gs.glsl", shaderPath + "particle_light_fs.glsl");
 	shaderManager->AddShader("deferred", shaderPath + "dr_vs.glsl", shaderPath + "dr_fs.glsl");
 	shaderManager->AddShader("deferred_final", shaderPath + "drfinal_vs.glsl", shaderPath + "drfinal_fs.glsl");
 
@@ -43,7 +44,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, SoundManager* soundManager)
 	if (particleManager == nullptr) return false;
 	if (!particleManager->Start())
 		return false;
-	particleManager->setShader(shaderManager->getShader("particle"));
+	particleManager->setShader(shaderManager->getShader("particle_light"));
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
