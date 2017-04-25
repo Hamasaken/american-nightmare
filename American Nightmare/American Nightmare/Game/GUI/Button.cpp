@@ -28,6 +28,18 @@ bool Button::Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, std
 	return true;
 }
 
+void Button::Stop()
+{
+	if (text != nullptr)
+	{
+		text->Stop();
+		delete text;
+		text = nullptr;
+	}
+
+	Object::Stop();
+}
+
 bool Button::StartText(std::string fontName, float characterSize)
 {
 	// Creating text object

@@ -99,6 +99,13 @@ void ScreenStart::Draw()
 
 void ScreenStart::Stop()
 {
+	if (shaderManager != nullptr)
+	{
+		shaderManager->Stop();
+		delete shaderManager;
+		shaderManager = nullptr;
+	}
+
 	// Deleting buttons
 	if (start != nullptr)
 	{
