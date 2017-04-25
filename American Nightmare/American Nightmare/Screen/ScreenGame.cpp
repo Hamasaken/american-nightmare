@@ -117,9 +117,9 @@ void ScreenGame::Draw()
 		DrawObjectLightPass(&drRendering, shaderManager, light);
 
 	// Drawing player
-	for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
-		DrawObjectAnimation(levelManager->getPlayer(), shaderManager, light);
-	//DrawObjectAnimation(player, shaderManager, levelManager->getLightManager()->getPointLightList()[0]);
+	//for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
+		//DrawObjectAnimation(levelManager->getPlayer(), shaderManager, light);
+	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList()[0]);
 
 	// Drawing vertices
 	shaderManager->setShader(particleManager->getShader());

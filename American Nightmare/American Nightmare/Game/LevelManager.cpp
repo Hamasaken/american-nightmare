@@ -29,7 +29,8 @@ bool LevelManager::Start(GLuint playerShader)
 	player->AddAnimation(playerMaterial, materialManager.getTextureID(tempNomralMapIndex), animationPath + "testanimationnormalmap.txt");
 
 	// Backing the player up a little to the screen
-	player->setPosition(glm::vec3(0, 0, 18.f));
+	player->setPosition(glm::vec3(0, 0, 10.f));
+	player->setScale(glm::vec3(4, 4, 4));
 
 	return true;
 }
@@ -46,6 +47,7 @@ void LevelManager::Stop()
 	// Unloads the map objects
 	StopMap();
 	lightManager->Clear();
+	materialManager.Clear();
 	delete lightManager;
 }
 
@@ -90,7 +92,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 		map[i]->setShader(shader);
 	}
 
-	materialManager.AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
+	materialManager.AddMaterial("lightmaterial", glm::vec3(0.1f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
 	materialManager.AddMaterial("groundmaterial", glm::vec3(0.1f), 1.f, "groundtexture", texturePath + "temp_ground.jpg");
 	materialManager.AddMaterial("backgroundmaterial", glm::vec3(0.1f), 1.f, "backgroundtexture", texturePath + "temp_background.jpg");
 
