@@ -21,41 +21,21 @@ bool Object::Start(std::string modelName, const MaterialManager::Material* mater
 	model = new Model();
 	if (model == nullptr) return false;
 	if (!model->Start(modelName)) return false;
-	
-	// Creating texture
-//	texture = new Texture();
-//	if (texture == nullptr) return false;
-//	if (!texture->Start(textureName)) return false;
 
 	this->material = material;
-
-	// TEMPORARY
-	//model->BuildTriangle(openGL);
-	//model->BuildQuad(openGL);
 	model->BuildQuadTexture();
 
+	//Physics
 	bodyDef.fixedRotation = true;
-	//Physic
 	bodyDef.position = b2Vec2(x, -y);
-	if (isDynamic)
-	{
-		bodyDef.type = b2_dynamicBody;
-	}
-	else
-	{
-		bodyDef.type = b2_staticBody;
-	}
+	bodyDef.type = (isDynamic) ? b2_dynamicBody : b2_staticBody;
 	body = world.CreateBody(&bodyDef);
-
-	
-	//Shape.SetAsBox((((w / 2) * (w / GroundTexture.getSize().x)) / SCALE), ((h / 2) * (h / GroundTexture.getSize().y)) / SCALE); // Creates a box shape. Divide your desired width and height by 2.
-	shape.SetAsBox(10.F, 0.5f); // Creates a box shape. Divide your desired width and height by 2.
+	shape.SetAsBox(1.f, 1.f); // Creates a box shape. Divide your desired width and height by 2.
 
 	fixtureDef.density = 0.f;  // Sets the density of the body
 	fixtureDef.friction = 10.0f;
 	fixtureDef.shape = &shape; // Sets the shape
 	body->CreateFixture(&fixtureDef); // Apply the fixture definition
-
 
 	return true;
 }
@@ -79,7 +59,10 @@ void Object::Stop()
 //	}
 }
 
-void Object::Update(GLint deltaT) { }
+void Object::Update(GLint deltaT) 
+{
+
+}
 
 void Object::Draw()
 {
@@ -91,9 +74,15 @@ glm::vec3 Object::getPosition() const { return position; }
 void Object::setRotation(glm::vec3 rotation) { this->rotation = rotation; }
 glm::vec3 Object::getRotation() const { return rotation; }
 glm::vec3 Object::getRotationInRadians() const { return glm::vec3(rotation * (3.141592654f / 180.0f)); }
-void Object::setScale(glm::vec3 scale) {
+void Object::setScale(glm::vec3 scale) 
+{
 	this->scale = scale;
+
+	shape.SetAsBox(scale.x, scale.y); // Creates a box shape. Divide your desired width and height by 2.
+	fixtureDef.shape = &shape; // Sets the shape
+	body->CreateFixture(&fixtureDef); // Apply the fixture definition
 }
+
 glm::vec3 Object::getScale() const { return scale; }
 void Object::setShader(GLuint shader) { this->shader = shader; }
 GLuint Object::getShader() const { return shader; }

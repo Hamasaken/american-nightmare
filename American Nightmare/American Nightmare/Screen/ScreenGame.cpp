@@ -110,7 +110,7 @@ void ScreenGame::Draw()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// Reenable Blend
-	glEnable(GL_BLEND);
+//	glEnable(GL_BLEND);
 
 	// DR: Light pass
 	for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())

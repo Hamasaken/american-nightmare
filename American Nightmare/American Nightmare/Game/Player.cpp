@@ -6,6 +6,36 @@ Player::Player(const Player & other) { }
 
 Player::~Player() { }
 
+bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World& world, float x, float y, bool isDynamic)
+{
+	// Setting starting variables
+	position = glm::vec3(0, 0, 0);
+	rotation = glm::vec3(0, 0, 0);
+	scale = glm::vec3(1, 1, 1);
+
+	// Creating model
+	model = new Model();
+	if (model == nullptr) return false;
+	if (!model->Start(modelName)) return false;
+
+	this->material = material;
+	model->BuildQuadTexture();
+
+	//Physics
+	bodyDef.fixedRotation = true;
+	bodyDef.position = b2Vec2(x, -y);
+	bodyDef.type = b2_dynamicBody;
+	body = world.CreateBody(&bodyDef);
+	shape.SetAsBox(1.f, 1.f); // Creates a box shape. Divide your desired width and height by 2.
+
+	fixtureDef.density = 0.f;  // Sets the density of the body
+	fixtureDef.friction = 10.0f;
+	fixtureDef.shape = &shape; // Sets the shape
+	body->CreateFixture(&fixtureDef); // Apply the fixture definition
+
+	return true;
+}
+
 void Player::Update(GLint deltaT)
 {
 	// Updating movement

@@ -10,6 +10,7 @@ public:
 	Player(const Player& other);
 	~Player();
 
+	bool Start(std::string modelName, const MaterialManager::Material* material, b2World& world, float x = 0.f, float y = 0.f, bool isDynamic = false);
 	void Update(GLint deltaT);
 
 	////////////////////////////////////////////////////////////
