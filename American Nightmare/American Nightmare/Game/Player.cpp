@@ -30,12 +30,14 @@ void Player::Movement()
 	// Positioning
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
-		position.x += 0.15f;
+		body->SetLinearVelocity(b2Vec2(10.f, 0.f));
+		//position.x += 0.15f;
 		directionIsRight = false;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 	{
-		position.x -= 0.15f;
+		body->SetLinearVelocity(b2Vec2(-10.f, 0.f));
+		//position.x -= 0.15f;
 		directionIsRight = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) position.z += 0.15f;
@@ -52,4 +54,7 @@ void Player::Movement()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) rotation.y -= 2.f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y)) rotation.z += 2.f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) rotation.z -= 2.f;
+
+	position.x = body->GetPosition().x;
+	position.y = -body->GetPosition().y;
 }

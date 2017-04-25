@@ -5,6 +5,7 @@
 #include "SFML\Graphics.hpp"
 #include "MaterialManager.h"
 #include "Model.h"
+#include "Box2D.h"
 
 class Object
 {
@@ -17,7 +18,7 @@ public:
 	// \brief Loads both a model & texture
 	// \return Returns false if one or both fails
 	////////////////////////////////////////////////////////////
-	virtual bool Start(std::string modelName, const MaterialManager::Material* material);
+	virtual bool Start(std::string modelName, const MaterialManager::Material* material, b2World& world, float x = 0.f, float y = 0.f, bool isDynamic = false);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads both model & texture
@@ -48,6 +49,14 @@ public:
 	GLuint getShader() const;
 	GLuint getTexture() const;
 	GLuint getTextureID() const;
+	void SetAsBoxbox(float x, float y);
+
+
+	b2BodyDef bodyDef;
+	b2Body* body;
+
+	b2PolygonShape shape;
+	b2FixtureDef fixtureDef;
 
 protected:
 	glm::vec3 position;	//< Object position
@@ -59,6 +68,7 @@ protected:	// Note: Make this private when loadModel is implemented!
 	Model* model;	//< This object's model
 	GLuint texture;	//< This object's texture 
 	const MaterialManager::Material* material; //< This object's material
+
 };
 
 

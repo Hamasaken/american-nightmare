@@ -1,6 +1,9 @@
 #include "LevelManager.h"
 
-LevelManager::LevelManager() { }
+LevelManager::LevelManager() 
+{
+	//world = b2World(Gravity);
+}
 
 LevelManager::LevelManager(const LevelManager & other) { }
 
@@ -8,6 +11,7 @@ LevelManager::~LevelManager() { }
 
 bool LevelManager::Start(GLuint playerShader)
 {
+	world = new b2World(Gravity);
 	lightManager = new LightManager();
 
 	std::string modelPath = MODEL_PATH;
@@ -23,14 +27,17 @@ bool LevelManager::Start(GLuint playerShader)
 
 	const MaterialManager::Material* playerMaterial = materialManager.getMaterial("playermaterial");
 
-	if (!player->Start(modelPath + "model.m", playerMaterial))
+	if (!player->Start(modelPath + "model.m", playerMaterial, *world, 0, 30, true))
 		return false;
 	player->setShader(playerShader);
 	player->AddAnimation(playerMaterial, materialManager.getTextureID(tempNomralMapIndex), animationPath + "testanimationnormalmap.txt");
 
 	// Backing the player up a little to the screen
-	player->setPosition(glm::vec3(0, 0, 18.f));
+	player->setPosition(glm::vec3(0, 0, 0.f));
 
+
+
+	
 	return true;
 }
 
@@ -100,7 +107,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 		printf("Material not found\n");
 	else
 	{
-		map[0]->Start(modelPath + "model.m", tempMaterial);
+		map[0]->Start(modelPath + "model.m", tempMaterial, *world);
 		map[0]->setScale(glm::vec3(8, 5, 3));
 		map[0]->setRotation(glm::vec3(0, 0, 40));
 		map[0]->setPosition(glm::vec3(-2, 0, -10));
@@ -111,10 +118,12 @@ void LevelManager::LoadTempLevel(GLuint shader)
 		printf("Material not found\n");
 	else
 	{
-		map[1]->Start(modelPath + "model.m", tempMaterial);
-		map[1]->setScale(glm::vec3(60, 100, 0));;
-		map[1]->setPosition(glm::vec3(0, -2, 0));
-		map[1]->setRotation(glm::vec3(0.f, -90, 0.f));
+		//map[1]->shape.SetAsBox(5000, 1);
+		map[1]->bodyDef.position = b2Vec2(map[1]->getPosition().x, map[1]->getPosition().y);
+		map[1]->Start(modelPath + "model.m", tempMaterial, *world);
+		map[1]->setScale(glm::vec3(20, 1, 0));;
+		map[1]->setPosition(glm::vec3(0, -1, 0));
+		map[1]->setRotation(glm::vec3(0.f, 0.f, 0.f));
 	}
 
 	tempMaterial = materialManager.getMaterial("backgroundmaterial");
@@ -122,7 +131,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 		printf("Material not found\n");
 	else
 	{
-		map[2]->Start(modelPath + "model.m", tempMaterial);
+		map[2]->Start(modelPath + "model.m", tempMaterial, *world);
 		map[2]->setScale(glm::vec3(60, 15, 0));;
 		map[2]->setPosition(glm::vec3(0, 13, -10));
 		map[2]->setRotation(glm::vec3(0.f, 0.f, 0.f));
@@ -133,7 +142,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 		printf("Material not found\n");
 	else
 	{
-		map[3]->Start(modelPath + "model.m", tempMaterial);
+		map[3]->Start(modelPath + "model.m", tempMaterial, *world);
 		map[3]->setPosition(glm::vec3(-20, 5, 15));
 		map[3]->setRotation(glm::vec3(0.f, 0.f, 0.f));
 		map[3]->setScale(glm::vec3(0.5, 0.5, 0.5));
@@ -144,7 +153,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 		printf("Material not found\n");
 	else
 	{
-		map[4]->Start(modelPath + "model.m", tempMaterial);
+		map[4]->Start(modelPath + "model.m", tempMaterial, *world);
 		map[4]->setPosition(glm::vec3(20, 5, 15));
 		map[4]->setRotation(glm::vec3(0.f, 0.f, 0.f));
 		map[4]->setScale(glm::vec3(0.5, 0.5, 0.5));
@@ -163,6 +172,8 @@ void LevelManager::Update(GLint deltaT)
 	// Updating every object on map
 	for (Object* object : map)
 		object->Update(deltaT);
+
+	world->Step(1 / 60.f, 8, 3);
 }
 
 std::vector<Object*> LevelManager::getMap()

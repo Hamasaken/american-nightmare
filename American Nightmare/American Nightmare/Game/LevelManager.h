@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "LightManager.h"
 #include <vector>
+#include "Box2D.h"
 
 class LevelManager
 {
@@ -58,6 +59,12 @@ private:
 
 	LightManager* lightManager;
 	MaterialManager materialManager;
+
+
+	b2Vec2 Gravity = { 0.f, 9.82f };
+	b2World *world;
+
+
 };
 
 
