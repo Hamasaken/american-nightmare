@@ -6,7 +6,15 @@
 class Frustum
 {
 private:
-	struct Plane { float a, b, c, d; };
+	struct Plane 
+	{ 
+		float a, b, c, d; 
+		void normalize() 
+		{
+			float d = sqrtf(a * a + b * b + c * c);
+			a = a / d; b = b / d; c = c / d; d = d / d;
+		}
+	} ;
 public:
 	Frustum();
 	Frustum(const Frustum& other);
