@@ -14,11 +14,11 @@ void MaterialManager::Clear()
 	for (int i = 0; i < textureList.size(); i++)
 		tempTextureList[i] = textureList[i]->textureID;
 
-	for (int i = 0; i < materialList.size(); i++)
-		delete materialList[i];
+	for (Material* material : materialList)
+		delete material;
 
-	for (int i = 0; i < textureList.size(); i++)
-		delete textureList[i];
+	for (Texture* texture : textureList)
+		delete texture;
 
 	glDeleteTextures(textureList.size(), tempTextureList);
 

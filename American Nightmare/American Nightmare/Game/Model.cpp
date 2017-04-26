@@ -182,13 +182,11 @@ void Model::BuildQuadTexture()
 	// Enable both vertex posiiton & color
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 
 	// Setting the location and size of the attributes
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(VertexUV), 0);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(VertexUV), (unsigned char*)(3 * sizeof(float)));
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(2, 3, GL_FLOAT, false, sizeof(VertexUV), (unsigned char*)(5 * sizeof(float)));
 
 	// Binding the index buffer and putting in data
@@ -296,15 +294,15 @@ void Model::Stop()
 	glBindVertexArray(vertexArray);
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
 
 	// Deleteing buffers
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDeleteBuffers(1, &vertexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 	glDeleteBuffers(1, &indexBuffer);
 
 	// Deleting vertex array
-	glBindVertexArray(vertexArray);
+	glBindVertexArray(0);
 	glDeleteVertexArrays(1, &vertexArray);
 }
 

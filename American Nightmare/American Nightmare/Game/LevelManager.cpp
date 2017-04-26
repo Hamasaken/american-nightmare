@@ -46,6 +46,7 @@ void LevelManager::Stop()
 	// Unloads the map objects
 	StopMap();
 	lightManager->Clear();
+	materialManager.Clear();
 	delete lightManager;
 }
 

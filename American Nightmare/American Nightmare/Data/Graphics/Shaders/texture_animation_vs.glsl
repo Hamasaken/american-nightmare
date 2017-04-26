@@ -1,9 +1,9 @@
 #version 430
 
 // Input
-in vec3 inputPosition;
-in vec2 inputTextureUV;
-in vec3 inputNormal;
+layout(location = 0) in vec3 inputPosition;
+layout(location = 1) in vec2 inputTextureUV;
+layout(location = 2) in vec3 inputNormal;
 
 // Output
 out vec2 textureUV;
@@ -54,6 +54,9 @@ void main(void)
 
 	// Setting vertex position according to matrices
 	position = vec3(world * vec4(inputPosition, 1.f));
-	normalw = vec3(world * vec4(inputNormal, 1.f));
+	//normalw = vec3(world * vec4(inputNormal, 0.f));
+	normalw = mat3(transpose(inverse(world))) * inputNormal;
+	//normalw = inputNormal;
+
 	gl_Position = projection * view * world * vec4(inputPosition, 1.f);
 }

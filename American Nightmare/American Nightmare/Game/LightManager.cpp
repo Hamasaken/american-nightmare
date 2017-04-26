@@ -8,15 +8,11 @@ LightManager::~LightManager() { Clear(); }
 
 void LightManager::Clear()
 {
-	for (int i = 0; i < pointLightList.size(); i++)
-	{
-		delete pointLightList[i];
-	}
+	for (PointLight* pointLight : pointLightList)
+		delete pointLight;
 
-	for (int i = 0; i < directionalLightList.size(); i++)
-	{
-		delete directionalLightList[i];
-	}
+	for (DirectionalLight* directionalLight : directionalLightList)
+		delete directionalLight;
 
 	pointLightList.clear();
 	directionalLightList.clear();
