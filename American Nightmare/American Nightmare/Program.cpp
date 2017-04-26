@@ -94,6 +94,7 @@ void Program::StartSDLWindow()
 	glEnable(GL_DEPTH_TEST);						// Enable Depth test
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+	//glEnable(GL_FRAMEBUFFER_SRGB);				// Gamma correction
 }
 
 void Program::Stop()

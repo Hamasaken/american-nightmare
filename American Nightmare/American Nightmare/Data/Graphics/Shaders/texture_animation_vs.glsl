@@ -54,9 +54,7 @@ void main(void)
 
 	// Setting vertex position according to matrices
 	position = vec3(world * vec4(inputPosition, 1.f));
-	//normalw = vec3(world * vec4(inputNormal, 0.f));
-	normalw = mat3(transpose(inverse(world))) * inputNormal;
-	//normalw = inputNormal;
-
+	normalw = vec3(world * vec4(inputNormal, 0.f));
+	//normalw = mat3(transpose(inverse(world))) * inputNormal;
 	gl_Position = projection * view * world * vec4(inputPosition, 1.f);
 }

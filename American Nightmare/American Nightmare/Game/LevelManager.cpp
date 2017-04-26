@@ -103,7 +103,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	else
 	{
 		map[0]->Start(modelPath + "model.m", tempMaterial);
-		map[0]->setScale(glm::vec3(8, 5, 3));
+		map[0]->setScale(glm::vec3(8, 5, 1));
 		map[0]->setRotation(glm::vec3(0, 0, 40));
 		map[0]->setPosition(glm::vec3(-2, 0, -10));
 	}
@@ -114,7 +114,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	else
 	{
 		map[1]->Start(modelPath + "model.m", tempMaterial);
-		map[1]->setScale(glm::vec3(60, 100, 0));;
+		map[1]->setScale(glm::vec3(60, 100, 1));;
 		map[1]->setPosition(glm::vec3(0, -2, 0));
 		map[1]->setRotation(glm::vec3(0.f, -90, 0.f));
 	}
@@ -125,7 +125,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	else
 	{
 		map[2]->Start(modelPath + "model.m", tempMaterial);
-		map[2]->setScale(glm::vec3(60, 15, 0));;
+		map[2]->setScale(glm::vec3(60, 15, 1));;
 		map[2]->setPosition(glm::vec3(0, 13, -10));
 		map[2]->setRotation(glm::vec3(0.f, 0.f, 0.f));
 	}
@@ -138,7 +138,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 		map[3]->Start(modelPath + "model.m", tempMaterial);
 		map[3]->setPosition(glm::vec3(-20, 5, 15));
 		map[3]->setRotation(glm::vec3(0.f, 0.f, 0.f));
-		map[3]->setScale(glm::vec3(0.5, 0.5, 0.5));
+		map[3]->setScale(glm::vec3(0.5, 0.5, 1));
 	}
 
 	tempMaterial = materialManager.getMaterial("lightmaterial");
@@ -149,7 +149,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 		map[4]->Start(modelPath + "model.m", tempMaterial);
 		map[4]->setPosition(glm::vec3(20, 5, 15));
 		map[4]->setRotation(glm::vec3(0.f, 0.f, 0.f));
-		map[4]->setScale(glm::vec3(0.5, 0.5, 0.5));
+		map[4]->setScale(glm::vec3(0.5, 0.5, 1));
 	}
 
 	// Temp lights

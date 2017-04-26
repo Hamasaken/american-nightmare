@@ -77,7 +77,7 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 	object->Draw();
 }
 
-void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, LightManager::PointLight* light)
+void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList)
 {
 	// Getting matrices
 	glm::mat4 world = worldMatrix;
@@ -113,10 +113,19 @@ void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderMa
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "normal"), 1);
 
 	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "viewPos"), camera->getPosition().x, camera->getPosition().y, camera->getPosition().z, 1.f);
-	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "lightPos"), light->position.x, light->position.y, light->position.z, light->position.w);
-	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "lightDiffuse"), light->diffuse.x, light->diffuse.y, light->diffuse.z, light->diffuse.w);
-	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "lightSpecular"), light->specular.x, light->specular.y, light->specular.z, light->specular.w);
+	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "nrOfLights"), pointLightList.size());
 
+	for (int i = 0; i < pointLightList.size(); i++)
+	{
+		std::string index = std::to_string(i);
+		glUniform4f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].position").c_str()), pointLightList[i]->position.x, pointLightList[i]->position.y, pointLightList[i]->position.z, pointLightList[i]->position.w);
+		glUniform4f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].diffuse").c_str()), pointLightList[i]->diffuse.x, pointLightList[i]->diffuse.y, pointLightList[i]->diffuse.z, pointLightList[i]->diffuse.w);
+		glUniform4f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].specular").c_str()), pointLightList[i]->specular.x, pointLightList[i]->specular.y, pointLightList[i]->specular.z, pointLightList[i]->specular.w);
+		glUniform1f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].constant").c_str()), pointLightList[i]->constant);
+		glUniform1f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].linear").c_str()), pointLightList[i]->linear);
+		glUniform1f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].quadratic").c_str()), pointLightList[i]->quadratic);
+	}
+	
 	// Drawing object
 	animatedObj->Draw();
 }
