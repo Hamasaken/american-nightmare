@@ -5,6 +5,7 @@
 #include "SFML\Graphics.hpp"
 #include "MaterialManager.h"
 #include "Model.h"
+#include "Box2D.h"
 
 class Object
 {

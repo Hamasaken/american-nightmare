@@ -24,6 +24,8 @@ public:
 	////////////////////////////////////////////////////////////
 	bool Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, std::string textureName, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f));
 
+	void Stop();
+
 	////////////////////////////////////////////////////////////
 	// \brief Starts text on the button
 	// \param fontName Full path to the font file

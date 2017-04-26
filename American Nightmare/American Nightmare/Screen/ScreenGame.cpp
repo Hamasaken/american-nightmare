@@ -64,7 +64,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, SoundManager* soundManager)
 void ScreenGame::SetStartVariables()
 {
 	// Backing the camera a little bit backwards
-	camera->setPosition(glm::vec3(0, 0, 40));
+	camera->setPosition(glm::vec3(0, 0, 15));
 
 	// Making wall & floor bigger
 	levelManager->LoadLevel(shaderManager->getShader("deferred"), "0.lvl");

@@ -21,17 +21,8 @@ bool Object::Start(std::string modelName, const MaterialManager::Material* mater
 	model = new Model();
 	if (model == nullptr) return false;
 	if (!model->Start(modelName)) return false;
-	
-	// Creating texture
-//	texture = new Texture();
-//	if (texture == nullptr) return false;
-//	if (!texture->Start(textureName)) return false;
 
 	this->material = material;
-
-	// TEMPORARY
-	//model->BuildTriangle(openGL);
-	//model->BuildQuad(openGL);
 	model->BuildQuadTexture();
 
 	return true;

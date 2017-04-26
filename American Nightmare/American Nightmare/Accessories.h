@@ -29,6 +29,9 @@
 #define SFX_PATH "Data/Sound/SFX/"
 #define MUSIC_PATH "Data/Sound/Music/"
 
+// Global variables
+#define GRAVITY 9.82f
+
 // Functions
 float randBetweenF(float low, float high);
 glm::vec3 fromScreenToWorld(glm::vec2 position, glm::vec2 screenSize, glm::mat4 view, glm::mat4 projection);

@@ -8,6 +8,7 @@ LevelManager::~LevelManager() { }
 
 bool LevelManager::Start(GLuint playerShader)
 {
+	world = new b2World(b2Vec2(NULL, GRAVITY));
 	lightManager = new LightManager();
 
 	std::string modelPath = MODEL_PATH;
@@ -23,15 +24,13 @@ bool LevelManager::Start(GLuint playerShader)
 
 	const MaterialManager::Material* playerMaterial = materialManager.getMaterial("playermaterial");
 
-	if (!player->Start(modelPath + "model.m", playerMaterial))
+	if (!player->Start(modelPath + "model.m", playerMaterial, world))
 		return false;
 	player->setShader(playerShader);
 	player->AddAnimation(playerMaterial, materialManager.getTextureID(tempNomralMapIndex), animationPath + "testanimationnormalmap.txt");
-
 	// Backing the player up a little to the screen
-	player->setPosition(glm::vec3(0, 0, 10.f));
-	player->setScale(glm::vec3(4, 4, 4));
-
+	player->setPosition(glm::vec3(0.f, 0.f, 0.f));
+	
 	return true;
 }
 
@@ -85,72 +84,81 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	std::string modelPath = MODEL_PATH;
 	std::string texturePath = TEXTURE_PATH;
 
-	// TEMPORARY 
-	for (int i = 0; i < 5; i++)
-	{
-		map.push_back(new Object());
-		map[i]->setShader(shader);
-	}
-
-	materialManager.AddMaterial("lightmaterial", glm::vec3(0.1f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
+	// Loading in materials
+	materialManager.AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
 	materialManager.AddMaterial("groundmaterial", glm::vec3(0.1f), 1.f, "groundtexture", texturePath + "temp_ground.jpg");
 	materialManager.AddMaterial("backgroundmaterial", glm::vec3(0.1f), 1.f, "backgroundtexture", texturePath + "temp_background.jpg");
+	if (materialManager.getMaterial("lightmaterial") == nullptr) printf("Material not found\n");
+	if (materialManager.getMaterial("groundmaterial") == nullptr) printf("Material not found\n");
+	if (materialManager.getMaterial("backgroundmaterial") == nullptr) printf("Material not found\n");
 
-	// TEMPORARY SHOWCASE MAP
-	const MaterialManager::Material* tempMaterial = materialManager.getMaterial("lightmaterial");
-	if (tempMaterial == nullptr)
-		printf("Material not found\n");
-	else
+	// Dammsugare in the middle of the screen
+	Entity* box = new Entity();
+	box->setShader(shader);
+	box->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(-10, 0), glm::vec2(8.f, 5.f), b2_staticBody);
+	box->setScale(glm::vec3(8, 5, 3));
+	map.push_back(box);
+
+	// Creating platforms
+
+	// Ground platform
+	Entity* platform = new Entity();
+	platform->setShader(shader);
+	platform->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"), world, glm::vec2(0, 0), glm::vec2(40.f, 1.f), b2_staticBody);
+	platform->setScale(glm::vec3(40, 1, 1));
+	map.push_back(platform);
+
+	// Above platform
+	platform = new Entity();
+	platform->setShader(shader);
+	platform->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"), world, glm::vec2(20, -7.5f), glm::vec2(10.f, 1.f), b2_staticBody);
+	platform->setScale(glm::vec3(10, 1, 1));
+	map.push_back(platform);
+
+	// Right wall
+	platform = new Entity();
+	platform->setShader(shader);
+	platform->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"), world, glm::vec2(40, -20), glm::vec2(1.f, 20.f), b2_staticBody);
+	platform->setScale(glm::vec3(1, 20, 1));
+	map.push_back(platform);
+
+	// Left wall
+	platform = new Entity();
+	platform->setShader(shader);
+	platform->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"), world, glm::vec2(-40, -20), glm::vec2(1.f, 20.f), b2_staticBody);
+	platform->setScale(glm::vec3(1, 20, 1));
+	map.push_back(platform);
+
+	// Background
+	Object* background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager.getMaterial("backgroundmaterial"));
+	background->setScale(glm::vec3(40, 20, 1));
+	background->setPosition(glm::vec3(0, 20, -1));
+	map.push_back(background);
+
+	// Making some boxes to move around
+	for (int i = 0; i < 100; i++)
 	{
-		map[0]->Start(modelPath + "model.m", tempMaterial);
-		map[0]->setScale(glm::vec3(8, 5, 1));
-		map[0]->setRotation(glm::vec3(0, 0, 40));
-		map[0]->setPosition(glm::vec3(-2, 0, -10));
+		Entity* moveble = new Entity();
+		moveble->setShader(shader);
+		moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
+		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
+		map.push_back(moveble);
 	}
 
-	tempMaterial = materialManager.getMaterial("groundmaterial");
-	if (tempMaterial == nullptr)
-		printf("Material not found\n");
-	else
-	{
-		map[1]->Start(modelPath + "model.m", tempMaterial);
-		map[1]->setScale(glm::vec3(60, 100, 1));;
-		map[1]->setPosition(glm::vec3(0, -2, 0));
-		map[1]->setRotation(glm::vec3(0.f, -90, 0.f));
-	}
+	// Texture on lights for testing
+	Object* light = new Object();
+	light->setShader(shader);
+	light->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"));
+	light->setPosition(glm::vec3(-20, 5, 15));
+	map.push_back(light);
 
-	tempMaterial = materialManager.getMaterial("backgroundmaterial");
-	if (tempMaterial == nullptr)
-		printf("Material not found\n");
-	else
-	{
-		map[2]->Start(modelPath + "model.m", tempMaterial);
-		map[2]->setScale(glm::vec3(60, 15, 1));;
-		map[2]->setPosition(glm::vec3(0, 13, -10));
-		map[2]->setRotation(glm::vec3(0.f, 0.f, 0.f));
-	}
-
-	tempMaterial = materialManager.getMaterial("lightmaterial");
-	if (tempMaterial == nullptr)
-		printf("Material not found\n");
-	else
-	{
-		map[3]->Start(modelPath + "model.m", tempMaterial);
-		map[3]->setPosition(glm::vec3(-20, 5, 15));
-		map[3]->setRotation(glm::vec3(0.f, 0.f, 0.f));
-		map[3]->setScale(glm::vec3(0.5, 0.5, 1));
-	}
-
-	tempMaterial = materialManager.getMaterial("lightmaterial");
-	if (tempMaterial == nullptr)
-		printf("Material not found\n");
-	else
-	{
-		map[4]->Start(modelPath + "model.m", tempMaterial);
-		map[4]->setPosition(glm::vec3(20, 5, 15));
-		map[4]->setRotation(glm::vec3(0.f, 0.f, 0.f));
-		map[4]->setScale(glm::vec3(0.5, 0.5, 1));
-	}
+	light = new Object();
+	light->setShader(shader);
+	light->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"));
+	light->setPosition(glm::vec3(20, 5, 15));
+	map.push_back(light);
 
 	// Temp lights
 	lightManager->AddPointLight(glm::vec4(-20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
@@ -159,6 +167,9 @@ void LevelManager::LoadTempLevel(GLuint shader)
 
 void LevelManager::Update(GLint deltaT)
 {
+	// Updating physics
+	world->Step(1 / 30.f, 3, 3);
+
 	// Updating player
 	player->Update(deltaT);
 
