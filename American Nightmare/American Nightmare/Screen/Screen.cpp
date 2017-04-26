@@ -32,7 +32,7 @@ bool Screen::Start(glm::vec2 screenSize, SoundManager* soundManager)
 	worldMatrix = glm::mat4(1.f);
 
 	// Building a projection matrix
-	float fov = glm::pi<float>() / 0.40f;
+	float fov = glm::radians(80.f);
 	projectionMatrix = glm::perspective(fov, screenSize.x / screenSize.y, 0.1f, 50.f);
 
 	// Creating Camera Object

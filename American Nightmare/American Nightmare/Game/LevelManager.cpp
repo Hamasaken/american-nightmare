@@ -128,12 +128,39 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	platform->setScale(glm::vec3(1, 20, 1));
 	map.push_back(platform);
 
-	// Foreground & Background
+	// Background
 	Object* background = new Object();
 	background->setShader(shader);
 	background->Start(modelPath + "model.m", materialManager.getMaterial("backgroundmaterial"));
 	background->setScale(glm::vec3(40, 20, 1));
 	background->setPosition(glm::vec3(0, 20, -10));
+	map.push_back(background);
+
+	// Ground
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"));
+	background->setScale(glm::vec3(40, 20, 1));
+	background->setPosition(glm::vec3(0, 1, 0));
+	background->setRotation(glm::vec3(1.5 * 3.14, 0, 0));
+	map.push_back(background);
+
+	// Right wall
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager.getMaterial("backgroundmaterial"));
+	background->setScale(glm::vec3(40, 20, 1));
+	background->setPosition(glm::vec3(39, 20, 0));
+	background->setRotation(glm::vec3(0, 1.5 * 3.14, 0));
+	map.push_back(background);
+
+	// Left wall
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager.getMaterial("backgroundmaterial"));
+	background->setScale(glm::vec3(40, 20, 1));
+	background->setPosition(glm::vec3(-39, 20, 0));
+	background->setRotation(glm::vec3(0, -1.5 * 3.14, 0));
 	map.push_back(background);
 
 	// Making some boxes to move around

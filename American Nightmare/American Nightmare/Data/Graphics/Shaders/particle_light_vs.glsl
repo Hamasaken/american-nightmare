@@ -23,7 +23,5 @@ void main(void)
 	vertex.position = vec3(world * vec4(inputPosition, 1.f));
 
 	// Setting vertex position according to matrices
-	gl_Position = world * vec4(inputPosition, 1.f);
-	gl_Position = view * gl_Position;
-	gl_Position = projection * gl_Position;
+	gl_Position = projection * view * world * vec4(inputPosition, 1.f);
 }
