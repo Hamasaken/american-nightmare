@@ -1,6 +1,6 @@
 #include "Animation.h"
 
-Animation::Animation() : Object()
+Animation::Animation() : Entity()
 {
 	currentAnimation = nullptr;
 	currentFrameUV.uvTopLeft = glm::vec2();
