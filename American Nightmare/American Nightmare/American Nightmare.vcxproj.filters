@@ -206,6 +206,9 @@
     <ClInclude Include="Game\QuadTree.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Graphics\Shaders\solid_fs.glsl">
