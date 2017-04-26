@@ -8,16 +8,13 @@ Runnable .exe Release Version 18/4
 OpenGL version 4.4: 
 OpenGL version 3.0: https://www.dropbox.com/s/zbvh3bl5fkkzouh/American%20Nightmare.zip?dl=0
 
-Box2D libs (temp)
-https://dropfile.to/fQrbNA4
-https://dropfile.to/jGkPgj2
-typPffS
-5rv36x4
-
-
 External (Libaries & Includes)
 
 Put in: "Source\Repos\american-nightmare\American Nightmare\"
+
+26/4-17 External
+
+https://www.dropbox.com/s/xd9wf9wt9vb6tyj/External%2026-4-17.zip?dl=0
 
 21/4-17 External
 
