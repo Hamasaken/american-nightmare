@@ -165,11 +165,16 @@ void LevelManager::LoadTempLevel(GLuint shader)
 
 void LevelManager::Update(GLint deltaT)
 {
-	// Updating physics
-	world->Step(1 / 30.f, 3, 3);
-
 	// Updating player
 	player->Update(deltaT);
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+		player->getHitbox()->AddBodyToWorld(world, glm::vec2(player->getPosition().x, player->getPosition().y), b2_dynamicBody, false);
+		player->getHitbox()->ModifyShape(glm::vec2(player->getScale().x, player->getScale().y), b2Shape::e_polygon, 60.f, 0.f);
+	}
+
+	// Updating physics
+	world->Step(1 / 30.f, 1, 1);
 
 	// Updating every object on map
 	for (Object* object : map)

@@ -49,12 +49,14 @@ public:
 	////////////////////////////////////////////////////////////
 	void ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density, float friction);
 
+
 	// Gets & Sets
 	b2Body* getBody();
 	glm::vec2 getPosition();
 
 protected:
 	b2Body* body;			//< The body object inside world
+	b2Fixture* fixture;
 };
 
 #endif // !HITBOX_H

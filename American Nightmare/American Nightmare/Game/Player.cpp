@@ -12,7 +12,7 @@ bool Player::Start(std::string modelName, const MaterialManager::Material* mater
 	Entity::Start(modelName, material, world, glm::vec2(0, -20), glm::vec2(PLAYER_SIZE_X, PLAYER_SIZE_Y), b2_dynamicBody, b2Shape::e_polygon, PLAYER_DENSITY, PLAYER_FRICTION);
 
 	// Setting starting variables
-	position = glm::vec3(0, 0, 0);
+	position = glm::vec3(0, 20, 0);
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_SIZE_Z);
 

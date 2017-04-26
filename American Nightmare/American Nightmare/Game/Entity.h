@@ -12,6 +12,9 @@ public:
 
 	void Stop();
 	void Update(GLint deltaT);
+	void setScale(glm::vec3 scale);
+	Hitbox* getHitbox();
+
 protected:
 	Hitbox* hitbox;
 };

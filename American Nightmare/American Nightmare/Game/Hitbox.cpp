@@ -3,6 +3,7 @@
 Hitbox::Hitbox()
 {
 	body = nullptr;
+	fixture = nullptr;
 }
 
 Hitbox::Hitbox(const Hitbox & other) { }
@@ -49,7 +50,12 @@ void Hitbox::Stop()
 void Hitbox::AddBodyToWorld(b2World* world, glm::vec2 position, b2BodyType type, bool isBullet)
 {
 	// Creating a new body and deleting old if needed
-	if (body != nullptr) body->Dump();
+	if (body != nullptr)
+	{
+		if (fixture != nullptr)
+			body->DestroyFixture(fixture);
+		body->Dump();
+	}
 
 	// Adding body to the world object
 	b2BodyDef bodyDef;
@@ -67,14 +73,14 @@ void Hitbox::ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density,
 	b2PolygonShape shape;
 	shape.m_type = shapeType;
 	shape.SetAsBox(size.x, size.y); // half the total size here
-
+	
 	// Creating the fixture
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	fixture.density = density;		// in kg/m^2
-	fixture.friction = friction;	// friction [0:1]
-	fixture.restitution = 0;		// bouncy ball [0:1]
-	body->CreateFixture(&fixture);
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &shape;
+	fixtureDef.density = density;		// in kg/m^2
+	fixtureDef.friction = friction;	// friction [0:1]
+	fixtureDef.restitution = 0;		// bouncy ball [0:1]
+	fixture = body->CreateFixture(&fixtureDef);
 }
 
 b2Body * Hitbox::getBody()
