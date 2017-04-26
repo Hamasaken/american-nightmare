@@ -99,9 +99,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	box->setScale(glm::vec3(8, 5, 3));
 	map.push_back(box);
 
-	// Creating platforms
-
-	// Ground platform
+	// Creating Hitbox platforms
 	Entity* platform = new Entity();
 	platform->setShader(shader);
 	platform->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"), world, glm::vec2(0, 0), glm::vec2(40.f, 1.f), b2_staticBody);
@@ -129,12 +127,12 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	platform->setScale(glm::vec3(1, 20, 1));
 	map.push_back(platform);
 
-	// Background
+	// Foreground & Background
 	Object* background = new Object();
 	background->setShader(shader);
 	background->Start(modelPath + "model.m", materialManager.getMaterial("backgroundmaterial"));
 	background->setScale(glm::vec3(40, 20, 1));
-	background->setPosition(glm::vec3(0, 20, -1));
+	background->setPosition(glm::vec3(0, 20, -10));
 	map.push_back(background);
 
 	// Making some boxes to move around
