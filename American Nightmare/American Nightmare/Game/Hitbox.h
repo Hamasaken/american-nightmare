@@ -22,10 +22,12 @@ public:
 	// \param position The starting position of the hitbox
 	// \param size The full size of the hitbox
 	// \param type Dynamic/Static/Other bodytype
+	// \optional fixedRotate If the hitbox can rotate or not
+	// \optional isBullet I don't what it does yet, sorry, glhf
 	// \optional density Density of shape, defaults as 0.f
 	// \optional friction Friction of the shape, defaults as 10.f
 	////////////////////////////////////////////////////////////
-	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, float density = 1000.f, float friction = 1.f, bool isBullet = false);
+	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, bool fixedRotate = true, float density = 1000.f, float friction = 1.f, bool isBullet = false);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads body from world
@@ -38,7 +40,7 @@ public:
 	// \param type The Body type (static,dynamic,kin.)
 	// \param isBullet If the body is a bullet or not
 	////////////////////////////////////////////////////////////
-	void AddBodyToWorld(b2World* world, glm::vec2 position, b2BodyType type, bool isBullet);
+	void AddBodyToWorld(b2World* world, glm::vec2 position, b2BodyType type, bool fixedRotate, bool isBullet);
 
 	////////////////////////////////////////////////////////////
 	// \brief Creates a shape object and sends it into body

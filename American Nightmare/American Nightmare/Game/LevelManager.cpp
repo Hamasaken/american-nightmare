@@ -9,6 +9,7 @@ LevelManager::~LevelManager() { }
 bool LevelManager::Start(GLuint playerShader)
 {
 	world = new b2World(b2Vec2(NULL, GRAVITY));
+	world->SetAllowSleeping(true);
 	lightManager = new LightManager();
 
 	std::string modelPath = MODEL_PATH;
@@ -140,7 +141,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	{
 		Entity* moveble = new Entity();
 		moveble->setShader(shader);
-		moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
+		moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, -(rand() % 40)), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
 		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
 		map.push_back(moveble);
 	}
@@ -167,11 +168,6 @@ void LevelManager::Update(GLint deltaT)
 {
 	// Updating player
 	player->Update(deltaT);
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
-		player->getHitbox()->AddBodyToWorld(world, glm::vec2(player->getPosition().x, player->getPosition().y), b2_dynamicBody, false);
-		player->getHitbox()->ModifyShape(glm::vec2(player->getScale().x, player->getScale().y), b2Shape::e_polygon, 60.f, 0.f);
-	}
 
 	// Updating physics
 	world->Step(1 / 30.f, 1, 1);
