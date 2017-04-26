@@ -7,6 +7,7 @@ layout(location = 1) in vec4 inputColor;
 // Output
 out vData
 {
+	vec3 position;
     vec4 color;
 }vertex;
 
@@ -19,6 +20,7 @@ void main(void)
 {
 	// Setting color
 	vertex.color = inputColor;
+	vertex.position = vec3(world * vec4(inputPosition, 1.f));
 
 	// Setting vertex position according to matrices
 	gl_Position = world * vec4(inputPosition, 1.f);
