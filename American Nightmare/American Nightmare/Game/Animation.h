@@ -1,12 +1,12 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-#include "Object.h"
+#include "Entity.h"
 #include <fstream>
 #include <sstream>
 #include <vector>
 
-class Animation : public Object
+class Animation : public Entity
 {
 public:
 	Animation();

@@ -161,9 +161,11 @@
     <ClCompile Include="Accessories.cpp" />
     <ClCompile Include="Game\Animation.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
+    <ClCompile Include="Game\Entity.cpp" />
     <ClCompile Include="Game\Frustum.cpp" />
     <ClCompile Include="Game\GUI\Button.cpp" />
     <ClCompile Include="Game\GUI\Text.cpp" />
+    <ClCompile Include="Game\Hitbox.cpp" />
     <ClCompile Include="Game\LevelManager.cpp" />
     <ClCompile Include="Game\LightManager.cpp" />
     <ClCompile Include="Game\Model.cpp" />
@@ -189,9 +191,11 @@
     <ClInclude Include="Accessories.h" />
     <ClInclude Include="Game\Animation.h" />
     <ClInclude Include="Game\Camera.h" />
+    <ClInclude Include="Game\Entity.h" />
     <ClInclude Include="Game\Frustum.h" />
     <ClInclude Include="Game\GUI\Button.h" />
     <ClInclude Include="Game\GUI\Text.h" />
+    <ClInclude Include="Game\Hitbox.h" />
     <ClInclude Include="Game\LevelManager.h" />
     <ClInclude Include="Game\LightManager.h" />
     <ClInclude Include="Game\Model.h" />

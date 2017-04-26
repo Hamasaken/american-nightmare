@@ -59,13 +59,7 @@ private:
 
 	LightManager* lightManager;
 	MaterialManager materialManager;
-
-
-	b2Vec2 Gravity = { 0.f, 9.82f };
 	b2World *world;
-
-
 };
-
 
 #endif  !LEVELMANAGER_H
