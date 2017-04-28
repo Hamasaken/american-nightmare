@@ -12,7 +12,7 @@ private:
 	std::string modelPath;
 	std::string texturePath;
 
-	sf::Mouse myMouse;
+	bool isPressed;
 
 	MaterialManager materialManager;
 public:
@@ -22,10 +22,8 @@ public:
 	void fireBullet(b2World* world, glm::vec2 position);
 	b2Vec2 normalize(const b2Vec2& source);
 
-	void Update(GLint deltaT);
+	void Update(GLint deltaT, b2World* world, glm::vec2 position);
 };
-
-
 
 #endif // !PROJECTILE_H
 

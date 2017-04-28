@@ -159,11 +159,11 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	//	moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
 	//	map.push_back(moveble);
 	//}
-
+	//
 	//A Projectile
 	//for (int i = 0; i < 100; i++)
 	//{
-		shoot(shader, modelPath);
+		//shoot(shader, modelPath);
 	//}
 
 	// Texture on lights for testing
@@ -186,8 +186,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	lightManager->AddPointLight(glm::vec4(-10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 	lightManager->AddPointLight(glm::vec4(+10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 
-	
-	//myProjectile = new Projectile(world);
+	myProjectile = new Projectile(world, shader);
 }
 
 void LevelManager::Update(GLint deltaT)
@@ -199,11 +198,8 @@ void LevelManager::Update(GLint deltaT)
 	player->Update(deltaT);
 
 	//Update Projectile
-	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-	{
-		moveble->fireBullet(world, player->getPlayerPosAsGLM());
-	}
+	myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
+	
 	//moveble->Update(deltaT);
 
 	enemy->Update(deltaT, player->getBody()->GetPosition());
@@ -222,15 +218,16 @@ std::vector<Object*> LevelManager::getMap()
 }
 
 
-void LevelManager::shoot(GLuint shader, std::string modelPath)
-{
-	moveble = new Projectile(world, shader);
-	//moveble->setShader(shader);
-	//moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
-	//moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
-	map.push_back(moveble);
-}
+//void LevelManager::shoot(GLuint shader, std::string modelPath)
+//{
+//	moveble = new Projectile(world, shader);
+//	//moveble->setShader(shader);
+//	//moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
+//	//moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
+//	map.push_back(moveble);
+//}
 
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
 Player* LevelManager::getPlayer() { return player; }
 Enemy* LevelManager::getEnemy() { return enemy; }
+Projectile* LevelManager::getProjectile() { return myProjectile; }

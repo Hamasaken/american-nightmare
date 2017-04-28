@@ -75,8 +75,8 @@ private:
 	MaterialManager materialManager;
 	b2World *world;
 
-	//Projectile* myProjectile;
-	Projectile* moveble;
+	Projectile* myProjectile;
+	//Projectile* moveble;
 };
 
 #endif  !LEVELMANAGER_H
