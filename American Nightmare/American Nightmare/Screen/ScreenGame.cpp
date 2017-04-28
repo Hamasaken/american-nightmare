@@ -156,6 +156,8 @@ void ScreenGame::Stop()
 		levelManager = nullptr;
 	}
 
+	drRendering.Stop();
+
 	// Removes Camera & openGL ptr
 	Screen::Stop();
 }
