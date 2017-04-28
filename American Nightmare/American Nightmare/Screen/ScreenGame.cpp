@@ -121,6 +121,11 @@ void ScreenGame::Draw()
 		DrawObjectAnimation(levelManager->getPlayer(), shaderManager, light);
 	//DrawObjectAnimation(player, shaderManager, levelManager->getLightManager()->getPointLightList()[0]);
 
+
+	// Draw Enemy
+	for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
+		DrawObjectAnimation(levelManager->getEnemy(), shaderManager, light);
+
 	// Drawing vertices
 	shaderManager->setShader(particleManager->getShader());
 	shaderManager->SetParameters(worldMatrix, camera->getViewMatrix(), projectionMatrix);

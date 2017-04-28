@@ -28,6 +28,8 @@ public:
 	// \brief Gets input from user and moves accordingly
 	////////////////////////////////////////////////////////////
 	void Movement();
+	
+	b2Body* getBody();
 };
 
 #endif // !PLAYER_H
