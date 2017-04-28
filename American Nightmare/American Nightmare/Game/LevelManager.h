@@ -5,6 +5,7 @@
 #include "LightManager.h"
 #include <vector>
 #include "Box2D.h"
+#include "../Enemy.h"
 
 class LevelManager
 {
@@ -52,6 +53,7 @@ public:
 
 	const LightManager* getLightManager() const;
 	Player* getPlayer();
+	Enemy* getEnemy();
 
 
 
@@ -64,6 +66,8 @@ public:
 private:
 	std::vector<Object*> map;	//< Vector with level specific objects
 	Player* player;				//< The player object
+
+	Enemy* enemy;				//< A Enemy object
 
 	LightManager* lightManager;
 	MaterialManager materialManager;

@@ -31,6 +31,20 @@ bool LevelManager::Start(GLuint playerShader)
 	// Backing the player up a little to the screen
 	player->setPosition(glm::vec3(0.f, 0.f, 0.f));
 	
+
+	// Making a Enemy
+	enemy = new Enemy();
+	if (enemy == nullptr) return false;
+
+	const MaterialManager::Material* enemyMaterial = materialManager.getMaterial("playermaterial");
+
+	if (!enemy->Start(modelPath + "model.m", playerMaterial, world))
+		return false;
+	enemy->setShader(playerShader);
+	enemy->AddAnimation(enemyMaterial, materialManager.getTextureID(tempNomralMapIndex), animationPath + "testanimationnormalmap.txt");
+	// Backing the player up a little to the screen
+	enemy->setPosition(glm::vec3(10.f, 0.f, 0.f));
+
 	return true;
 }
 
@@ -146,6 +160,8 @@ void LevelManager::LoadTempLevel(GLuint shader)
 		map.push_back(moveble);
 	}
 
+
+
 	// Texture on lights for testing
 	Object* light = new Object();
 	light->setShader(shader);
@@ -163,6 +179,8 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	lightManager->AddPointLight(glm::vec4(-20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
 	lightManager->AddPointLight(glm::vec4(+20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
 
+	lightManager->AddPointLight(glm::vec4(-10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
+	lightManager->AddPointLight(glm::vec4(+10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 }
 
 void LevelManager::Update(GLint deltaT)
@@ -172,6 +190,8 @@ void LevelManager::Update(GLint deltaT)
 
 	// Updating player
 	player->Update(deltaT);
+
+	enemy->Update(deltaT, player->getBody()->GetPosition());
 
 	// Updating every object on map
 	for (Object* object : map)
@@ -185,3 +205,4 @@ std::vector<Object*> LevelManager::getMap()
 
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
 Player* LevelManager::getPlayer() { return player; }
+Enemy* LevelManager::getEnemy() { return enemy; };
