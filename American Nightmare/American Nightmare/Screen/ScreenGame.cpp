@@ -135,8 +135,9 @@ void ScreenGame::Draw()
 	glEnable(GL_BLEND);
 
 	// DR: Light pass
-	for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
-		DrawObjectLightPass(&drRendering, shaderManager, light);
+	//for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
+		//DrawObjectLightPass(&drRendering, shaderManager, light);
+	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList());
 
 	// Drawing player
 	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList());
@@ -240,6 +241,8 @@ void ScreenGame::Stop()
 		delete levelManager;
 		levelManager = nullptr;
 	}
+
+	drRendering.Stop();
 
 	// Removes Camera & openGL ptr
 	Screen::Stop();
