@@ -219,7 +219,7 @@ void LevelManager::Update(GLint deltaT)
 	enemy->Update(deltaT, player->getBody()->GetPosition());
 
 	// Updating physics
-	world->Step(1 / 30.f, 1, 1);
+	world->Step(1 / 60.f, 3, 3);
 
 	// Updating every object on map
 	for (Object* object : map)
