@@ -164,7 +164,7 @@ bool Program::Update(GLint deltaT)
 	screenManager->Update(deltaT);
 
 	// Draw game
-	screenManager->Draw(window, glm::vec4(0.15f, 0.15f, 0.15f, 1.f));
+	screenManager->Draw(window, glm::vec4(0.f, 0.f, 0.f, 1.f));
 
 	return true;
 }

@@ -113,8 +113,9 @@ void ScreenGame::Draw()
 	glEnable(GL_BLEND);
 
 	// DR: Light pass
-	for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
-		DrawObjectLightPass(&drRendering, shaderManager, light);
+	//for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
+		//DrawObjectLightPass(&drRendering, shaderManager, light);
+	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList());
 
 	// Drawing player
 	//for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
