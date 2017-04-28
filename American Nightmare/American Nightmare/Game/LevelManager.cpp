@@ -99,7 +99,9 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	std::string modelPath = MODEL_PATH;
 	std::string texturePath = TEXTURE_PATH;
 
+	////////////////////////////////////////////////////////////
 	// Loading in materials
+	////////////////////////////////////////////////////////////
 	materialManager.AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
 	materialManager.AddMaterial("groundmaterial", glm::vec3(0.1f), 1.f, "groundtexture", texturePath + "temp_ground.jpg");
 	materialManager.AddMaterial("backgroundmaterial", glm::vec3(0.1f), 1.f, "backgroundtexture", texturePath + "temp_background.jpg");
@@ -107,40 +109,9 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	if (materialManager.getMaterial("groundmaterial") == nullptr) printf("Material not found\n");
 	if (materialManager.getMaterial("backgroundmaterial") == nullptr) printf("Material not found\n");
 
-	// Dammsugare in the middle of the screen
-	Entity* box = new Entity();
-	box->setShader(shader);
-	box->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(-10, 0), glm::vec2(8.f, 5.f), b2_staticBody);
-	box->setScale(glm::vec3(8, 5, 3));
-	map.push_back(box);
-
-	// Creating Hitbox platforms
-	Entity* platform = new Entity();
-	platform->setShader(shader);
-	platform->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"), world, glm::vec2(0, 0), glm::vec2(40.f, 1.f), b2_staticBody);
-	platform->setScale(glm::vec3(40, 1, 1));
-	map.push_back(platform);
-
-	// Above platform
-	platform = new Entity();
-	platform->setShader(shader);
-	platform->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"), world, glm::vec2(20, -7.5f), glm::vec2(10.f, 1.f), b2_staticBody);
-	platform->setScale(glm::vec3(10, 1, 1));
-	map.push_back(platform);
-
-	// Right wall
-	platform = new Entity();
-	platform->setShader(shader);
-	platform->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"), world, glm::vec2(40, -20), glm::vec2(1.f, 20.f), b2_staticBody);
-	platform->setScale(glm::vec3(1, 20, 1));
-	map.push_back(platform);
-
-	// Left wall
-	platform = new Entity();
-	platform->setShader(shader);
-	platform->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"), world, glm::vec2(-40, -20), glm::vec2(1.f, 20.f), b2_staticBody);
-	platform->setScale(glm::vec3(1, 20, 1));
-	map.push_back(platform);
+	////////////////////////////////////////////////////////////
+	// Map Visuals
+	////////////////////////////////////////////////////////////
 
 	// Background
 	Object* background = new Object();
@@ -177,7 +148,36 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	background->setRotation(glm::vec3(0, -1.5 * 3.14, 0));
 	map.push_back(background);
 
-	// Making some boxes to move around
+	// Left platform
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"));
+	background->setScale(glm::vec3(8, 5, 3));
+	background->setPosition(glm::vec3(-10, 0, 0));
+	map.push_back(background);
+
+
+	// Right platform cave
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"));
+	background->setScale(glm::vec3(10.f, 15.f, 1));
+	background->setPosition(glm::vec3(20, 6.5, 0));
+	background->setRotation(glm::vec3(-45, 0, 0));
+	map.push_back(background);
+
+	// Right platform cave
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"));
+	background->setScale(glm::vec3(10.f, 15.f, 1));
+	background->setPosition(glm::vec3(20, 8.5, 0));
+	background->setRotation(glm::vec3(-45, 0, 0));
+	map.push_back(background);
+
+	////////////////////////////////////////////////////////////
+	// Fun boxes
+	////////////////////////////////////////////////////////////
 	for (int i = 0; i < 100; i++)
 	{
 		Entity* moveble = new Entity();
@@ -187,9 +187,28 @@ void LevelManager::LoadTempLevel(GLuint shader)
 		map.push_back(moveble);
 	}
 
+	////////////////////////////////////////////////////////////
+	// Map Collision (Invisible)
+	////////////////////////////////////////////////////////////
+	Hitbox* hitbox = new Hitbox();
+	hitbox->InitializeHitbox(world, glm::vec2(0, 0), glm::vec2(40.f, 1), b2_staticBody);	 // ground
+	hitboxes.push_back(hitbox);
+	hitbox = new Hitbox();
+	hitbox->InitializeHitbox(world, glm::vec2(20, -7.5f), glm::vec2(10.f, 1), b2_staticBody);	// platform
+	hitboxes.push_back(hitbox);
+	hitbox = new Hitbox();
+	hitbox->InitializeHitbox(world, glm::vec2(-40, 0), glm::vec2(1.f, 20.f), b2_staticBody);	// left wall
+	hitboxes.push_back(hitbox);
+	hitbox = new Hitbox();
+	hitbox->InitializeHitbox(world, glm::vec2(40, 0), glm::vec2(1.f, 20.f), b2_staticBody);	// right wall
+	hitboxes.push_back(hitbox);
+	hitbox = new Hitbox();
+	hitbox->InitializeHitbox(world, glm::vec2(-10, 0), glm::vec2(8.f, 5.f), b2_staticBody);	// dammsugare
+	hitboxes.push_back(hitbox);
 
-
-	// Texture on lights for testing
+	////////////////////////////////////////////////////////////
+	// Lights
+	////////////////////////////////////////////////////////////
 	Object* light = new Object();
 	light->setShader(shader);
 	light->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"));
@@ -202,10 +221,8 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	light->setPosition(glm::vec3(20, 5, 15));
 	map.push_back(light);
 
-	// Temp lights
 	lightManager->AddPointLight(glm::vec4(-20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
 	lightManager->AddPointLight(glm::vec4(+20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
-
 	lightManager->AddPointLight(glm::vec4(-10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 	lightManager->AddPointLight(glm::vec4(+10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 }
