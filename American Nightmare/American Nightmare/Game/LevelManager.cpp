@@ -160,12 +160,9 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	map.push_back(light);
 
 	// Temp lights
-	//lightManager->AddPointLight(glm::vec4(-20, 5, 15, 1), glm::vec4(10, 10, 10, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
-	//lightManager->AddPointLight(glm::vec4(+20, 5, 15, 1), glm::vec4(11, 10, 10, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
+	lightManager->AddPointLight(glm::vec4(-20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
+	lightManager->AddPointLight(glm::vec4(+20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
 
-
-	lightManager->AddPointLight(glm::vec4(-10, 5, 15, 0), glm::vec4(10, 10, 10, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
-	lightManager->AddPointLight(glm::vec4(+10, 5, 15, 0), glm::vec4(10, 10, 10, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 }
 
 void LevelManager::Update(GLint deltaT)

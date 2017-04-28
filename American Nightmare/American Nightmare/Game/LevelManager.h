@@ -53,6 +53,14 @@ public:
 	const LightManager* getLightManager() const;
 	Player* getPlayer();
 
+
+
+	//////////////////////////////////////////////////////////////
+	// Shoot something
+	/////////////////////////////////////////////////////////////
+	
+
+
 private:
 	std::vector<Object*> map;	//< Vector with level specific objects
 	Player* player;				//< The player object

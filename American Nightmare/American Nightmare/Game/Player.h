@@ -24,6 +24,7 @@ public:
 	bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
 	void Update(GLint deltaT);
 
+	Entity myEntity;
 	////////////////////////////////////////////////////////////
 	// \brief Gets input from user and moves accordingly
 	////////////////////////////////////////////////////////////
