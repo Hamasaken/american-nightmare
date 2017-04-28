@@ -58,7 +58,6 @@ void Object::setPosition(glm::vec3 position) { this->position = position; }
 glm::vec3 Object::getPosition() const { return position; }
 void Object::setRotation(glm::vec3 rotation) { this->rotation = rotation; }
 glm::vec3 Object::getRotation() const { return rotation; }
-glm::vec3 Object::getRotationInRadians() const { return glm::vec3(rotation * (3.141592654f / 180.0f)); }
 void Object::setScale(glm::vec3 scale) { this->scale = scale; }
 glm::vec3 Object::getScale() const { return scale; }
 void Object::setShader(GLuint shader) { this->shader = shader; }

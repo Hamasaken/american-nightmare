@@ -9,6 +9,7 @@ LevelManager::~LevelManager() { }
 bool LevelManager::Start(GLuint playerShader)
 {
 	world = new b2World(b2Vec2(NULL, GRAVITY));
+	world->SetAllowSleeping(true);
 	lightManager = new LightManager();
 
 	std::string modelPath = MODEL_PATH;
@@ -60,6 +61,7 @@ void LevelManager::Stop()
 	// Unloads the map objects
 	StopMap();
 	lightManager->Clear();
+	materialManager.Clear();
 	delete lightManager;
 }
 
@@ -112,9 +114,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	box->setScale(glm::vec3(8, 5, 3));
 	map.push_back(box);
 
-	// Creating platforms
-
-	// Ground platform
+	// Creating Hitbox platforms
 	Entity* platform = new Entity();
 	platform->setShader(shader);
 	platform->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"), world, glm::vec2(0, 0), glm::vec2(40.f, 1.f), b2_staticBody);
@@ -147,7 +147,34 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	background->setShader(shader);
 	background->Start(modelPath + "model.m", materialManager.getMaterial("backgroundmaterial"));
 	background->setScale(glm::vec3(40, 20, 1));
-	background->setPosition(glm::vec3(0, 20, -1));
+	background->setPosition(glm::vec3(0, 20, -10));
+	map.push_back(background);
+
+	// Ground
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager.getMaterial("groundmaterial"));
+	background->setScale(glm::vec3(40, 20, 1));
+	background->setPosition(glm::vec3(0, 1, 0));
+	background->setRotation(glm::vec3(1.5 * 3.14, 0, 0));
+	map.push_back(background);
+
+	// Right wall
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager.getMaterial("backgroundmaterial"));
+	background->setScale(glm::vec3(40, 20, 1));
+	background->setPosition(glm::vec3(39, 20, 0));
+	background->setRotation(glm::vec3(0, 1.5 * 3.14, 0));
+	map.push_back(background);
+
+	// Left wall
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager.getMaterial("backgroundmaterial"));
+	background->setScale(glm::vec3(40, 20, 1));
+	background->setPosition(glm::vec3(-39, 20, 0));
+	background->setRotation(glm::vec3(0, -1.5 * 3.14, 0));
 	map.push_back(background);
 
 	// Making some boxes to move around
@@ -155,7 +182,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	{
 		Entity* moveble = new Entity();
 		moveble->setShader(shader);
-		moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
+		moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, -(rand() % 40)), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
 		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
 		map.push_back(moveble);
 	}
@@ -186,13 +213,13 @@ void LevelManager::LoadTempLevel(GLuint shader)
 
 void LevelManager::Update(GLint deltaT)
 {
-	// Updating physics
-	world->Step(1 / 30.f, 3, 3);
-
 	// Updating player
 	player->Update(deltaT);
 
 	enemy->Update(deltaT, player->getBody()->GetPosition());
+
+	// Updating physics
+	world->Step(1 / 30.f, 1, 1);
 
 	// Updating every object on map
 	for (Object* object : map)
