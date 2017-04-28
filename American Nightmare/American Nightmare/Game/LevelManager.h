@@ -16,9 +16,11 @@ public:
 
 	////////////////////////////////////////////////////////////
 	// \brief Starts class, gets the openGL ptr
+	// \param playerShader The specific shader for the player
+	// \param materialManager ptr to all the materials
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(GLuint playerShader);
+	bool Start(GLuint playerShader, MaterialManager* materialManager);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -66,7 +68,7 @@ private:
 	Enemy* enemy;				//< A Enemy object
 
 	LightManager* lightManager;
-	MaterialManager materialManager;
+	MaterialManager* materialManager;
 	b2World *world;
 };
 

@@ -1,19 +1,21 @@
 #include "Button.h"
 
-Button::Button() : Object() { }
+Button::Button() : Object() 
+{
+	text = nullptr;
+}
 
 Button::Button(const Button & other) { }
 
 Button::~Button() { }
 
-bool Button::Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, std::string textureName, glm::vec4 color)
+bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, glm::vec4 color)
 {
-	//Object::Start("", textureName);
+	Object::Start("", material);
 
-	// Setting starting variables and inserting parameters
-	this->position = fromScreenToWorld(position);
+	this->position = position;
 	this->rotation = glm::vec3(0, 0, 0);
-	this->scale = glm::vec3(1, 1, 1);
+	this->scale = glm::vec3(1 * size.x, 1 * size.y, 1);
 	this->screenSize = screenSize;
 	this->size = size;
 	this->color = color;
@@ -23,7 +25,7 @@ bool Button::Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, std
 	if (model == nullptr) return false;
 
 	// Updating quad model
-	UpdateQuad();
+	model->BuildQuadTexture();
 
 	return true;
 }
@@ -67,7 +69,7 @@ void Button::Update(GLint deltaT)
 	case Hovering:
 	case Pressed:
 	case Released:
-		position.x += 1;
+	//	position.x += 1;
 		break;
 	case Nothing:
 		break;
@@ -90,19 +92,13 @@ void Button::Update(GLint deltaT)
 	}
 }
 
-void Button::UpdateQuad()
-{
-	// Updating vertices with new variables
-	model->BuildQuad(screenSize, position, color, size);
-}
-
 void Button::Draw()
 {
 	// Draws the actual button quad
 	Object::Draw();
 
-	if (text != nullptr)
-		text->Draw();
+//	if (text != nullptr)
+//		text->Draw();
 }
 
 void Button::setShader(GLuint shader)
@@ -115,9 +111,9 @@ void Button::setShader(GLuint shader)
 
 void Button::setState(State state) { this->state = state; }
 
-void Button::setSize(glm::vec2 size) { this->size = size; UpdateQuad(); }
+void Button::setSize(glm::vec2 size) { this->size = size; scale.x = size.x; scale.y = size.y; }
 
-void Button::setColor(glm::vec4 color) { this->color = color; UpdateQuad(); }
+void Button::setColor(glm::vec4 color) { this->color = color; }
 
 Button::State Button::getState() { return state; }
 

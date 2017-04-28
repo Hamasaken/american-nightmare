@@ -5,6 +5,7 @@ ScreenGame::ScreenGame() : Screen()
 	particleManager = nullptr;
 	shaderManager = nullptr;
 	levelManager = nullptr;
+	materialManager = nullptr;
 }
 
 ScreenGame::ScreenGame(const ScreenGame& other) { }
@@ -37,6 +38,23 @@ bool ScreenGame::Start(glm::vec2 screenSize, SoundManager* soundManager)
 	drRendering.Start(screenSize, shaderManager->getShader("deferred_final"));
 
 	////////////////////////////////////////////////////////////
+	// Creating Material Manager and loading textures/materials
+	////////////////////////////////////////////////////////////
+	std::string texturePath = TEXTURE_PATH;
+	materialManager = new MaterialManager();
+	if (materialManager == nullptr) return false;
+
+	// Loading materials
+	materialManager->AddMaterial("playermaterial", glm::vec3(0.1), 1.f, "playertexture", texturePath + "Walk01.png");
+	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
+	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), 1.f, "groundtexture", texturePath + "temp_ground.jpg");
+	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), 1.f, "backgroundtexture", texturePath + "temp_background.jpg");
+	if (materialManager->getMaterial("playermaterial") == nullptr) printf("Player Material not found\n");
+	if (materialManager->getMaterial("lightmaterial") == nullptr) printf("Light Material not found\n");
+	if (materialManager->getMaterial("groundmaterial") == nullptr) printf("Ground Material not found\n");
+	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Background Material not found\n");
+
+	////////////////////////////////////////////////////////////
 	// Creating Particle Manager
 	////////////////////////////////////////////////////////////
 	particleManager = new ParticleManager();
@@ -52,8 +70,17 @@ bool ScreenGame::Start(glm::vec2 screenSize, SoundManager* soundManager)
 	// Creating a simple level
 	levelManager = new LevelManager();
 	if (levelManager == nullptr) return false;
-	if (!levelManager->Start(shaderManager->getShader("texture_animation_normal")))
+	if (!levelManager->Start(shaderManager->getShader("texture_animation_normal"), materialManager))
 		return false;
+
+	////////////////////////////////////////////////////////////
+	// Creating a GUI manager	
+	////////////////////////////////////////////////////////////
+	guiManager = new GUIManager();
+	if (guiManager == nullptr) return false;
+	if (!guiManager->Start(screenSize)) return false;
+	guiManager->setShader(shaderManager->getShader("texture"));
+	guiManager->AddButton(glm::vec3(0, 20, 5), glm::vec2(8, 5), materialManager->getMaterial("lightmaterial"));
 
 	// Setting startvariables
 	SetStartVariables();
@@ -63,6 +90,9 @@ bool ScreenGame::Start(glm::vec2 screenSize, SoundManager* soundManager)
 
 void ScreenGame::SetStartVariables()
 {
+	// Setting game state
+	state = PLAYING;
+
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 15));
 
@@ -72,21 +102,13 @@ void ScreenGame::SetStartVariables()
 
 void ScreenGame::Update(GLint deltaT)
 {
-	// Temporary for testing
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
-		particleManager->Effect(ParticleEmitter::TRIANGLE, levelManager->getPlayer()->getPosition(), glm::vec4(randBetweenF(0, 1), randBetweenF(0, 1), randBetweenF(0, 1), randBetweenF(0, 1)), 100);
-
-	// Updating particles effects
-	particleManager->Update(deltaT);
-
-	// Updating map objects
-	levelManager->Update(deltaT);
-
-	// Moving the camera to follow player object
-	camera->smoothToPosition(glm::vec3(levelManager->getPlayer()->getPosition().x, levelManager->getPlayer()->getPosition().y, camera->getPosition().z));
-
-	// Building a new camera view matrix
-	camera->buildViewMatrix();
+	switch (state)
+	{
+	case GameState::PAUSING: UpdatePausing(deltaT); break;
+	case GameState::PAUSED: UpdatePaused(deltaT); break;
+	case GameState::PLAYING: UpdatePlaying(deltaT); break;
+	case GameState::UNPAUSING: UpdateUnpausing(deltaT); break;
+	}
 }
 
 void ScreenGame::Draw()
@@ -117,20 +139,84 @@ void ScreenGame::Draw()
 		DrawObjectLightPass(&drRendering, shaderManager, light);
 
 	// Drawing player
-	//for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
-		//DrawObjectAnimation(levelManager->getPlayer(), shaderManager, light);
 	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList());
-
 
 	// Draw Enemy
 	DrawObjectAnimation(levelManager->getEnemy(), shaderManager, levelManager->getLightManager()->getPointLightList());
 
 	// Drawing vertices
 	DrawParticles(particleManager, shaderManager);
+
+	// Drawing gui Manager if we're paused
+	glDisable(GL_BLEND);
+	if (state != PLAYING)
+	{
+		for (Object* object : guiManager->getObjectList())
+			DrawObject(object, shaderManager);
+	}
+}
+
+void ScreenGame::UpdatePaused(GLint deltaT)
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
+		state = UNPAUSING;
+}
+
+void ScreenGame::UpdatePlaying(GLint deltaT)
+{
+	// Check if user is pausing
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
+		state = PAUSING;
+
+	// Temporary for testing
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
+		particleManager->Effect(ParticleEmitter::TRIANGLE, levelManager->getPlayer()->getPosition(), glm::vec4(randBetweenF(0, 1), randBetweenF(0, 1), randBetweenF(0, 1), randBetweenF(0, 1)), 100);
+
+	// Updating particles effects
+	particleManager->Update(deltaT);
+
+	// Updating map objects
+	levelManager->Update(deltaT);
+
+	// Moving the camera to follow player object
+	camera->smoothToPosition(glm::vec3(levelManager->getPlayer()->getPosition().x, levelManager->getPlayer()->getPosition().y, camera->getPosition().z));
+
+	// Building a new camera view matrix
+	camera->buildViewMatrix();
+}
+
+void ScreenGame::UpdatePausing(GLint deltaT)
+{
+	static GLint pausTimer = 0.f;
+	pausTimer += deltaT;
+	if (pausTimer > PAUS_TIMER)
+	{
+		pausTimer = 0.f;
+		state = PAUSED;
+	}
+}
+
+void ScreenGame::UpdateUnpausing(GLint deltaT)
+{
+	static GLint unpausTimer = 0.f;
+	unpausTimer += deltaT;
+	if (unpausTimer > PAUS_TIMER)
+	{
+		unpausTimer = 0.f;
+		state = PLAYING;
+	}
 }
 
 void ScreenGame::Stop()
 {
+	// Deleting material manager
+	if (materialManager != nullptr)
+	{
+		materialManager->Clear();
+		delete materialManager;
+		materialManager = nullptr;
+	}
+
 	// Deleting particles
 	if (particleManager != nullptr)
 	{

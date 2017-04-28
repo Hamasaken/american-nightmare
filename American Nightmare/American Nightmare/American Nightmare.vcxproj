@@ -165,6 +165,7 @@
     <ClCompile Include="Game\Entity.cpp" />
     <ClCompile Include="Game\Frustum.cpp" />
     <ClCompile Include="Game\GUI\Button.cpp" />
+    <ClCompile Include="Game\GUI\GUIManager.cpp" />
     <ClCompile Include="Game\GUI\Text.cpp" />
     <ClCompile Include="Game\Hitbox.cpp" />
     <ClCompile Include="Game\LevelManager.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="Game\Entity.h" />
     <ClInclude Include="Game\Frustum.h" />
     <ClInclude Include="Game\GUI\Button.h" />
+    <ClInclude Include="Game\GUI\GUIManager.h" />
     <ClInclude Include="Game\GUI\Text.h" />
     <ClInclude Include="Game\Hitbox.h" />
     <ClInclude Include="Game\LevelManager.h" />

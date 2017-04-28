@@ -8,7 +8,7 @@ Text::~Text() { }
 
 bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
-	this->position = fromScreenToWorld(position);
+	this->position = position;
 	this->rotation = rotation;
 	this->scale = scale;
 	this->screenSize = screenSize;
@@ -74,7 +74,7 @@ void Text::CreateText(std::string text, glm::vec4 color)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glGenerateMipmap(GL_TEXTURE_2D);
-
+	
 	// Unbinding
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -82,7 +82,7 @@ void Text::CreateText(std::string text, glm::vec4 color)
 	SDL_FreeSurface(surface);
 
 	// Creating quad for this text
-	model->BuildQuad(screenSize, position, color, size);
+	model->BuildQuadTexture();
 }
 
 void Text::Draw()
