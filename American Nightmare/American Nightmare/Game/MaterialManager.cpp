@@ -61,7 +61,6 @@ GLint MaterialManager::AddTexture(std::string name, std::string texturePath)
 	if (textureID != 0)
 	{
 		textureList.push_back(new Texture(name, textureID));
-		printf("%d\n", textureID);
 		return textureList.size() - 1;
 	}
 

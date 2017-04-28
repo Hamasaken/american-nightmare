@@ -19,6 +19,15 @@ void GUIManager::Stop()
 	clearTexts();
 }
 
+void GUIManager::Update(GLuint deltaT)
+{
+	// Send in mouse pos
+	// --
+
+	for (Button* button : buttons)
+		button->Update(deltaT);
+}
+
 bool GUIManager::AddButton(glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material)
 {
 	std::string texturePath = TEXTURE_PATH;

@@ -200,13 +200,13 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	////////////////////////////////////////////////////////////
 	Object* light = new Object();
 	light->setShader(shader);
-	light->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"));
+	light->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
 	light->setPosition(glm::vec3(-20, 10, 15));
 	map.push_back(light);
 
 	light = new Object();
 	light->setShader(shader);
-	light->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"));
+	light->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
 	light->setPosition(glm::vec3(20, 10, 15));
 	map.push_back(light);
 

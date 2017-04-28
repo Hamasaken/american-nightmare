@@ -80,7 +80,10 @@ bool ScreenGame::Start(glm::vec2 screenSize, SoundManager* soundManager)
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize)) return false;
 	guiManager->setShader(shaderManager->getShader("texture"));
-	guiManager->AddButton(glm::vec3(0, 20, 5), glm::vec2(8, 5), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(glm::vec3(0, 0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->setAlpha(0.f);
 
 	// Setting startvariables
 	SetStartVariables();
@@ -149,16 +152,18 @@ void ScreenGame::Draw()
 	DrawParticles(particleManager, shaderManager);
 
 	// Drawing gui Manager if we're paused
-	glDisable(GL_BLEND);
 	if (state != PLAYING)
 	{
 		for (Object* object : guiManager->getObjectList())
-			DrawObject(object, shaderManager);
+			DrawObjectGUI(dynamic_cast<Button*>(object), shaderManager);
 	}
 }
 
 void ScreenGame::UpdatePaused(GLint deltaT)
 {
+	// Updating Buttons
+	guiManager->Update(deltaT);
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
 		state = UNPAUSING;
 }
@@ -190,7 +195,8 @@ void ScreenGame::UpdatePausing(GLint deltaT)
 {
 	static GLint pausTimer = 0.f;
 	pausTimer += deltaT;
-	if (pausTimer > PAUS_TIMER)
+	guiManager->setAlpha(pausTimer / PAUS_TIMER);
+	if (pausTimer >= PAUS_TIMER)
 	{
 		pausTimer = 0.f;
 		state = PAUSED;
@@ -199,11 +205,12 @@ void ScreenGame::UpdatePausing(GLint deltaT)
 
 void ScreenGame::UpdateUnpausing(GLint deltaT)
 {
-	static GLint unpausTimer = 0.f;
-	unpausTimer += deltaT;
-	if (unpausTimer > PAUS_TIMER)
+	static GLint unpausTimer = PAUS_TIMER;
+	unpausTimer -= deltaT;
+	guiManager->setAlpha(unpausTimer / PAUS_TIMER);
+	if (unpausTimer <= NULL)
 	{
-		unpausTimer = 0.f;
+		unpausTimer = PAUS_TIMER;
 		state = PLAYING;
 	}
 }
@@ -241,6 +248,15 @@ void ScreenGame::Stop()
 		delete levelManager;
 		levelManager = nullptr;
 	}
+
+	// Deleting gui
+	if (guiManager != nullptr)
+	{
+		guiManager->Stop();
+		delete guiManager;
+		guiManager = nullptr;
+	}
+
 
 	drRendering.Stop();
 

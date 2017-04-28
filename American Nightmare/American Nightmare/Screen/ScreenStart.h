@@ -2,8 +2,8 @@
 #define SCREENSTART_H
 
 #include "Screen.h"
-#include "../Game/GUI/Button.h"
-#include "../Game/GUI/Text.h"
+#include "../Game/GUI/GUIManager.h"
+#include "../Game/MaterialManager.h"
 
 #define CLEAR_COLOR glm::vec4(0.25f, 0.1, 0.1, 1)
 
@@ -40,12 +40,9 @@ public:
 	void Draw();
 
 private:
+	MaterialManager* materialManager;
+	GUIManager* guiManager;
 	ShaderManager* shaderManager;
-	Button* start;
-	Button* posters;
-	Button* options;
-	Button* exit;
-	Text* logo;
 };
 
 #endif // !SCREENSTART_H

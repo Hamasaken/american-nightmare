@@ -14,6 +14,8 @@ public:
 	bool Start(glm::vec2 screenSize);
 	void Stop();
 
+	void Update(GLuint deltaT);
+
 	bool AddButton(glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material);
 	bool AddText(glm::vec3 position, float characterSize, std::string text, std::string fontName);
 

@@ -9,6 +9,7 @@
 #include "../Game/LightManager.h"
 #include "../SoundManager.h"
 #include "../Game/Particle/ParticleManager.h"
+#include "../Game/GUI/Button.h"
 
 class Screen
 {
@@ -59,6 +60,7 @@ public:
 	// \note Replace the solid shader with an abstract "Shader" instead
 	////////////////////////////////////////////////////////////
 	void DrawObject(Object* object, ShaderManager* shaderManager);
+	void DrawObjectGUI(Button* object, ShaderManager* shaderManager);
 	void DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList);
 	void DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager);
 	void DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList);

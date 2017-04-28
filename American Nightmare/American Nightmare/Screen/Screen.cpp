@@ -77,6 +77,41 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 	object->Draw();
 }
 
+void Screen::DrawObjectGUI(Button* object, ShaderManager * shaderManager)
+{	// Getting matrices
+	glm::mat4 world = worldMatrix;
+	glm::mat4 view = camera->getViewMatrix();
+	glm::mat4 projection = projectionMatrix;
+
+	// Positioning object
+	glm::vec3 pos = object->getPosition();
+	world = glm::translate(world, pos);
+
+	// Rotating object
+	glm::vec3 rot = object->getRotation();
+	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
+	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
+	world = glm::rotate(world, rot.z, glm::vec3(0, 0, 1));
+
+	// Scaling object
+	glm::vec3 scale = object->getScale();
+	world = glm::scale(world, scale);
+
+	// Setting shader as active and setting parameters
+	shaderManager->setShader(object->getShader());
+	shaderManager->SetParameters(world, view, projection);
+
+	glEnable(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, object->getTextureID());
+
+	glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
+	glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), object->getColor().a);
+
+	// Drawing object
+	object->Draw();
+}
+
 void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList)
 {
 	// Getting matrices
