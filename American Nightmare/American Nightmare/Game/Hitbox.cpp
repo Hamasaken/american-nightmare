@@ -3,6 +3,7 @@
 Hitbox::Hitbox()
 {
 	body = nullptr;
+	fixture = nullptr;
 }
 
 Hitbox::Hitbox(const Hitbox & other) { }
@@ -15,7 +16,7 @@ bool Hitbox::InitializeHitbox(b2World* world)
 	if (world == nullptr) return false;
 
 	// Adding body to world
-	AddBodyToWorld(world, glm::vec2(1.f, 1.f), b2_dynamicBody, false);
+	AddBodyToWorld(world, glm::vec2(1.f, 1.f), b2_dynamicBody, false, false);
 
 	// Creating shape for body
 	ModifyShape(glm::vec2(1.f, 1.f), b2Shape::e_polygon, 0.f, 10.f);
@@ -23,13 +24,13 @@ bool Hitbox::InitializeHitbox(b2World* world)
 	return true;
 }
 
-bool Hitbox::InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType, float density, float friction, bool isBullet)
+bool Hitbox::InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType, bool canRotate, float density, float friction, bool isBullet)
 {
 	// Checking if world is created
 	if (world == nullptr) return false;
 
 	// Adding body to world
-	AddBodyToWorld(world, position, type, isBullet);
+	AddBodyToWorld(world, position, type, canRotate, isBullet);
 
 	// Creating shape for body
 	ModifyShape(size, shapeType, density, friction);
@@ -46,16 +47,22 @@ void Hitbox::Stop()
 	}
 }
 
-void Hitbox::AddBodyToWorld(b2World* world, glm::vec2 position, b2BodyType type, bool isBullet)
+void Hitbox::AddBodyToWorld(b2World* world, glm::vec2 position, b2BodyType type, bool canRotate, bool isBullet)
 {
 	// Creating a new body and deleting old if needed
-	if (body != nullptr) body->Dump();
+	if (body != nullptr)
+	{
+		if (fixture != nullptr)
+			body->DestroyFixture(fixture);
+		body->Dump();
+	}
 
 	// Adding body to the world object
 	b2BodyDef bodyDef;
 	bodyDef.type = type;
 	bodyDef.position = b2Vec2(position.x, position.y);
 	bodyDef.bullet = isBullet;
+	bodyDef.fixedRotation = canRotate;
 	bodyDef.active = true;
 	body = world->CreateBody(&bodyDef);
 }
@@ -68,12 +75,12 @@ void Hitbox::ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density,
 	shape.SetAsBox(size.x, size.y); // half the total size here
 
 	// Creating the fixture
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	fixture.density = density;		// in kg/m^2
-	fixture.friction = friction;	// friction [0:1]
-	fixture.restitution = NULL;		// bouncy ball [0:1]
-	body->CreateFixture(&fixture);
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &shape;
+	fixtureDef.density = density;		// in kg/m^2
+	fixtureDef.friction = friction;	// friction [0:1]
+	fixtureDef.restitution = 0;		// bouncy ball [0:1]
+	fixture = body->CreateFixture(&fixtureDef);
 }
 
 b2Body * Hitbox::getBody()

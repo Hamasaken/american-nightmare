@@ -3,6 +3,7 @@
 // Input
 in fData
 {
+	vec3 position;
 	vec3 center;
     vec4 color;
 }frag;  
@@ -13,8 +14,8 @@ out vec4 outputColor;
 void main(void)
 {
 	// Setting 
-	float distance = distance(gl_FragCoord.xy, frag.center.xy);
-	if (distance > 600)
+	float distance = distance(frag.position.xy, frag.center.xy);
+	if (distance > 15)
 	{
 		outputColor = vec4(1.f, 1.f, 1.f, frag.color.a);
 	}

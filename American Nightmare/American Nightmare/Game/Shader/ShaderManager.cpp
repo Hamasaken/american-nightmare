@@ -10,6 +10,7 @@ void ShaderManager::Start() { currentShaderProgram = -1; }
 
 void ShaderManager::Stop()
 {
+	glUseProgram(0);
 	// Deleting shader programs
 	while (shaderList.size() > 0)
 	{
@@ -79,10 +80,6 @@ void ShaderManager::AddShader(std::string name, std::string vs, std::string gs, 
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, geometryShader);
 	glAttachShader(shaderProgram, fragmentShader);
-
-	// Attributes locations
-	//glBindAttribLocation(shaderProgram, 0, "inputPosition");
-	//glBindAttribLocation(shaderProgram, 1, "inputColor");
 
 	// Link program
 	glLinkProgram(shaderProgram);

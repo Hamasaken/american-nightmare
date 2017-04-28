@@ -26,21 +26,21 @@ vec4 ads(vec4 lightPosition, vec4 lightColor, vec3 inFragPos, vec3 inNormal, vec
 	vec3 viewDir = normalize(viewPos.xyz - inFragPos);
 	vec3 reflectDir = reflect(-lightDir, normal);
 
-	float specular = pow(max(dot(viewDir, reflectDir), 0.f), 32);
+	float specular = pow(max(dot(viewDir, reflectDir), 0.f), 34);
 	vec4 specularLight = specular * inSpecular;
 
-	return lightColor * (inAmbient * 0.1 + diffuseLight * lightDiffuse + specularLight * lightSpecular);
+	return lightColor * (inAmbient * 0.1f + diffuseLight * lightDiffuse + specularLight * lightSpecular * 0.2);
 }
 
 void main () {
 
 	vec3 fragPos = texture2D(drPosition, textureUV).rgb;
-    vec3 bufferNormal = -texture2D(drNormal, textureUV).rgb;
+    vec3 bufferNormal = texture2D(drNormal, textureUV).rgb;
     vec4 bufferAmb = texture2D(drAmbient, textureUV);
 	vec4 bufferDif = texture2D(drDiffuse, textureUV);
     vec4 bufferSpec = texture2D(drSpecular, textureUV);
 
 	fragment_color = ads(lightPos, vec4(1, 1, 1, 1), fragPos, bufferNormal, bufferAmb, bufferDif, bufferSpec);
 
-	//fragment_color = texture2D(drPosition, textureUV);
+	//fragment_color = vec4(texture2D(drNormal, textureUV).rgb, 1.f);
 }
