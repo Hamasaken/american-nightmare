@@ -6,12 +6,15 @@ Player::Player(const Player & other) { }
 
 Player::~Player() { }
 
-bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World& world, float x, float y, bool isDynamic)
+bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 {
+	// Starting entity variables (including hitbox)
+	Entity::Start(modelName, material, world, glm::vec2(0, -20), glm::vec2(PLAYER_SIZE_X, PLAYER_SIZE_Y), b2_dynamicBody, b2Shape::e_polygon, PLAYER_DENSITY, PLAYER_FRICTION);
+
 	// Setting starting variables
 	position = glm::vec3(0, 0, 0);
 	rotation = glm::vec3(0, 0, 0);
-	scale = glm::vec3(1, 1, 1);
+	scale = glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_SIZE_Z);
 
 	// Creating model
 	model = new Model();
@@ -21,27 +24,19 @@ bool Player::Start(std::string modelName, const MaterialManager::Material* mater
 	this->material = material;
 	model->BuildQuadTexture();
 
-	//Physics
-	bodyDef.fixedRotation = true;
-	bodyDef.position = b2Vec2(x, -y);
-	bodyDef.type = b2_dynamicBody;
-	body = world.CreateBody(&bodyDef);
-	shape.SetAsBox(1.f, 1.f); // Creates a box shape. Divide your desired width and height by 2.
-
-	fixtureDef.density = 0.f;  // Sets the density of the body
-	fixtureDef.friction = 10.0f;
-	fixtureDef.shape = &shape; // Sets the shape
-	body->CreateFixture(&fixtureDef); // Apply the fixture definition
-
 	return true;
 }
 
 void Player::Update(GLint deltaT)
 {
-	// Updating movement
+	// Getting user input
 	Movement();
-
+	
+	// Updating animation texture
 	updateAnimation(deltaT);
+
+	// Correcting texture to hitbox
+	Entity::Update(deltaT);
 }
 
 void Player::Movement()
@@ -61,16 +56,24 @@ void Player::Movement()
 	// Positioning
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
-		body->SetLinearVelocity(b2Vec2(10.f, 0.f));
-		//position.x += 0.15f;
+		hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
 		directionIsRight = false;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 	{
-		body->SetLinearVelocity(b2Vec2(-10.f, 0.f));
-		//position.x -= 0.15f;
+		hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
 		directionIsRight = true;
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+	{
+		hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+	{
+		hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, PLAYER_VEL_Y), true);
+	}
+
+	// Move in Z axis
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) position.z += 0.15f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) position.z -= 0.15f;
 
@@ -86,6 +89,24 @@ void Player::Movement()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y)) rotation.z += 2.f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) rotation.z -= 2.f;
 
-	position.x = body->GetPosition().x;
-	position.y = -body->GetPosition().y;
+	// Thresholds in velocity
+	if (hitbox->getBody()->GetLinearVelocity().x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(PLAYER_MAX_VEL_X, hitbox->getBody()->GetLinearVelocity().y));
+	if (hitbox->getBody()->GetLinearVelocity().x < -PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(-PLAYER_MAX_VEL_X, hitbox->getBody()->GetLinearVelocity().y));
+	if (hitbox->getBody()->GetLinearVelocity().y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, PLAYER_MAX_VEL_Y));
+	if (hitbox->getBody()->GetLinearVelocity().y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, -PLAYER_MAX_VEL_Y));
+}
+
+b2Body* Player::getBody()
+{
+	return hitbox->getBody();
+}
+
+glm::vec2 Player::getPlayerPosAsGLM()
+{
+	glm::vec2 myVec;
+
+	myVec.x = hitbox->getPosition().x;
+	myVec.y = hitbox->getPosition().y;
+
+	return myVec;
 }

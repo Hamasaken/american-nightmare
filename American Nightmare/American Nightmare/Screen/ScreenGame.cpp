@@ -64,7 +64,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, SoundManager* soundManager)
 void ScreenGame::SetStartVariables()
 {
 	// Backing the camera a little bit backwards
-	camera->setPosition(glm::vec3(0, 0, 40));
+	camera->setPosition(glm::vec3(0, 0, 15));
 
 	// Making wall & floor bigger
 	levelManager->LoadLevel(shaderManager->getShader("deferred"), "0.lvl");
@@ -102,6 +102,12 @@ void ScreenGame::Draw()
 	for (Object* object : levelManager->getMap())
 		DrawObjectGeometryPass(object, shaderManager);
 
+	//Draw Projectile///////////////////////////////////////////////////////
+	////TESTING
+	//////////////////////////////////////////////////////////////////////
+	DrawObject(levelManager->getProjectile(), shaderManager);
+
+
 	// Transfer deferred rendering depth buffer to forward rendering
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, drRendering.getDRFBO());
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -110,16 +116,22 @@ void ScreenGame::Draw()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// Reenable Blend
-//	glEnable(GL_BLEND);
+	glEnable(GL_BLEND);
 
 	// DR: Light pass
 	for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
 		DrawObjectLightPass(&drRendering, shaderManager, light);
 
+
 	// Drawing player
 	for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
 		DrawObjectAnimation(levelManager->getPlayer(), shaderManager, light);
 	//DrawObjectAnimation(player, shaderManager, levelManager->getLightManager()->getPointLightList()[0]);
+
+
+	// Draw Enemy
+	for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
+		DrawObjectAnimation(levelManager->getEnemy(), shaderManager, light);
 
 	// Drawing vertices
 	shaderManager->setShader(particleManager->getShader());
