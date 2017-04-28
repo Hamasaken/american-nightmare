@@ -77,12 +77,12 @@ void Enemy::Movement(b2Vec2 playerPos)
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y)) rotation.z += 2.f;
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) rotation.z -= 2.f;
 
-	if (playerPos.x < hitbox->getBody()->GetPosition().x - 0.1f)
+	if (playerPos.x < hitbox->getBody()->GetPosition().x - 0.3f)
 	{
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2( -ENEMY_VEL_X, hitbox->getBody()->GetLinearVelocity().y), true );
 		directionIsRight = true;
 	}
-	else if (playerPos.x > hitbox->getBody()->GetPosition().x + 0.1f)
+	else if (playerPos.x > hitbox->getBody()->GetPosition().x + 0.3f)
 	{
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2( ENEMY_VEL_X, hitbox->getBody()->GetLinearVelocity().y), true );
 		directionIsRight = false;
