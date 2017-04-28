@@ -44,8 +44,9 @@ void Player::Movement()
 	// Temporary movement & rotation & scaling for testing :)
 	
 	// Temp gravity
-	velocity.y -= 0.02f;
-	position += glm::vec3(velocity, 0);
+	/*velocity.y -= 0.02f;
+	position += glm::vec3(velocity, 0);*/
+
 	if (position.y < 0.f)
 		position.y = 0.f;
 
