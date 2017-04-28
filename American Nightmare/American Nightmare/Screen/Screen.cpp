@@ -69,7 +69,7 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, object->getTexture());
+	glBindTexture(GL_TEXTURE_2D, object->getTextureID());
 
 	glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
 
@@ -121,9 +121,11 @@ void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderMa
 		glUniform4f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].position").c_str()), pointLightList[i]->position.x, pointLightList[i]->position.y, pointLightList[i]->position.z, pointLightList[i]->position.w);
 		glUniform4f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].diffuse").c_str()), pointLightList[i]->diffuse.x, pointLightList[i]->diffuse.y, pointLightList[i]->diffuse.z, pointLightList[i]->diffuse.w);
 		glUniform4f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].specular").c_str()), pointLightList[i]->specular.x, pointLightList[i]->specular.y, pointLightList[i]->specular.z, pointLightList[i]->specular.w);
+		glUniform1f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].strength").c_str()), pointLightList[i]->strength);
 		glUniform1f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].constant").c_str()), pointLightList[i]->constant);
 		glUniform1f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].linear").c_str()), pointLightList[i]->linear);
 		glUniform1f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].quadratic").c_str()), pointLightList[i]->quadratic);
+		glUniform1f(glGetUniformLocation(animatedObj->getShader(), ("pointLights[" + index + "].radius").c_str()), pointLightList[i]->radius);
 	}
 	
 	// Drawing object
@@ -165,7 +167,7 @@ void Screen::DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager
 	object->Draw();
 }
 
-void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, LightManager::PointLight* light)
+void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList)
 {
 
 	Model* model = drRendering->getFinalRenderQuad();
@@ -191,17 +193,38 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drDiffuse"), 3);
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drSpecular"), 4);
 
-	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "viewPos"), camera->getPosition().x, camera->getPosition().y, camera->getPosition().z, 1.f);
-	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightPos"), light->position.x, light->position.y, light->position.z, light->position.w);
-	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightDiffuse"), light->diffuse.x, light->diffuse.y, light->diffuse.z, light->diffuse.w);
-	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightSpecular"), light->specular.x, light->specular.y, light->specular.z, light->specular.w);
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "nrOfLights"), pointLightList.size());
 
+	for (int i = 0; i < pointLightList.size(); i++)
+	{
+		std::string index = std::to_string(i);
+		glUniform4f(glGetUniformLocation(drRendering->getLightShader(), ("pointLights[" + index + "].position").c_str()), pointLightList[i]->position.x, pointLightList[i]->position.y, pointLightList[i]->position.z, pointLightList[i]->position.w);
+		glUniform4f(glGetUniformLocation(drRendering->getLightShader(), ("pointLights[" + index + "].diffuse").c_str()), pointLightList[i]->diffuse.x, pointLightList[i]->diffuse.y, pointLightList[i]->diffuse.z, pointLightList[i]->diffuse.w);
+		glUniform4f(glGetUniformLocation(drRendering->getLightShader(), ("pointLights[" + index + "].specular").c_str()), pointLightList[i]->specular.x, pointLightList[i]->specular.y, pointLightList[i]->specular.z, pointLightList[i]->specular.w);
+		glUniform1f(glGetUniformLocation(drRendering->getLightShader(), ("pointLights[" + index + "].strength").c_str()), pointLightList[i]->strength);
+		glUniform1f(glGetUniformLocation(drRendering->getLightShader(), ("pointLights[" + index + "].constant").c_str()), pointLightList[i]->constant);
+		glUniform1f(glGetUniformLocation(drRendering->getLightShader(), ("pointLights[" + index + "].linear").c_str()), pointLightList[i]->linear);
+		glUniform1f(glGetUniformLocation(drRendering->getLightShader(), ("pointLights[" + index + "].quadratic").c_str()), pointLightList[i]->quadratic);
+		glUniform1f(glGetUniformLocation(drRendering->getLightShader(), ("pointLights[" + index + "].radius").c_str()), pointLightList[i]->radius);
+	}
 
 	glDisable(GL_DEPTH_TEST);
 
 	// Drawing object
 	model->Draw();
 
+	glEnable(GL_DEPTH_TEST);
+}
+
+void Screen::DrawParticles(ParticleManager* particleManager, ShaderManager * shaderManager)
+{
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	shaderManager->setShader(particleManager->getShader());
+	shaderManager->SetParameters(worldMatrix, camera->getViewMatrix(), projectionMatrix);
+
+	glDisable(GL_DEPTH_TEST);
+	particleManager->Draw();
 	glEnable(GL_DEPTH_TEST);
 }
 

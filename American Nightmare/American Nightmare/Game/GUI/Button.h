@@ -16,13 +16,13 @@ public:
 
 	////////////////////////////////////////////////////////////
 	// \brief Starts a button
-	// \param position Position of the center position of the button (0, 0 is lower left corner)
+	// \param position Position of the center position of the button
 	// \param size Size of the button & quad
-	// \param textureName The texture of this button (no path needed)
+	// \param material The material of this button (no path needed)
 	// \param color Color of the full quad, default as white
 	// \return Returns false if model or font could not be created
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, std::string textureName, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f));
+	bool Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f));
 
 	void Stop();
 
@@ -61,10 +61,6 @@ public:
 	glm::vec4 getColor();
 
 private:
-	////////////////////////////////////////////////////////////
-	// \brief Updates the vertices into a new quad
-	////////////////////////////////////////////////////////////
-	void UpdateQuad();
 
 	Text* text;				//< Optional text object
 	glm::vec2 screenSize;	//< The screensize of the screen

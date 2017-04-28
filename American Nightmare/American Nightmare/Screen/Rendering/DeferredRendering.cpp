@@ -4,7 +4,7 @@ DeferredRendering::DeferredRendering() { }
 
 DeferredRendering::DeferredRendering(const DeferredRendering & other) { }
 
-DeferredRendering::~DeferredRendering() { }
+DeferredRendering::~DeferredRendering() { Stop(); }
 
 bool DeferredRendering::Start(glm::vec2 screenSize, GLuint lightShader)
 {

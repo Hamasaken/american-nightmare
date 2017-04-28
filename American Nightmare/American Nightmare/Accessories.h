@@ -54,6 +54,15 @@ struct Vertex
 		b = color.b;
 		a = color.a;
 	}
+/*	void setSize(glm::vec2 size)
+	{
+		w = size.x;
+		h = size.y;
+	}
+
+	float w, h;
+	*/
+	
 	float x, y, z;
 	float r, g, b, a; 
 };

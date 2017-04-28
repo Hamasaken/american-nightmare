@@ -16,9 +16,11 @@ public:
 
 	////////////////////////////////////////////////////////////
 	// \brief Starts class, gets the openGL ptr
+	// \param playerShader The specific shader for the player
+	// \param materialManager ptr to all the materials
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(GLuint playerShader);
+	bool Start(GLuint playerShader, MaterialManager* materialManager);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -40,7 +42,6 @@ public:
 	bool LoadLevel(GLuint shader, std::string levelFile);
 	void LoadTempLevel(GLuint shader);
 
-
 	////////////////////////////////////////////////////////////
 	// \brief Updates every object on map
 	///////////////////////////////////////////////////////////
@@ -55,22 +56,19 @@ public:
 	Player* getPlayer();
 	Enemy* getEnemy();
 
-
-
 	//////////////////////////////////////////////////////////////
 	// Shoot something
 	/////////////////////////////////////////////////////////////
 	
-
-
 private:
 	std::vector<Object*> map;	//< Vector with level specific objects
+	std::vector<Hitbox*> hitboxes;
 	Player* player;				//< The player object
 
 	Enemy* enemy;				//< A Enemy object
 
 	LightManager* lightManager;
-	MaterialManager materialManager;
+	MaterialManager* materialManager;
 	b2World *world;
 };
 
