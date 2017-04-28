@@ -5,6 +5,7 @@
 #include "LightManager.h"
 #include <vector>
 #include "Box2D.h"
+#include "../Enemy.h"
 
 class LevelManager
 {
@@ -39,7 +40,6 @@ public:
 	bool LoadLevel(GLuint shader, std::string levelFile);
 	void LoadTempLevel(GLuint shader);
 
-
 	////////////////////////////////////////////////////////////
 	// \brief Updates every object on map
 	///////////////////////////////////////////////////////////
@@ -52,10 +52,18 @@ public:
 
 	const LightManager* getLightManager() const;
 	Player* getPlayer();
+	Enemy* getEnemy();
 
+	//////////////////////////////////////////////////////////////
+	// Shoot something
+	/////////////////////////////////////////////////////////////
+	
 private:
 	std::vector<Object*> map;	//< Vector with level specific objects
+	std::vector<Hitbox*> hitboxes;
 	Player* player;				//< The player object
+
+	Enemy* enemy;				//< A Enemy object
 
 	LightManager* lightManager;
 	MaterialManager materialManager;

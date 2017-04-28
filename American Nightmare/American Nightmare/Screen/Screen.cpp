@@ -216,6 +216,18 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 	glEnable(GL_DEPTH_TEST);
 }
 
+void Screen::DrawParticles(ParticleManager* particleManager, ShaderManager * shaderManager)
+{
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	shaderManager->setShader(particleManager->getShader());
+	shaderManager->SetParameters(worldMatrix, camera->getViewMatrix(), projectionMatrix);
+
+	glDisable(GL_DEPTH_TEST);
+	particleManager->Draw();
+	glEnable(GL_DEPTH_TEST);
+}
+
 void Screen::Stop()
 {
 	// Deleting camera
