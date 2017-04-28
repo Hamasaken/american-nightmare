@@ -31,6 +31,8 @@ public:
 	void Movement();
 	
 	b2Body* getBody();
+
+	glm::vec2 getPlayerPosAsGLM();
 };
 
 #endif // !PLAYER_H

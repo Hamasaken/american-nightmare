@@ -150,17 +150,21 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	background->setPosition(glm::vec3(0, 20, -1));
 	map.push_back(background);
 
-	// Making some boxes to move around
-	for (int i = 0; i < 100; i++)
-	{
-		Entity* moveble = new Entity();
-		moveble->setShader(shader);
-		moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
-		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
-		map.push_back(moveble);
-	}
+	//// Making some boxes to move around
+	//for (int i = 0; i < 100; i++)
+	//{
+	//	Entity* moveble = new Entity();
+	//	moveble->setShader(shader);
+	//	moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
+	//	moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
+	//	map.push_back(moveble);
+	//}
 
-
+	//A Projectile
+	//for (int i = 0; i < 100; i++)
+	//{
+		shoot(shader, modelPath);
+	//}
 
 	// Texture on lights for testing
 	Object* light = new Object();
@@ -181,6 +185,9 @@ void LevelManager::LoadTempLevel(GLuint shader)
 
 	lightManager->AddPointLight(glm::vec4(-10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 	lightManager->AddPointLight(glm::vec4(+10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
+
+	
+	//myProjectile = new Projectile(world);
 }
 
 void LevelManager::Update(GLint deltaT)
@@ -191,9 +198,20 @@ void LevelManager::Update(GLint deltaT)
 	// Updating player
 	player->Update(deltaT);
 
+	//Update Projectile
+	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	{
+		moveble->fireBullet(world, player->getPlayerPosAsGLM());
+	}
+	//moveble->Update(deltaT);
+
 	enemy->Update(deltaT, player->getBody()->GetPosition());
 
 	// Updating every object on map
+	/*for (Object* object : map)
+		object->Update(deltaT);*/
+
 	for (Object* object : map)
 		object->Update(deltaT);
 }
@@ -203,6 +221,16 @@ std::vector<Object*> LevelManager::getMap()
 	return map;
 }
 
+
+void LevelManager::shoot(GLuint shader, std::string modelPath)
+{
+	moveble = new Projectile(world, shader);
+	//moveble->setShader(shader);
+	//moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
+	//moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
+	map.push_back(moveble);
+}
+
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
 Player* LevelManager::getPlayer() { return player; }
-Enemy* LevelManager::getEnemy() { return enemy; };
+Enemy* LevelManager::getEnemy() { return enemy; }

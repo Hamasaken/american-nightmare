@@ -6,6 +6,7 @@
 #include <vector>
 #include "Box2D.h"
 #include "../Enemy.h"
+#include "../Projectile.h"
 
 class LevelManager
 {
@@ -54,13 +55,14 @@ public:
 	const LightManager* getLightManager() const;
 	Player* getPlayer();
 	Enemy* getEnemy();
+	Projectile* getProjectile();
 
 
 
 	//////////////////////////////////////////////////////////////
 	// Shoot something
 	/////////////////////////////////////////////////////////////
-	
+	void shoot(GLuint shader, std::string modelPath);
 
 
 private:
@@ -72,6 +74,9 @@ private:
 	LightManager* lightManager;
 	MaterialManager materialManager;
 	b2World *world;
+
+	//Projectile* myProjectile;
+	Projectile* moveble;
 };
 
 #endif  !LEVELMANAGER_H

@@ -1,7 +1,16 @@
 #include "Projectile.h"
-
-Projectile::Projectile()
+#include <iostream>
+Projectile::Projectile(b2World *world, GLuint shader)
 {
+	std::string modelPath = MODEL_PATH;
+	std::string texturePath = TEXTURE_PATH;
+	materialManager.AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
+	
+	
+	setShader(shader);
+	Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
+	setScale(glm::vec3(0.5f, 0.5f, 1));
+
 	
 }
 
@@ -9,12 +18,28 @@ Projectile::~Projectile()
 {
 }
 
-void Projectile::fireBullet()
+void Projectile::fireBullet(b2World* world, glm::vec2 position)
 {
-	/*Entity* box = new Entity();
-	box->setShader(shader);
-	box->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(-10, 0), glm::vec2(8.f, 5.f), b2_staticBody);
-	box->setScale(glm::vec3(8, 5, 3));
-	map.push_back(box);
-	*/
+	hitbox->AddBodyToWorld(world, position, b2_dynamicBody, false);
+	hitbox->getBody()->ApplyLinearImpulseToCenter({500, 0 }, true);
+
+}
+
+void Projectile::Update(GLint deltaT)
+{
+	Entity::Update(deltaT);
+}
+
+b2Vec2 Projectile::normalize(const b2Vec2& source)
+{
+	float length = sqrt((source.x * source.x) + (source.y * source.y));
+
+	if (length != 0)
+	{
+		return b2Vec2(source.x / length, source.y / length);
+	}
+	else
+	{
+		return b2Vec2(source.x, source.y);
+	}
 }

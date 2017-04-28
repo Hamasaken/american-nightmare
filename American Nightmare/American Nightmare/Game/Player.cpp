@@ -31,7 +31,7 @@ void Player::Update(GLint deltaT)
 {
 	// Getting user input
 	Movement();
-
+	
 	// Updating animation texture
 	updateAnimation(deltaT);
 
@@ -87,4 +87,14 @@ void Player::Movement()
 b2Body* Player::getBody()
 {
 	return hitbox->getBody();
+}
+
+glm::vec2 Player::getPlayerPosAsGLM()
+{
+	glm::vec2 myVec;
+
+	myVec.x = hitbox->getPosition().x;
+	myVec.y = hitbox->getPosition().y;
+
+	return myVec;
 }
