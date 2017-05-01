@@ -57,7 +57,7 @@ public:
 	Player* getPlayer();
 	Enemy* getEnemy();
 	Projectile* getProjectile();
-	ProjectileHandler* getProjectiles();
+	//ProjectileHandler* getProjectiles();
 
 
 
@@ -77,9 +77,9 @@ private:
 	MaterialManager materialManager;
 	b2World *world;
 
-	ProjectileHandler* myPH;
+	//ProjectileHandler* myPH;
 
-	//Projectile* myProjectile;
+	Projectile* myProjectile;
 	//Projectile* moveble;
 
 };

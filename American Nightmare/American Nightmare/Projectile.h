@@ -30,7 +30,8 @@ public:
 	b2Vec2 normalize(const b2Vec2& source);
 	bool getIsFired();
 
-	void Update(GLint deltaT);
+	//void Update(GLint deltaT);
+	void Update(GLint deltaT, b2World* world, glm::vec2 position);
 };
 
 #endif // !PROJECTILE_H
