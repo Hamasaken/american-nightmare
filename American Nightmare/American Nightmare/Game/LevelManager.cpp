@@ -186,7 +186,9 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	lightManager->AddPointLight(glm::vec4(-10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 	lightManager->AddPointLight(glm::vec4(+10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 
-	myProjectile = new Projectile(world, shader);
+	myPH = new ProjectileHandler(world, shader);
+
+	//myProjectile = new Projectile(world, shader);
 	//lightManager->AddPointLight(glm::vec4(-20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
 	//lightManager->AddPointLight(glm::vec4(+20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
 	lightManager->AddPointLight(glm::vec4(20, 5, 15, 1), glm::vec4(10, 10, 10, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
@@ -201,7 +203,8 @@ void LevelManager::Update(GLint deltaT)
 	player->Update(deltaT);
 
 	//Update Projectile
-	myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
+	myPH->Update(deltaT, world);
+	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
 	
 	//moveble->Update(deltaT);
 
@@ -233,4 +236,5 @@ std::vector<Object*> LevelManager::getMap()
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
 Player* LevelManager::getPlayer() { return player; }
 Enemy* LevelManager::getEnemy() { return enemy; }
-Projectile* LevelManager::getProjectile() { return myProjectile; }
+ProjectileHandler* LevelManager::getProjectiles() { return myPH; }
+//Projectile* LevelManager::getProjectile() { return myProjectile; }

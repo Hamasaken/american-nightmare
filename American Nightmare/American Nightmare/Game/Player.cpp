@@ -51,7 +51,7 @@ void Player::Movement()
 		position.y = 0.f;
 
 	// Jumping
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && position.y == 0) velocity.y = 0.35f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && position.y == 0) velocity.y = 0.35f;
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && !jumping) velocity.y = 0.35f;
 
 	// Positioning
