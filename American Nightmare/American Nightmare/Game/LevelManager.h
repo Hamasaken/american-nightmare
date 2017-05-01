@@ -4,10 +4,9 @@
 #include "Player.h"
 #include "LightManager.h"
 #include <vector>
-#include "Box2D.h"
+#include <Box2D.h>
 #include "../Enemy.h"
 #include "../Projectile.h"
-#include "../ProjectileHandler.h"
 #include <Box2D.h>
 
 class LevelManager
@@ -82,6 +81,7 @@ private:
 
 	//Projectile* myProjectile;
 	//Projectile* moveble;
+
 };
 
 #endif  !LEVELMANAGER_H
