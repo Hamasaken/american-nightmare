@@ -19,16 +19,55 @@ Projectile::~Projectile()
 
 void Projectile::fireBullet(b2World* world, glm::vec2 position)
 {
-	hitbox->AddBodyToWorld(world, position, b2_dynamicBody, false);
-	hitbox->getBody()->ApplyLinearImpulseToCenter({500, 0 }, true);
+	if (right)
+	{
+		hitbox->AddBodyToWorld(world, position, b2_dynamicBody, false);
+		hitbox->getBody()->ApplyLinearImpulseToCenter({500, 0 }, true);
+	}
+	if (left)
+	{
+		hitbox->AddBodyToWorld(world, position, b2_dynamicBody, false);
+		hitbox->getBody()->ApplyLinearImpulseToCenter({ -500, 0 }, true);
+	}
+	if (up)
+	{
+		hitbox->AddBodyToWorld(world, position, b2_dynamicBody, false);
+		hitbox->getBody()->ApplyLinearImpulseToCenter({ 0, -500 }, true);
+	}
+	if (down)
+	{
+		hitbox->AddBodyToWorld(world, position, b2_dynamicBody, false);
+		hitbox->getBody()->ApplyLinearImpulseToCenter({ 0, 500 }, true);
+	}
+
 
 }
 
 void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isPressed)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
+		right = true;
 		fireBullet(world, position);
+		right = false;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	{
+		left = true;
+		fireBullet(world, position);
+		left = false;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	{ 
+		up = true;
+		fireBullet(world, position);
+		up = false;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		down = true;
+		fireBullet(world, position);
+		down = false;
 	}
 
 	Entity::Update(deltaT);

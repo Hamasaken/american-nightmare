@@ -15,6 +15,12 @@ private:
 	bool isPressed;
 
 	MaterialManager materialManager;
+
+	bool right = false;
+	bool left = false;
+	bool up = false;
+	bool down = false;
+
 public:
 	Projectile(b2World *world, GLuint shader);
 	~Projectile();
