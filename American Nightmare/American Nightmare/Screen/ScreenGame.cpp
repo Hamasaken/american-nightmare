@@ -157,8 +157,8 @@ void ScreenGame::Draw()
 	{
 		for (Button* object : guiManager->getButtonList())
 			DrawObjectGUI(object, shaderManager);
-		for (Text* object : guiManager->getTextList())
-			DrawObjectGUI(object, shaderManager);
+	//	for (Text* object : guiManager->getTextList())
+	//		DrawObjectGUI(object, shaderManager);
 	}
 }
 
@@ -179,7 +179,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	// Temporary for testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
-		particleManager->Effect(ParticleEmitter::TRIANGLE, levelManager->getPlayer()->getPosition(), glm::vec4(randBetweenF(0.8f, 1.f), randBetweenF(0.f, 0.35f), 0.f, randBetweenF(0, 1.f)), 50);
+		particleManager->Effect(ParticleEmitter::TRIANGLE, levelManager->getPlayer()->getPosition(), glm::vec4(randBetweenF(0.8f, 1.f), randBetweenF(0.f, 0.35f), 0.f, randBetweenF(0, 1)), 50);
 
 	// Updating particles effects
 	particleManager->Update(deltaT);
