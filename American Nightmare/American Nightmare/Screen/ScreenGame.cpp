@@ -139,15 +139,13 @@ void ScreenGame::Draw()
 	glEnable(GL_BLEND);
 
 	// DR: Light pass
-	//for (LightManager::PointLight* light : levelManager->getLightManager()->getPointLightList())
-		//DrawObjectLightPass(&drRendering, shaderManager, light);
-	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList());
+	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList());
 
 	// Drawing player
-	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList());
+	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList());
 
 	// Draw Enemy
-	DrawObjectAnimation(levelManager->getEnemy(), shaderManager, levelManager->getLightManager()->getPointLightList());
+	DrawObjectAnimation(levelManager->getEnemy(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList());
 
 	// Drawing vertices
 	DrawParticles(particleManager, shaderManager);
