@@ -106,6 +106,7 @@ void ScreenGame::Draw()
 	////TESTING
 	//////////////////////////////////////////////////////////////////////
 	DrawObject(levelManager->getProjectile(), shaderManager);
+	//DrawObject(levelManager->getProjectiles(), shaderManager);
 
 
 	// Transfer deferred rendering depth buffer to forward rendering

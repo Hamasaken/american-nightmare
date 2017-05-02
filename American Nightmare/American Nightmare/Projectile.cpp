@@ -10,13 +10,18 @@ Projectile::Projectile(b2World *world, GLuint shader)
 	Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_circle, 1.f, 0.5f);
 	setScale(glm::vec3(0.5f, 0.5f, 1));
 
-	isPressed = false;
+	isFired = false;
 }
 
 Projectile::~Projectile()
 {
 
 	hitbox->Stop();
+}
+
+bool Projectile::getIsFired()
+{
+	return isFired;
 }
 
 void Projectile::fireBullet(b2World* world, glm::vec2 position)
@@ -73,7 +78,6 @@ void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)
 	}
 
 	Entity::Update(deltaT);
-
 }
 
 b2Vec2 Projectile::normalize(const b2Vec2& source)

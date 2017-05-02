@@ -12,7 +12,7 @@ private:
 	std::string modelPath;
 	std::string texturePath;
 
-	bool isPressed;
+	bool isFired;
 
 	MaterialManager materialManager;
 
@@ -23,11 +23,14 @@ private:
 
 public:
 	Projectile(b2World *world, GLuint shader);
+	Projectile();
 	~Projectile();
 
 	void fireBullet(b2World* world, glm::vec2 position);
 	b2Vec2 normalize(const b2Vec2& source);
+	bool getIsFired();
 
+	//void Update(GLint deltaT);
 	void Update(GLint deltaT, b2World* world, glm::vec2 position);
 };
 
