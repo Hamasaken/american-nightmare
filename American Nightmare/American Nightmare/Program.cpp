@@ -25,7 +25,7 @@ bool Program::Start()
 	////////////////////////////////////////////////////////////
 	screenManager = new ScreenManager();
 	if (screenManager == nullptr) return false;
-	if (!screenManager->Start(screenSize, hwnd))
+	if (!screenManager->Start(screenSize, glm::vec2(posX, posY), hwnd))
 	{
 		MessageBox(hwnd, L"Could not start ScreenManager class.", L"Woops", MB_OKCANCEL);
 		return false;
@@ -72,6 +72,9 @@ void Program::StartSDLWindow()
 	SDL_SysWMinfo systemInfo;
 	SDL_VERSION(&systemInfo.version);
 	SDL_GetWindowWMInfo(window, &systemInfo);
+
+	// Getting window position
+	SDL_GetWindowPosition(window, &posX, &posY);
 
 	hwnd = systemInfo.info.win.window;
 

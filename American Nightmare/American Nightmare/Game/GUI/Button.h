@@ -36,13 +36,13 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Checking if mouse pointer is inside button
 	////////////////////////////////////////////////////////////
-	bool isMouseInside();
+	bool isMouseInside(glm::vec2 mousePosition);
 
 	////////////////////////////////////////////////////////////
 	// \brief Updates button by checking if mouse is hovering/pressing/releasing
 	// \param deltaT The time between each frame in milliseconds
 	////////////////////////////////////////////////////////////
-	void Update(GLint deltaT);	
+	void Update(GLint deltaT, glm::vec2 mousePosition);
 
 	////////////////////////////////////////////////////////////
 	// \brief Draws the model and the text on top
@@ -59,14 +59,16 @@ public:
 	State getState();
 	glm::vec2 getSize();
 	glm::vec4 getColor();
+	bool getPressed();
 
 private:
-
+	bool pressed;			//< If the button have been pressed or not
 	Text* text;				//< Optional text object
 	glm::vec2 screenSize;	//< The screensize of the screen
 	glm::vec2 size;			//< Size of the button in (width, height)
 	glm::vec4 color;		//< Color of the button
 	State state;			//< Current state of the button
+	State prevState;		//< The previous state of the button (for optimazition)
 };
 
 #endif // !BUTTON_H

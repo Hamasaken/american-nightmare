@@ -24,7 +24,7 @@ public:
 	// \brief Loads everything related to the playable game
 	// \return Returns false if any object could not be loaded
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, SoundManager* soundManager);
+	bool Start(glm::vec2 screenSize, glm::vec2 screenPosition, SoundManager* soundManager);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads everything related to this screen 

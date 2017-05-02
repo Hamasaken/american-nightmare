@@ -11,7 +11,7 @@ public:
 	GUIManager(const GUIManager& other);
 	~GUIManager();
 
-	bool Start(glm::vec2 screenSize);
+	bool Start(glm::vec2 screenSize, glm::vec2 screenPosition);
 	void Stop();
 
 	void Update(GLuint deltaT);
@@ -31,6 +31,7 @@ private:
 	void clearTexts();
 
 	glm::vec2 screenSize;
+	glm::vec2 screenPosition;
 	GLuint shader;
 	std::vector<Button*> buttons;
 	std::vector<Text*> texts;

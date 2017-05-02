@@ -12,10 +12,10 @@ ScreenGame::ScreenGame(const ScreenGame& other) { }
 
 ScreenGame::~ScreenGame() { }
 
-bool ScreenGame::Start(glm::vec2 screenSize, SoundManager* soundManager)
+bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, SoundManager* soundManager)
 {
 	// Starting Camera & getting openGL pointer
-	Screen::Start(screenSize, soundManager);
+	Screen::Start(screenSize, screenPosition, soundManager);
 
 	////////////////////////////////////////////////////////////
 	// Creating Shader Manager
@@ -78,7 +78,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, SoundManager* soundManager)
 	////////////////////////////////////////////////////////////
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
-	if (!guiManager->Start(screenSize)) return false;
+	if (!guiManager->Start(screenSize, screenPosition)) return false;
 	guiManager->AddButton(glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
 	guiManager->AddButton(glm::vec3(0, 0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
 	guiManager->AddButton(glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
