@@ -13,7 +13,7 @@ Program::~Program() { }
 bool Program::Start()
 {
 	srand(time_t(NULL));
-
+	
 	////////////////////////////////////////////////////////////
 	// Creating a window for the program
 	////////////////////////////////////////////////////////////
@@ -161,6 +161,9 @@ bool Program::Update(GLint deltaT)
 {
 	// Check if user exits
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
+		return false;
+
+	if (screenManager->getState() == Exit)
 		return false;
 
 	// Update game

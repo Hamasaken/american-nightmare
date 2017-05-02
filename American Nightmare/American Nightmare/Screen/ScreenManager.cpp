@@ -21,6 +21,7 @@ bool ScreenManager::Start(glm::vec2 screenSize, glm::vec2 screenPosition, HWND h
 
 	// Setting start screen
 	currentState = State(START_STATE);
+	prevState = State(START_STATE);
 
 	// Starting sound manager
 	soundManager = new SoundManager();
@@ -67,7 +68,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::Game: 
 		screenGame = new ScreenGame();
 		if (screenGame == nullptr) return false;
-		if (!screenGame->Start(screenSize, screenPosition, soundManager))
+		if (!screenGame->Start(screenSize, screenPosition, &currentState, soundManager))
 		{
 			MessageBox(hwnd, L"Could not start Game Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
@@ -76,7 +77,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::StartMeny:
 		screenStart = new ScreenStart();
 		if (screenStart == nullptr) return false;
-		if (!screenStart->Start(screenSize, screenPosition, soundManager))
+		if (!screenStart->Start(screenSize, screenPosition, &currentState, soundManager))
 		{
 			MessageBox(hwnd, L"Could not start Start Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
@@ -85,7 +86,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::Cutscene:
 		screenCutscene = new ScreenCutscene();
 		if (screenCutscene == nullptr) return false;
-		if (!screenCutscene->Start(screenSize, screenPosition, soundManager))
+		if (!screenCutscene->Start(screenSize, screenPosition, &currentState, soundManager))
 		{
 			MessageBox(hwnd, L"Could not start Cutscene Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
@@ -96,9 +97,9 @@ bool ScreenManager::StartCurrentScreen()
 	return true;
 }
 
-void ScreenManager::StopCurrentScreen()
+void ScreenManager::StopScreen(State state)
 {
-	switch (currentState)
+	switch (state)
 	{
 	case State::Game: 
 		if (screenGame != nullptr) 
@@ -127,7 +128,7 @@ void ScreenManager::StopCurrentScreen()
 bool ScreenManager::goToState(State state)
 {
 	// Stopping active screen
-	StopCurrentScreen();
+	StopScreen(prevState);
 
 	// Changing current state
 	currentState = state;
@@ -142,18 +143,22 @@ bool ScreenManager::goToState(State state)
 void ScreenManager::Update(GLint deltaT)
 {
 	// Temporary state switching
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F1))		{ goToState(Game); }
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F2))	{ goToState(StartMeny); }
+//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F1))		{ goToState(Game); }
+//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F2))	{ goToState(StartMeny); }
 //	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F3))	{ goToState(Options); }
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F4))	{ goToState(Cutscene); }
+//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F4))	{ goToState(Cutscene); }
 //	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F5))	{ goToState(Posters); }
 
+	prevState = currentState;
 	switch (currentState)
 	{
 	case State::Game: screenGame->Update(deltaT); break;
 	case State::StartMeny: screenStart->Update(deltaT); break;
 	case State::Cutscene: screenCutscene->Update(deltaT); break;
 	}
+
+	if (prevState != currentState)
+		goToState(currentState);
 }
 
 void ScreenManager::Draw(SDL_Window* window, glm::vec4 color)
@@ -174,7 +179,7 @@ void ScreenManager::Draw(SDL_Window* window, glm::vec4 color)
 	SDL_GL_SwapWindow(window);
 }
 
-ScreenManager::State ScreenManager::getState()
+State ScreenManager::getState()
 {
 	return State(currentState);
 }

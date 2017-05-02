@@ -24,7 +24,7 @@ public:
 	// \brief Loads everything related to the playable game
 	// \return Returns false if any object could not be loaded
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, glm::vec2 screenPosition, SoundManager* soundManager);
+	bool Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads everything related to this screen 
@@ -53,7 +53,7 @@ private:
 	void UpdateUnpausing(GLint deltaT);
 
 	MaterialManager* materialManager;	//< The material manager
-	GameState state;					//< Current State of the gameloop
+	GameState gameState;				//< Current State of the gameloop
 	GUIManager* guiManager;				//< Paus Meny
 	ParticleManager* particleManager;	//< Manager for particle effects
 	ShaderManager* shaderManager;		//< Manager for shaderprograms

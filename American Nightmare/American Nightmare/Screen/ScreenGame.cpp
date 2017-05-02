@@ -6,16 +6,17 @@ ScreenGame::ScreenGame() : Screen()
 	shaderManager = nullptr;
 	levelManager = nullptr;
 	materialManager = nullptr;
+	guiManager = nullptr;
 }
 
 ScreenGame::ScreenGame(const ScreenGame& other) { }
 
 ScreenGame::~ScreenGame() { }
 
-bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, SoundManager* soundManager)
+bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager)
 {
 	// Starting Camera & getting openGL pointer
-	Screen::Start(screenSize, screenPosition, soundManager);
+	Screen::Start(screenSize, screenPosition, state, soundManager);
 
 	////////////////////////////////////////////////////////////
 	// Creating Shader Manager
@@ -79,9 +80,9 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, SoundMana
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
-	guiManager->AddButton(glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddButton(glm::vec3(0, 0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddButton(glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
 	guiManager->AddText(glm::vec3(0, 0.5f, 0), 0.0001f, "WHAT", "framd.ttf");
 	guiManager->setAlpha(0.f);
 	guiManager->setShader(shaderManager->getShader("texture"));
@@ -95,7 +96,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, SoundMana
 void ScreenGame::SetStartVariables()
 {
 	// Setting game state
-	state = PLAYING;
+	gameState = PLAYING;
 
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 15));
@@ -106,7 +107,7 @@ void ScreenGame::SetStartVariables()
 
 void ScreenGame::Update(GLint deltaT)
 {
-	switch (state)
+	switch (gameState)
 	{
 	case GameState::PAUSING: UpdatePausing(deltaT); break;
 	case GameState::PAUSED: UpdatePaused(deltaT); break;
@@ -153,10 +154,10 @@ void ScreenGame::Draw()
 	DrawParticles(particleManager, shaderManager);
 
 	// Drawing gui Manager if we're paused
-	if (state != PLAYING)
+	if (gameState != PLAYING)
 	{
-		for (Button* object : guiManager->getButtonList())
-			DrawObjectGUI(object, shaderManager);
+		for (std::pair<Button*, GUIManager::Action> button : guiManager->getButtonList())
+			DrawObjectGUI(button.first, shaderManager);
 	//	for (Text* object : guiManager->getTextList())
 	//		DrawObjectGUI(object, shaderManager);
 	}
@@ -167,15 +168,29 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 	// Updating Buttons
 	guiManager->Update(deltaT);
 
+	for (std::pair<Button*, GUIManager::Action> button : guiManager->getButtonList())
+	{
+		if (button.first->getPressed())
+		{
+			switch (button.second)
+			{
+			case GUIManager::Action::OK:  gameState = UNPAUSING; break;
+			case GUIManager::Action::STARTMENY: *state = State::StartMeny; break;
+			case GUIManager::Action::EXIT: *state = State::Exit; break;
+			}
+			button.first->setPressed(false);
+		}
+	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
-		state = UNPAUSING;
+		gameState = UNPAUSING;
 }
 
 void ScreenGame::UpdatePlaying(GLint deltaT)
 {
 	// Check if user is pausing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
-		state = PAUSING;
+		gameState = PAUSING;
 
 	// Temporary for testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
@@ -202,7 +217,7 @@ void ScreenGame::UpdatePausing(GLint deltaT)
 	if (pausTimer >= PAUS_TIMER)
 	{
 		pausTimer = 0.f;
-		state = PAUSED;
+		gameState = PAUSED;
 	}
 }
 
@@ -214,7 +229,7 @@ void ScreenGame::UpdateUnpausing(GLint deltaT)
 	if (unpausTimer <= NULL)
 	{
 		unpausTimer = PAUS_TIMER;
-		state = PLAYING;
+		gameState = PLAYING;
 	}
 }
 
@@ -259,7 +274,6 @@ void ScreenGame::Stop()
 		delete guiManager;
 		guiManager = nullptr;
 	}
-
 
 	drRendering.Stop();
 

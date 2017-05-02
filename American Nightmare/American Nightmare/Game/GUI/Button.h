@@ -60,6 +60,7 @@ public:
 	glm::vec2 getSize();
 	glm::vec4 getColor();
 	bool getPressed();
+	void setPressed(bool pressed);
 
 private:
 	bool pressed;			//< If the button have been pressed or not

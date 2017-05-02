@@ -36,6 +36,9 @@
 float randBetweenF(float low, float high);
 glm::vec3 fromScreenToWorld(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
 
+// Game State
+enum State { Game, StartMeny, Options, Cutscene, Posters, Exit };
+
 // Vertex Struct for vertex buffers, etc
 struct Vertex
 {

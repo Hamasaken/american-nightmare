@@ -11,9 +11,9 @@ ScreenStart::ScreenStart(const ScreenStart& other) { }
 
 ScreenStart::~ScreenStart() { }
 
-bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, SoundManager* soundManager)
+bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager)
 {
-	Screen::Start(screenSize, screenPosition, soundManager);
+	Screen::Start(screenSize, screenPosition, state, soundManager);
 
 	////////////////////////////////////////////////////////////
 	// Creating Shader Manager
@@ -44,9 +44,9 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, SoundMan
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
 	guiManager->setShader(shaderManager->getShader("texture"));
-	guiManager->AddButton(glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddButton(glm::vec3(0, 0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddButton(glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(GUIManager::OPTIONS, glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
 	guiManager->setAlpha(1.f);
 
 	// Setting starting variables
@@ -65,6 +65,20 @@ void ScreenStart::Update(GLint deltaT)
 {
 	// Updating Buttons
 	guiManager->Update(deltaT);
+
+	for (std::pair<Button*, GUIManager::Action> button : guiManager->getButtonList())
+	{
+		if (button.first->getPressed())
+		{
+			switch (button.second)
+			{
+			case GUIManager::Action::PLAY: *state = State::Game; break;
+			case GUIManager::Action::OPTIONS: *state = State::Options; break;
+			case GUIManager::Action::EXIT: *state = State::Exit; break;
+			}
+			button.first->setPressed(false);
+		}
+	}
 }
 
 void ScreenStart::Draw()
@@ -72,8 +86,8 @@ void ScreenStart::Draw()
 	// Getting view matrix from camera
 	camera->buildViewMatrix();
 
-	for (Button* object : guiManager->getButtonList())
-		DrawObjectGUI(object, shaderManager);
+	for (std::pair<Button*, GUIManager::Action> button : guiManager->getButtonList())
+		DrawObjectGUI(button.first, shaderManager);
 }
 
 void ScreenStart::Stop()

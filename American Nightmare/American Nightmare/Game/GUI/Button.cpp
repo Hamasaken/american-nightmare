@@ -133,3 +133,5 @@ glm::vec2 Button::getSize() { return size; }
 glm::vec4 Button::getColor() { return color; }
 
 bool Button::getPressed() { return pressed; }
+
+void Button::setPressed(bool pressed) {	this->pressed = pressed; }

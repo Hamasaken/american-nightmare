@@ -14,8 +14,8 @@
 class ScreenManager
 {
 public:
-	enum State { Game, StartMeny, Options, Cutscene, Posters };
 	State currentState;
+	State prevState;
 
 	ScreenManager();
 	ScreenManager(const ScreenManager& other);
@@ -41,9 +41,9 @@ public:
 	bool StartCurrentScreen();
 
 	////////////////////////////////////////////////////////////
-	// \brief Unloads the current state
+	// \brief Unloads a specific screen
 	////////////////////////////////////////////////////////////
-	void StopCurrentScreen();
+	void StopScreen(State state);
 
 	////////////////////////////////////////////////////////////
 	// \brief Will switch current state and it will also run the 
