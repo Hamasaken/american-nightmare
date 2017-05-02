@@ -15,29 +15,31 @@ Projectile::Projectile(b2World *world, GLuint shader)
 
 Projectile::~Projectile()
 {
+
+	hitbox->Stop();
 }
 
 void Projectile::fireBullet(b2World* world, glm::vec2 position)
 {
 	if (right)
 	{
-		hitbox->AddBodyToWorld(world, position, b2_dynamicBody, false);
-		hitbox->getBody()->ApplyLinearImpulseToCenter({500, 0 }, true);
+		hitbox->InitializeHitbox(world, glm::vec2(position.x + 2, position.y), glm::vec2(0.5f, 0.5f), b2_dynamicBody);
+		hitbox->getBody()->ApplyLinearImpulseToCenter({50000.f, 0 }, true);
 	}
 	if (left)
 	{
-		hitbox->AddBodyToWorld(world, position, b2_dynamicBody, false);
-		hitbox->getBody()->ApplyLinearImpulseToCenter({ -500, 0 }, true);
+		hitbox->InitializeHitbox(world, glm::vec2(position.x - 2, position.y), glm::vec2(0.5f, 0.5f), b2_dynamicBody);
+		hitbox->getBody()->ApplyLinearImpulseToCenter({ -50000.f, 0 }, true);
 	}
 	if (up)
 	{
-		hitbox->AddBodyToWorld(world, position, b2_dynamicBody, false);
-		hitbox->getBody()->ApplyLinearImpulseToCenter({ 0, -500 }, true);
+		hitbox->InitializeHitbox(world, glm::vec2(position.x, position.y - 2), glm::vec2(0.5f, 0.5f), b2_dynamicBody);
+		hitbox->getBody()->ApplyLinearImpulseToCenter({ 0, -50000.f }, true);
 	}
 	if (down)
 	{
-		hitbox->AddBodyToWorld(world, position, b2_dynamicBody, false);
-		hitbox->getBody()->ApplyLinearImpulseToCenter({ 0, 500 }, true);
+		hitbox->InitializeHitbox(world, glm::vec2(position.x, position.y + 2), glm::vec2(0.5f, 0.5f), b2_dynamicBody);
+		hitbox->getBody()->ApplyLinearImpulseToCenter({ 0, 50000.f }, true);
 	}
 
 
