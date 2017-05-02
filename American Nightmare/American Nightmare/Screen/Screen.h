@@ -61,9 +61,9 @@ public:
 	////////////////////////////////////////////////////////////
 	void DrawObject(Object* object, ShaderManager* shaderManager);
 	void DrawObjectGUI(Object* object, ShaderManager* shaderManager);
-	void DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList);
+	void DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList);
 	void DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager);
-	void DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList);
+	void DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList);
 	void DrawParticles(ParticleManager* particleManager, ShaderManager* shaderManager);
 
 protected:
