@@ -6,9 +6,10 @@ GUIManager::GUIManager(const GUIManager & other) { }
 
 GUIManager::~GUIManager() { }
 
-bool GUIManager::Start(glm::vec2 screenSize)
+bool GUIManager::Start(glm::vec2 screenSize, glm::vec2 screenPosition)
 {
 	this->screenSize = screenSize;
+	this->screenPosition = screenPosition;
 
 	return true;
 }
@@ -21,11 +22,10 @@ void GUIManager::Stop()
 
 void GUIManager::Update(GLuint deltaT)
 {
-	// Send in mouse pos
-	// --
+	glm::vec2 mousePosition = fromScreenToWorld(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), screenSize, screenPosition);
 
 	for (Button* button : buttons)
-		button->Update(deltaT);
+		button->Update(deltaT, mousePosition);
 }
 
 bool GUIManager::AddButton(glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material)

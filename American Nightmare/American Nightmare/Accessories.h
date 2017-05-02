@@ -34,8 +34,7 @@
 
 // Functions
 float randBetweenF(float low, float high);
-glm::vec3 fromScreenToWorld(glm::vec2 position, glm::vec2 screenSize, glm::mat4 view, glm::mat4 projection);
-glm::vec3 fromScreenToWorld(glm::vec2 position);
+glm::vec3 fromScreenToWorld(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
 
 // Vertex Struct for vertex buffers, etc
 struct Vertex

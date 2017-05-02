@@ -62,6 +62,7 @@ private:
 	HINSTANCE hInstance;		//< hInstance
 	HWND hwnd;					//< Windowhandle from SDL window
 	glm::vec2 screenSize;		//< Screensize in (x,y)
+	int posX, posY;				//< Screen Position in (x,y)
 };
 
 #endif // !PROGRAM

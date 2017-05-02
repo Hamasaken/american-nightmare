@@ -19,6 +19,9 @@ bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, con
 	this->screenSize = screenSize;
 	this->size = size;
 	this->color = color;
+	this->state = Nothing;
+	this->prevState = Nothing;
+	this->pressed = false;
 
 	// Creating model object
 	model = new Model();
@@ -53,35 +56,45 @@ bool Button::StartText(std::string fontName, float characterSize)
 	return true;
 }
 
-bool Button::isMouseInside()
+bool Button::isMouseInside(glm::vec2 mousePosition)
 {
-	glm::vec2 mousePosition = fromScreenToWorld(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y));
-	return (mousePosition.x > position.x && mousePosition.x < position.x + size.x &&
-		mousePosition.y > position.y && mousePosition.y < position.y + size.y);
+	return (mousePosition.x > position.x - size.x &&
+			mousePosition.y > -position.y - size.y &&
+			mousePosition.x < position.x + size.x &&
+			mousePosition.y < -position.y + size.y);
 }
 
-void Button::Update(GLint deltaT)
+void Button::Update(GLint deltaT, glm::vec2 mousePosition)
 {
-	switch (state)
+	if (prevState != state)
 	{
-	case Hovering:
-	case Pressed:
-	case Released:
-	//	position.x += 1;
-		break;
-	case Nothing:
-		break;
+		switch (state)
+		{
+		case Hovering:
+			setColor(glm::vec4(1, 1, 1, 0.8f));
+			break;
+		case Pressed:
+			setColor(glm::vec4(1, 1, 1, 0.25f));
+			break;
+		case Released:
+			pressed = true;
+			break;
+		case Nothing:
+			setColor(glm::vec4(1, 1, 1, 1.f));
+			break;
+		}
+		prevState = state;
 	}
 
 	// Checking if pressed or not
 	if (state == State::Pressed)
 	{
 		if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			state = isMouseInside() ? State::Released : State::Nothing;
+			state = isMouseInside(mousePosition) ? State::Released : State::Nothing;
 	}
 	else
 	{
-		if (isMouseInside())
+		if (isMouseInside(mousePosition))
 		{
 			state = sf::Mouse::isButtonPressed(sf::Mouse::Left) ? State::Pressed : State::Hovering;
 		}
@@ -118,3 +131,5 @@ Button::State Button::getState() { return state; }
 glm::vec2 Button::getSize() { return size; }
 
 glm::vec4 Button::getColor() { return color; }
+
+bool Button::getPressed() { return pressed; }
