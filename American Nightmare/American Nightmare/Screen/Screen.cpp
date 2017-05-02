@@ -77,8 +77,9 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 	object->Draw();
 }
 
-void Screen::DrawObjectGUI(Button* object, ShaderManager * shaderManager)
-{	// Getting matrices
+void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
+{	
+	// Getting matrices
 	glm::mat4 world = worldMatrix;
 	glm::mat4 view = camera->getViewMatrix();
 	glm::mat4 projection = projectionMatrix;
@@ -101,12 +102,24 @@ void Screen::DrawObjectGUI(Button* object, ShaderManager * shaderManager)
 	shaderManager->setShader(object->getShader());
 	shaderManager->SetParameters(world, view, projection);
 
-	glEnable(GL_TEXTURE_2D);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, object->getTextureID());
+	if (dynamic_cast<Button*>(object) != nullptr)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, object->getTextureID());
 
-	glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
-	glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), object->getColor().a);
+		glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
+		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), dynamic_cast<Button*>(object)->getColor().a);
+	}
+	else
+	{
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, object->getTexture());
+
+		glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
+		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), 1.f);
+	}
 
 	// Drawing object
 	object->Draw();

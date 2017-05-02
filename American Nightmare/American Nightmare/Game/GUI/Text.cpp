@@ -6,12 +6,13 @@ Text::Text(const Text & other) { }
 
 Text::~Text() { }
 
-bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+bool Text::Start(glm::vec2 screenSize, std::string fontName, std::string text, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
 	this->position = position;
 	this->rotation = rotation;
 	this->scale = scale;
 	this->screenSize = screenSize;
+	this->shader = shader;
 
 	// Creating a empty model class
 	model = new Model();
@@ -22,7 +23,7 @@ bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize
 		return false;
 
 	// Creating a default string 
-	CreateText("Default");
+	CreateText(text);
 
 	return true;
 }

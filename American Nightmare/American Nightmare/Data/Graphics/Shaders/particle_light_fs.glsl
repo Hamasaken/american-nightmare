@@ -14,8 +14,8 @@ out vec4 outputColor;
 void main(void)
 {
 	vec4 color = frag.color;
-	color = vec4(1, 1, 1, 1);
 
 	float distance = abs(distance(frag.position.xy, frag.center.xy));
-	outputColor = vec4(color.r, color.g, color.b, -0.50 + color.a / (8.f * distance));	
+	outputColor = vec4(color.r, color.g, color.b, -0.39 + color.a / (8.f * distance));	
 }
+

@@ -72,8 +72,8 @@ void ScreenStart::Draw()
 	// Getting view matrix from camera
 	camera->buildViewMatrix();
 
-	for (Object* object : guiManager->getObjectList())
-		DrawObjectGUI(dynamic_cast<Button*>(object), shaderManager);
+	for (Button* object : guiManager->getButtonList())
+		DrawObjectGUI(object, shaderManager);
 }
 
 void ScreenStart::Stop()

@@ -79,11 +79,12 @@ bool ScreenGame::Start(glm::vec2 screenSize, SoundManager* soundManager)
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize)) return false;
-	guiManager->setShader(shaderManager->getShader("texture"));
 	guiManager->AddButton(glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
 	guiManager->AddButton(glm::vec3(0, 0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
 	guiManager->AddButton(glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddText(glm::vec3(0, 0.5f, 0), 0.0001f, "WHAT", "framd.ttf");
 	guiManager->setAlpha(0.f);
+	guiManager->setShader(shaderManager->getShader("texture"));
 
 	// Setting startvariables
 	SetStartVariables();
@@ -154,8 +155,10 @@ void ScreenGame::Draw()
 	// Drawing gui Manager if we're paused
 	if (state != PLAYING)
 	{
-		for (Object* object : guiManager->getObjectList())
-			DrawObjectGUI(dynamic_cast<Button*>(object), shaderManager);
+		for (Button* object : guiManager->getButtonList())
+			DrawObjectGUI(object, shaderManager);
+		for (Text* object : guiManager->getTextList())
+			DrawObjectGUI(object, shaderManager);
 	}
 }
 
@@ -176,7 +179,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	// Temporary for testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
-		particleManager->Effect(ParticleEmitter::TRIANGLE, levelManager->getPlayer()->getPosition(), glm::vec4(randBetweenF(0, 1), randBetweenF(0, 1), randBetweenF(0, 1), randBetweenF(0, 1)), 100);
+		particleManager->Effect(ParticleEmitter::TRIANGLE, levelManager->getPlayer()->getPosition(), glm::vec4(randBetweenF(0.8f, 1.f), randBetweenF(0.f, 0.35f), 0.f, randBetweenF(0, 1.f)), 50);
 
 	// Updating particles effects
 	particleManager->Update(deltaT);

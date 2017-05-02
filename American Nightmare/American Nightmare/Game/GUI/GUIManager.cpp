@@ -46,7 +46,7 @@ bool GUIManager::AddText(glm::vec3 position, float characterSize, std::string te
 
 	Text* txt = new Text();
 	if (txt == nullptr) return false;
-	if (!txt->Start(screenSize, fontPath + "framd.ttf", 30.f, position)) return false;
+	if (!txt->Start(screenSize, fontPath + fontName, text, characterSize, position)) return false;
 	txt->setShader(shader);
 
 	texts.push_back(txt);
@@ -70,12 +70,20 @@ void GUIManager::setShader(GLuint shader)
 		text->setShader(shader);
 }
 
-std::vector<Object*> GUIManager::getObjectList()
+std::vector<Button*> GUIManager::getButtonList()
 {
-	std::vector<Object*> objects;
+	std::vector<Button*> objects;
 
 	for (Button* button : buttons)
 		objects.push_back(button);
+
+	return objects;
+}
+
+std::vector<Text*> GUIManager::getTextList()
+{
+	std::vector<Text*> objects;
+
 	for (Text* text : texts)
 		objects.push_back(text);
 
