@@ -54,13 +54,10 @@ void main(void)
 {
 	vec4 bufferColor = texture2D(texture, vec2(textureUV.x, 1.f - textureUV.y));
 	vec3 bufferNormal = texture2D(normal, vec2(textureUV.x, 1.f - textureUV.y)).rgb;
+	bufferNormal = normalize(bufferNormal * 2.0 - 1.0);
 
-	/*bufferNormal = mat3(vec3(cos(3.14/7.f), 0, sin(3.14/7.f)), 
-		vec3(0, 1, 0),
-		vec3(-sin(3.14/7.f), 0, cos(3.14/7.f))) * bufferNormal;
-	
 	if (!isRight)
-		bufferNormal.x = bufferNormal.x * -1.f;*/
+		bufferNormal.x = bufferNormal.x * -1.f;
 
 	vec4 result = vec4(0);
 
@@ -71,7 +68,7 @@ void main(void)
 		float distance = length(pointLights[i].position.xyz - position);
 
 		if(distance < pointLights[i].radius)
-			result += lightCalc(pointLights[i].position, pointLights[i].diffuse, pointLights[i].strength, pointLights[i].constant, pointLights[i].linear, pointLights[i].quadratic, position, normalw, bufferColor, distance);	
+			result += lightCalc(pointLights[i].position, pointLights[i].diffuse, pointLights[i].strength, pointLights[i].constant, pointLights[i].linear, pointLights[i].quadratic, position, bufferNormal, bufferColor, distance);	
 	}
 
 	if(result.x > bufferColor.x)

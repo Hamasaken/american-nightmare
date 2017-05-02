@@ -22,7 +22,8 @@ public:
 	void setShader(GLuint shader);
 	void setAlpha(float alpha);
 
-	std::vector<Object*> getObjectList();
+	std::vector<Button*> getButtonList();
+	std::vector<Text*> getTextList();
 
 private:
 

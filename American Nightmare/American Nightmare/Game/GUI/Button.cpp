@@ -47,10 +47,8 @@ bool Button::StartText(std::string fontName, float characterSize)
 	// Creating text object
 	text = new Text();
 	if (text == nullptr) return false;
-	if (!text->Start(screenSize, fontName, characterSize, position, rotation, scale))
+	if (!text->Start(screenSize, fontName, "BTN text", characterSize, position, rotation, scale))
 		return false;
-
-	text->CreateText("Default");
 
 	return true;
 }

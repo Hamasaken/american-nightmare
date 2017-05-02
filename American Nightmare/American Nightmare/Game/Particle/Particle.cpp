@@ -12,7 +12,6 @@ void Particle::Start(glm::vec3 position, glm::vec4 color)
 	isDead = false;
 	vertex.setPosition(position);
 	vertex.setColor(color);
-//	vertex.setSize(glm::vec2(10, 10));
 
 	// Setting some random variables
 	lifeTime = PARTICLE_LIFETIME;
