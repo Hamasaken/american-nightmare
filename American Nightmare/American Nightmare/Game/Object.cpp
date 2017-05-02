@@ -62,5 +62,4 @@ void Object::setScale(glm::vec3 scale) { this->scale = scale; }
 glm::vec3 Object::getScale() const { return scale; }
 void Object::setShader(GLuint shader) { this->shader = shader; }
 GLuint Object::getShader() const { return shader; }
-GLuint Object::getTexture() const {	return texture; }
 GLuint Object::getTextureID() const { return material->getTextureID(); }

@@ -69,7 +69,6 @@ GLint MaterialManager::AddTexture(std::string name, std::string texturePath)
 
 GLuint MaterialManager::loadTexture(std::string inImage)
 {
-
 	sf::Image* sfImage = new sf::Image();
 	if (!sfImage->loadFromFile(inImage))
 	{

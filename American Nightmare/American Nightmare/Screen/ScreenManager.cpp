@@ -143,8 +143,8 @@ bool ScreenManager::goToState(State state)
 void ScreenManager::Update(GLint deltaT)
 {
 	// Temporary state switching
-//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F1))		{ goToState(Game); }
-//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F2))	{ goToState(StartMeny); }
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F1))		{ goToState(Game); }
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F2))	{ goToState(StartMeny); }
 //	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F3))	{ goToState(Options); }
 //	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F4))	{ goToState(Cutscene); }
 //	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F5))	{ goToState(Posters); }

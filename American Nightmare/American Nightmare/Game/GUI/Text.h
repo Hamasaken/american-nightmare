@@ -43,8 +43,8 @@ public:
 
 	// Set & Get functions
 	std::string getString();
-	glm::vec2 getSize();
 	glm::vec4 getColor();
+	GLuint getTexture() const;
 	void setString(std::string text);
 	void setColor(glm::vec4 color);
 
@@ -57,9 +57,9 @@ private:
 	////////////////////////////////////////////////////////////
 	bool LoadFont(std::string fontName, float characterSize);
 
+	GLuint texture;			//< This object's texture 
 	TTF_Font* font;			//< The font of this text
 	std::string text;		//< The string of text to be displayed
-	glm::vec2 size;			//< The texture dimension of the full text, can't be changed
 	glm::vec4 color;		//< Text color
 	glm::vec2 screenSize;	//< The overall screen size
 };

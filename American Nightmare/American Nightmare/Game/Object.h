@@ -46,7 +46,6 @@ public:
 	glm::vec3 getScale() const;
 	virtual void setShader(GLuint shader);
 	GLuint getShader() const;
-	GLuint getTexture() const;
 	GLuint getTextureID() const;
 
 protected:
@@ -57,7 +56,6 @@ protected:
 
 protected:	// Note: Make this private when loadModel is implemented!
 	Model* model;	//< This object's model
-	GLuint texture;	//< This object's texture 
 	const MaterialManager::Material* material; //< This object's material
 };
 

@@ -11,7 +11,8 @@ Button::~Button() { }
 
 bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, glm::vec4 color)
 {
-	Object::Start("", material);
+	if (!Object::Start("", material))
+		return false;
 
 	this->position = position;
 	this->rotation = glm::vec3(0, 0, 0);
@@ -22,13 +23,6 @@ bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, con
 	this->state = Nothing;
 	this->prevState = Nothing;
 	this->pressed = false;
-
-	// Creating model object
-	model = new Model();
-	if (model == nullptr) return false;
-
-	// Updating quad model
-	model->BuildQuadTexture();
 
 	return true;
 }
@@ -50,7 +44,7 @@ bool Button::StartText(std::string fontName, float characterSize)
 	// Creating text object
 	text = new Text();
 	if (text == nullptr) return false;
-	if (!text->Start(screenSize, fontName, "BTN text", characterSize, position, rotation, scale))
+	if (!text->Start(screenSize, fontName, "BTN text", characterSize, position, rotation))
 		return false;
 
 	return true;
