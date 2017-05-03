@@ -14,6 +14,7 @@ public:
 		EFFECT,			// particle effect
 		SFX,			// sound effect
 		SPAWN,			// spawns an entity
+		SAVE,			// save station
 		CUTSCENE		// plays an cutscene
 	};
 	TriggerType triggerType;	//< The type of trigger this is
