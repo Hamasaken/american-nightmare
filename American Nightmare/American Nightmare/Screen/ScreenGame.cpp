@@ -80,12 +80,12 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
+	guiManager->setShader(shaderManager->getShader("texture"));
 	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
 	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
 	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddText(glm::vec3(0, 0.5f, 0), 100.f, "WHAT", "framd.ttf");
+//	guiManager->AddText(glm::vec3(0, 0.5f, 0), 30.f, "WHAT", "framd.ttf");
 	guiManager->setAlpha(0.f);
-	guiManager->setShader(shaderManager->getShader("texture"));
 
 	// Setting startvariables
 	SetStartVariables();
@@ -154,9 +154,9 @@ void ScreenGame::Draw()
 	// Drawing gui Manager if we're paused
 	if (gameState != PLAYING)
 	{
-		for (std::pair<Button*, GUIManager::Action> button : guiManager->getButtonList())
+		for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
 			DrawObjectGUI(button.first, shaderManager);
-		for (Text* object : guiManager->getTextList())
+		for (Text* object : *guiManager->getTextList())
 			DrawObjectGUI(object, shaderManager);
 	}
 }
@@ -166,7 +166,7 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 	// Updating Buttons
 	guiManager->Update(deltaT);
 
-	for (std::pair<Button*, GUIManager::Action> button : guiManager->getButtonList())
+	for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
 	{
 		if (button.first->getPressed())
 		{

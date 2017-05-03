@@ -115,12 +115,14 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 	}
 	else
 	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, dynamic_cast<Text*>(object)->getTexture());
 
 		glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
-		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), dynamic_cast<Text*>(object)->getColor().a);
+		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), 1.f);
 	}
 
 	// Drawing object
