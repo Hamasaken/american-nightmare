@@ -27,7 +27,7 @@ public:
 	// \param position Position of the trigger
 	// \param size Scale/Size of the trigger
 	////////////////////////////////////////////////////////////
-	bool InitializeTrigger(TriggerType type, b2World* world, glm::vec2 position, glm::vec2 size);
+	bool InitializeTrigger(TriggerType type, b2World* world, glm::vec2 position, glm::vec2 size, bool isSensor = true);
 
 	////////////////////////////////////////////////////////////
 	// \brief Checks collision with this trigger

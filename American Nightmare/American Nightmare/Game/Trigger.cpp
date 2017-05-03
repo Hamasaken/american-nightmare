@@ -1,10 +1,10 @@
 #include "Trigger.h"
 
-bool Trigger::InitializeTrigger(TriggerType type, b2World * world, glm::vec2 position, glm::vec2 size)
+bool Trigger::InitializeTrigger(TriggerType type, b2World * world, glm::vec2 position, glm::vec2 size, bool isSensor)
 {
 	this->triggerType = type;
 
-	if (!InitializeHitbox(world, position, size, b2BodyType::b2_kinematicBody, b2Shape::e_polygon, true, 0, 0, false, true))
+	if (!InitializeHitbox(world, position, size, b2BodyType::b2_kinematicBody, b2Shape::e_polygon, true, 0, 0, false, isSensor))
 		return false;
 
 	return true;
@@ -18,7 +18,9 @@ void Trigger::CheckCollision(void* bodyPtr)
 	{
 		b2Body* body = contact->other;
 		if (body == bodyPtr)
+		{
 			isTriggered = true;
+		}
 	}
 }
 

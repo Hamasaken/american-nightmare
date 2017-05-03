@@ -304,7 +304,8 @@ void LevelManager::Update(GLint deltaT)
 
 	// Updating triggers and checking for collisions
 	for (Trigger* trigger : triggers)
-		trigger->CheckCollision(player->getBody());
+		if (!trigger->getIsTriggered())	
+			trigger->CheckCollision(player->getBody());
 	
 	// Checking triggers
 	CheckTriggers();
@@ -328,6 +329,7 @@ void LevelManager::CheckTriggers()
 				moveble->Start("", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, -(rand() % 40)), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
 				moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
 				map.push_back(moveble);
+				trigger->setIsTriggered(false);
 			}
 				break;
 
@@ -341,7 +343,6 @@ void LevelManager::CheckTriggers()
 				break;
 			case Trigger::CUTSCENE:				break;
 			}
-			trigger->setIsTriggered(false);
 		}
 	}
 }
