@@ -77,7 +77,30 @@ void LevelManager::StopMap()
 			object = nullptr;
 		}
 	}
+
+	// Unloads every hitbox in the map
+	for (Hitbox* hitbox : hitboxes)
+	{
+		if (hitbox != nullptr)
+		{
+			hitbox->Stop();
+			delete hitbox;
+			hitbox = nullptr;
+		}
+	}
+
+	// Unloads every trigger in the map
+	for (Trigger* trigger : triggers)
+	{
+		if (trigger != nullptr)
+		{
+			trigger->Stop();
+			delete trigger;
+			trigger = nullptr;
+		}
+	}
 }
+
 
 bool LevelManager::LoadLevel(GLuint shader, std::string levelFile)
 {
@@ -197,6 +220,35 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	hitboxes.push_back(hitbox);
 
 	////////////////////////////////////////////////////////////
+	// Action Triggers
+	////////////////////////////////////////////////////////////
+	Trigger* trigger = new Trigger();
+	trigger->InitializeTrigger(Trigger::EFFECT, world, glm::vec2(10, -20), glm::vec2(1.f, 1.f));
+	triggers.push_back(trigger);
+
+	trigger = new Trigger();
+	trigger->InitializeTrigger(Trigger::SPAWN, world, glm::vec2(-10, -15), glm::vec2(1.f, 1.f));
+	triggers.push_back(trigger);
+
+	// Triggers visuals
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
+	background->setScale(glm::vec3(1, 1, 1));
+	background->setPosition(glm::vec3(10, 20, 0));
+	background->setRotation(glm::vec3(0, 0, 0));
+	map.push_back(background);
+
+	// Trigger visuals
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
+	background->setScale(glm::vec3(1, 1, 1));
+	background->setPosition(glm::vec3(-10, 15, 0));
+	background->setRotation(glm::vec3(0, 0, 0));
+	map.push_back(background);
+
+	////////////////////////////////////////////////////////////
 	// Lights
 	////////////////////////////////////////////////////////////
 	Object* light = new Object();
@@ -215,7 +267,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	lightManager->AddPointLight(glm::vec4(-20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.001f);
 	lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.001f);
 
-	lightManager->AddDirectionalLight(glm::vec4(-1, -1, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
+//	lightManager->AddDirectionalLight(glm::vec4(-1, -1, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
 
 	//lightManager->AddPointLight(glm::vec4(0, 10, 0, 1), glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 1, 1), 1.f, 1, 0.01f, 0.001f);
 	//printf("%f\n", lightManager->getPointLightList()[0]->radius);
@@ -256,6 +308,7 @@ void LevelManager::Update(GLint deltaT)
 	
 	//moveble->Update(deltaT);
 
+	// Updating enemies
 	enemy->Update(deltaT, player->getBody()->GetPosition());
 
 	// Updating physics
@@ -267,6 +320,97 @@ void LevelManager::Update(GLint deltaT)
 
 	for (Object* object : map)
 		object->Update(deltaT);
+
+	// Updating triggers and checking for collisions
+	for (Trigger* trigger : triggers)
+		if (!trigger->getIsTriggered())	
+			trigger->CheckCollision(player->getBody());
+	
+	// Checking triggers
+	CheckTriggers();
+}
+
+void LevelManager::CheckTriggers()
+{
+	for (Trigger* trigger : triggers)
+	{
+		if (trigger->getIsTriggered())
+		{
+			switch (trigger->triggerType)
+			{
+
+			////////////////////////////////////////////////////////////
+			// Door - The player switches level
+			////////////////////////////////////////////////////////////
+			case Trigger::DOOR:	
+
+				// Checks if the door have a level file
+				if (!trigger->getData().empty())
+				{
+					// Loads new level with the current player's shader
+					LoadLevel(player->getShader(), trigger->getData());
+				} 
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Popup - For popups with text/pictures, anything
+			////////////////////////////////////////////////////////////
+			case Trigger::POPUP:				
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Push - Move an entity with a force
+			////////////////////////////////////////////////////////////
+			case Trigger::PUSH:		
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Effect - Starts an particle effect
+			////////////////////////////////////////////////////////////
+			case Trigger::EFFECT:
+				
+				// Temporary effect, clear all lights and adds another
+				lightManager->Clear(); 	
+				lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 0.25f, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.001f);
+				break;
+
+			////////////////////////////////////////////////////////////
+			// SFX - Plays a sound effect
+			////////////////////////////////////////////////////////////
+			case Trigger::SFX:					
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Spawn Trigger - Spawns anything, anywhere, (currently boxes)
+			////////////////////////////////////////////////////////////
+			case Trigger::SPAWN:	
+			{
+				Entity* moveble = new Entity();
+				moveble->setShader(player->getShader());
+				moveble->Start("", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, -(rand() % 40)), glm::vec2(randBetweenF(0.25f, 0.75f), randBetweenF(0.25f, 0.75f)), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
+				map.push_back(moveble);
+			}
+
+				break;
+
+
+			////////////////////////////////////////////////////////////
+			// Save - Save station for the player, saves the game
+			////////////////////////////////////////////////////////////
+			case Trigger::SAVE:
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Cutscene - Switches screen to cutscene and plays a cutscene
+			////////////////////////////////////////////////////////////
+			case Trigger::CUTSCENE:				
+				break;
+			}
+		}
+
+		// Trigger is now deactivated
+		trigger->setIsTriggered(false);
+	}
 }
 
 std::vector<Object*> LevelManager::getMap()

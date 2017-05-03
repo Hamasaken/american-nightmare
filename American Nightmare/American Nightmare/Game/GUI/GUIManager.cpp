@@ -70,14 +70,14 @@ void GUIManager::setShader(GLuint shader)
 		text->setShader(shader);
 }
 
-std::vector<std::pair<Button*, GUIManager::Action>> GUIManager::getButtonList()
+std::vector<std::pair<Button*, GUIManager::Action>>* GUIManager::getButtonList()
 {
-	return buttons;
+	return &buttons;
 }
 
-std::vector<Text*> GUIManager::getTextList()
+std::vector<Text*>* GUIManager::getTextList()
 {
-	return texts;
+	return &texts;
 }
 
 void GUIManager::clearButtons()

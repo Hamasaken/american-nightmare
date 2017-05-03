@@ -6,6 +6,7 @@
 #include <vector>
 #include <Box2D.h>
 #include "../Enemy.h"
+#include "Trigger.h"
 #include "../Projectile.h"
 #include "../MyContactListener.h"
 
@@ -67,8 +68,14 @@ public:
 
 
 private:
+	////////////////////////////////////////////////////////////
+	// \brief Check for action triggers on the map 
+	///////////////////////////////////////////////////////////
+	void CheckTriggers();
+
 	std::vector<Object*> map;	//< Vector with level specific objects
 	std::vector<Hitbox*> hitboxes;
+	std::vector<Trigger*> triggers;
 	Player* player;				//< The player object
 
 	Enemy* enemy;				//< A Enemy object
