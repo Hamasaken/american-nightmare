@@ -8,9 +8,9 @@ class Trigger : public Hitbox
 public:
 	enum TriggerType 
 	{
-		LEVEL_CHANGE,	// changes the current level
+		DOOR,			// changes the current level
 		POPUP,			// tutorial popups
-		TELEPORT,		// moves the player to a new position on the current level
+		PUSH,			// moves an entity
 		EFFECT,			// particle effect
 		SFX,			// sound effect
 		SPAWN,			// spawns an entity
@@ -27,7 +27,7 @@ public:
 	// \param position Position of the trigger
 	// \param size Scale/Size of the trigger
 	////////////////////////////////////////////////////////////
-	bool InitializeTrigger(TriggerType type, b2World* world, glm::vec2 position, glm::vec2 size, bool isSensor = true);
+	bool InitializeTrigger(TriggerType type, b2World* world, glm::vec2 position, glm::vec2 size, std::string data = "", bool isSensor = true);
 
 	////////////////////////////////////////////////////////////
 	// \brief Checks collision with this trigger
@@ -38,18 +38,12 @@ public:
 	// Gets & Sets
 	void setIsTriggered(bool isTriggered);
 	bool getIsTriggered() const;
+	void setData(std::string data);
+	std::string getData() const;
 
 private:
-	bool isTriggered;	//< If the box is triggered by a body or not
-};
-
-class Door : public Trigger
-{
-public:
-	std::string getLevelName();
-
-private:
-	std::string levelName;
+	bool isTriggered;		//< If the box is triggered by a body or not
+	std::string data;		//< Extra Data for various things
 };
 
 #endif // !TRIGGER_H

@@ -21,6 +21,9 @@ bool Entity::Start(std::string modelName, const MaterialManager::Material * mate
 	if (!hitbox->InitializeHitbox(world, position, size, type, shapeType, fixedRotate, density, friction))
 		return false;
 
+	// Updating size
+	this->scale = glm::vec3(size, 1);
+
 	return false;
 }
 

@@ -1,8 +1,9 @@
 #include "Trigger.h"
 
-bool Trigger::InitializeTrigger(TriggerType type, b2World * world, glm::vec2 position, glm::vec2 size, bool isSensor)
+bool Trigger::InitializeTrigger(TriggerType type, b2World * world, glm::vec2 position, glm::vec2 size, std::string data, bool isSensor)
 {
 	this->triggerType = type;
+	this->data = data;
 
 	if (!InitializeHitbox(world, position, size, b2BodyType::b2_kinematicBody, b2Shape::e_polygon, true, 0, 0, false, isSensor))
 		return false;
@@ -26,11 +27,5 @@ void Trigger::CheckCollision(void* bodyPtr)
 
 void Trigger::setIsTriggered(bool isTriggered) { this->isTriggered = isTriggered; }
 bool Trigger::getIsTriggered() const { return isTriggered; }
-
-////////////////////////////////////////////////////////////
-// Door
-////////////////////////////////////////////////////////////
-std::string Door::getLevelName()
-{
-	return levelName;
-}
+void Trigger::setData(std::string data) { this->data = data; }
+std::string Trigger::getData() const { return data; }

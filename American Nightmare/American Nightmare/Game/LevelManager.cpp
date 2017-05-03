@@ -226,10 +226,10 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	triggers.push_back(trigger);
 
 	trigger = new Trigger();
-	trigger->InitializeTrigger(Trigger::TELEPORT, world, glm::vec2(-10, -15), glm::vec2(1.f, 1.f));
+	trigger->InitializeTrigger(Trigger::SPAWN, world, glm::vec2(-10, -15), glm::vec2(1.f, 1.f));
 	triggers.push_back(trigger);
 
-	// Right platform cave
+	// Triggers visuals
 	background = new Object();
 	background->setShader(shader);
 	background->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
@@ -238,7 +238,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	background->setRotation(glm::vec3(0, 0, 0));
 	map.push_back(background);
 
-	// Right platform cave
+	// Trigger visuals
 	background = new Object();
 	background->setShader(shader);
 	background->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
@@ -266,7 +266,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	lightManager->AddPointLight(glm::vec4(-20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.001f);
 	lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.001f);
 
-	lightManager->AddDirectionalLight(glm::vec4(-1, -1, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
+//	lightManager->AddDirectionalLight(glm::vec4(-1, -1, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
 
 	//lightManager->AddPointLight(glm::vec4(0, 10, 0, 1), glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 1, 1), 1.f, 1, 0.01f, 0.001f);
 	//printf("%f\n", lightManager->getPointLightList()[0]->radius);
@@ -319,31 +319,71 @@ void LevelManager::CheckTriggers()
 		{
 			switch (trigger->triggerType)
 			{
-			case Trigger::LEVEL_CHANGE:			break;
-			case Trigger::POPUP:				break;
-			case Trigger::TELEPORT:		
+
+			////////////////////////////////////////////////////////////
+			// Door - The player switches level
+			////////////////////////////////////////////////////////////
+			case Trigger::DOOR:	
+
+				// Checks if the door have a level file
+				if (!trigger->getData().empty())
+				{
+					// Loads new level with the current player's shader
+					LoadLevel(player->getShader(), trigger->getData());
+				} 
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Popup - For popups with text/pictures, anything
+			////////////////////////////////////////////////////////////
+			case Trigger::POPUP:				
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Push - Move an entity with a force
+			////////////////////////////////////////////////////////////
+			case Trigger::PUSH:		
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Effect - Starts an particle effect
+			////////////////////////////////////////////////////////////
+			case Trigger::EFFECT:
 				
+				// Temporary effect, clear all lights and adds another
+				lightManager->Clear(); 	
+				lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 0.25f, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.001f);
+				break;
+
+			////////////////////////////////////////////////////////////
+			// SFX - Plays a sound effect
+			////////////////////////////////////////////////////////////
+			case Trigger::SFX:					
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Spawn Trigger - Spawns anything, anywhere, (currently boxes)
+			////////////////////////////////////////////////////////////
+			case Trigger::SPAWN:	
 			{
 				Entity* moveble = new Entity();
 				moveble->setShader(player->getShader());
-				moveble->Start("", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, -(rand() % 40)), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
-				moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
+				moveble->Start("", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, -(rand() % 40)), glm::vec2(randBetweenF(0.25f, 0.75f), randBetweenF(0.25f, 0.75f)), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
 				map.push_back(moveble);
-				trigger->setIsTriggered(false);
 			}
+
 				break;
 
-			case Trigger::EFFECT:
-				lightManager->Clear(); 	
-				lightManager->AddPointLight(glm::vec4(20, 20, 5, 1), glm::vec4(1, 0.25f, 1, 1), glm::vec4(1, 1, 1, 1), 0.15f, 1, 0.01f, 0.001f); 
+			////////////////////////////////////////////////////////////
+			// Cutscene - Switches screen to cutscene and plays a cutscene
+			////////////////////////////////////////////////////////////
+			case Trigger::CUTSCENE:				
 				break;
-
-			case Trigger::SFX:					break;
-			case Trigger::SPAWN:	
-				break;
-			case Trigger::CUTSCENE:				break;
 			}
 		}
+
+		// Trigger is now deactivated
+		trigger->setIsTriggered(false);
 	}
 }
 
