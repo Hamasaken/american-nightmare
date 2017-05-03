@@ -7,6 +7,7 @@
 #include <Box2D.h>
 #include "../Enemy.h"
 #include "../Projectile.h"
+#include "../ProjectileHandler.h"
 #include <Box2D.h>
 
 class LevelManager
@@ -56,8 +57,8 @@ public:
 	const LightManager* getLightManager() const;
 	Player* getPlayer();
 	Enemy* getEnemy();
-	Projectile* getProjectile();
-	//ProjectileHandler* getProjectiles();
+	//Projectile* getProjectile();
+	ProjectileHandler* getProjectiles();
 
 
 
@@ -77,9 +78,8 @@ private:
 	MaterialManager materialManager;
 	b2World *world;
 
-	//ProjectileHandler* myPH;
-
-	Projectile* myProjectile;
+	ProjectileHandler* myPH;
+	//Projectile* myProjectile;
 	//Projectile* moveble;
 
 };

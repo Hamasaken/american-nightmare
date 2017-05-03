@@ -13,6 +13,8 @@ Projectile::Projectile(b2World *world, GLuint shader)
 	isFired = false;
 }
 
+Projectile::Projectile(){}
+
 Projectile::~Projectile()
 {
 
@@ -24,59 +26,38 @@ bool Projectile::getIsFired()
 	return isFired;
 }
 
-void Projectile::fireBullet(b2World* world, glm::vec2 position)
+void Projectile::fireBullet(b2World* world, glm::vec2 position, int dirInt)
 {
-	if (right)
+	if (dirInt == 1)
 	{
 		hitbox->InitializeHitbox(world, glm::vec2(position.x + 2, position.y), glm::vec2(0.5f, 0.5f), b2_dynamicBody);
 		hitbox->getBody()->ApplyLinearImpulseToCenter({50000.f, 0 }, true);
 	}
-	if (left)
+	if (dirInt == 2)
 	{
 		hitbox->InitializeHitbox(world, glm::vec2(position.x - 2, position.y), glm::vec2(0.5f, 0.5f), b2_dynamicBody);
 		hitbox->getBody()->ApplyLinearImpulseToCenter({ -50000.f, 0 }, true);
 	}
-	if (up)
+	if (dirInt == 3)
 	{
 		hitbox->InitializeHitbox(world, glm::vec2(position.x, position.y - 2), glm::vec2(0.5f, 0.5f), b2_dynamicBody);
 		hitbox->getBody()->ApplyLinearImpulseToCenter({ 0, -50000.f }, true);
 	}
-	if (down)
+	if (dirInt == 4)
 	{
 		hitbox->InitializeHitbox(world, glm::vec2(position.x, position.y + 2), glm::vec2(0.5f, 0.5f), b2_dynamicBody);
 		hitbox->getBody()->ApplyLinearImpulseToCenter({ 0, 50000.f }, true);
 	}
-
-
 }
 
-void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)
-{
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		right = true;
-		fireBullet(world, position);
-		right = false;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		left = true;
-		fireBullet(world, position);
-		left = false;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{ 
-		up = true;
-		fireBullet(world, position);
-		up = false;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		down = true;
-		fireBullet(world, position);
-		down = false;
-	}
+//void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)
+//{
+//
+//	Entity::Update(deltaT);
+//}
 
+void Projectile::Update(GLint deltaT)
+{
 	Entity::Update(deltaT);
 }
 
