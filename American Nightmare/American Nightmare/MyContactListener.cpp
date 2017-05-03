@@ -24,7 +24,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		if (dynamic_cast<Enemy*>(bodyB))
 		{
 			printf("Enemy is hurting you!!!\n");
-			player->getBody()->ApplyForce(b2Vec2(0, -1000), b2Vec2(), true);
+			player->getBody()->ApplyForce(b2Vec2(0, -1000000), b2Vec2(), true);
 		}
 	}
 

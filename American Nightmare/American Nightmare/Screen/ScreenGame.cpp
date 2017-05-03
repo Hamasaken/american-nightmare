@@ -132,7 +132,7 @@ void ScreenGame::Draw()
 	//Draw Projectile///////////////////////////////////////////////////////
 	////TESTING
 	//////////////////////////////////////////////////////////////////////
-	DrawObject(levelManager->getProjectile(), shaderManager);
+	//DrawObject(levelManager->getProjectile(), shaderManager);
 	//DrawObject(levelManager->getProjectiles(), shaderManager);
 
 

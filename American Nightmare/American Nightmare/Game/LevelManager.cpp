@@ -304,7 +304,8 @@ void LevelManager::Update(GLint deltaT)
 
 	//Update Projectile
 	//myPH->Update(deltaT, world);
-	myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
+
+	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
 	
 	//moveble->Update(deltaT);
 
