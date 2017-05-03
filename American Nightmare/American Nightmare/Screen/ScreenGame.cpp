@@ -129,6 +129,13 @@ void ScreenGame::Draw()
 	for (Object* object : levelManager->getMap())
 		DrawObjectGeometryPass(object, shaderManager);
 
+	//Draw Projectile///////////////////////////////////////////////////////
+	////TESTING
+	//////////////////////////////////////////////////////////////////////
+	DrawObject(levelManager->getProjectile(), shaderManager);
+	//DrawObject(levelManager->getProjectiles(), shaderManager);
+
+
 	// Transfer deferred rendering depth buffer to forward rendering
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, drRendering.getDRFBO());
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -141,6 +148,7 @@ void ScreenGame::Draw()
 
 	// DR: Light pass
 	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList());
+
 
 	// Drawing player
 	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList());

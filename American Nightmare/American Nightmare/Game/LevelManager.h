@@ -4,8 +4,10 @@
 #include "Player.h"
 #include "LightManager.h"
 #include <vector>
-#include "Box2D.h"
+#include <Box2D.h>
 #include "../Enemy.h"
+#include "../Projectile.h"
+#include "../MyContactListener.h"
 
 class LevelManager
 {
@@ -55,11 +57,15 @@ public:
 	const LightManager* getLightManager() const;
 	Player* getPlayer();
 	Enemy* getEnemy();
+	Projectile* getProjectile();
+	//ProjectileHandler* getProjectiles();
 
 	//////////////////////////////////////////////////////////////
 	// Shoot something
 	/////////////////////////////////////////////////////////////
-	
+	void shoot(GLuint shader, std::string modelPath);
+
+
 private:
 	std::vector<Object*> map;	//< Vector with level specific objects
 	std::vector<Hitbox*> hitboxes;
@@ -70,6 +76,13 @@ private:
 	LightManager* lightManager;
 	MaterialManager* materialManager;
 	b2World *world;
+	MyContactListener contactManager;
+
+	//ProjectileHandler* myPH;
+
+	Projectile* myProjectile;
+	//Projectile* moveble;
+
 };
 
 #endif  !LEVELMANAGER_H

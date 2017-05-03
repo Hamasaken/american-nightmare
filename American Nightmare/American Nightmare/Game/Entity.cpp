@@ -9,6 +9,8 @@ bool Entity::Start(std::string modelName, const MaterialManager::Material * mate
 	if (!hitbox->InitializeHitbox(world))
 		return false;
 
+	hitbox->getBody()->SetUserData(this);
+
 	return false;
 }
 
@@ -20,6 +22,8 @@ bool Entity::Start(std::string modelName, const MaterialManager::Material * mate
 	if (hitbox == nullptr) return false;
 	if (!hitbox->InitializeHitbox(world, position, size, type, shapeType, fixedRotate, density, friction))
 		return false;
+
+	hitbox->getBody()->SetUserData(this);
 
 	return false;
 }

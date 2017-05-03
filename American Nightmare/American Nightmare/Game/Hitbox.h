@@ -3,6 +3,7 @@
 
 #include "Box2D.h"
 #include "../Accessories.h"
+#include "Object.h"
 
 class Hitbox
 {

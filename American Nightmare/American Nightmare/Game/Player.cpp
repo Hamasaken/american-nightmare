@@ -24,6 +24,9 @@ bool Player::Start(std::string modelName, const MaterialManager::Material* mater
 	this->material = material;
 	model->BuildQuadTexture();
 
+
+	getBody()->SetUserData(this);
+
 	return true;
 }
 
@@ -31,7 +34,7 @@ void Player::Update(GLint deltaT)
 {
 	// Getting user input
 	Movement();
-
+	
 	// Updating animation texture
 	updateAnimation(deltaT);
 
@@ -41,6 +44,19 @@ void Player::Update(GLint deltaT)
 
 void Player::Movement()
 {
+	// Temporary movement & rotation & scaling for testing :)
+	
+	// Temp gravity
+	/*velocity.y -= 0.02f;
+	position += glm::vec3(velocity, 0);*/
+
+	if (position.y < 0.f)
+		position.y = 0.f;
+
+	// Jumping
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && position.y == 0) velocity.y = 0.35f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && !jumping) velocity.y = 0.35f;
+
 	// Positioning
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
@@ -87,4 +103,14 @@ void Player::Movement()
 b2Body* Player::getBody()
 {
 	return hitbox->getBody();
+}
+
+glm::vec2 Player::getPlayerPosAsGLM()
+{
+	glm::vec2 myVec;
+
+	myVec.x = hitbox->getPosition().x;
+	myVec.y = hitbox->getPosition().y;
+
+	return myVec;
 }
