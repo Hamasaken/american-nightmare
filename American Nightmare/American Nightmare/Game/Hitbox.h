@@ -34,6 +34,13 @@ public:
 	////////////////////////////////////////////////////////////
 	void Stop();
 
+
+	// Gets & Sets
+	b2Body* getBody();
+	glm::vec2 getPosition();
+
+protected:
+
 	////////////////////////////////////////////////////////////
 	// \brief Creates a b2body object and sends it into world
 	// \param position The starting position of this hitbox
@@ -51,12 +58,6 @@ public:
 	////////////////////////////////////////////////////////////
 	void ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density, float friction);
 
-
-	// Gets & Sets
-	b2Body* getBody();
-	glm::vec2 getPosition();
-
-protected:
 	b2Body* body;			//< The body object inside world
 	b2Fixture* fixture;
 };
