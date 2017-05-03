@@ -3,6 +3,7 @@
 
 #include "Box2D.h"
 #include "../Accessories.h"
+#include "Object.h"
 
 class Hitbox
 {
@@ -48,6 +49,7 @@ public:
 	// \param friction The friction coffeinent [0:1]
 	////////////////////////////////////////////////////////////
 	void ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density, float friction);
+
 
 	// Gets & Sets
 	b2Body* getBody();

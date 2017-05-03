@@ -7,6 +7,7 @@
 #include <Box2D.h>
 #include "../Enemy.h"
 #include "../Projectile.h"
+#include "../MyContactListener.h"
 #include "../ProjectileHandler.h"
 #include <Box2D.h>
 
@@ -77,6 +78,7 @@ private:
 	LightManager* lightManager;
 	MaterialManager materialManager;
 	b2World *world;
+	MyContactListener contactManager;
 
 	ProjectileHandler* myPH;
 	//Projectile* myProjectile;

@@ -9,6 +9,8 @@ LevelManager::~LevelManager() { }
 bool LevelManager::Start(GLuint playerShader)
 {
 	world = new b2World(b2Vec2(NULL, GRAVITY));
+	world->SetContactListener(&contactManager);
+
 	lightManager = new LightManager();
 
 	std::string modelPath = MODEL_PATH;
