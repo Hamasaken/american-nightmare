@@ -1,4 +1,5 @@
 #include "Trigger.h"
+#include "Player.h"
 
 bool Trigger::InitializeTrigger(TriggerType type, b2World * world, glm::vec2 position, glm::vec2 size, bool isSensor)
 {
