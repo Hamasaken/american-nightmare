@@ -16,27 +16,40 @@ public:
 		SPAWN,			// spawns an entity
 		CUTSCENE		// plays an cutscene
 	};
-	TriggerType triggerType;
+	TriggerType triggerType;	//< The type of trigger this is
 
 public:
-	bool InitializeTrigger(TriggerType type, b2World* world, glm::vec2 position, glm::vec2 size);
-	void CheckCollision(GLfloat deltaT, void* playerBodyPtr);
 
+	////////////////////////////////////////////////////////////
+	// \brief Creates a hitbox for this trigger
+	// \param type The type of trigger 
+	// \param world Ptr to the world
+	// \param position Position of the trigger
+	// \param size Scale/Size of the trigger
+	////////////////////////////////////////////////////////////
+	bool InitializeTrigger(TriggerType type, b2World* world, glm::vec2 position, glm::vec2 size);
+
+	////////////////////////////////////////////////////////////
+	// \brief Checks collision with this trigger
+	// \param bodyPtr Pointer to another body
+	////////////////////////////////////////////////////////////
+	void CheckCollision(void* bodyPtr);
+
+	// Gets & Sets
 	void setIsTriggered(bool isTriggered);
 	bool getIsTriggered() const;
 
-protected:
-	////////////////////////////////////////////////////////////
-	// \brief Creates a shape object and sends it into body
-	// \param size The size in width and height in meters 
-	// \param shapeType The type of shape to be created (polygon, circle, rope, mm)
-	// \param density The density in kg/m2
-	// \param friction The friction coffeinent [0:1]
-	////////////////////////////////////////////////////////////
-	void ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density, float friction);
+private:
+	bool isTriggered;	//< If the box is triggered by a body or not
+};
+
+class Door : public Trigger
+{
+public:
+	std::string getLevelName();
 
 private:
-	bool isTriggered;
+	std::string levelName;
 };
 
 #endif // !TRIGGER_H

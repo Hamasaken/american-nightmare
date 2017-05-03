@@ -19,12 +19,12 @@ bool Hitbox::InitializeHitbox(b2World* world)
 	AddBodyToWorld(world, glm::vec2(1.f, 1.f), b2_dynamicBody, false, false);
 
 	// Creating shape for body
-	ModifyShape(glm::vec2(1.f, 1.f), b2Shape::e_polygon, 0.f, 10.f);
+	ModifyShape(glm::vec2(1.f, 1.f), b2Shape::e_polygon, 0.f, 10.f, false);
 
 	return true;
 }
 
-bool Hitbox::InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType, bool canRotate, float density, float friction, bool isBullet)
+bool Hitbox::InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType, bool canRotate, float density, float friction, bool isBullet, bool isSensor)
 {
 	// Checking if world is created
 	if (world == nullptr) return false;
@@ -33,7 +33,7 @@ bool Hitbox::InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size
 	AddBodyToWorld(world, position, type, canRotate, isBullet);
 
 	// Creating shape for body
-	ModifyShape(size, shapeType, density, friction);
+	ModifyShape(size, shapeType, density, friction, isSensor);
 
 	return true;
 }
@@ -67,7 +67,7 @@ void Hitbox::AddBodyToWorld(b2World* world, glm::vec2 position, b2BodyType type,
 	body = world->CreateBody(&bodyDef);
 }
 
-void Hitbox::ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density, float friction)
+void Hitbox::ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density, float friction, bool isSensor)
 {
 	// Creating shape for body
 	b2PolygonShape shape;
@@ -76,6 +76,7 @@ void Hitbox::ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density,
 
 	// Creating the fixture
 	b2FixtureDef fixtureDef;
+	fixtureDef.isSensor = isSensor;
 	fixtureDef.shape = &shape;
 	fixtureDef.density = density;		// in kg/m^2
 	fixtureDef.friction = friction;	// friction [0:1]

@@ -304,7 +304,7 @@ void LevelManager::Update(GLint deltaT)
 
 	// Updating triggers and checking for collisions
 	for (Trigger* trigger : triggers)
-		trigger->CheckCollision(deltaT, player->getBody());
+		trigger->CheckCollision(player->getBody());
 	
 	// Checking triggers
 	CheckTriggers();

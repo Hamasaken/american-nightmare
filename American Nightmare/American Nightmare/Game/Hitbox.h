@@ -26,8 +26,9 @@ public:
 	// \optional isBullet I don't what it does yet, sorry, glhf
 	// \optional density Density of shape, defaults as 0.f
 	// \optional friction Friction of the shape, defaults as 10.f
+	// \optional isSensor If the hitbox have collision or not
 	////////////////////////////////////////////////////////////
-	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, bool fixedRotate = true, float density = 1000.f, float friction = 1.f, bool isBullet = false);
+	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, bool fixedRotate = true, float density = 1000.f, float friction = 1.f, bool isBullet = false, bool isSensor = false);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads body from world
@@ -54,8 +55,9 @@ protected:
 	// \param shapeType The type of shape to be created (polygon, circle, rope, mm)
 	// \param density The density in kg/m2
 	// \param friction The friction coffeinent [0:1]
+	// \param isSensor If the shape have colission or not
 	////////////////////////////////////////////////////////////
-	virtual void ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density, float friction);
+	virtual void ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density, float friction, bool isSensor);
 
 	b2Body* body;			//< The body object inside world
 	b2Fixture* fixture;
