@@ -76,7 +76,30 @@ void LevelManager::StopMap()
 			object = nullptr;
 		}
 	}
+
+	// Unloads every hitbox in the map
+	for (Hitbox* hitbox : hitboxes)
+	{
+		if (hitbox != nullptr)
+		{
+			hitbox->Stop();
+			delete hitbox;
+			hitbox = nullptr;
+		}
+	}
+
+	// Unloads every trigger in the map
+	for (Trigger* trigger : triggers)
+	{
+		if (trigger != nullptr)
+		{
+			trigger->Stop();
+			delete trigger;
+			trigger = nullptr;
+		}
+	}
 }
+
 
 bool LevelManager::LoadLevel(GLuint shader, std::string levelFile)
 {
@@ -196,6 +219,35 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	hitboxes.push_back(hitbox);
 
 	////////////////////////////////////////////////////////////
+	// Action Triggers
+	////////////////////////////////////////////////////////////
+	Trigger* trigger = new Trigger();
+	trigger->InitializeTrigger(Trigger::EFFECT, world, glm::vec2(10, -20), glm::vec2(1.f, 1.f));
+	triggers.push_back(trigger);
+
+	trigger = new Trigger();
+	trigger->InitializeTrigger(Trigger::TELEPORT, world, glm::vec2(-10, -15), glm::vec2(1.f, 1.f));
+	triggers.push_back(trigger);
+
+	// Right platform cave
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
+	background->setScale(glm::vec3(1, 1, 1));
+	background->setPosition(glm::vec3(10, 20, 0));
+	background->setRotation(glm::vec3(0, 0, 0));
+	map.push_back(background);
+
+	// Right platform cave
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
+	background->setScale(glm::vec3(1, 1, 1));
+	background->setPosition(glm::vec3(-10, 15, 0));
+	background->setRotation(glm::vec3(0, 0, 0));
+	map.push_back(background);
+
+	////////////////////////////////////////////////////////////
 	// Lights
 	////////////////////////////////////////////////////////////
 	Object* light = new Object();
@@ -240,6 +292,7 @@ void LevelManager::Update(GLint deltaT)
 	// Updating player
 	player->Update(deltaT);
 
+	// Updating enemies
 	enemy->Update(deltaT, player->getBody()->GetPosition());
 
 	// Updating physics
@@ -248,6 +301,49 @@ void LevelManager::Update(GLint deltaT)
 	// Updating every object on map
 	for (Object* object : map)
 		object->Update(deltaT);
+
+	// Updating triggers and checking for collisions
+	for (Trigger* trigger : triggers)
+		trigger->CheckCollision(deltaT, player->getBody());
+	
+	// Checking triggers
+	CheckTriggers();
+}
+
+void LevelManager::CheckTriggers()
+{
+	for (Trigger* trigger : triggers)
+	{
+		if (trigger->getIsTriggered())
+		{
+			switch (trigger->triggerType)
+			{
+			case Trigger::LEVEL_CHANGE:			break;
+			case Trigger::POPUP:				break;
+			case Trigger::TELEPORT:		
+				
+			{
+				Entity* moveble = new Entity();
+				moveble->setShader(player->getShader());
+				moveble->Start("", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, -(rand() % 40)), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
+				moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
+				map.push_back(moveble);
+			}
+				break;
+
+			case Trigger::EFFECT:
+				lightManager->Clear(); 	
+				lightManager->AddPointLight(glm::vec4(20, 20, 5, 1), glm::vec4(1, 0.25f, 1, 1), glm::vec4(1, 1, 1, 1), 0.15f, 1, 0.01f, 0.001f); 
+				break;
+
+			case Trigger::SFX:					break;
+			case Trigger::SPAWN:	
+				break;
+			case Trigger::CUTSCENE:				break;
+			}
+			trigger->setIsTriggered(false);
+		}
+	}
 }
 
 std::vector<Object*> LevelManager::getMap()

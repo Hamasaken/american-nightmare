@@ -34,7 +34,6 @@ public:
 	////////////////////////////////////////////////////////////
 	void Stop();
 
-
 	// Gets & Sets
 	b2Body* getBody();
 	glm::vec2 getPosition();
@@ -47,7 +46,7 @@ protected:
 	// \param type The Body type (static,dynamic,kin.)
 	// \param isBullet If the body is a bullet or not
 	////////////////////////////////////////////////////////////
-	void AddBodyToWorld(b2World* world, glm::vec2 position, b2BodyType type, bool fixedRotate, bool isBullet);
+	virtual void AddBodyToWorld(b2World* world, glm::vec2 position, b2BodyType type, bool fixedRotate, bool isBullet);
 
 	////////////////////////////////////////////////////////////
 	// \brief Creates a shape object and sends it into body
@@ -56,7 +55,7 @@ protected:
 	// \param density The density in kg/m2
 	// \param friction The friction coffeinent [0:1]
 	////////////////////////////////////////////////////////////
-	void ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density, float friction);
+	virtual void ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density, float friction);
 
 	b2Body* body;			//< The body object inside world
 	b2Fixture* fixture;
