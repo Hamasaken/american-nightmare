@@ -7,7 +7,7 @@
 #include <Box2D.h>
 #include "../Enemy.h"
 #include "../Projectile.h"
-#include <Box2D.h>
+#include "../MyContactListener.h"
 
 class LevelManager
 {
@@ -76,6 +76,7 @@ private:
 	LightManager* lightManager;
 	MaterialManager materialManager;
 	b2World *world;
+	MyContactListener contactManager;
 
 	//ProjectileHandler* myPH;
 

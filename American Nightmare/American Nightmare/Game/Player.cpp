@@ -24,6 +24,9 @@ bool Player::Start(std::string modelName, const MaterialManager::Material* mater
 	this->material = material;
 	model->BuildQuadTexture();
 
+
+	getBody()->SetUserData(this);
+
 	return true;
 }
 

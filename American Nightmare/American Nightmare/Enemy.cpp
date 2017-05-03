@@ -24,6 +24,8 @@ bool Enemy::Start(std::string modelName, const MaterialManager::Material* materi
 	this->material = material;
 	model->BuildQuadTexture();
 
+	hitbox->getBody()->SetUserData(this);
+
 	return true;
 }
 
