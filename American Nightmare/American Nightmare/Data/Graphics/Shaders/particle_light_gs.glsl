@@ -22,11 +22,10 @@ out fData
 
 void main()
 {
-	
-	float left = -0.25f;		// -vertices[0].size.x;
-	float right = 0.25f;		// vertices[0].size.x;
-	float top = 0.25f;			// vertices[0].size.y;
-	float bottom = -0.25f;		//-vertices[0].size.y;
+	float left = -vertices[0].size.x;
+	float right = vertices[0].size.x;
+	float top = vertices[0].size.y;
+	float bottom = -vertices[0].size.y;
 
 	// Top left
 	frag.color = vertices[0].color;

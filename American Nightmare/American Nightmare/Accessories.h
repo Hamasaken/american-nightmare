@@ -1,8 +1,10 @@
 #ifndef ACCESSORIES_H
 #define ACCESSORIES_H
 
+// Various includes
 #include <Windows.h>
 #include <GL/glew.h>
+#include <string>
 
 // Including various opengl math classes & functions
 #include <glm/glm.hpp>	
@@ -12,12 +14,9 @@
 #include <glm/gtc/type_ptr.hpp>		// value_ptr
 #include <glm/gtx/rotate_vector.hpp>	// rotating vectors and matrices
 
-// Including full smfl libary
+// Including parts of SFML
 #include <SFML\Audio.hpp>			// Sound and SFX
 #include <SFML\Window\Keyboard.hpp>	// Input Keyboard	
-
-// Various includes
-#include <string>
 
 // Paths
 #define SHADER_PATH "Data/Graphics/Shaders/"
@@ -39,7 +38,7 @@ glm::vec3 fromScreenToWorld(glm::vec2 position, glm::vec2 screenSize, glm::vec2 
 // Game State
 enum State { Game, StartMeny, Options, Cutscene, Posters, Exit };
 
-// Vertex Struct for vertex buffers, etc
+// Vertex struct for particles
 struct Vertex
 {
 	void setPosition(glm::vec3 position)
@@ -56,19 +55,18 @@ struct Vertex
 		b = color.b;
 		a = color.a;
 	}
-/*	void setSize(glm::vec2 size)
+	void setSize(glm::vec2 size)
 	{
 		w = size.x;
 		h = size.y;
 	}
 
-	float w, h;
-	*/
-	
 	float x, y, z;
-	float r, g, b, a; 
+	float r, g, b, a;
+	float w, h;
 };
 
+// Vertex struct for textures/models
 struct VertexUV
 {
 	void setPosition(glm::vec3 position)
