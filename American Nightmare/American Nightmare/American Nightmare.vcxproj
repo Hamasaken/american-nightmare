@@ -22,7 +22,7 @@
     <ProjectGuid>{9972CD7A-4E2E-4234-B431-FFBF2B6E863F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>AmericanNightmare</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

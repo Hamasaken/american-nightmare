@@ -31,7 +31,7 @@ public:
 	bool getIsFired();
 
 	void Update(GLint deltaT);
-	//void Update(GLint deltaT, b2World* world, glm::vec2 position);
+	void Update(GLint deltaT, b2World* world, glm::vec2 position);
 };
 
 #endif // !PROJECTILE_H

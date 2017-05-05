@@ -50,11 +50,13 @@ void Projectile::fireBullet(b2World* world, glm::vec2 position, int dirInt)
 	}
 }
 
-//void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)
-//{
-//
-//	Entity::Update(deltaT);
-//}
+void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::L))
+		fireBullet(world, position, 2);
+
+	Entity::Update(deltaT);
+}
 
 void Projectile::Update(GLint deltaT)
 {
@@ -74,3 +76,4 @@ b2Vec2 Projectile::normalize(const b2Vec2& source)
 		return b2Vec2(source.x, source.y);
 	}
 }
+

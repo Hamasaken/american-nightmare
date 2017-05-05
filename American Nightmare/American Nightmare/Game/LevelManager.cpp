@@ -165,7 +165,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	//A Projectile
 	//for (int i = 0; i < 100; i++)
 	//{
-		//shoot(shader, modelPath);
+	//	shoot(shader, modelPath);
 	//}
 
 	// Texture on lights for testing
@@ -188,12 +188,13 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	lightManager->AddPointLight(glm::vec4(-10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 	lightManager->AddPointLight(glm::vec4(+10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 
-	myPH = new ProjectileHandler(world, shader);
+	//myPH = new ProjectileHandler(world, shader);
+
+	moveble = new Projectile(world, shader);
 
 	//myProjectile = new Projectile(world, shader);
 	lightManager->AddPointLight(glm::vec4(-20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
 	lightManager->AddPointLight(glm::vec4(+20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
-	//lightManager->AddPointLight(glm::vec4(20, 5, 15, 1), glm::vec4(10, 10, 10, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
 }
 
 void LevelManager::Update(GLint deltaT)
@@ -205,16 +206,16 @@ void LevelManager::Update(GLint deltaT)
 	player->Update(deltaT);
 
 	//Update Projectile
-	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
+	//myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
 	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
 
-	//moveble->Update(deltaT);
+	moveble->Update(deltaT, world, player->getPlayerPosAsGLM());
 
 	enemy->Update(deltaT, player->getBody()->GetPosition());
 
 	// Updating every object on map
-	/*for (Object* object : map)
-		object->Update(deltaT);*/
+	// for (Object* object : map)
+	//	 object->Update(deltaT);
 
 	for (Object* object : map)
 		object->Update(deltaT);
@@ -238,5 +239,5 @@ std::vector<Object*> LevelManager::getMap()
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
 Player* LevelManager::getPlayer() { return player; }
 Enemy* LevelManager::getEnemy() { return enemy; }
-ProjectileHandler* LevelManager::getProjectiles() { return myPH; }
-//Projectile* LevelManager::getProjectile() { return myProjectile; }
+//ProjectileHandler* LevelManager::getProjectiles() { return myPH; }
+Projectile* LevelManager::getProjectile() { return moveble; }

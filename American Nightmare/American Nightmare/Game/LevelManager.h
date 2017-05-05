@@ -58,8 +58,8 @@ public:
 	const LightManager* getLightManager() const;
 	Player* getPlayer();
 	Enemy* getEnemy();
-	//Projectile* getProjectile();
-	ProjectileHandler* getProjectiles();
+	Projectile* getProjectile();
+	//ProjectileHandler* getProjectiles();
 
 
 
@@ -80,9 +80,9 @@ private:
 	b2World *world;
 	MyContactListener contactManager;
 
-	ProjectileHandler* myPH;
+	//ProjectileHandler* myPH;
 	//Projectile* myProjectile;
-	//Projectile* moveble;
+	Projectile* moveble;
 
 };
 
