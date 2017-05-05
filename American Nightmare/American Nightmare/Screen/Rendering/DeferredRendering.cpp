@@ -19,18 +19,20 @@ bool DeferredRendering::Start(glm::vec2 screenSize, GLuint lightShader, GLuint s
 
 void DeferredRendering::Stop()
 {
-	GLuint* textureList = new GLuint[5];
+	GLuint* textureList = new GLuint[6];
 	textureList[0] = drPosition;
 	textureList[1] = drNormal;
 	textureList[2] = drAmbient;
 	textureList[3] = drDiffuse;
 	textureList[4] = drSpecular;
+	textureList[5] = shadowMap;
 
-	glDeleteTextures(5, textureList);
+	glDeleteTextures(6, textureList);
 
 	delete[] textureList;
 
 	glDeleteFramebuffers(1, &drFBO);
+	glDeleteFramebuffers(1, &shadowFBO);
 }
 
 void DeferredRendering::createDRBuffer(glm::vec2 screenSize)
@@ -108,10 +110,6 @@ void DeferredRendering::createShadowBuffer(glm::vec2 screenSize)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-	//GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
-	//glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-
 
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMap, 0);
