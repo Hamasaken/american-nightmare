@@ -84,16 +84,25 @@ void ParticleManager::MakeVertices()
 	glVertexAttribPointer(2, 2, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(7 * sizeof(float)));
 }
 
-void ParticleManager::Effect(ParticleEmitter::ParticleType type, glm::vec3 position, glm::vec4 color, int amount)
+void ParticleManager::EffectExplosionLights(glm::vec3 position, int amount, glm::vec4 color)
 {
 	// Creating a emmiter with a specific type
 	ParticleEmitter* emitter = new ParticleEmitter();
-	emitter->setType(type);
+	emitter->setType(ParticleEmitter::LIGHT);
 
 	// Creating particles with inputted variables into emitter
-	emitter->CreateParticles(position, color, glm::vec2(2.25f, 1.50f), amount);
+	emitter->LightExplosion(position, color, LIGHT_SIZE, amount);
+	emitters.push_back(emitter);
+}
 
-	// Pushing new emitter into vector
+void ParticleManager::EffectBloodSplatter(glm::vec3 position, float angle, float strength, int amount, glm::vec4 color)
+{
+	// Creating a emmiter with a specific type
+	ParticleEmitter* emitter = new ParticleEmitter();
+	emitter->setType(ParticleEmitter::BLOOD);
+
+	// Creating particles with inputted variables into emitter
+	emitter->BloodSplatter(position, angle, strength, color, BLOOD_SIZE, amount);
 	emitters.push_back(emitter);
 }
 

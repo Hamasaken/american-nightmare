@@ -241,7 +241,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	// Temporary for testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
-		particleManager->Effect(ParticleEmitter::TRIANGLE, levelManager->getPlayer()->getPosition(), glm::vec4(randBetweenF(0.8f, 1.f), randBetweenF(0.f, 0.35f), 0.f, randBetweenF(0, 1)), 50);
+		particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.80f, 1.f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
 
 	// Updating particles effects
 	particleManager->Update(deltaT);

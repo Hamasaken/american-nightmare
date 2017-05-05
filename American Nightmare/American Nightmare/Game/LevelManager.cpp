@@ -368,7 +368,7 @@ void LevelManager::CheckTriggers()
 			////////////////////////////////////////////////////////////
 			case Trigger::EFFECT:
 				
-				particleManager->Effect(ParticleEmitter::ParticleType::TRIANGLE, glm::vec3(trigger->getPosition(), 0), glm::vec4(1, 1, 1, 1), 1);
+				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 1, glm::vec4(1, 1, 1, 1));
 
 				// Temporary effect, clear all lights and a new light
 				lightManager->Clear(); 	

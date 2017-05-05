@@ -46,7 +46,7 @@ public:
 	////////////////////////////////////////////////////////////
 	bool getIsDead();
 
-private:
+protected:
 	bool isDead;			//< If the particle is dead and should be removed
 	GLfloat lifeTimeStart;	//< How much time the particle started with
 	GLfloat lifeTime;		//< How much time the particle have left
