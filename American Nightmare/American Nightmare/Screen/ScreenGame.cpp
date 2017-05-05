@@ -101,7 +101,7 @@ void ScreenGame::SetStartVariables()
 	gameState = PLAYING;
 
 	// Backing the camera a little bit backwards
-	camera->setPosition(glm::vec3(0, 0, 25));
+	camera->setPosition(glm::vec3(0, 0, 15));
 
 	// Making wall & floor bigger
 	levelManager->LoadLevel(shaderManager->getShader("deferred"), "0.lvl");
@@ -135,6 +135,10 @@ void ScreenGame::Draw()
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
 			DrawObjectShadowMap(object, shaderManager, drRendering.getLightSpaceMatrix());
+
+		DrawObjectShadowMap(levelManager->getPlayer(), shaderManager, drRendering.getLightSpaceMatrix());
+
+		DrawObjectShadowMap(levelManager->getEnemy(), shaderManager, drRendering.getLightSpaceMatrix());
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
@@ -172,10 +176,10 @@ void ScreenGame::Draw()
 
 
 	// Drawing player
-	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList());
+	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), drRendering.getLightSpaceMatrix(), drRendering.getShadowMap(), drRendering.useShadows());
 
 	// Draw Enemy
-	DrawObjectAnimation(levelManager->getEnemy(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList());
+	DrawObjectAnimation(levelManager->getEnemy(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), drRendering.getLightSpaceMatrix(), drRendering.getShadowMap(), drRendering.useShadows());
 
 	// Drawing vertices
 	DrawParticles(particleManager, shaderManager);
