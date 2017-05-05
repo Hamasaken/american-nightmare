@@ -98,6 +98,10 @@ void Screen::DrawObjectShadowMap(Object* object, ShaderManager* shaderManager, g
 
 	// Scaling object
 	glm::vec3 scale = object->getScale();
+
+	if (dynamic_cast<Animation*>(object))
+		scale.x = scale.x * 0.5f;
+
 	world = glm::scale(world, scale);
 
 	// Setting shader as active and setting parameters
@@ -161,7 +165,7 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 	glDisable(GL_BLEND);
 }
 
-void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList)
+void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, glm::mat4 lightSpaceMatrix, GLuint shadowMap, bool useShadow)
 {
 	// Getting matrices
 	glm::mat4 world = worldMatrix;
@@ -192,13 +196,19 @@ void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderMa
 	glBindTexture(GL_TEXTURE_2D, animatedObj->getTextureID());
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, animatedObj->getAnimationNormal());
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, shadowMap);
 
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "texture"), 0);
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "normal"), 1);
+	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "shadowmap"), 2);
 
 	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "viewPos"), camera->getPosition().x, camera->getPosition().y, camera->getPosition().z, 1.f);
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "nrOfPointLights"), pointLightList.size());
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "nrOfDirectionalLights"), directionalLightList.size());
+
+	glUniformMatrix4fv(glGetUniformLocation(animatedObj->getShader(), "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "useShadow"), useShadow);
 
 	std::string index;
 
