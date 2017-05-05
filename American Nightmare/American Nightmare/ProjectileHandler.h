@@ -6,12 +6,21 @@
 class ProjectileHandler : public Entity
 {
 private:
-	std::vector<Projectile*> myProjtileVector;
-	GLuint myShader;
+	//Projectile* *myProjectiles;
+	//int nrOfProjectiles;
+	//int CAP;
+	//
+	//Help functions
+	//void expand();
+	//void freeMemory();
+	//void initiateFrom(int from = 0);
+	//void addProjectile(b2World* world);
 
+	GLuint myShader;
 	int dirInt;
+	std::vector<Projectile*> myProjtileVector;
 public:
-	ProjectileHandler(b2World *world, GLuint shader);
+	ProjectileHandler(b2World *world, GLuint shader, int CAP = 10);
 	ProjectileHandler();
 	~ProjectileHandler();
 

@@ -58,16 +58,13 @@ public:
 	const LightManager* getLightManager() const;
 	Player* getPlayer();
 	Enemy* getEnemy();
-	Projectile* getProjectile();
-	//ProjectileHandler* getProjectiles();
-
-
+	//Projectile* getProjectile();
+	ProjectileHandler* getProjectiles();
 
 	//////////////////////////////////////////////////////////////
 	// Shoot something
 	/////////////////////////////////////////////////////////////
-	void shoot(GLuint shader, std::string modelPath);
-
+	//void shoot(GLuint shader, std::string modelPath);
 
 private:
 	std::vector<Object*> map;	//< Vector with level specific objects
@@ -80,9 +77,9 @@ private:
 	b2World *world;
 	MyContactListener contactManager;
 
-	//ProjectileHandler* myPH;
+	ProjectileHandler* myPH;
 	//Projectile* myProjectile;
-	Projectile* moveble;
+	//Projectile* moveble;
 
 };
 

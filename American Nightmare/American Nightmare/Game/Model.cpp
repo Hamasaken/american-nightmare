@@ -9,8 +9,8 @@ Model::~Model() { }
 bool Model::Start(std::string modelPath)
 {
 	// Trying to load model
-//	if (!LoadModel(openGL, modelPath))
-//		return false;
+	//if (!LoadModel(openGL, modelPath))
+	//		return false;
 
 	return true;
 }
