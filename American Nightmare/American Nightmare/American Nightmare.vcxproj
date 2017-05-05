@@ -247,6 +247,8 @@
     <None Include="Data\Graphics\Shaders\particle_light_vs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_vs.glsl" />
     <None Include="Data\Graphics\Shaders\shadowmap_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_transparent_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_transparent_vs.glsl" />
     <None Include="Data\Graphics\Shaders\shadowmap_vs.glsl" />
     <None Include="Data\Graphics\Shaders\solid_fs.glsl" />
     <None Include="Data\Graphics\Shaders\solid_vs.glsl" />

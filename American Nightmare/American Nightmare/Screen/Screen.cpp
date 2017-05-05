@@ -99,9 +99,6 @@ void Screen::DrawObjectShadowMap(Object* object, ShaderManager* shaderManager, g
 	// Scaling object
 	glm::vec3 scale = object->getScale();
 
-	if (dynamic_cast<Animation*>(object))
-		scale.x = scale.x * 0.5f;
-
 	world = glm::scale(world, scale);
 
 	// Setting shader as active and setting parameters
@@ -111,6 +108,43 @@ void Screen::DrawObjectShadowMap(Object* object, ShaderManager* shaderManager, g
 
 	// Drawing object
 	object->Draw();
+}
+
+void Screen::DrawObjectShadowMapTransparent(Animation* animatedObj, ShaderManager* shaderManager, glm::mat4 lightSpaceMatrix)
+{
+	// Getting matrices
+	glm::mat4 world = worldMatrix;
+	glm::mat4 view = camera->getViewMatrix();
+	glm::mat4 projection = projectionMatrix;
+
+	// Positioning object
+	glm::vec3 pos = animatedObj->getPosition();
+	world = glm::translate(world, pos);
+
+	// Rotating object
+	glm::vec3 rot = animatedObj->getRotation();
+	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
+	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
+	world = glm::rotate(world, rot.z, glm::vec3(0, 0, 1));
+
+	// Scaling object
+	glm::vec3 scale = animatedObj->getScale();
+	world = glm::scale(world, scale);
+
+	// Setting shader as active and setting parameters
+	shaderManager->SetParameters(world, view, projection);
+	shaderManager->SetParametersAnimated(animatedObj);
+
+	glEnable(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, animatedObj->getTextureID());
+
+	glUniform1i(glGetUniformLocation(shaderManager->getShader(), "texture"), 0);
+
+	glUniformMatrix4fv(glGetUniformLocation(shaderManager->getShader(), "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+
+	// Drawing object
+	animatedObj->Draw();
 }
 
 void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)

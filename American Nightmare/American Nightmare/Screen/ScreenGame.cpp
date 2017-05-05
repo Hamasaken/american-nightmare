@@ -35,6 +35,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	shaderManager->AddShader("deferred", shaderPath + "dr_vs.glsl", shaderPath + "dr_fs.glsl");
 	shaderManager->AddShader("deferred_final", shaderPath + "drfinal_vs.glsl", shaderPath + "drfinal_fs.glsl");
 	shaderManager->AddShader("shadow", shaderPath + "shadowmap_vs.glsl", shaderPath + "shadowmap_fs.glsl");
+	shaderManager->AddShader("shadowtransparent", shaderPath + "shadowmap_transparent_vs.glsl", shaderPath + "shadowmap_transparent_fs.glsl");
 	shaderManager->AddShader("debug", shaderPath + "debug_shader_vs.glsl", shaderPath + "debug_shader_fs.glsl");
 
 	// Initialize Deferred Rendering
@@ -136,9 +137,10 @@ void ScreenGame::Draw()
 		for (Object* object : levelManager->getMap())
 			DrawObjectShadowMap(object, shaderManager, drRendering.getLightSpaceMatrix());
 
-		DrawObjectShadowMap(levelManager->getPlayer(), shaderManager, drRendering.getLightSpaceMatrix());
+		shaderManager->setShader("shadowtransparent");
+		DrawObjectShadowMapTransparent(levelManager->getPlayer(), shaderManager, drRendering.getLightSpaceMatrix());
 
-		DrawObjectShadowMap(levelManager->getEnemy(), shaderManager, drRendering.getLightSpaceMatrix());
+		DrawObjectShadowMapTransparent(levelManager->getEnemy(), shaderManager, drRendering.getLightSpaceMatrix());
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
