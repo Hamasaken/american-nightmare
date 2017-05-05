@@ -61,7 +61,7 @@ void Hitbox::AddBodyToWorld(b2World* world, glm::vec2 position, b2BodyType type,
 	// Adding body to the world object
 	b2BodyDef bodyDef;
 	bodyDef.type = type;
-	bodyDef.position = b2Vec2(position.x, position.y);
+	bodyDef.position = b2Vec2(position.x, -position.y);
 	bodyDef.bullet = isBullet;
 	bodyDef.fixedRotation = canRotate;
 	bodyDef.active = true;
@@ -92,5 +92,5 @@ b2Body * Hitbox::getBody()
 
 glm::vec2 Hitbox::getPosition()
 {
-	return glm::vec2(body->GetPosition().x, body->GetPosition().y);
+	return glm::vec2(body->GetPosition().x, -body->GetPosition().y);
 }

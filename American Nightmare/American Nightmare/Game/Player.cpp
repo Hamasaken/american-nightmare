@@ -9,7 +9,7 @@ Player::~Player() { }
 bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 {
 	// Starting entity variables (including hitbox)
-	Entity::Start(modelName, material, world, glm::vec2(0, -20), glm::vec2(PLAYER_SIZE_X, PLAYER_SIZE_Y), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_DENSITY, PLAYER_FRICTION);
+	Entity::Start(modelName, material, world, glm::vec2(0, 20), glm::vec2(PLAYER_SIZE_X, PLAYER_SIZE_Y), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_DENSITY, PLAYER_FRICTION);
 
 	// Setting starting variables
 	position = glm::vec3(0, 20, 0);

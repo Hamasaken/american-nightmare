@@ -6,9 +6,12 @@ LevelManager::LevelManager(const LevelManager & other) { }
 
 LevelManager::~LevelManager() { }
 
-bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager)
+bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, ParticleManager* particleManager)
 {
 	this->materialManager = materialManager;
+	this->particleManager = particleManager;
+
+	contactManager.Start(particleManager);
 
 	world = new b2World(b2Vec2(NULL, GRAVITY));
 	world->SetContactListener(&contactManager);
@@ -63,6 +66,7 @@ void LevelManager::Stop()
 	lightManager->Clear();
 	delete lightManager;
 	materialManager = nullptr;
+	particleManager = nullptr;
 }
 
 void LevelManager::StopMap()
@@ -118,6 +122,9 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelFile)
 
 void LevelManager::LoadTempLevel(GLuint shader)
 {
+	// Clearing map if already created
+	StopMap();
+
 	// Gettings paths to files
 	std::string modelPath = MODEL_PATH;
 	std::string texturePath = TEXTURE_PATH;
@@ -195,7 +202,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	{
 		Entity* moveble = new Entity();
 		moveble->setShader(shader);
-		moveble->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, -(rand() % 40)), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
+		moveble->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
 		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
 		map.push_back(moveble);
 	}
@@ -207,7 +214,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	hitbox->InitializeHitbox(world, glm::vec2(0, 0), glm::vec2(40.f, 1), b2_staticBody);	 // ground
 	hitboxes.push_back(hitbox);
 	hitbox = new Hitbox();
-	hitbox->InitializeHitbox(world, glm::vec2(20, -7.5f), glm::vec2(10.f, 1), b2_staticBody);	// platform
+	hitbox->InitializeHitbox(world, glm::vec2(20, 7.5f), glm::vec2(10.f, 1), b2_staticBody);	// platform
 	hitboxes.push_back(hitbox);
 	hitbox = new Hitbox();
 	hitbox->InitializeHitbox(world, glm::vec2(-40, 0), glm::vec2(1.f, 20.f), b2_staticBody);	// left wall
@@ -223,14 +230,14 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Action Triggers
 	////////////////////////////////////////////////////////////
 	Trigger* trigger = new Trigger();
-	trigger->InitializeTrigger(Trigger::EFFECT, world, glm::vec2(10, -20), glm::vec2(1.f, 1.f));
+	trigger->InitializeTrigger(Trigger::EFFECT, world, glm::vec2(10, 20), glm::vec2(1.f, 1.f));
 	triggers.push_back(trigger);
 
 	trigger = new Trigger();
-	trigger->InitializeTrigger(Trigger::SPAWN, world, glm::vec2(-10, -15), glm::vec2(1.f, 1.f));
+	trigger->InitializeTrigger(Trigger::SPAWN, world, glm::vec2(-10, 15), glm::vec2(1.f, 1.f));
 	triggers.push_back(trigger);
 
-	// Triggers visuals
+	// Triggers visual
 	background = new Object();
 	background->setShader(shader);
 	background->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
@@ -239,7 +246,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	background->setRotation(glm::vec3(0, 0, 0));
 	map.push_back(background);
 
-	// Trigger visuals
+	// Trigger visual
 	background = new Object();
 	background->setShader(shader);
 	background->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
@@ -370,7 +377,9 @@ void LevelManager::CheckTriggers()
 			////////////////////////////////////////////////////////////
 			case Trigger::EFFECT:
 				
-				// Temporary effect, clear all lights and adds another
+				particleManager->Effect(ParticleEmitter::ParticleType::TRIANGLE, glm::vec3(trigger->getPosition(), 0), glm::vec4(1, 1, 1, 1), 50);
+
+				// Temporary effect, clear all lights and a new light
 				lightManager->Clear(); 	
 				lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 0.25f, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.001f);
 				break;
@@ -388,7 +397,7 @@ void LevelManager::CheckTriggers()
 			{
 				Entity* moveble = new Entity();
 				moveble->setShader(player->getShader());
-				moveble->Start("", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, -(rand() % 40)), glm::vec2(randBetweenF(0.25f, 0.75f), randBetweenF(0.25f, 0.75f)), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
+				moveble->Start("", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec2(randBetweenF(0.25f, 0.75f), randBetweenF(0.25f, 0.75f)), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
 				map.push_back(moveble);
 			}
 
@@ -407,10 +416,10 @@ void LevelManager::CheckTriggers()
 			case Trigger::CUTSCENE:				
 				break;
 			}
-		}
 
-		// Trigger is now deactivated
-		trigger->setIsTriggered(false);
+			// Trigger is now reactivated
+			trigger->setIsTriggered(false);
+		}
 	}
 }
 

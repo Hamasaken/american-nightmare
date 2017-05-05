@@ -1,16 +1,16 @@
 #include "MyContactListener.h"
-#include "Game\Object.h"
-#include "Game\Entity.h"
-#include "Game\Player.h"
-#include "Enemy.h"
 
-
-MyContactListener::MyContactListener()
-{
-}
+MyContactListener::MyContactListener() { }
 
 MyContactListener::~MyContactListener()
 {
+	particleManager = nullptr;
+}
+
+void MyContactListener::Start(ParticleManager* particleManager)
+{
+	// Getting different managers parameters
+	this->particleManager = particleManager;
 }
 
 void MyContactListener::BeginContact(b2Contact* contact)
@@ -23,13 +23,10 @@ void MyContactListener::BeginContact(b2Contact* contact)
 	{
 		if (dynamic_cast<Enemy*>(bodyB))
 		{
-			printf("Enemy is hurting you!!!\n");
-			player->getBody()->ApplyForce(b2Vec2(0, -1000000), b2Vec2(), true);
+			player->getBody()->ApplyForce(b2Vec2(0, -100000), b2Vec2(), true);
+			particleManager->Effect(ParticleEmitter::TRIANGLE, player->getPosition(), glm::vec4(1, 0.25, 0.1f, 0.75f), 25); // temp blood effect
 		}
 	}
-
-
-
 }
 
 void MyContactListener::EndContact(b2Contact* contact)

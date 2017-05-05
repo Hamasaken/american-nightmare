@@ -47,7 +47,7 @@ void Entity::Update(GLint deltaT)
 {
 	// Update the texture position
 	position.x = hitbox->getPosition().x;
-	position.y = -hitbox->getPosition().y;
+	position.y = hitbox->getPosition().y;
 	rotation.z = hitbox->getBody()->GetAngle();
 
 	Object::Update(deltaT);

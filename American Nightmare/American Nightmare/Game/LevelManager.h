@@ -3,6 +3,7 @@
 
 #include "Player.h"
 #include "LightManager.h"
+#include "Particle\ParticleManager.h"
 #include <vector>
 #include <Box2D.h>
 #include "../Enemy.h"
@@ -21,9 +22,10 @@ public:
 	// \brief Starts class, gets the openGL ptr
 	// \param playerShader The specific shader for the player
 	// \param materialManager ptr to all the materials
+	// \param particleManager ptr to the particle manager
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(GLuint playerShader, MaterialManager* materialManager);
+	bool Start(GLuint playerShader, MaterialManager* materialManager, ParticleManager* particleManager);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -80,6 +82,7 @@ private:
 
 	Enemy* enemy;				//< A Enemy object
 
+	ParticleManager* particleManager;
 	LightManager* lightManager;
 	MaterialManager* materialManager;
 	b2World *world;
