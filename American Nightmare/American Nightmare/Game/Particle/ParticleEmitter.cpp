@@ -59,13 +59,14 @@ void ParticleEmitter::Update(GLfloat deltaT)
 		isComplete = true;
 }
 
-std::vector<Vertex> ParticleEmitter::getParticlesAsVertices() 
+std::vector<Vertex*>* ParticleEmitter::getParticlesAsVertices() 
 {
-	std::vector<Vertex> vertices;
+	vertices.clear();
+
 	for (Particle* p : particles)
 		vertices.push_back(p->getAsVertex());
 
-	return vertices;
+	return &vertices;
 }
 
 void ParticleEmitter::setPosition(glm::vec3 position) { this->position = position; }

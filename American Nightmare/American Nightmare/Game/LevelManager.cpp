@@ -6,12 +6,16 @@ LevelManager::LevelManager(const LevelManager & other) { }
 
 LevelManager::~LevelManager() { }
 
-bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager)
+bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, ParticleManager* particleManager)
 {
 	this->materialManager = materialManager;
+	this->particleManager = particleManager;
+
+	contactManager.Start(particleManager);
 
 	world = new b2World(b2Vec2(NULL, GRAVITY));
-	world->SetAllowSleeping(true);
+	world->SetContactListener(&contactManager);
+
 	lightManager = new LightManager();
 
 	std::string modelPath = MODEL_PATH;
@@ -62,6 +66,7 @@ void LevelManager::Stop()
 	lightManager->Clear();
 	delete lightManager;
 	materialManager = nullptr;
+	particleManager = nullptr;
 }
 
 void LevelManager::StopMap()
@@ -76,7 +81,30 @@ void LevelManager::StopMap()
 			object = nullptr;
 		}
 	}
+
+	// Unloads every hitbox in the map
+	for (Hitbox* hitbox : hitboxes)
+	{
+		if (hitbox != nullptr)
+		{
+			hitbox->Stop();
+			delete hitbox;
+			hitbox = nullptr;
+		}
+	}
+
+	// Unloads every trigger in the map
+	for (Trigger* trigger : triggers)
+	{
+		if (trigger != nullptr)
+		{
+			trigger->Stop();
+			delete trigger;
+			trigger = nullptr;
+		}
+	}
 }
+
 
 bool LevelManager::LoadLevel(GLuint shader, std::string levelFile)
 {
@@ -94,6 +122,9 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelFile)
 
 void LevelManager::LoadTempLevel(GLuint shader)
 {
+	// Clearing map if already created
+	StopMap();
+
 	// Gettings paths to files
 	std::string modelPath = MODEL_PATH;
 	std::string texturePath = TEXTURE_PATH;
@@ -171,7 +202,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	{
 		Entity* moveble = new Entity();
 		moveble->setShader(shader);
-		moveble->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, -(rand() % 40)), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
+		moveble->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
 		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
 		map.push_back(moveble);
 	}
@@ -183,7 +214,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	hitbox->InitializeHitbox(world, glm::vec2(0, 0), glm::vec2(40.f, 1), b2_staticBody);	 // ground
 	hitboxes.push_back(hitbox);
 	hitbox = new Hitbox();
-	hitbox->InitializeHitbox(world, glm::vec2(20, -7.5f), glm::vec2(10.f, 1), b2_staticBody);	// platform
+	hitbox->InitializeHitbox(world, glm::vec2(20, 7.5f), glm::vec2(10.f, 1), b2_staticBody);	// platform
 	hitboxes.push_back(hitbox);
 	hitbox = new Hitbox();
 	hitbox->InitializeHitbox(world, glm::vec2(-40, 0), glm::vec2(1.f, 20.f), b2_staticBody);	// left wall
@@ -194,6 +225,35 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	hitbox = new Hitbox();
 	hitbox->InitializeHitbox(world, glm::vec2(-10, 0), glm::vec2(8.f, 5.f), b2_staticBody);	// dammsugare
 	hitboxes.push_back(hitbox);
+
+	////////////////////////////////////////////////////////////
+	// Action Triggers
+	////////////////////////////////////////////////////////////
+	Trigger* trigger = new Trigger();
+	trigger->InitializeTrigger(Trigger::EFFECT, world, glm::vec2(10, 20), glm::vec2(1.f, 1.f));
+	triggers.push_back(trigger);
+
+	trigger = new Trigger();
+	trigger->InitializeTrigger(Trigger::SPAWN, world, glm::vec2(-10, 15), glm::vec2(1.f, 1.f));
+	triggers.push_back(trigger);
+
+	// Triggers visual
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
+	background->setScale(glm::vec3(1, 1, 1));
+	background->setPosition(glm::vec3(10, 20, 0));
+	background->setRotation(glm::vec3(0, 0, 0));
+	map.push_back(background);
+
+	// Trigger visual
+	background = new Object();
+	background->setShader(shader);
+	background->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
+	background->setScale(glm::vec3(1, 1, 1));
+	background->setPosition(glm::vec3(-10, 15, 0));
+	background->setRotation(glm::vec3(0, 0, 0));
+	map.push_back(background);
 
 	////////////////////////////////////////////////////////////
 	// Lights
@@ -240,14 +300,118 @@ void LevelManager::Update(GLint deltaT)
 	// Updating player
 	player->Update(deltaT);
 
+	//Update Projectile
+	//myPH->Update(deltaT, world);
+
+	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
+	
+	//moveble->Update(deltaT);
+
+	// Updating enemies
 	enemy->Update(deltaT, player->getBody()->GetPosition());
 
 	// Updating physics
 	world->Step(1 / 60.f, 3, 3);
 
 	// Updating every object on map
+	/*for (Object* object : map)
+		object->Update(deltaT);*/
+
 	for (Object* object : map)
 		object->Update(deltaT);
+
+	// Updating triggers and checking for collisions
+	for (Trigger* trigger : triggers)
+		if (!trigger->getIsTriggered())	
+			trigger->CheckCollision(player->getBody());
+	
+	// Checking triggers
+	CheckTriggers();
+}
+
+void LevelManager::CheckTriggers()
+{
+	for (Trigger* trigger : triggers)
+	{
+		if (trigger->getIsTriggered())
+		{
+			switch (trigger->triggerType)
+			{
+
+			////////////////////////////////////////////////////////////
+			// Door - The player switches level
+			////////////////////////////////////////////////////////////
+			case Trigger::DOOR:	
+
+				// Checks if the door have a level file
+				if (!trigger->getData().empty())
+				{
+					// Loads new level with the current player's shader
+					LoadLevel(player->getShader(), trigger->getData());
+				} 
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Popup - For popups with text/pictures, anything
+			////////////////////////////////////////////////////////////
+			case Trigger::POPUP:				
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Push - Move an entity with a force
+			////////////////////////////////////////////////////////////
+			case Trigger::PUSH:		
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Effect - Starts an particle effect
+			////////////////////////////////////////////////////////////
+			case Trigger::EFFECT:
+				
+				particleManager->Effect(ParticleEmitter::ParticleType::TRIANGLE, glm::vec3(trigger->getPosition(), 0), glm::vec4(1, 1, 1, 1), 1);
+
+				// Temporary effect, clear all lights and a new light
+				lightManager->Clear(); 	
+				lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 0.25f, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.001f);
+				break;
+
+			////////////////////////////////////////////////////////////
+			// SFX - Plays a sound effect
+			////////////////////////////////////////////////////////////
+			case Trigger::SFX:					
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Spawn Trigger - Spawns anything, anywhere, (currently boxes)
+			////////////////////////////////////////////////////////////
+			case Trigger::SPAWN:	
+			{
+				Entity* moveble = new Entity();
+				moveble->setShader(player->getShader());
+				moveble->Start("", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec2(randBetweenF(0.25f, 0.75f), randBetweenF(0.25f, 0.75f)), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
+				map.push_back(moveble);
+			}
+
+				break;
+
+
+			////////////////////////////////////////////////////////////
+			// Save - Save station for the player, saves the game
+			////////////////////////////////////////////////////////////
+			case Trigger::SAVE:
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Cutscene - Switches screen to cutscene and plays a cutscene
+			////////////////////////////////////////////////////////////
+			case Trigger::CUTSCENE:				
+				break;
+			}
+
+			// Trigger is now reactivated
+			trigger->setIsTriggered(false);
+		}
+	}
 }
 
 std::vector<Object*> LevelManager::getMap()
@@ -255,6 +419,18 @@ std::vector<Object*> LevelManager::getMap()
 	return map;
 }
 
+
+//void LevelManager::shoot(GLuint shader, std::string modelPath)
+//{
+//	moveble = new Projectile(world, shader);
+//	//moveble->setShader(shader);
+//	//moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
+//	//moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
+//	map.push_back(moveble);
+//}
+
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
 Player* LevelManager::getPlayer() { return player; }
-Enemy* LevelManager::getEnemy() { return enemy; };
+Enemy* LevelManager::getEnemy() { return enemy; }
+//ProjectileHandler* LevelManager::getProjectiles() { return myPH; }
+Projectile* LevelManager::getProjectile() { return myProjectile; }

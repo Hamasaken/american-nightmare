@@ -51,8 +51,8 @@ void ParticleManager::MakeVertices()
 	// Creating the vertices
 	for (ParticleEmitter* emitter : emitters)
 	{
-		std::vector<Vertex> emitterVertices = emitter->getParticlesAsVertices();
-		vertices.insert(vertices.end(), emitterVertices.begin(), emitterVertices.end());
+		std::vector<Vertex*>* emitterVertices = emitter->getParticlesAsVertices();
+		std::transform(std::begin(*emitterVertices), std::end(*emitterVertices), std::back_inserter(vertices), [](Vertex* item) { return *item; });
 	}
 
 	// Getting the number of vertices
@@ -70,7 +70,7 @@ void ParticleManager::MakeVertices()
 
 	// Binding the vertex buffer and putting in data
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertexCount, &vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertexCount, (&vertices[0]), GL_STATIC_DRAW);
 
 	// Enable both vertex posiiton & color
 	glEnableVertexAttribArray(0);

@@ -33,12 +33,12 @@ void Particle::Update(GLfloat deltaT)
 		isDead = true;
 
 	// Adds velocity fall-off for realistic effect
-	velocity += (glm::vec3(0, 0, 0) - velocity) * VELOCITY_FALL_OFF;
+	velocity += (glm::vec3(0, -0.0035, 0) - velocity) * VELOCITY_FALL_OFF;
 
 	// Moves the particle with velocity and frametime
 	vertex.setPosition(glm::vec3(vertex.x, vertex.y, vertex.z) + velocity * deltaT);
 }
 
-Vertex Particle::getAsVertex() { return vertex; }
+Vertex* Particle::getAsVertex() { return &vertex; }
 
 bool Particle::getIsDead() { return isDead; }

@@ -3,9 +3,13 @@
 
 #include "Player.h"
 #include "LightManager.h"
+#include "Particle\ParticleManager.h"
 #include <vector>
-#include "Box2D.h"
+#include <Box2D.h>
 #include "../Enemy.h"
+#include "Trigger.h"
+#include "../Projectile.h"
+#include "../MyContactListener.h"
 
 class LevelManager
 {
@@ -18,9 +22,10 @@ public:
 	// \brief Starts class, gets the openGL ptr
 	// \param playerShader The specific shader for the player
 	// \param materialManager ptr to all the materials
+	// \param particleManager ptr to the particle manager
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(GLuint playerShader, MaterialManager* materialManager);
+	bool Start(GLuint playerShader, MaterialManager* materialManager, ParticleManager* particleManager);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -55,21 +60,39 @@ public:
 	const LightManager* getLightManager() const;
 	Player* getPlayer();
 	Enemy* getEnemy();
+	Projectile* getProjectile();
+	//ProjectileHandler* getProjectiles();
 
 	//////////////////////////////////////////////////////////////
 	// Shoot something
 	/////////////////////////////////////////////////////////////
-	
+	void shoot(GLuint shader, std::string modelPath);
+
+
 private:
+	////////////////////////////////////////////////////////////
+	// \brief Check for action triggers on the map 
+	///////////////////////////////////////////////////////////
+	void CheckTriggers();
+
 	std::vector<Object*> map;	//< Vector with level specific objects
 	std::vector<Hitbox*> hitboxes;
+	std::vector<Trigger*> triggers;
 	Player* player;				//< The player object
 
 	Enemy* enemy;				//< A Enemy object
 
+	ParticleManager* particleManager;
 	LightManager* lightManager;
 	MaterialManager* materialManager;
 	b2World *world;
+	MyContactListener contactManager;
+
+	//ProjectileHandler* myPH;
+
+	Projectile* myProjectile;
+	//Projectile* moveble;
+
 };
 
 #endif  !LEVELMANAGER_H

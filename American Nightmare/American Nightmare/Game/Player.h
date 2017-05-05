@@ -24,12 +24,17 @@ public:
 	bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
 	void Update(GLint deltaT);
 
+	//Test-variable
+
+
 	////////////////////////////////////////////////////////////
 	// \brief Gets input from user and moves accordingly
 	////////////////////////////////////////////////////////////
 	void Movement();
 	
 	b2Body* getBody();
+
+	glm::vec2 getPlayerPosAsGLM();
 };
 
 #endif // !PLAYER_H
