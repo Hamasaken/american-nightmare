@@ -34,9 +34,11 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	shaderManager->AddShader("particle_light", shaderPath + "particle_light_vs.glsl", shaderPath + "particle_light_gs.glsl", shaderPath + "particle_light_fs.glsl");
 	shaderManager->AddShader("deferred", shaderPath + "dr_vs.glsl", shaderPath + "dr_fs.glsl");
 	shaderManager->AddShader("deferred_final", shaderPath + "drfinal_vs.glsl", shaderPath + "drfinal_fs.glsl");
+	shaderManager->AddShader("shadow", shaderPath + "shadowmap_vs.glsl", shaderPath + "shadowmap_fs.glsl");
+	shaderManager->AddShader("debug", shaderPath + "debug_shader_vs.glsl", shaderPath + "debug_shader_fs.glsl");
 
 	// Initialize Deferred Rendering
-	drRendering.Start(screenSize, shaderManager->getShader("deferred_final"));
+	drRendering.Start(screenSize, shaderManager->getShader("deferred_final"), shaderManager->getShader("shadow"));
 
 	////////////////////////////////////////////////////////////
 	// Creating Material Manager and loading textures/materials
@@ -99,10 +101,13 @@ void ScreenGame::SetStartVariables()
 	gameState = PLAYING;
 
 	// Backing the camera a little bit backwards
-	camera->setPosition(glm::vec3(0, 0, 15));
+	camera->setPosition(glm::vec3(0, 0, 25));
 
 	// Making wall & floor bigger
 	levelManager->LoadLevel(shaderManager->getShader("deferred"), "0.lvl");
+
+	// Adding shadow light to drRendering
+	drRendering.setShadowLight(levelManager->getLightManager()->getDirectionalLightList()[0]);
 }
 
 void ScreenGame::Update(GLint deltaT)
@@ -118,6 +123,22 @@ void ScreenGame::Update(GLint deltaT)
 
 void ScreenGame::Draw()
 {
+	if (drRendering.useShadows())
+	{
+		// Bindind depth FBO
+		glBindFramebuffer(GL_FRAMEBUFFER, drRendering.getShadowFBO());
+
+		shaderManager->setShader(drRendering.getShadowShader());
+
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		// Drawing shadowmap
+		for (Object* object : levelManager->getMap())
+			DrawObjectShadowMap(object, shaderManager, drRendering.getLightSpaceMatrix());
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
 	// Disable Blend for DR
 	glDisable(GL_BLEND);
 
@@ -147,7 +168,7 @@ void ScreenGame::Draw()
 	glEnable(GL_BLEND);
 
 	// DR: Light pass
-	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList());
+	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), drRendering.getLightSpaceMatrix(), drRendering.useShadows());
 
 
 	// Drawing player
@@ -167,6 +188,26 @@ void ScreenGame::Draw()
 		for (Text* object : *guiManager->getTextList())
 			DrawObjectGUI(object, shaderManager);
 	}
+
+	// Temp shadow map debug
+	/*if (drRendering.useShadows())
+	{
+		shaderManager->setShader("debug");
+
+		glm::mat4 tempWorld = glm::translate(glm::mat4(1.f), glm::vec3(-0.60f, -0.60f, 0.f)) *
+			glm::scale(glm::mat4(1.f), glm::vec3(0.4f, 0.4f, 0.4f));
+
+		shaderManager->SetParameters(tempWorld, glm::mat4(), glm::mat4());
+
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, drRendering.getShadowMap());
+		glUniform1i(glGetUniformLocation(shaderManager->getShader(), "texture"), 0);
+
+		glDisable(GL_DEPTH_TEST);
+		drRendering.getFinalRenderQuad()->Draw();
+		glEnable(GL_DEPTH_TEST);
+	}*/
 }
 
 void ScreenGame::UpdatePaused(GLint deltaT)

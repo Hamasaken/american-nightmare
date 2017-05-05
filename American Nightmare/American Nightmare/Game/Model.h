@@ -21,7 +21,6 @@ public:
 	void BuildTriangle();
 	void BuildQuad();
 	void BuildQuadTexture();
-	void BuildQuad(glm::vec2 screenSize, glm::vec3 position, glm::vec4 color, glm::vec2 size); // Temporary for button
 	
 	////////////////////////////////////////////////////////////
 	// \brief Loads a model with vertices and normals and inserts into buffers

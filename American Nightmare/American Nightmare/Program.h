@@ -21,7 +21,6 @@
 #define SCREEN_DEPTH		50.f
 #define SCREEN_NEAR			0.1f
 #define VSYNC_ON			true
-#define DEPTH_BUFFER_CLEAR	1.f
 
 class Program
 {

@@ -128,6 +128,11 @@ GLuint ShaderManager::getShader(std::string name) const
 	return findShader(name);
 }
 
+std::string ShaderManager::getShader(GLuint id) const
+{
+	return findShader(id);
+}
+
 bool ShaderManager::SetParameters(glm::mat4 world, glm::mat4 view, glm::mat4 projection)
 {
 	// Loading uniforms
@@ -194,6 +199,21 @@ GLint ShaderManager::findShader(std::string name) const
 		if (shaderList[i].name == name)
 		{
 			shaderProgram = shaderList[i].id;
+		}
+	}
+
+	return shaderProgram;
+}
+
+std::string ShaderManager::findShader(GLuint id) const
+{
+	std::string shaderProgram = "unknownshader";
+
+	for (int i = 0; i < shaderList.size() && shaderProgram == "unknownshader"; i++)
+	{
+		if (shaderList[i].id == id)
+		{
+			shaderProgram = shaderList[i].name;
 		}
 	}
 

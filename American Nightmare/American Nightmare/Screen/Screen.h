@@ -60,10 +60,11 @@ public:
 	// \note Replace the solid shader with an abstract "Shader" instead
 	////////////////////////////////////////////////////////////
 	void DrawObject(Object* object, ShaderManager* shaderManager);
+	void DrawObjectShadowMap(Object* object, ShaderManager* shaderManager, glm::mat4 lightSpaceMatrix);
 	void DrawObjectGUI(Object* object, ShaderManager* shaderManager);
 	void DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList);
 	void DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager);
-	void DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList);
+	void DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, glm::mat4 lightSpaceMatrix, bool useShadow);
 	void DrawParticles(ParticleManager* particleManager, ShaderManager* shaderManager);
 
 protected:

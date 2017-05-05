@@ -271,10 +271,10 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	map.push_back(light);
 
 	// Temp lights
-	lightManager->AddPointLight(glm::vec4(-20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.001f);
-	lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.001f);
+	lightManager->AddPointLight(glm::vec4(-20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
+	lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
 
-//	lightManager->AddDirectionalLight(glm::vec4(-1, -1, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
+	lightManager->AddDirectionalLight(glm::vec4(5, 20, 20, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
 
 	//lightManager->AddPointLight(glm::vec4(0, 10, 0, 1), glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 1, 1), 1.f, 1, 0.01f, 0.001f);
 	//printf("%f\n", lightManager->getPointLightList()[0]->radius);
@@ -286,15 +286,6 @@ void LevelManager::LoadTempLevel(GLuint shader)
 			lightManager->AddPointLight(glm::vec4(x * 7 - 32, 3, z * 4 - 8, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 5.f, 1.f, 0.8f, 1.7f);
 			printf("%f\n", lightManager->getPointLightList()[lightManager->getPointLightList().size() - 1]->radius);
 
-	lightManager->AddPointLight(glm::vec4(-10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
-	lightManager->AddPointLight(glm::vec4(+10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
-
-	//myPH = new ProjectileHandler(world, shader);
-
-	myProjectile = new Projectile(world, shader);
-	lightManager->AddPointLight(glm::vec4(-20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
-	lightManager->AddPointLight(glm::vec4(+20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
-	//lightManager->AddPointLight(glm::vec4(20, 5, 15, 1), glm::vec4(10, 10, 10, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
 			light = new Object();
 			light->setShader(shader);
 			light->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"));
