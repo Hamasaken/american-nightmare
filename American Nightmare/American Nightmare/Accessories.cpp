@@ -1,5 +1,12 @@
 #include "Accessories.h"
 
+float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2)
+{
+	float dY = p1.x - p2.y;
+	float dX = p1.y - p2.x;
+	return atan2(dY, dX) * 180 / 3.14;
+}
+
 float randBetweenF(float low, float high)
 {
 	return low + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (high - low)));

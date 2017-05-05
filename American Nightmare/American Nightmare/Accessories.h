@@ -32,6 +32,7 @@
 #define GRAVITY 9.82f
 
 // Functions
+float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2);
 float randBetweenF(float low, float high);
 glm::vec3 fromScreenToWorld(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
 

@@ -56,6 +56,7 @@ void Object::Draw()
 
 void Object::setPosition(glm::vec3 position) { this->position = position; }
 glm::vec3 Object::getPosition() const { return position; }
+glm::vec3 Object::getCenter() const { return glm::vec3(position.x - scale.x / 2, position.y + scale.y / 2, position.z + scale.z / 2); }
 void Object::setRotation(glm::vec3 rotation) { this->rotation = rotation; }
 glm::vec3 Object::getRotation() const { return rotation; }
 void Object::setScale(glm::vec3 scale) { this->scale = scale; }

@@ -1,26 +1,31 @@
 #include "ParticleEmitter.h"
 
-ParticleEmitter::ParticleEmitter() { }
+ParticleEmitter::ParticleEmitter() 
+{
+	isComplete = false;
+}
 
 ParticleEmitter::ParticleEmitter(const ParticleEmitter & other) { }
 
 ParticleEmitter::~ParticleEmitter() { }
 
-void ParticleEmitter::CreateParticles(glm::vec3 position, glm::vec4 color, glm::vec2 size, int amount)
+void ParticleEmitter::LightExplosion(glm::vec3 position, glm::vec4 color, glm::vec2 size, int amount)
 {
-	this->position = position;
-	this->isComplete = false;
-
-	switch (type)
+	for (int i = 0; i < amount; i++)
 	{
-	case TRIANGLE:
-		for (int i = 0; i < amount; i++)
-		{
-			Particle* particle = new Particle;
-			particle->Start(position, color, size);
-			particles.push_back(particle);
-		}
-	break;
+		Particle* particle = new Particle;
+		particle->Start(position, color, size);
+		particles.push_back(particle);
+	}
+}
+
+void ParticleEmitter::BloodSplatter(glm::vec3 position, float angle, float strength, glm::vec4 color, glm::vec2 size, int amount)
+{
+	for (int i = 0; i < amount; i++)
+	{
+		BloodParticle* particle = new BloodParticle;
+		particle->Start(position, color, size, angle, strength);
+		particles.push_back(particle);
 	}
 }
 
