@@ -38,7 +38,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Returns every particle as a vector in this emitter
 	////////////////////////////////////////////////////////////
-	std::vector<Vertex> getParticlesAsVertices();
+	std::vector<Vertex*>* getParticlesAsVertices();
 
 	// Get & Set functions
 	void setPosition(glm::vec3 position);
@@ -49,9 +49,10 @@ public:
 	int getNumberOfParticles();
 
 private:
-	bool isComplete;			//< If this emitter is finished or not
-	glm::vec3 position;			//< The starting position of this emitter (will use for optimaztion later on)
-	ParticleType type;			//< The type of particles inside this emitter
+	bool isComplete;					//< If this emitter is finished or not
+	glm::vec3 position;					//< The starting position of this emitter (will use for optimaztion later on)
+	ParticleType type;					//< The type of particles inside this emitter
+	std::vector<Vertex*> vertices;		//< The vertices in this emitter in a vector
 	std::vector<Particle*> particles;	//< The particles in this emitter in a vector
 };
 
