@@ -223,6 +223,8 @@
     <ClInclude Include="SoundManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Graphics\Shaders\debug_shader_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\debug_shader_vs.glsl" />
     <None Include="Data\Graphics\Shaders\drfinal_fs.glsl" />
     <None Include="Data\Graphics\Shaders\drfinal_vs.glsl" />
     <None Include="Data\Graphics\Shaders\dr_fs.glsl" />
@@ -232,6 +234,8 @@
     <None Include="Data\Graphics\Shaders\particle_light_gs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_light_vs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_vs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_vs.glsl" />
     <None Include="Data\Graphics\Shaders\solid_fs.glsl" />
     <None Include="Data\Graphics\Shaders\solid_vs.glsl" />
     <None Include="Data\Graphics\Shaders\texture_animation_fs.glsl" />

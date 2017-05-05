@@ -24,9 +24,9 @@ void LightManager::AddPointLight(glm::vec4 position, glm::vec4 diffuse, glm::vec
 	pointLightList.push_back(new PointLight(position, diffuse, specular, strength, constant, linear, quadratic, radius));
 }
 
-void LightManager::AddDirectionalLight(glm::vec4 direction, glm::vec4 diffuse, glm::vec4 specular, GLfloat strength)
+void LightManager::AddDirectionalLight(glm::vec4 position, glm::vec4 direction, glm::vec4 diffuse, glm::vec4 specular, GLfloat strength)
 {
-	directionalLightList.push_back(new DirectionalLight(direction, diffuse, specular, strength));
+	directionalLightList.push_back(new DirectionalLight(position, direction, diffuse, specular, strength));
 }
 
 std::vector<LightManager::PointLight*> LightManager::getPointLightList() const { return pointLightList; }

@@ -286,5 +286,17 @@
     <None Include="Data\Graphics\Shaders\particle_light_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Data\Graphics\Shaders\shadowmap_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\shadowmap_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\debug_shader_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\debug_shader_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
