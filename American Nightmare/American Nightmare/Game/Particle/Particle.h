@@ -18,8 +18,9 @@ public:
 	// \brief Initializes the particle with a position and color
 	// \param position The starting position of the particle
 	// \param color The starting color of the particle
+	// \param size The size in w/h of the particle quad
 	////////////////////////////////////////////////////////////
-	virtual void Start(glm::vec3 position, glm::vec4 color);
+	virtual void Start(glm::vec3 position, glm::vec4 color, glm::vec2 size);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads stuff inside the particle

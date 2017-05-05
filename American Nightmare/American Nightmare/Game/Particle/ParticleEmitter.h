@@ -19,10 +19,11 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Creates particles in this emitter
 	// \param position The start position of the particles
+	// \param size The dimensions of the quad inside geometry shader
 	// \param color The start color of the particles
 	// \param amount The total number of particles to be created
 	////////////////////////////////////////////////////////////
-	void CreateParticles(glm::vec3 position, glm::vec4 color, int amount);
+	void CreateParticles(glm::vec3 position, glm::vec4 color, glm::vec2 size, int amount);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads every particle in this vector

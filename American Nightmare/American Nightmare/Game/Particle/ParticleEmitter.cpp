@@ -6,7 +6,7 @@ ParticleEmitter::ParticleEmitter(const ParticleEmitter & other) { }
 
 ParticleEmitter::~ParticleEmitter() { }
 
-void ParticleEmitter::CreateParticles(glm::vec3 position, glm::vec4 color, int amount)
+void ParticleEmitter::CreateParticles(glm::vec3 position, glm::vec4 color, glm::vec2 size, int amount)
 {
 	this->position = position;
 	this->isComplete = false;
@@ -17,7 +17,7 @@ void ParticleEmitter::CreateParticles(glm::vec3 position, glm::vec4 color, int a
 		for (int i = 0; i < amount; i++)
 		{
 			Particle* particle = new Particle;
-			particle->Start(position, color);
+			particle->Start(position, color, size);
 			particles.push_back(particle);
 		}
 	break;

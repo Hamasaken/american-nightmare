@@ -75,13 +75,13 @@ void ParticleManager::MakeVertices()
 	// Enable both vertex posiiton & color
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
-//	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(2);
 
 	// Setting the location and size of the attributes
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0);
 	glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
-//	glVertexAttribPointer(2, 2, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(4 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(7 * sizeof(float)));
 }
 
 void ParticleManager::Effect(ParticleEmitter::ParticleType type, glm::vec3 position, glm::vec4 color, int amount)
@@ -91,7 +91,7 @@ void ParticleManager::Effect(ParticleEmitter::ParticleType type, glm::vec3 posit
 	emitter->setType(type);
 
 	// Creating particles with inputted variables into emitter
-	emitter->CreateParticles(position, color, amount);
+	emitter->CreateParticles(position, color, glm::vec2(2.25f, 1.50f), amount);
 
 	// Pushing new emitter into vector
 	emitters.push_back(emitter);
