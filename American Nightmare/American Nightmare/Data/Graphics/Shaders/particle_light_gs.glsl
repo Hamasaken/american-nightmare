@@ -36,16 +36,16 @@ void main()
 
 	// Top right
 	frag.color = vertices[0].color;
-	frag.position = vertices[0].position + vec3(right, top, 0.0);
+	frag.position = vertices[0].position + vec3(left, bottom, 0.0);
 	frag.center = gl_in[0].gl_Position.xyz;
-    gl_Position = gl_in[0].gl_Position + vec4(right, top, 0.0, 0.0);
+	gl_Position = gl_in[0].gl_Position + vec4(left, bottom, 0.0, 0.0);
     EmitVertex();
 
 	// Bottom left
 	frag.color = vertices[0].color;
-	frag.position = vertices[0].position + vec3(left, bottom, 0.0);
+	frag.position = vertices[0].position + vec3(right, top, 0.0);
 	frag.center = gl_in[0].gl_Position.xyz;
-	gl_Position = gl_in[0].gl_Position + vec4(left, bottom, 0.0, 0.0);
+    gl_Position = gl_in[0].gl_Position + vec4(right, top, 0.0, 0.0);
     EmitVertex();
 
     EndPrimitive();
@@ -59,16 +59,16 @@ void main()
 
 	// Top right
 	frag.color = vertices[0].color;
-	frag.position = vertices[0].position + vec3(right, top, 0.0);
+	frag.position = vertices[0].position + vec3(right, bottom, 0.0);
 	frag.center = gl_in[0].gl_Position.xyz;
-    gl_Position = gl_in[0].gl_Position + vec4(right, top, 0.0, 0.0);
+    gl_Position = gl_in[0].gl_Position + vec4(right, bottom, 0.0, 0.0);
     EmitVertex();
 
 	// Bottom right
 	frag.color = vertices[0].color;
-	frag.position = vertices[0].position + vec3(right, bottom, 0.0);
+	frag.position = vertices[0].position + vec3(right, top, 0.0);
 	frag.center = gl_in[0].gl_Position.xyz;
-    gl_Position = gl_in[0].gl_Position + vec4(right, bottom, 0.0, 0.0);
+    gl_Position = gl_in[0].gl_Position + vec4(right, top, 0.0, 0.0);
     EmitVertex();
 
     EndPrimitive();
