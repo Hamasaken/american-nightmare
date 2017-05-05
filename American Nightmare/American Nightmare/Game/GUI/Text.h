@@ -57,7 +57,7 @@ private:
 	////////////////////////////////////////////////////////////
 	bool LoadFont(std::string fontName, float characterSize);
 
-	GLuint texture;			//< This object's texture 
+	GLuint texture;			//< This text's texture 
 	TTF_Font* font;			//< The font of this text
 	std::string text;		//< The string of text to be displayed
 	glm::vec4 color;		//< Text color

@@ -21,8 +21,6 @@ bool Text::Start(glm::vec2 screenSize, std::string fontName, std::string text, f
 	if (!LoadFont(fontName, characterSize))
 		return false;
 
-	CreateText(text);
-
 	return true;
 }
 
@@ -55,18 +53,19 @@ void Text::CreateText(std::string text, glm::vec4 color)
 	this->color = color;
 
 	// Text Color
-	SDL_Color clr = { color.r * 255.f, color.g * 255.f, color.b * 255.f, color.a * 255.f };
+	SDL_Color clr = { color.r * 0, color.g * 0, color.b * 255.f, color.a * 255.f };
 
-	// Create Surface
 	SDL_Surface* surface;
 	surface = TTF_RenderText_Blended(font, text.c_str(), clr);
-	if (surface == nullptr) std::runtime_error("Something went wrong");
-	scale = glm::vec3(surface->w, surface->h, 1.f);
+	if (surface == nullptr) std::runtime_error("ERROR");
+	SDL_LockSurface(surface);
+
+	scale = glm::vec3((surface->w / screenSize.x) / 20, (surface->h / screenSize.y) / 20, 1.f);
 
 	// Create OpenGL Texture
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, surface->w, surface->h, 0, GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
 
 	// Setting some important parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -74,7 +73,7 @@ void Text::CreateText(std::string text, glm::vec4 color)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glGenerateMipmap(GL_TEXTURE_2D);
-	
+
 	// Unbinding
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -82,7 +81,7 @@ void Text::CreateText(std::string text, glm::vec4 color)
 	SDL_FreeSurface(surface);
 
 	// Creating quad for this text
-	model->BuildQuadTexture();
+	model->BuildQuad();
 }
 
 void Text::Draw()

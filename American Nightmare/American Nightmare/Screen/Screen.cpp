@@ -113,10 +113,8 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 		glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
 		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), dynamic_cast<Button*>(object)->getColor().a);
 	}
-	else
+	else if (dynamic_cast<Text*>(object) != nullptr)
 	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, dynamic_cast<Text*>(object)->getTexture());
@@ -125,8 +123,12 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), 1.f);
 	}
 
+	glEnable(GL_BLEND);
+
 	// Drawing object
 	object->Draw();
+
+	glDisable(GL_BLEND);
 }
 
 void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList)

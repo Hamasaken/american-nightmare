@@ -49,6 +49,8 @@ bool GUIManager::AddText(glm::vec3 position, float characterSize, std::string te
 	if (!txt->Start(screenSize, fontPath + fontName, text, characterSize, position)) return false;
 	txt->setShader(shader);
 
+	txt->CreateText(text);
+
 	texts.push_back(txt);
 }
 
