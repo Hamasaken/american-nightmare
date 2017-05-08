@@ -176,6 +176,7 @@
     <ClCompile Include="Game\Particle\Particle.cpp" />
     <ClCompile Include="Game\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Game\Particle\ParticleManager.cpp" />
+    <ClCompile Include="Game\Particle\TextureParticle.cpp" />
     <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\QuadTree.cpp" />
     <ClCompile Include="Game\Shader\ShaderManager.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="Game\Particle\Particle.h" />
     <ClInclude Include="Game\Particle\ParticleEmitter.h" />
     <ClInclude Include="Game\Particle\ParticleManager.h" />
+    <ClInclude Include="Game\Particle\TextureParticle.h" />
     <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Game\QuadTree.h" />
     <ClInclude Include="Game\Shader\ShaderManager.h" />
@@ -244,12 +246,12 @@
     <None Include="Data\Graphics\Shaders\drfinal_fs.glsl" />
     <None Include="Data\Graphics\Shaders\drfinal_vs.glsl" />
     <None Include="Data\Graphics\Shaders\dr_fs.glsl" />
-    <None Include="Data\Graphics\Shaders\particle_fs.glsl" />
-    <None Include="Data\Graphics\Shaders\particle_gs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_light_fs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_light_gs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_light_vs.glsl" />
-    <None Include="Data\Graphics\Shaders\particle_vs.glsl" />
+    <None Include="Data\Graphics\Shaders\particle_texture_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\particle_texture_gs.glsl" />
+    <None Include="Data\Graphics\Shaders\particle_texture_vs.glsl" />
     <None Include="Data\Graphics\Shaders\shadowmap_fs.glsl" />
     <None Include="Data\Graphics\Shaders\shadowmap_transparent_fs.glsl" />
     <None Include="Data\Graphics\Shaders\shadowmap_transparent_vs.glsl" />

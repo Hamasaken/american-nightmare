@@ -198,6 +198,74 @@ void Model::BuildQuadTexture()
 	delete[]indices; indices = nullptr;
 }
 
+void Model::BuildQuad(glm::vec2 size)
+{
+	VertexUV* vertices;
+	unsigned int* indices;
+
+	vertexCount = 4;
+	indexCount = 6;
+	vertices = new VertexUV[vertexCount];
+	indices = new unsigned int[indexCount];
+
+	// Top left
+	vertices[0].setPosition(glm::vec3(-1, 1, 0));
+	vertices[0].setUV(glm::vec2(0, 1));
+	vertices[0].setNormal(glm::vec3(0, 0, 1));
+
+	// Top right
+	vertices[1].setPosition(glm::vec3(1 + size.x, 1, 0));
+	vertices[1].setUV(glm::vec2(1, 1));
+	vertices[0].setNormal(glm::vec3(0, 0, 1));
+
+	// Right bottom
+	vertices[2].setPosition(glm::vec3(1 + size.x, -1 - size.y, 0));
+	vertices[2].setUV(glm::vec2(1, 0));
+	vertices[0].setNormal(glm::vec3(0, 0, 1));
+
+	// Left Bottom
+	vertices[3].setPosition(glm::vec3(-1, -1 - size.y, 0));
+	vertices[3].setUV(glm::vec2(0, 0));
+	vertices[0].setNormal(glm::vec3(0, 0, 1));
+
+	// Creating indices
+	indices[0] = 0;
+	indices[1] = 3;
+	indices[2] = 2;
+	indices[3] = 0;
+	indices[4] = 2;
+	indices[5] = 1;
+	// Creating the vertex buffer that will hold the buffers
+	glGenVertexArrays(1, &vertexArray);
+	glBindVertexArray(vertexArray);
+
+	// Generating buffers
+	glGenBuffers(1, &indexBuffer);
+	glGenBuffers(1, &vertexBuffer);
+
+	// Binding the vertex buffer and putting in data
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexUV) * vertexCount, vertices, GL_STATIC_DRAW);
+
+	// Enable both vertex posiiton & color
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+
+	// Setting the location and size of the attributes
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(VertexUV), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(VertexUV), (unsigned char*)(3 * sizeof(float)));
+
+	// Binding the index buffer and putting in data
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indexCount, indices, GL_STATIC_DRAW);
+
+	// Clearing from memeory
+	delete[]vertices; vertices = nullptr;
+	delete[]indices; indices = nullptr;
+}
+
 bool Model::LoadModel(std::string modelPath)
 {
 	// Load model from file

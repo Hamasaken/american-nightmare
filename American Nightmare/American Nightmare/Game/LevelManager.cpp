@@ -6,10 +6,11 @@ LevelManager::LevelManager(const LevelManager & other) { }
 
 LevelManager::~LevelManager() { }
 
-bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, ParticleManager* particleManager)
+bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, ParticleManager* particleManager, SoundManager* soundManager)
 {
 	this->materialManager = materialManager;
 	this->particleManager = particleManager;
+	this->soundManager = soundManager;
 
 	contactManager.Start(particleManager);
 
@@ -65,8 +66,11 @@ void LevelManager::Stop()
 	StopMap();
 	lightManager->Clear();
 	delete lightManager;
+
+	// These are getting removed in screen instead
 	materialManager = nullptr;
 	particleManager = nullptr;
+	soundManager = nullptr;
 }
 
 void LevelManager::StopMap()
@@ -128,6 +132,11 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Gettings paths to files
 	std::string modelPath = MODEL_PATH;
 	std::string texturePath = TEXTURE_PATH;
+
+	////////////////////////////////////////////////////////////
+	// Level Music
+	////////////////////////////////////////////////////////////
+	soundManager->playSong(SoundManager::SONG::MUSIC_WOOP);
 
 	////////////////////////////////////////////////////////////
 	// Map Visuals
@@ -366,7 +375,8 @@ void LevelManager::CheckTriggers()
 			////////////////////////////////////////////////////////////
 			// Spawn Trigger - Spawns anything, anywhere, (currently boxes)
 			////////////////////////////////////////////////////////////
-			case Trigger::SPAWN:	
+			case Trigger::SPAWN:
+				soundManager->playSFX(SoundManager::SFX::SFX_POWERUP);
 			{
 				Entity* moveble = new Entity();
 				moveble->setShader(player->getShader());

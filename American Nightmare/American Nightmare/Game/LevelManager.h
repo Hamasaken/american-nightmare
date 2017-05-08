@@ -10,6 +10,7 @@
 #include "Trigger.h"
 #include "../Projectile.h"
 #include "../MyContactListener.h"
+#include "../SoundManager.h"
 
 class LevelManager
 {
@@ -25,7 +26,7 @@ public:
 	// \param particleManager ptr to the particle manager
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(GLuint playerShader, MaterialManager* materialManager, ParticleManager* particleManager);
+	bool Start(GLuint playerShader, MaterialManager* materialManager, ParticleManager* particleManager, SoundManager* soundManager);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -83,6 +84,7 @@ private:
 	Enemy* enemy;				//< A Enemy object
 
 	ParticleManager* particleManager;
+	SoundManager* soundManager;
 	LightManager* lightManager;
 	MaterialManager* materialManager;
 	b2World *world;

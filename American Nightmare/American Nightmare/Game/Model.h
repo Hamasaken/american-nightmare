@@ -21,6 +21,7 @@ public:
 	void BuildTriangle();
 	void BuildQuad();
 	void BuildQuadTexture();
+	void BuildQuad(glm::vec2 size); // Temporary for button
 	
 	////////////////////////////////////////////////////////////
 	// \brief Loads a model with vertices and normals and inserts into buffers
