@@ -90,13 +90,15 @@ void Program::StartSDLWindow()
 
 	// Setting various OpenGL settings, check header for variables
 	glViewport(0, 0, screenSize.x, screenSize.y);
-	glClearDepth(DEPTH_BUFFER_CLEAR);				// Threshold for depthbuffer to clear
-	glFrontFace(GL_CW);								// ClockWise = CW, CounterClockWise = CCW
+	glEnable(GL_DEPTH_TEST);						// Enable Depth test
+	glClearDepth(1);								// Threshold for depthbuffer to clear
+	glDepthFunc(GL_LESS);
+	//glFrontFace(GL_CW);							// ClockWise = CW, CounterClockWise = CCW
 	glEnable(GL_CULL_FACE);							// Enable Culling
 	glCullFace(GL_BACK);							// GL_BACK is default, (backculling), we can also use GL_FRONT, and GL_FRONT_AND_BACK if needed
-	glEnable(GL_DEPTH_TEST);						// Enable Depth test
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	//glEnable(GL_FRAMEBUFFER_SRGB);				// Gamma correction
 }
 
@@ -126,8 +128,8 @@ bool Program::Run()
 	bool done = false;
 	while (!done)
 	{
-		Uint32 currentTime = SDL_GetPerformanceCounter();
-		deltaT = ((currentTime - lastFrameTime) * 1000) / SDL_GetPerformanceFrequency();
+		Uint32 currentTime = SDL_GetTicks();
+		deltaT = (currentTime - lastFrameTime);
 		lastFrameTime = currentTime;
 
 		while (SDL_PollEvent(&event))

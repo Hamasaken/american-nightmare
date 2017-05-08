@@ -18,8 +18,9 @@ public:
 	// \brief Initializes the particle with a position and color
 	// \param position The starting position of the particle
 	// \param color The starting color of the particle
+	// \param size The size in w/h of the particle quad
 	////////////////////////////////////////////////////////////
-	virtual void Start(glm::vec3 position, glm::vec4 color);
+	virtual void Start(glm::vec3 position, glm::vec4 color, glm::vec2 size);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads stuff inside the particle
@@ -38,14 +39,14 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Gets the particle as a vertex for drawing with shader
 	////////////////////////////////////////////////////////////
-	Vertex getAsVertex();
+	Vertex* getAsVertex();
 
 	////////////////////////////////////////////////////////////
 	// \brief Returns true if the particle is dead, otherwise false
 	////////////////////////////////////////////////////////////
 	bool getIsDead();
 
-private:
+protected:
 	bool isDead;			//< If the particle is dead and should be removed
 	GLfloat lifeTimeStart;	//< How much time the particle started with
 	GLfloat lifeTime;		//< How much time the particle have left

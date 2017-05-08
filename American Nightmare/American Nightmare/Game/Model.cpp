@@ -161,11 +161,11 @@ void Model::BuildQuadTexture()
 	//	indices[i] = i;
 
 	indices[0] = 0;
-	indices[1] = 2;
-	indices[2] = 3;
+	indices[1] = 3;
+	indices[2] = 2;
 	indices[3] = 0;
-	indices[4] = 1;
-	indices[5] = 2;
+	indices[4] = 2;
+	indices[5] = 1;
 
 	// Creating the vertex buffer that will hold the buffers
 	glGenVertexArrays(1, &vertexArray);
@@ -230,12 +230,11 @@ void Model::BuildQuad(glm::vec2 size)
 
 	// Creating indices
 	indices[0] = 0;
-	indices[1] = 2;
-	indices[2] = 3;
+	indices[1] = 3;
+	indices[2] = 2;
 	indices[3] = 0;
-	indices[4] = 1;
-	indices[5] = 2;
-
+	indices[4] = 2;
+	indices[5] = 1;
 	// Creating the vertex buffer that will hold the buffers
 	glGenVertexArrays(1, &vertexArray);
 	glBindVertexArray(vertexArray);

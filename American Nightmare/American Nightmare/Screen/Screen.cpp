@@ -79,6 +79,74 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 	object->Draw();
 }
 
+void Screen::DrawObjectShadowMap(Object* object, ShaderManager* shaderManager, glm::mat4 lightSpaceMatrix)
+{
+	// Getting matrices
+	glm::mat4 world = worldMatrix;
+	glm::mat4 view = camera->getViewMatrix();
+	glm::mat4 projection = projectionMatrix;
+
+	// Positioning object
+	glm::vec3 pos = object->getPosition();
+	world = glm::translate(world, pos);
+
+	// Rotating object
+	glm::vec3 rot = object->getRotation();
+	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
+	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
+	world = glm::rotate(world, rot.z, glm::vec3(0, 0, 1));
+
+	// Scaling object
+	glm::vec3 scale = object->getScale();
+
+	world = glm::scale(world, scale);
+
+	// Setting shader as active and setting parameters
+	shaderManager->SetParameters(world, view, projection);
+
+	glUniformMatrix4fv(glGetUniformLocation(shaderManager->getShader(), "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+
+	// Drawing object
+	object->Draw();
+}
+
+void Screen::DrawObjectShadowMapTransparent(Animation* animatedObj, ShaderManager* shaderManager, glm::mat4 lightSpaceMatrix)
+{
+	// Getting matrices
+	glm::mat4 world = worldMatrix;
+	glm::mat4 view = camera->getViewMatrix();
+	glm::mat4 projection = projectionMatrix;
+
+	// Positioning object
+	glm::vec3 pos = animatedObj->getPosition();
+	world = glm::translate(world, pos);
+
+	// Rotating object
+	glm::vec3 rot = animatedObj->getRotation();
+	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
+	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
+	world = glm::rotate(world, rot.z, glm::vec3(0, 0, 1));
+
+	// Scaling object
+	glm::vec3 scale = animatedObj->getScale();
+	world = glm::scale(world, scale);
+
+	// Setting shader as active and setting parameters
+	shaderManager->SetParameters(world, view, projection);
+	shaderManager->SetParametersAnimated(animatedObj);
+
+	glEnable(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, animatedObj->getTextureID());
+
+	glUniform1i(glGetUniformLocation(shaderManager->getShader(), "texture"), 0);
+
+	glUniformMatrix4fv(glGetUniformLocation(shaderManager->getShader(), "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+
+	// Drawing object
+	animatedObj->Draw();
+}
+
 void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 {	
 	// Getting matrices
@@ -113,7 +181,7 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 		glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
 		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), dynamic_cast<Button*>(object)->getColor().a);
 	}
-	else
+	else if (dynamic_cast<Text*>(object) != nullptr)
 	{
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_TEXTURE_2D);
@@ -121,14 +189,18 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 		glBindTexture(GL_TEXTURE_2D, dynamic_cast<Text*>(object)->getTexture());
 
 		glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
-		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), dynamic_cast<Text*>(object)->getColor().a);
+		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), 1.f);
 	}
+
+	glEnable(GL_BLEND);
 
 	// Drawing object
 	object->Draw();
+
+	glDisable(GL_BLEND);
 }
 
-void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList)
+void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, glm::mat4 lightSpaceMatrix, GLuint shadowMap, bool useShadow)
 {
 	// Getting matrices
 	glm::mat4 world = worldMatrix;
@@ -159,13 +231,19 @@ void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderMa
 	glBindTexture(GL_TEXTURE_2D, animatedObj->getTextureID());
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, animatedObj->getAnimationNormal());
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, shadowMap);
 
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "texture"), 0);
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "normal"), 1);
+	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "shadowmap"), 2);
 
 	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "viewPos"), camera->getPosition().x, camera->getPosition().y, camera->getPosition().z, 1.f);
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "nrOfPointLights"), pointLightList.size());
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "nrOfDirectionalLights"), directionalLightList.size());
+
+	glUniformMatrix4fv(glGetUniformLocation(animatedObj->getShader(), "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "useShadow"), useShadow);
 
 	std::string index;
 
@@ -230,9 +308,8 @@ void Screen::DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager
 	object->Draw();
 }
 
-void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList)
+void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, glm::mat4 lightSpaceMatrix, bool useShadow)
 {
-
 	Model* model = drRendering->getFinalRenderQuad();
 
 	// Setting shader as active and setting parameters
@@ -249,12 +326,15 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 	glBindTexture(GL_TEXTURE_2D, drRendering->getDRDiffuse());
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D, drRendering->getDRSpecular());
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D, drRendering->getShadowMap());
 
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drPosition"), 0);
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drNormal"), 1);
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drAmbient"), 2);
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drDiffuse"), 3);
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drSpecular"), 4);
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "shadowmap"), 5);
 
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "nrOfPointLights"), pointLightList.size());
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "nrOfDirectionalLights"), directionalLightList.size());
@@ -282,6 +362,9 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 		glUniform4f(glGetUniformLocation(drRendering->getLightShader(), ("directionalLights[" + index + "].specular").c_str()), directionalLightList[i]->specular.x, directionalLightList[i]->specular.y, directionalLightList[i]->specular.z, directionalLightList[i]->specular.w);
 		glUniform1f(glGetUniformLocation(drRendering->getLightShader(), ("directionalLights[" + index + "].strength").c_str()), directionalLightList[i]->strength);
 	}
+
+	glUniformMatrix4fv(glGetUniformLocation(drRendering->getLightShader(), "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "useShadow"), useShadow);
 
 	glDisable(GL_DEPTH_TEST);
 

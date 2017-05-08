@@ -22,7 +22,7 @@ void GUIManager::Stop()
 
 void GUIManager::Update(GLuint deltaT)
 {
-	glm::vec2 mousePosition = fromScreenToWorld(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), screenSize, screenPosition);
+	glm::vec2 mousePosition = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), screenSize, screenPosition);
 
 	for (std::pair<Button*, Action> button : buttons)
 		button.first->Update(deltaT, mousePosition);
@@ -49,6 +49,8 @@ bool GUIManager::AddText(glm::vec3 position, float characterSize, std::string te
 	if (!txt->Start(screenSize, fontPath + fontName, text, characterSize, position)) return false;
 	txt->setShader(shader);
 
+	txt->CreateText(text);
+
 	texts.push_back(txt);
 }
 
@@ -70,14 +72,14 @@ void GUIManager::setShader(GLuint shader)
 		text->setShader(shader);
 }
 
-std::vector<std::pair<Button*, GUIManager::Action>> GUIManager::getButtonList()
+std::vector<std::pair<Button*, GUIManager::Action>>* GUIManager::getButtonList()
 {
-	return buttons;
+	return &buttons;
 }
 
-std::vector<Text*> GUIManager::getTextList()
+std::vector<Text*>* GUIManager::getTextList()
 {
-	return texts;
+	return &texts;
 }
 
 void GUIManager::clearButtons()

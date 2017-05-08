@@ -144,6 +144,18 @@
     <ClCompile Include="Game\GUI\GUIManager.cpp">
       <Filter>Source Files\Game\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Trigger.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileHandler.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="MyContactListener.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Particle\BloodParticle.cpp">
+      <Filter>Source Files\Game\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h">
@@ -236,6 +248,18 @@
     <ClInclude Include="Game\GUI\GUIManager.h">
       <Filter>Header Files\Game\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Trigger.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileHandler.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="MyContactListener.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Particle\BloodParticle.h">
+      <Filter>Header Files\Game\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Graphics\Shaders\solid_fs.glsl">
@@ -284,6 +308,24 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Data\Graphics\Shaders\particle_light_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\shadowmap_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\shadowmap_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\debug_shader_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\debug_shader_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\shadowmap_transparent_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\shadowmap_transparent_fs.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

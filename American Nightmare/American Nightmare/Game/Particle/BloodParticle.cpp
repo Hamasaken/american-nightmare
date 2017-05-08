@@ -1,12 +1,6 @@
-#include "Particle.h"
+#include "BloodParticle.h"
 
-Particle::Particle() { }
-
-Particle::Particle(const Particle & other) { }
-
-Particle::~Particle() { }
-
-void Particle::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size)
+void BloodParticle::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size, float angle, float strength)
 {
 	// Setting parameters
 	isDead = false;
@@ -15,14 +9,12 @@ void Particle::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size)
 	vertex.setSize(size);
 
 	// Setting some random variables
-	lifeTime = PARTICLE_LIFETIME;
+	lifeTime = BLOOD_LIFETIME;
 	lifeTimeStart = lifeTime;
-	velocity = glm::vec3(VELOCITY, VELOCITY, VELOCITY);
+	velocity = glm::vec3(cos(angle + randBetweenF(-0.45f, 0.45f)) * strength, sin(angle + randBetweenF(-0.45f, 0.45f)) * strength, BLOOD_VELOCITY);
 }
 
-void Particle::Stop() { }
-
-void Particle::Update(GLfloat deltaT)
+void BloodParticle::Update(GLfloat deltaT)
 {
 	// Makes color alpha with the rest of lifetime
 	float alpha = lifeTime / lifeTimeStart;
@@ -34,12 +26,8 @@ void Particle::Update(GLfloat deltaT)
 		isDead = true;
 
 	// Adds velocity fall-off for realistic effect
-	velocity += (glm::vec3(0, 0, 0) - velocity) * VELOCITY_FALL_OFF;
+	velocity += (glm::vec3(0, 0, 0) - velocity) * BLOOD_VELOCITY_FALL_OFF;
 
 	// Moves the particle with velocity and frametime
 	vertex.setPosition(glm::vec3(vertex.x, vertex.y, vertex.z) + velocity * deltaT);
 }
-
-Vertex* Particle::getAsVertex() { return &vertex; }
-
-bool Particle::getIsDead() { return isDead; }

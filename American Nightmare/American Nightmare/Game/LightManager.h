@@ -29,6 +29,7 @@ public:
 	struct DirectionalLight
 	{
 		//std::string name; maybe?
+		glm::vec4 position;
 		glm::vec4 direction;
 
 		glm::vec4 diffuse;
@@ -36,9 +37,9 @@ public:
 
 		GLfloat strength;
 
-		DirectionalLight() : direction(glm::vec4()), diffuse(glm::vec4()), specular(glm::vec4()), strength(0.f) {}
-		DirectionalLight(glm::vec4 direction, glm::vec4 diffuse, glm::vec4 specular, GLfloat strength) : direction(direction), diffuse(diffuse), specular(specular), strength(strength) {}
-		DirectionalLight(const DirectionalLight& light) : direction(light.direction), diffuse(light.diffuse), specular(light.specular), strength(light.strength) {}
+		DirectionalLight() : position(glm::vec4()), direction(glm::vec4()), diffuse(glm::vec4()), specular(glm::vec4()), strength(0.f) {}
+		DirectionalLight(glm::vec4 position, glm::vec4 direction, glm::vec4 diffuse, glm::vec4 specular, GLfloat strength) : direction(direction), position(position), diffuse(diffuse), specular(specular), strength(strength) {}
+		DirectionalLight(const DirectionalLight& light) : position(light.position), direction(light.direction), diffuse(light.diffuse), specular(light.specular), strength(light.strength) {}
 	};
 
 	LightManager();
@@ -48,7 +49,7 @@ public:
 	void Clear();
 
 	void AddPointLight(glm::vec4 position, glm::vec4 diffuse, glm::vec4 specular, GLfloat strength, GLfloat constant, GLfloat linear, GLfloat quadratic);
-	void AddDirectionalLight(glm::vec4 direction, glm::vec4 diffuse, glm::vec4 specular, GLfloat strength);
+	void AddDirectionalLight(glm::vec4 position, glm::vec4 direction, glm::vec4 diffuse, glm::vec4 specular, GLfloat strength);
 	//void RemoveLight(); maybe?
 
 	std::vector<PointLight*> getPointLightList() const;

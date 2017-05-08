@@ -24,6 +24,7 @@ public:
 	bool setShader(std::string name);
 	GLuint getShader() const;
 	GLuint getShader(std::string name) const;
+	std::string getShader(GLuint id) const;
 
 	bool SetParameters(glm::mat4 world, glm::mat4 view, glm::mat4 projection);
 	bool SetParametersAnimated(Animation* character);
@@ -40,6 +41,7 @@ private:
 	};
 
 	GLint findShader(std::string name) const;
+	std::string findShader(GLuint id) const;
 	std::string getSource(std::string path);
 	GLuint compileShader(std::string text, GLenum type);
 
