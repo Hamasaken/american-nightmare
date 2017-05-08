@@ -102,7 +102,6 @@ void ParticleManager::EffectBloodSplatter(glm::vec3 position, float angle, float
 	emitter->setType(ParticleEmitter::BLOOD);
 
 	// Creating particles with inputted variables into emitter
-	printf("%f\n", (angle));
 	emitter->BloodSplatter(position, angle, strength, color, BLOOD_SIZE, amount);
 	emitters.push_back(emitter);
 }
