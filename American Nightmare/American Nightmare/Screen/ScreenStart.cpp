@@ -35,7 +35,9 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 
 	// Loading materials
 	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
+	materialManager->AddMaterial("titlematerial", glm::vec3(1.f), 0.f, "titletexture", texturePath + "title.jpg");
 	if (materialManager->getMaterial("lightmaterial") == nullptr) printf("Light Material not found\n");
+	if (materialManager->getMaterial("titlematerial") == nullptr) printf("Title Material not found\n");
 
 	////////////////////////////////////////////////////////////
 	// Creating a GUI manager	
@@ -44,10 +46,10 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
 	guiManager->setShader(shaderManager->getShader("texture"));
-//	guiManager->AddButton(GUIManager::OPTIONS, glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(-0.7f, 0, 0), glm::vec2(0.30f, 0.60f), materialManager->getMaterial("titlematerial"));
 	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
 	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddText(glm::vec3(0, 0.5f, 0), 300.f, "AA", "framd.ttf");
+	guiManager->AddText(glm::vec3(0, 0.0, 0), 300.f, "AA", "framd.ttf");
 	guiManager->setAlpha(1.f);
 
 	// Setting starting variables
