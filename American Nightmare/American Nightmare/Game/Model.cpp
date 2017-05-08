@@ -198,7 +198,7 @@ void Model::BuildQuadTexture()
 	delete[]indices; indices = nullptr;
 }
 
-void Model::BuildQuad(glm::vec2 screenSize, glm::vec3 position, glm::vec4 color, glm::vec2 size)
+void Model::BuildQuad(glm::vec2 size)
 {
 	VertexUV* vertices;
 	unsigned int* indices;
@@ -208,40 +208,25 @@ void Model::BuildQuad(glm::vec2 screenSize, glm::vec3 position, glm::vec4 color,
 	vertices = new VertexUV[vertexCount];
 	indices = new unsigned int[indexCount];
 
-	// Screen Aspect
-	float NDCX = 20.f;
-	float NDCY = 20.f;
-
-	// Changing size and position variables with screen aspect
-	glm::vec3 pos = glm::vec3((position.x / NDCX), position.y / NDCY, position.z);;
- 	glm::vec2 dimensions = glm::vec2(size.x / NDCX, size.y / NDCY);
-
-	// The position on screen if 0,0 is upper left corner
-	float screenX = 0 - (screenSize.x / NDCX * 1.115) / 2;
-	float screenY = 0 + (screenSize.y / NDCY * 1.115) / 2;
-
-	// The positions of the vertices
-	float left, right, top, bottom;
-	left = (screenX);
-	right = left + dimensions.x;
-	top = (screenY);
-	bottom = top - dimensions.y;
-
 	// Top left
-	vertices[0].setPosition(glm::vec3(left, top, position.z));
+	vertices[0].setPosition(glm::vec3(-1, 1, 0));
 	vertices[0].setUV(glm::vec2(0, 1));
+	vertices[0].setNormal(glm::vec3(0, 0, 1));
 
 	// Top right
-	vertices[1].setPosition(glm::vec3(right, top, position.z));
+	vertices[1].setPosition(glm::vec3(1 + size.x, 1, 0));
 	vertices[1].setUV(glm::vec2(1, 1));
+	vertices[0].setNormal(glm::vec3(0, 0, 1));
 
 	// Right bottom
-	vertices[2].setPosition(glm::vec3(right, bottom, position.z));
+	vertices[2].setPosition(glm::vec3(1 + size.x, -1 - size.y, 0));
 	vertices[2].setUV(glm::vec2(1, 0));
+	vertices[0].setNormal(glm::vec3(0, 0, 1));
 
 	// Left Bottom
-	vertices[3].setPosition(glm::vec3(left, bottom, position.z));
+	vertices[3].setPosition(glm::vec3(-1, -1 - size.y, 0));
 	vertices[3].setUV(glm::vec2(0, 0));
+	vertices[0].setNormal(glm::vec3(0, 0, 1));
 
 	// Creating indices
 	indices[0] = 0;
