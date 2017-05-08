@@ -53,6 +53,8 @@ private:
 	void UpdatePausing(GLint deltaT);
 	void UpdateUnpausing(GLint deltaT);
 
+	void DrawShadowMaps();
+
 	MaterialManager* materialManager;	//< The material manager
 	GameState gameState;				//< Current State of the gameloop
 	GUIManager* guiManager;				//< Paus Meny
