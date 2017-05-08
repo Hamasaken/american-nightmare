@@ -159,6 +159,9 @@
     <ClCompile Include="Game\Particle\TextureParticle.cpp">
       <Filter>Source Files\Game\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="Screen\Rendering\ShadowManager.cpp">
+      <Filter>Source Files\Screen\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h">
@@ -262,6 +265,9 @@
     </ClInclude>
     <ClInclude Include="Game\Particle\BloodParticle.h">
       <Filter>Header Files\Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen\Rendering\ShadowManager.h">
+      <Filter>Header Files\Screen\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Game\Particle\TextureParticle.h">
       <Filter>Header Files\Game\Particle</Filter>
