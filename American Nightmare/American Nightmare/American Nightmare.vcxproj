@@ -126,7 +126,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\External\SFML\SFML-32\include;..\External\glew\include;..\External\SDL2\include;..\External\sfeMovie\sfeMovie-32\include;..\External\SDL2_ttf\SDL2_ttf-32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\External\SFML\SFML-32\include;..\External\glew\include;..\External\SDL2\include;..\External\sfeMovie\sfeMovie-32\include;..\External\SDL2_ttf\SDL2_ttf-32\include;..\External\Box2D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,7 +134,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>sfml-window.lib;sfml-audio.lib;sfml-system.lib;sfml-graphics.lib;glew32.lib;SDL2.lib;SDL2main.lib;opengl32.lib;SDL2_ttf.lib;Box2DLib-X32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\External\SFML\SFML-32\lib;..\External\glew\lib\Release\Win32;..\External\SDL2\lib\x86;..\External\sfeMovie\sfeMovie-32\lib;..\External\SDL2_ttf\SDL2_ttf-32\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\External\SFML\SFML-32\lib;..\External\glew\lib\Release\Win32;..\External\SDL2\lib\x86;..\External\sfeMovie\sfeMovie-32\lib;..\External\SDL2_ttf\SDL2_ttf-32\lib;..\External\Box2D;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
