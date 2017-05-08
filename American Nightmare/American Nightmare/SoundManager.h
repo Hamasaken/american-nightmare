@@ -9,12 +9,12 @@
 #define SONG_CAPACITY	50
 
 // Volume of Music and SFX
-#define VOLUME_MUSIC	20
-#define VOLUME_SFX	100
+#define VOLUME_MUSIC	100
+#define VOLUME_SFX		100
 
 // Turn Music & SFX on/off for testing
-#define MUSIC_ON	false	
-#define SFX_ON		false
+#define MUSIC_ON	true	
+#define SFX_ON		true
 
 class SoundManager
 {
@@ -22,13 +22,15 @@ public:
 	// Put sfx names here, and then load them in the loadSFXs function
 	enum SFX
 	{
-		SFX_PROP
+		SFX_BIP, 
+		SFX_HIT,
+		SFX_POWERUP
 	};
 
 	// Put song names here, and then load them in the loadSongs functions
 	enum SONG
 	{
-		MUSIC_PROP
+		MUSIC_WOOP
 	};
 
 	SoundManager();
