@@ -1,4 +1,5 @@
 #include "Accessories.h"
+#include <iostream>
 
 float randBetweenF(float low, float high)
 {
@@ -29,4 +30,12 @@ glm::vec3 fromScreenToWorld(glm::vec2 position, glm::vec2 screenSize, glm::mat4 
 	finalResult.z *= finalResult.w;
 
 	return finalResult;
+}
+
+glm::vec2 fromScreenToNDC(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos)
+{
+	glm::vec2 tomas = glm::vec2(((position.x / screenSize.x) - screenPos.x / screenSize.x) * 2.f - 1.f,
+		((position.y / screenSize.y) - screenPos.y / screenSize.y) * 2.f - 1.f);
+		std::cout << tomas.x << ", " << tomas.y << std::endl;
+	return tomas; // temp
 }

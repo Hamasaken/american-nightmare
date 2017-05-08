@@ -26,7 +26,10 @@ public:
 	Projectile();
 	~Projectile();
 
-	void fireBullet(b2World* world, glm::vec2 position, int dirInt);
+
+	void fireBullet(b2World* world, glm::vec2 position, glm::vec2 direction);
+/*
+	void fireBullet(b2World* world, glm::vec2 position, int dirInt);*/
 	b2Vec2 normalize(const b2Vec2& source);
 	bool getIsFired();
 

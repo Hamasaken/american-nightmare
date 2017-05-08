@@ -2,6 +2,7 @@
 #define PROJECTILEHANDLER_H
 
 #include "Projectile.h"
+#include "Accessories.h"
 
 class ProjectileHandler : public Entity
 {
