@@ -129,7 +129,7 @@ void ScreenGame::Draw()
 {
 	// Draw shadow maps
 	if (shadowManager.getUseShadows())
-		DrawShadowMaps();
+		DrawShadowMaps();		
 
 	// Disable Blend for DR
 	glDisable(GL_BLEND);
@@ -204,25 +204,35 @@ void ScreenGame::Draw()
 
 void ScreenGame::DrawShadowMaps()
 {
-	glViewport(0, 0, shadowManager.getDirectionalShadowMapList()[0]->resolution.x, shadowManager.getDirectionalShadowMapList()[0]->resolution.y);
-	// Bind depth FBO
-	glBindFramebuffer(GL_FRAMEBUFFER, shadowManager.getDirectionalShadowMapList()[0]->shadowFBO);
+	for (int i = 0; i < shadowManager.getDirectionalShadowMapList().size(); i++)
+	{
+		// Set Viewport to resolution of shadow map
+		glViewport(0, 0, shadowManager.getDirectionalShadowMapList()[i]->resolution.x, shadowManager.getDirectionalShadowMapList()[i]->resolution.y);
+		// Bind depth FBO
+		glBindFramebuffer(GL_FRAMEBUFFER, shadowManager.getDirectionalShadowMapList()[i]->shadowFBO);
 
-	shaderManager->setShader(shadowManager.getDirectionalShadowShader());
+		// Set shader
+		shaderManager->setShader(shadowManager.getDirectionalShadowShader());
 
-	glClear(GL_DEPTH_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER_BIT);
 
-	// Drawing shadowmap
-	for (Object* object : levelManager->getMap())
-		DrawObjectShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix);
+		// Drawing shadowmap
+		for (Object* object : levelManager->getMap())
+			DrawObjectShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix);
 
-	shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
-	DrawObjectShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix);
+		// Set shader for transparent objects
+		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
 
-	DrawObjectShadowMapTransparent(levelManager->getEnemy(), shaderManager, shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix);
+		DrawObjectShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+		DrawObjectShadowMapTransparent(levelManager->getEnemy(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, screenSize.x, screenSize.y);
+		// Unbind FBO
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// Reset Viewport to screen size
+		glViewport(0, 0, screenSize.x, screenSize.y);
+	}
+	
 }
 
 void ScreenGame::UpdatePaused(GLint deltaT)
