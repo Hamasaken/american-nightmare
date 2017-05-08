@@ -53,23 +53,25 @@ void Text::CreateText(std::string text, glm::vec4 color)
 	this->color = color;
 
 	// Text Color
-	SDL_Color clr = { 255, 0, 0, 255 };
+	SDL_Color clr = { 255.f, 255.f, 255.f, 255.f };
 
 	// Create Surface
 	SDL_Surface* surface;
-	surface = TTF_RenderUTF8_Blended(font, text.c_str(), clr);
-	scale = glm::vec3(surface->w / screenSize.x, surface->h / screenSize.y, 1.f);
+	surface = TTF_RenderText_Blended(font, text.c_str(), clr);
+	scale = glm::vec3(0.5f, 0.5f, 1.f);
 
 	// Create OpenGL Texture
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, surface->w, surface->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, surface->pixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_BGR, GL_UNSIGNED_BYTE, surface->pixels);
 
 	// Setting some important parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	
+//	glGenerateMipmap(GL_TEXTURE_2D);
+
 	// Unbinding
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -77,7 +79,7 @@ void Text::CreateText(std::string text, glm::vec4 color)
 	SDL_FreeSurface(surface);
 
 	// Creating quad for this text
-	model->BuildQuad(glm::vec2(surface->w / screenSize.x, surface->h / screenSize.y));
+	model->BuildQuadTexture();
 }
 
 void Text::Draw()

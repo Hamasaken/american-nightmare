@@ -172,6 +172,10 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 	shaderManager->setShader(object->getShader());
 	shaderManager->SetParameters(world, view, projection);
 
+
+	glEnable(GL_BLEND);
+
+
 	if (dynamic_cast<Button*>(object) != nullptr)
 	{
 		glEnable(GL_TEXTURE_2D);
@@ -191,8 +195,6 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 		glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
 		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), 1.f);
 	}
-
-	glEnable(GL_BLEND);
 
 	// Drawing object
 	object->Draw();

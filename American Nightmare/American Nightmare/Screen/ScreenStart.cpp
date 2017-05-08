@@ -49,7 +49,7 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	guiManager->AddButton(GUIManager::OK, glm::vec3(-0.7f, 0, 0), glm::vec2(0.30f, 0.60f), materialManager->getMaterial("titlematerial"));
 	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
 	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddText(glm::vec3(0, 0.0, 0), 300.f, "AA", "framd.ttf");
+	guiManager->AddText(glm::vec3(0, 0.0, 0), 400.f, "What", "framd.ttf");
 	guiManager->setAlpha(1.f);
 
 	// Setting starting variables
