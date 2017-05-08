@@ -60,6 +60,9 @@ void ScreenStart::SetStartVariables()
 {
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 15));
+
+	// Setting meny music
+	soundManager->playSong(SoundManager::SONG::MUSIC_BOOGIE);
 }
 
 void ScreenStart::Update(GLint deltaT)

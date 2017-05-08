@@ -30,7 +30,8 @@ public:
 	// Put song names here, and then load them in the loadSongs functions
 	enum SONG
 	{
-		MUSIC_WOOP
+		MUSIC_WOOP, 
+		MUSIC_BOOGIE
 	};
 
 	SoundManager();
@@ -117,15 +118,15 @@ private:
 	////////////////////////////////////////////////////////////
 	float getRandomFloat(float low, float high);
 
-	int		volumeMusic;
-	int		volumeEffect;
-	int		nrOfMusicPlayingCurrently;
+	int				volumeMusic;
+	int				volumeEffect;
+	int				nrOfMusicPlayingCurrently;
 
 	sf::Listener	listener;			//< The listener for sfx
 	sf::SoundBuffer buffer[SFX_CAPACITY];		//< The buffers of all sounds to load in sound
-	sf::Sound	sfx[SFX_CAPACITY];		//< Array with sfx
-	sf::Music	song[SONG_CAPACITY];		//< Array with songs
-	int		nrOfSound;			//< The current number of the bufferloading
+	sf::Sound		sfx[SFX_CAPACITY];		//< Array with sfx
+	sf::Music		song[SONG_CAPACITY];		//< Array with songs
+	int				nrOfSound;			//< The current number of the bufferloading
 };
 
 #endif // !SFXMANAGER_H

@@ -50,6 +50,7 @@ void SoundManager::loadSongs()
 
 	// Load all songs here
 	song[MUSIC_WOOP].openFromFile(pathToFolder + "woop.ogg");
+	song[MUSIC_BOOGIE].openFromFile(pathToFolder + "boogie.ogg");
 
 	// Setting every song as looping and setting volume
 	for (sf::Music& m : song)
