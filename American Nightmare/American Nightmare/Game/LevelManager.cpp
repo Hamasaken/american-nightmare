@@ -275,24 +275,6 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
 
 	lightManager->AddDirectionalLight(glm::vec4(5, 20, 20, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
-
-	//lightManager->AddPointLight(glm::vec4(0, 10, 0, 1), glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 1, 1), 1.f, 1, 0.01f, 0.001f);
-	//printf("%f\n", lightManager->getPointLightList()[0]->radius);
-
-	/*for (int x = 0; x < 10; x++)
-	{
-		for (int z = 0; z < 5; z++)
-		{
-			lightManager->AddPointLight(glm::vec4(x * 7 - 32, 3, z * 4 - 8, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 5.f, 1.f, 0.8f, 1.7f);
-			printf("%f\n", lightManager->getPointLightList()[lightManager->getPointLightList().size() - 1]->radius);
-
-			light = new Object();
-			light->setShader(shader);
-			light->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"));
-			light->setPosition(glm::vec3(x * 7 - 32, 3, z * 4 - 8));
-			map.push_back(light);
-		}
-	}*/
 }
 
 void LevelManager::Update(GLint deltaT)

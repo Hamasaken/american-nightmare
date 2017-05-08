@@ -190,6 +190,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Screen\Rendering\DeferredRendering.cpp" />
+    <ClCompile Include="Screen\Rendering\ShadowManager.cpp" />
     <ClCompile Include="Screen\Screen.cpp" />
     <ClCompile Include="Screen\ScreenCutscene.cpp" />
     <ClCompile Include="Screen\ScreenGame.cpp" />
@@ -229,6 +230,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Screen\Rendering\DeferredRendering.h" />
+    <ClInclude Include="Screen\Rendering\ShadowManager.h" />
     <ClInclude Include="Screen\Screen.h" />
     <ClInclude Include="Screen\ScreenCutscene.h" />
     <ClInclude Include="Screen\ScreenGame.h" />

@@ -3,6 +3,7 @@
 
 #include "Screen.h"
 #include "Rendering/DeferredRendering.h"
+#include "Rendering/ShadowManager.h"
 #include "../Game/Player.h"
 #include "../Game/LevelManager.h"
 #include "../Game/Particle/ParticleManager.h"
@@ -59,6 +60,7 @@ private:
 	ShaderManager* shaderManager;		//< Manager for shaderprograms
 	LevelManager* levelManager;			//< Manager for levels/maps
 	DeferredRendering drRendering;		//< Holds framebuffer for deferred rendering
+	ShadowManager shadowManager;		//< Manager for shadow maps
 };
 
 #endif // !SCREENGAME_H

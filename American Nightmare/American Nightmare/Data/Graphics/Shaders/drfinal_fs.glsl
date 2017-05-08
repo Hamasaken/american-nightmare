@@ -40,15 +40,16 @@ uniform sampler2D drSpecular;
 uniform sampler2D shadowmap;
 
 uniform mat4 lightSpaceMatrix;
+uniform vec4 lightDirection;
 uniform bool useShadow;
 
 in vec2 textureUV;
 
 layout(location = 0) out vec4 fragment_color;
 
-float calculateShadow(vec3 lightSpacePos)
+float calculateShadow(vec3 lightSpacePos, vec3 normal)
 {
-	float bias = 0.005f;
+	float bias = max(0.01 * (1.0 - dot(normal, lightDirection.xyz)), 0.005);
   
 	float currentDepth = lightSpacePos.z;
 	//float closestDepth = texture(shadowmap, lightSpacePos.xy).r; 
@@ -68,7 +69,7 @@ float calculateShadow(vec3 lightSpacePos)
     shadow /= 9.0;
 
 	if(lightSpacePos.z > 1.0)
-		shadow = 0.0;
+		shadow = 0.f;
 
 	return shadow;
 }
@@ -123,7 +124,7 @@ void main () {
 		vec3 finalLightSpacePos = lightSpacePos.xyz / lightSpacePos.w;
 		finalLightSpacePos = finalLightSpacePos * 0.5f + 0.5f;
 
-		shadow = calculateShadow(finalLightSpacePos);
+		shadow = calculateShadow(finalLightSpacePos, bufferNormal);
 	}
 
 	vec4 result = vec4(0);

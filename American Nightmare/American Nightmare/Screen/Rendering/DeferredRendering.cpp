@@ -6,13 +6,11 @@ DeferredRendering::DeferredRendering(const DeferredRendering & other) { }
 
 DeferredRendering::~DeferredRendering() { Stop(); }
 
-bool DeferredRendering::Start(glm::vec2 screenSize, GLuint lightShader, GLuint shadowShader)
+bool DeferredRendering::Start(glm::vec2 screenSize, GLuint lightShader)
 {
 	this->lightShader = lightShader;
 	this->shadowShader = shadowShader;
-	this->useShadow = false;
 	createDRBuffer(screenSize);
-	createShadowBuffer(screenSize);
 	finalRenderQuad.BuildQuadTexture();
 	return true;
 }
@@ -25,14 +23,12 @@ void DeferredRendering::Stop()
 	textureList[2] = drAmbient;
 	textureList[3] = drDiffuse;
 	textureList[4] = drSpecular;
-	textureList[5] = shadowMap;
 
 	glDeleteTextures(6, textureList);
 
 	delete[] textureList;
 
 	glDeleteFramebuffers(1, &drFBO);
-	glDeleteFramebuffers(1, &shadowFBO);
 }
 
 void DeferredRendering::createDRBuffer(glm::vec2 screenSize)
@@ -99,48 +95,11 @@ void DeferredRendering::createDRBuffer(glm::vec2 screenSize)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void DeferredRendering::createShadowBuffer(glm::vec2 screenSize)
-{
-	glGenFramebuffers(1, &shadowFBO);
-
-	glGenTextures(1, &shadowMap);
-	glBindTexture(GL_TEXTURE_2D, shadowMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, screenSize.x, screenSize.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMap, 0);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-
-	// Check if FBO is complete
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		printf("Framebuffer not complete!\n");
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-void DeferredRendering::setShadowLight(LightManager::DirectionalLight* light)
-{
-	glm::mat4 lightProjection = glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, 0.1f, 100.f);
-	glm::mat4 lightView = glm::lookAt(glm::vec3(light->position), glm::vec3(light->position + light->direction), glm::vec3(0.f, 1.f, 0.f));
-	lightSpaceMatrix = lightProjection * lightView;
-	useShadow = true;
-}
-
 GLuint DeferredRendering::getDRFBO() const { return drFBO; }
-GLuint DeferredRendering::getShadowFBO() const { return shadowFBO; }
 GLuint DeferredRendering::getDRPosition() const { return drPosition; }
 GLuint DeferredRendering::getDRNormal() const { return drNormal; }
 GLuint DeferredRendering::getDRAmbient() const { return drAmbient; }
 GLuint DeferredRendering::getDRDiffuse() const { return drDiffuse; }
 GLuint DeferredRendering::getDRSpecular() const { return drSpecular; }
-GLuint DeferredRendering::getShadowMap() const { return shadowMap; }
 GLuint DeferredRendering::getLightShader() const { return lightShader; }
-GLuint DeferredRendering::getShadowShader() const { return shadowShader; }
-glm::mat4 DeferredRendering::getLightSpaceMatrix() const { return lightSpaceMatrix; }
 Model* DeferredRendering::getFinalRenderQuad() { return &finalRenderQuad; }
-bool DeferredRendering::useShadows() const { return useShadow; }
