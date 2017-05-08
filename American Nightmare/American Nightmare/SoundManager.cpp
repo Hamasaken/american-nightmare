@@ -4,6 +4,7 @@ SoundManager::SoundManager()
 {
 	// Setting listener volume
 	listener.setGlobalVolume(100);
+	nrOfMusicPlayingCurrently = -1;
 
 	// Setting volumes
 	volumeEffect = VOLUME_SFX;
@@ -62,7 +63,7 @@ void SoundManager::loadSongs()
 
 void SoundManager::stopSFX(SFX effect)
 {
-	if (SFX_ON && sfx[effect].getStatus() == sf::Sound::Status::Playing)
+	if (SFX_ON && sfx[effect].getStatus() == sf::Sound::Playing)
 	{
 		sfx[effect].stop();
 	}
@@ -70,7 +71,7 @@ void SoundManager::stopSFX(SFX effect)
 
 void SoundManager::playSFX(SFX effect)
 {
-	if (SFX_ON && sfx[effect].getStatus() != sf::Sound::Status::Playing)
+	if (SFX_ON && sfx[effect].getStatus() != sf::Sound::Playing)
 	{
 		sfx[effect].setPitch(1);
 		sfx[effect].play();
@@ -79,7 +80,7 @@ void SoundManager::playSFX(SFX effect)
 
 void SoundManager::playModifiedSFX(SFX effect, float volume, float offset)
 {
-	if (SFX_ON && sfx[effect].getStatus() != sf::Sound::Status::Playing)
+	if (SFX_ON && sfx[effect].getStatus() != sf::Sound::Playing)
 	{
 		sfx[effect].setVolume(volume);
 		sfx[effect].setPitch(getRandomFloat(1 - offset, 1 + offset));
@@ -91,48 +92,40 @@ void SoundManager::playSong(SONG song)
 {
 	if (MUSIC_ON)
 	{
-		int nrOfSong = static_cast<int>(song);
-		this->nrOfMusicPlayingCurrently = nrOfSong;
-
-		this->song[nrOfSong].play();
-	}
-}
-
-void SoundManager::switchToMusic(SONG song)
-{
-	if (MUSIC_ON)
-	{
-		if (int(song) != nrOfMusicPlayingCurrently)
+		if (nrOfMusicPlayingCurrently != -1)
 		{
-			pauseMusic();
-			playSong(song);
+			if (this->song[nrOfMusicPlayingCurrently].getStatus() == sf::Sound::Playing)
+				pauseMusic();
 		}
+
+		nrOfMusicPlayingCurrently = song;
+		this->song[nrOfMusicPlayingCurrently].play();
 	}
 }
 
 void SoundManager::stopMusic()
 {
-	if (MUSIC_ON)
+	if (MUSIC_ON && nrOfMusicPlayingCurrently != -1)
 	{
-		if (song[nrOfMusicPlayingCurrently].getStatus() == sf::Sound::Status::Playing)
+		if (song[nrOfMusicPlayingCurrently].getStatus() == sf::Sound::Playing)
 			song[nrOfMusicPlayingCurrently].stop();
 	}
 }
 
 void SoundManager::pauseMusic()
 {
-	if (MUSIC_ON)
+	if (MUSIC_ON && nrOfMusicPlayingCurrently != -1)
 	{
-		if (song[nrOfMusicPlayingCurrently].getStatus() == sf::Sound::Status::Playing)
+		if (song[nrOfMusicPlayingCurrently].getStatus() == sf::Sound::Playing)
 			song[nrOfMusicPlayingCurrently].pause();
 	}
 }
 
 void SoundManager::continueMusic()
 {
-	if (MUSIC_ON)
+	if (MUSIC_ON && nrOfMusicPlayingCurrently != -1)
 	{
-		if (song[nrOfMusicPlayingCurrently].getStatus() == sf::Sound::Status::Paused)
+		if (song[nrOfMusicPlayingCurrently].getStatus() == sf::Sound::Paused)
 			song[nrOfMusicPlayingCurrently].play();
 	}
 }

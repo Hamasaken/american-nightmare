@@ -6,18 +6,20 @@
 #include "Game\Object.h"
 #include "Game\Entity.h"
 #include "Game\Player.h"
+#include "SoundManager.h"
 #include "Enemy.h"
 
 class MyContactListener : public b2ContactListener
 {
 private:
 	ParticleManager* particleManager;
+	SoundManager* soundManager;
 
 public:
 	MyContactListener();
 	~MyContactListener();
 
-	void Start(ParticleManager* particleManager);
+	void Start(ParticleManager* particleManager, SoundManager* soundManager);
 
 	void BeginContact(b2Contact* contact);
 	void EndContact(b2Contact* contact);

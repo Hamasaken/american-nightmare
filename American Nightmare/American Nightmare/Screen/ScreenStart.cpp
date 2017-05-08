@@ -62,7 +62,7 @@ void ScreenStart::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 15));
 
 	// Setting meny music
-	soundManager->playSong(SoundManager::SONG::MUSIC_BOOGIE);
+	soundManager->playSong(SoundManager::SONG::MUSIC_WOOP);
 }
 
 void ScreenStart::Update(GLint deltaT)

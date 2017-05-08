@@ -12,7 +12,7 @@ bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, 
 	this->particleManager = particleManager;
 	this->soundManager = soundManager;
 
-	contactManager.Start(particleManager);
+	contactManager.Start(particleManager, soundManager);
 
 	world = new b2World(b2Vec2(NULL, GRAVITY));
 	world->SetContactListener(&contactManager);
@@ -136,7 +136,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	////////////////////////////////////////////////////////////
 	// Level Music
 	////////////////////////////////////////////////////////////
-	soundManager->playSong(SoundManager::SONG::MUSIC_WOOP);
+	soundManager->playSong(SoundManager::SONG::MUSIC_BOOGIE);
 
 	////////////////////////////////////////////////////////////
 	// Map Visuals
@@ -376,7 +376,9 @@ void LevelManager::CheckTriggers()
 			// Effect - Starts an particle effect
 			////////////////////////////////////////////////////////////
 			case Trigger::EFFECT:
-				
+
+				// Effects
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BIP, 50, 0.5f);
 				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 1, glm::vec4(1, 1, 1, 1));
 
 				// Temporary effect, clear all lights and a new light
@@ -394,11 +396,13 @@ void LevelManager::CheckTriggers()
 			// Spawn Trigger - Spawns anything, anywhere, (currently boxes)
 			////////////////////////////////////////////////////////////
 			case Trigger::SPAWN:
+
+				// Temporary sound effect
 				soundManager->playSFX(SoundManager::SFX::SFX_POWERUP);
 			{
 				Entity* moveble = new Entity();
-				moveble->setShader(player->getShader());
-				moveble->Start("", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec2(randBetweenF(0.25f, 0.75f), randBetweenF(0.25f, 0.75f)), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 1.f);
+				moveble->setShader(map[0]->getShader());
+				moveble->Start("", materialManager->getMaterial("groundmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec2(randBetweenF(0.25f, 0.75f), randBetweenF(0.25f, 0.75f)), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 1.f);
 				map.push_back(moveble);
 			}
 

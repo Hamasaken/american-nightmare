@@ -5,12 +5,14 @@ MyContactListener::MyContactListener() { }
 MyContactListener::~MyContactListener()
 {
 	particleManager = nullptr;
+	soundManager = nullptr;
 }
 
-void MyContactListener::Start(ParticleManager* particleManager)
+void MyContactListener::Start(ParticleManager* particleManager, SoundManager* soundManager)
 {
 	// Getting different managers parameters
 	this->particleManager = particleManager;
+	this->soundManager = soundManager;
 }
 
 void MyContactListener::BeginContact(b2Contact* contact)
@@ -26,6 +28,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			player->getBody()->ApplyForce(b2Vec2(0, -100000), b2Vec2(), true);
 		
 			particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter())); // temp blood effect
+			soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
 		}
 	}
 }
