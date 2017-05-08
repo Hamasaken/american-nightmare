@@ -388,7 +388,7 @@ void LevelManager::CheckTriggers()
 			{
 				Entity* moveble = new Entity();
 				moveble->setShader(player->getShader());
-				moveble->Start("", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec2(randBetweenF(0.25f, 0.75f), randBetweenF(0.25f, 0.75f)), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
+				moveble->Start("", materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec2(randBetweenF(0.25f, 0.75f), randBetweenF(0.25f, 0.75f)), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 1.f);
 				map.push_back(moveble);
 			}
 
