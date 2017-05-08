@@ -2,6 +2,7 @@
 
 Projectile::Projectile(b2World *world, GLuint shader)
 {
+
 	std::string modelPath = MODEL_PATH;
 	std::string texturePath = TEXTURE_PATH;
 	materialManager.AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");

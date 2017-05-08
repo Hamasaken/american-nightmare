@@ -73,6 +73,9 @@ ProjectileHandler::ProjectileHandler(b2World *world, GLuint shader, int CAP)
 {
 	this->dirInt = 0;
 	this->myShader = shader;
+
+	//this->tempProj = new Projectile(world, myShader);
+	//myProjtileVector.push_back(tempProj);
 }
 
 ProjectileHandler::ProjectileHandler() {}
@@ -110,6 +113,50 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 		myProjtileVector.back()->fireBullet(world, position, dirInt);
 	}
 
-	for (int i = 0; i < myProjtileVector.capacity(); i++)
-		myProjtileVector.at(i)->Update(deltaT);
+	for (int i = 0; i < myProjtileVector.size(); i++)
+	{
+		myProjtileVector[i]->Update(deltaT);
+	}
+}
+
+//void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
+//{
+//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+//	{
+//		myProjtileVector.push_back( Projectile(world, myShader));
+//		dirInt = 1;
+//		myProjtileVector.back().fireBullet(world, position, dirInt);
+//	}
+//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+//	{
+//		myProjtileVector.push_back( Projectile(world, myShader));
+//		dirInt = 2;
+//		myProjtileVector.back().fireBullet(world, position, dirInt);
+//	}
+//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+//	{
+//		myProjtileVector.push_back( Projectile(world, myShader));
+//		dirInt = 3;
+//		myProjtileVector.back().fireBullet(world, position, dirInt);
+//	}
+//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+//	{
+//		myProjtileVector.push_back( Projectile(world, myShader));
+//		dirInt = 4;
+//		myProjtileVector.back().fireBullet(world, position, dirInt);
+//	}
+//
+//	for (int i = 0; i < myProjtileVector.size(); i++)
+//	{
+//		//myProjtileVector[i]->Update(deltaT);
+//	}
+//
+//
+//	printf("Nu é Jag en badboll");
+//}
+
+
+std::vector<Projectile*> ProjectileHandler::getBullets()
+{
+	return myProjtileVector;
 }

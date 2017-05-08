@@ -102,11 +102,17 @@ void ScreenGame::Draw()
 	for (Object* object : levelManager->getMap())
 		DrawObjectGeometryPass(object, shaderManager);
 
+
+	//TEST
+	for(Projectile* proj : levelManager->getProj())
+		DrawObjectGeometryPass(proj, shaderManager);
+
+
 	//Draw Projectile///////////////////////////////////////////////////////
 	////TESTING
 	//////////////////////////////////////////////////////////////////////
 	//DrawObject(levelManager->getProjectile(), shaderManager);
-	DrawObject(levelManager->getProjectiles(), shaderManager);
+	//DrawObject(levelManager->getProjectiles(), shaderManager);
 
 
 	// Transfer deferred rendering depth buffer to forward rendering

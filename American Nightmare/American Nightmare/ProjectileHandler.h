@@ -16,6 +16,8 @@ private:
 	//void initiateFrom(int from = 0);
 	//void addProjectile(b2World* world);
 
+
+	Projectile *tempProj;
 	GLuint myShader;
 	int dirInt;
 	std::vector<Projectile*> myProjtileVector;
@@ -25,6 +27,8 @@ public:
 	~ProjectileHandler();
 
 	void Update(GLint deltaT, b2World* world, glm::vec2 position);
+
+	std::vector<Projectile*> getBullets();
 };
 
 #endif

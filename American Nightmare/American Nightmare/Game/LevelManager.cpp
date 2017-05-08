@@ -188,7 +188,9 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	lightManager->AddPointLight(glm::vec4(-10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 	lightManager->AddPointLight(glm::vec4(+10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 
-	myPH = new ProjectileHandler(world, shader);
+	//myPH = new ProjectileHandler(world, shader);
+	myPH = new ProjectileHandler(world, shader, 10);
+	
 
 	//moveble = new Projectile(world, shader);
 
@@ -207,8 +209,6 @@ void LevelManager::Update(GLint deltaT)
 
 	//Update Projectile
 	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
-	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
-
 	//moveble->Update(deltaT, world, player->getPlayerPosAsGLM());
 
 	enemy->Update(deltaT, player->getBody()->GetPosition());
@@ -226,17 +226,13 @@ std::vector<Object*> LevelManager::getMap()
 	return map;
 }
 
-//void LevelManager::shoot(GLuint shader, std::string modelPath)
-//{
-//	moveble = new Projectile(world, shader);
-//	//moveble->setShader(shader);
-//	//moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
-//	//moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
-//	map.push_back(moveble);
-//}
+std::vector<Projectile*> LevelManager::getProj()
+{
+	return this->myPH->getBullets();
+}
 
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
 Player* LevelManager::getPlayer() { return player; }
 Enemy* LevelManager::getEnemy() { return enemy; }
-ProjectileHandler* LevelManager::getProjectiles() { return myPH; }
+//ProjectileHandler* LevelManager::getProjectiles() { return myPH; }
 //Projectile* LevelManager::getProjectile() { return moveble; }

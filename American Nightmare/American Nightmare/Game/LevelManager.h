@@ -55,6 +55,8 @@ public:
 	///////////////////////////////////////////////////////////
 	std::vector<Object*> getMap();
 
+	std::vector<Projectile*> getProj();
+
 	const LightManager* getLightManager() const;
 	Player* getPlayer();
 	Enemy* getEnemy();
@@ -64,7 +66,6 @@ public:
 	//////////////////////////////////////////////////////////////
 	// Shoot something
 	/////////////////////////////////////////////////////////////
-	//void shoot(GLuint shader, std::string modelPath);
 
 private:
 	std::vector<Object*> map;	//< Vector with level specific objects
@@ -78,6 +79,7 @@ private:
 	MyContactListener contactManager;
 
 	ProjectileHandler* myPH;
+	//ProjectileHandler* myPH;
 	//Projectile* myProjectile;
 	//Projectile* moveble;
 
