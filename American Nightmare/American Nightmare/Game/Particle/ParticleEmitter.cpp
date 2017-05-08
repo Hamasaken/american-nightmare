@@ -29,6 +29,16 @@ void ParticleEmitter::BloodSplatter(glm::vec3 position, float angle, float stren
 	}
 }
 
+void ParticleEmitter::TextureExplosion(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount)
+{
+	for (int i = 0; i < amount; i++)
+	{
+		TextureParticle* particle = new TextureParticle;
+		particle->Start(position, color, size, texture);
+		particles.push_back(particle);
+	}
+}
+
 void ParticleEmitter::Stop()
 {
 	// Erasing everything in vector

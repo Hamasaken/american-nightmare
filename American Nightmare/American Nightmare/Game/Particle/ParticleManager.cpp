@@ -106,6 +106,17 @@ void ParticleManager::EffectBloodSplatter(glm::vec3 position, float angle, float
 	emitters.push_back(emitter);
 }
 
+void ParticleManager::EffectTextureExplosion(glm::vec3 position, GLuint texture, int amount, glm::vec4 color)
+{
+	// Creating a emmiter with a specific type
+	ParticleEmitter* emitter = new ParticleEmitter();
+	emitter->setType(ParticleEmitter::TEXTURE);
+
+	// Creating particles with inputted variables into emitter
+	emitter->TextureExplosion(position, texture, color, TEXTURE_SIZE, amount);
+	emitters.push_back(emitter);
+}
+
 void ParticleManager::Update(GLfloat deltaT)
 {
 	for (int i = 0; i < int(emitters.size()); i++)

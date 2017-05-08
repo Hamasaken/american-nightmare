@@ -3,6 +3,7 @@
 
 #include "Particle.h"
 #include "BloodParticle.h"
+#include "TextureParticle.h"
 
 class ParticleEmitter
 {
@@ -11,7 +12,8 @@ public:
 	enum ParticleType
 	{
 		LIGHT, 
-		BLOOD
+		BLOOD, 
+		TEXTURE
 	};
 
 	ParticleEmitter();
@@ -20,6 +22,7 @@ public:
 
 	void LightExplosion(glm::vec3 position, glm::vec4 color, glm::vec2 size, int amount);
 	void BloodSplatter(glm::vec3 position, float angle, float strength, glm::vec4 color, glm::vec2 size, int amount);
+	void TextureExplosion(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads every particle in this vector

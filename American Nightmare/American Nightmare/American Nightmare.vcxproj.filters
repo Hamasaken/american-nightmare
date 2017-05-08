@@ -156,6 +156,9 @@
     <ClCompile Include="Game\Particle\BloodParticle.cpp">
       <Filter>Source Files\Game\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Particle\TextureParticle.cpp">
+      <Filter>Source Files\Game\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h">
@@ -260,6 +263,9 @@
     <ClInclude Include="Game\Particle\BloodParticle.h">
       <Filter>Header Files\Game\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Particle\TextureParticle.h">
+      <Filter>Header Files\Game\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Graphics\Shaders\solid_fs.glsl">
@@ -272,15 +278,6 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Data\Graphics\Shaders\texture_vs.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Data\Graphics\Shaders\particle_fs.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Data\Graphics\Shaders\particle_gs.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Data\Graphics\Shaders\particle_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Data\Graphics\Shaders\texture_animation_vs.glsl">
@@ -326,6 +323,15 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Data\Graphics\Shaders\shadowmap_transparent_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_texture_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_texture_gs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_texture_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
