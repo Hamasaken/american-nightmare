@@ -56,6 +56,7 @@ private:
 	MaterialManager* materialManager;	//< The material manager
 	GameState gameState;				//< Current State of the gameloop
 	GUIManager* guiManager;				//< Paus Meny
+	GUIManager* uiManager;				//< UI
 	ParticleManager* particleManager;	//< Manager for particle effects
 	ShaderManager* shaderManager;		//< Manager for shaderprograms
 	LevelManager* levelManager;			//< Manager for levels/maps

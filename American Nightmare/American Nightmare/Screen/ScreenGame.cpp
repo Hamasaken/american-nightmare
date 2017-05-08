@@ -92,6 +92,17 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 //	guiManager->AddText(glm::vec3(0, 0.5f, 0), 30.f, "WHAT", "framd.ttf");
 	guiManager->setAlpha(0.f);
 
+	////////////////////////////////////////////////////////////
+	// Creating a UI manager	
+	////////////////////////////////////////////////////////////
+	uiManager = new GUIManager();
+	if (uiManager == nullptr) return false;
+	if (!uiManager->Start(screenSize, screenPosition)) return false;
+	uiManager->setShader(shaderManager->getShader("texture"));
+	uiManager->AddButton(GUIManager::OK, glm::vec3(0, -0.95, 0), glm::vec2(0.15f, 0.05f), materialManager->getMaterial("groundmaterial"));
+	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.95f, -0.95, 0), glm::vec2(0.05f, 0.05f), materialManager->getMaterial("backgroundmaterial"));
+	uiManager->setAlpha(1.f);
+
 	// Setting startvariables
 	SetStartVariables();
 
@@ -181,7 +192,6 @@ void ScreenGame::Draw()
 	// DR: Light pass
 	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix, shadowManager.getDirectionalShadowMapList()[0]->lightDirection, shadowManager.getDirectionalShadowMapList()[0]->shadowMap, shadowManager.getUseShadows());
 
-
 	// Drawing player
 	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix, shadowManager.getDirectionalShadowMapList()[0]->lightDirection, shadowManager.getDirectionalShadowMapList()[0]->shadowMap, shadowManager.getUseShadows());
 
@@ -197,6 +207,13 @@ void ScreenGame::Draw()
 		for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
 			DrawObjectGUI(button.first, shaderManager);
 		for (Text* object : *guiManager->getTextList())
+			DrawObjectGUI(object, shaderManager);
+	}
+	else
+	{
+		for (std::pair<Button*, GUIManager::Action> button : *uiManager->getButtonList())
+			DrawObjectGUI(button.first, shaderManager);
+		for (Text* object : *uiManager->getTextList())
 			DrawObjectGUI(object, shaderManager);
 	}
 
@@ -250,13 +267,11 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
 		gameState = PAUSING;
 
-	// Temporary for testing
+	// Particle Managare Testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
 		particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.80f, 1.f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::I))
 		particleManager->EffectTextureExplosion(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("lightmaterial")->getTextureID(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.80f, 1.f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
-
-
 
 	// Updating particles effects
 	particleManager->Update(deltaT);
@@ -269,6 +284,18 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	// Building a new camera view matrix
 	camera->buildViewMatrix();
+
+	// Updating UI presses
+	uiManager->Update(deltaT);
+	for (std::pair<Button*, GUIManager::Action> button : *uiManager->getButtonList())
+	{
+		if (button.first->getPressed())
+		{
+			switch (button.second)
+			{ case GUIManager::Action::PAUSE:  gameState = PAUSING; break; }
+			button.first->setPressed(false);
+		}
+	}
 }
 
 void ScreenGame::UpdatePausing(GLint deltaT)
@@ -335,6 +362,14 @@ void ScreenGame::Stop()
 		guiManager->Stop();
 		delete guiManager;
 		guiManager = nullptr;
+	}
+
+	// Deleting ui
+	if (uiManager != nullptr)
+	{
+		uiManager->Stop();
+		delete uiManager;
+		uiManager = nullptr;
 	}
 
 	drRendering.Stop();

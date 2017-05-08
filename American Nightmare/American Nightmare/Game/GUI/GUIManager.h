@@ -7,7 +7,7 @@
 class GUIManager
 {
 public:
-	enum Action { OK, CANCEL, PLAY, STARTMENY, OPTIONS, POSTERS, EXIT };
+	enum Action { OK, CANCEL, PLAY, PAUSE, STARTMENY, OPTIONS, POSTERS, EXIT };
 
 public:
 	GUIManager();
