@@ -25,7 +25,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		{
 			player->getBody()->ApplyForce(b2Vec2(0, -100000), b2Vec2(), true);
 		
-			particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyB->getCenter(), bodyA->getCenter())); // temp blood effect
+			particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter())); // temp blood effect
 		}
 	}
 }

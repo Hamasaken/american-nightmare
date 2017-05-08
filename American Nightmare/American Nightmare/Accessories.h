@@ -32,9 +32,15 @@
 #define GRAVITY 9.82f
 
 // Functions
+
+// Returns the angle in radians
 float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2);
+
+// Returns a random number between your two parameters
 float randBetweenF(float low, float high);
-glm::vec3 fromScreenToWorld(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
+
+// Returns the screen cordinates to NDC
+glm::vec3 fromScreenToNDC(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
 
 // Game State
 enum State { Game, StartMeny, Options, Cutscene, Posters, Exit };

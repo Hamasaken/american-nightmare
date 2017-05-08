@@ -22,7 +22,7 @@ void GUIManager::Stop()
 
 void GUIManager::Update(GLuint deltaT)
 {
-	glm::vec2 mousePosition = fromScreenToWorld(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), screenSize, screenPosition);
+	glm::vec2 mousePosition = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), screenSize, screenPosition);
 
 	for (std::pair<Button*, Action> button : buttons)
 		button.first->Update(deltaT, mousePosition);
