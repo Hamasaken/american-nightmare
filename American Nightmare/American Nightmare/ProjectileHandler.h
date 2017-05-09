@@ -7,21 +7,14 @@
 class ProjectileHandler : public Entity
 {
 private:
-	//Projectile* *myProjectiles;
-	//int nrOfProjectiles;
-	//int CAP;
-	//
-	//Help functions
-	//void expand();
-	//void freeMemory();
-	//void initiateFrom(int from = 0);
-	//void addProjectile(b2World* world);
-
-
 	Projectile *tempProj;
+	std::vector<Projectile*> myProjtileVector;
+
 	GLuint myShader;
 	int dirInt;
-	std::vector<Projectile*> myProjtileVector;
+	bool wasPressed;
+	bool isPressed;
+
 public:
 	ProjectileHandler(b2World *world, GLuint shader, int CAP = 10);
 	ProjectileHandler();
