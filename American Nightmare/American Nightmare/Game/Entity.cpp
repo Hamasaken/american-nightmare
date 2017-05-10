@@ -14,7 +14,7 @@ bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	return false;
 }
 
-bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World * world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType, bool fixedRotate, float density, float friction)
+bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World * world, glm::vec2 position, glm::vec3 size, b2BodyType type, b2Shape::Type shapeType, bool fixedRotate, float density, float friction)
 {
 	Object::Start(mesh, material);
 
@@ -24,7 +24,7 @@ bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 		return false;
 
 	// Updating size
-	this->scale = glm::vec3(size, 1);
+	this->scale = size;
 
 	hitbox->getBody()->SetUserData(this);
 

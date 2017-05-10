@@ -128,7 +128,7 @@ void ScreenGame::SetStartVariables()
 
 	// Adding shadow
 	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);
-	shadowManager.setUseShadows(false);
+	shadowManager.setUseShadows(true);
 }
 
 void ScreenGame::Update(GLint deltaT)

@@ -149,5 +149,5 @@ void main () {
 
 	fragment_color = result;
 
-	//fragment_color = ads(lightPos, vec4(1, 1, 1, 1), fragPos, bufferNormal, bufferAmb, bufferDif, bufferSpec);
+//	fragment_color = vec4(bufferNormal, 1.f);
 }

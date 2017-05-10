@@ -93,9 +93,8 @@ void Program::StartSDLWindow()
 	glEnable(GL_DEPTH_TEST);						// Enable Depth test
 	glClearDepth(1);								// Threshold for depthbuffer to clear
 	glDepthFunc(GL_LESS);
-	//glFrontFace(GL_CW);							// ClockWise = CW, CounterClockWise = CCW
-	// glEnable(GL_CULL_FACE);							// Enable Culling
-	// glCullFace(GL_BACK);							// GL_BACK is default, (backculling), we can also use GL_FRONT, and GL_FRONT_AND_BACK if needed
+	glEnable(GL_CULL_FACE);							// Enable Culling
+	glCullFace(GL_BACK);							// GL_BACK is default, (backculling), we can also use GL_FRONT, and GL_FRONT_AND_BACK if needed
 	glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
