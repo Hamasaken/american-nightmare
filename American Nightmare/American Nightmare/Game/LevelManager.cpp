@@ -110,7 +110,7 @@ void LevelManager::StopMap()
 }
 
 
-bool LevelManager::LoadLevel(GLuint shader, std::string levelFile)
+bool LevelManager::LoadLevel(GLuint shader, std::string levelPath)
 {
 	// Deleting current level
 	StopMap();
@@ -118,6 +118,55 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelFile)
 	// Gettings paths to files
 	std::string modelPath = MODEL_PATH;
 	std::string texturePath = TEXTURE_PATH;
+
+//	archive.readFromFile(levelPath.c_str());
+//	AMaterial mat = archive.materials[0];
+//	materialManager->AddMaterial(mat.identifier.name, mat.ambient, mat.specular, mat.ma )
+
+	/*
+
+	levelFile.readFromFile(levelPath.c_str());
+
+	for (int i = 0; i < levelFile.meshes.size(); i++)
+	{
+		Object* background = new Object();
+		background->setShader(shader);
+		background->Start(modelPath + "model.m", materialManager->getMaterial("backgroundmaterial"));
+		background->setScale(glm::vec3(levelFile.meshes[i].scale[0], levelFile.meshes[i].scale[1], 1.f));
+		background->setRotation(glm::vec3(levelFile.meshes[i].rotation[0], levelFile.meshes[i].rotation[1], levelFile.meshes[i].rotation[2]));
+		background->setPosition(glm::vec3(levelFile.meshes[i].position[0], levelFile.meshes[i].position[1], -levelFile.meshes[i].position[2]));
+		map.push_back(background);
+	}
+
+	for (int i = 0; i < levelFile.hitboxes.size(); i++)
+	{
+		Hitbox* hitbox = new Hitbox();
+		hitbox->InitializeHitbox(world, glm::vec2(levelFile.hitboxes[i].position[0], levelFile.hitboxes[i].position[1]), glm::vec2(levelFile.hitboxes[i].scale[0], levelFile.hitboxes[i].scale[1]), b2_staticBody);
+		hitboxes.push_back(hitbox);
+	}
+
+	////////////////////////////////////////////////////////////
+	// Lights
+	////////////////////////////////////////////////////////////
+	Object* light = new Object();
+	light->setShader(shader);
+	light->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
+	light->setPosition(glm::vec3(-20, 10, 15));
+	map.push_back(light);
+
+	light = new Object();
+	light->setShader(shader);
+	light->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"));
+	light->setPosition(glm::vec3(20, 10, 15));
+	map.push_back(light);
+
+	// Temp lights
+	lightManager->AddPointLight(glm::vec4(-20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
+	lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
+
+	lightManager->AddDirectionalLight(glm::vec4(5, 20, 20, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
+
+	*/
 
 	LoadTempLevel(shader);
 

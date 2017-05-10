@@ -9,8 +9,8 @@
 #define SONG_CAPACITY	50
 
 // Volume of Music and SFX
-#define VOLUME_MUSIC	100
-#define VOLUME_SFX		100
+#define VOLUME_MUSIC	50
+#define VOLUME_SFX		70
 
 // Turn Music & SFX on/off for testing
 #define MUSIC_ON	true	

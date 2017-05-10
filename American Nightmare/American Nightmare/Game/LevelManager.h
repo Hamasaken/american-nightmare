@@ -11,6 +11,8 @@
 #include "../Projectile.h"
 #include "../MyContactListener.h"
 #include "../SoundManager.h"
+#include "../ANNIE/ArchiveFile.h"
+#include "../ANNIE/LevelFile.h"
 
 class LevelManager
 {
@@ -45,7 +47,7 @@ public:
 	// \param levelFile Only the name of the file (path is already set)
 	// \return Returns false if the map could not be loaded, otherwise true
 	////////////////////////////////////////////////////////////
-	bool LoadLevel(GLuint shader, std::string levelFile);
+	bool LoadLevel(GLuint shader, std::string levelPath);
 	void LoadTempLevel(GLuint shader);
 
 	////////////////////////////////////////////////////////////
@@ -82,6 +84,9 @@ private:
 	Player* player;				//< The player object
 
 	Enemy* enemy;				//< A Enemy object
+
+	AArchiveHandler archive;
+	LLevelHandler levelFile;
 
 	ParticleManager* particleManager;
 	SoundManager* soundManager;

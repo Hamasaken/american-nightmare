@@ -159,6 +159,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Accessories.cpp" />
+    <ClCompile Include="ANNIE\ArchiveFile.cpp" />
+    <ClCompile Include="ANNIE\LevelFile.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game\Animation.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
@@ -201,6 +203,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Accessories.h" />
+    <ClInclude Include="ANNIE\ArchiveFile.h" />
+    <ClInclude Include="ANNIE\Header.h" />
+    <ClInclude Include="ANNIE\LevelFile.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game\Animation.h" />
     <ClInclude Include="Game\Camera.h" />

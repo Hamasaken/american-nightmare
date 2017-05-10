@@ -12,7 +12,11 @@ out vec4 outputColor;
 void main(void)
 {
 	// Setting color
-	
 	outputColor = texture2D(texture, vec2(textureUV.x, 1.f - textureUV.y));
-	outputColor.a = alpha;
+
+	// Just for text, don't remove
+	if (alpha != -1)
+	{
+		outputColor.a = alpha;
+	}
 }

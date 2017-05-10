@@ -86,10 +86,10 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
 	guiManager->setShader(shaderManager->getShader("texture"));
-	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-//	guiManager->AddText(glm::vec3(0, 0.5f, 0), 30.f, "WHAT", "framd.ttf");
+	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.25f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.25f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.75f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddText(glm::vec3(0.f, 0.75f, 0.f), 70.f, "Paused", "framd.ttf");
 	guiManager->setAlpha(0.f);
 
 	////////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 15));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(shaderManager->getShader("deferred"), "0.lvl");
+	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "lvl.anl");
 
 	// Adding shadow
 	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);
