@@ -8,6 +8,12 @@ ProjectileHandler::ProjectileHandler(b2World *world, GLuint shader, int CAP)
 	this->wasPressed = false;
 	
 
+	//Test for the cursor
+	SDL_ShowCursor(SDL_ENABLE);
+	cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_CROSSHAIR);
+	SDL_SetCursor(cursor);
+
+	
 	//this->tempProj = new Projectile(world, myShader);
 	//myProjtileVector.push_back(tempProj);
 }
@@ -53,7 +59,7 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 	{
 		this->wasPressed = true;
 		myProjtileVector.push_back(new Projectile(world, myShader));
-		myProjtileVector.back()->fireBullet(world, position, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1920, 1080 }, glm::vec2{ 320, 180 }));
+		myProjtileVector.back()->fireBullet(world, position, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1280, 720 }, glm::vec2{ 320, 180 }));
 	}
 
 	for (int i = 0; i < myProjtileVector.size(); i++)

@@ -60,9 +60,6 @@ void Projectile::fireBullet(b2World* world, glm::vec2 position, glm::vec2 direct
 
 void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)
 {
-	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::L))
-		fireBullet(world, position, 2);*/
-
 	Entity::Update(deltaT);
 }
 

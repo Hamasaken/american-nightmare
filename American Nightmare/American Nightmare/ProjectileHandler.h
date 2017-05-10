@@ -3,6 +3,7 @@
 
 #include "Projectile.h"
 #include "Accessories.h"
+#include <SDL.h>
 
 class ProjectileHandler : public Entity
 {
@@ -14,6 +15,9 @@ private:
 	int dirInt;
 	bool wasPressed;
 	bool isPressed;
+
+	//TEST of a crosshair
+	SDL_Cursor* cursor;
 
 public:
 	ProjectileHandler(b2World *world, GLuint shader, int CAP = 10);
