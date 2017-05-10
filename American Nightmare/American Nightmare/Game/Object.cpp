@@ -3,48 +3,35 @@
 Object::Object()
 { 
 	model = nullptr;
-//	texture = nullptr;
+	material = nullptr;
 }
 
 Object::Object(const Object& other) { }
 
 Object::~Object() { }
 
-bool Object::Start(std::string modelName, const MaterialManager::Material* material)
+bool Object::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material)
 {
 	// Setting starting variables
 	position = glm::vec3(0, 0, 0);
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(1, 1, 1);
 
-	// Creating model
-	model = new Model();
-	if (model == nullptr) return false;
-	if (!model->Start(modelName)) return false;
+	// Adding model (Creating a quad if a mesh is not found)
+	if (mesh == nullptr || mesh->model == nullptr)
+	{
+	//	printf("Mesh or model not inputted, creating quad instead.\n");
+		model = new Model;
+		model->BuildQuadTexture();
+	}
+	else model = mesh->model;
 
+	// Adding material
 	this->material = material;
-	model->BuildQuadTexture();
+	if (material == nullptr)
+		return false;
 
 	return true;
-}
-
-void Object::Stop()
-{
-	// Unloading the model
-	if (model != nullptr)
-	{ 
-		model->Stop();
-		delete model;
-		model = nullptr;
-	}
-
-	// Unloading the texture
-//	if (texture != nullptr)
-//	{
-//		texture->Stop();
-//		delete texture;
-//		texture = nullptr;
-//	}
 }
 
 void Object::Update(GLint deltaT) { }

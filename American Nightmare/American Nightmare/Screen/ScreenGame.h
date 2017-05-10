@@ -55,6 +55,7 @@ private:
 
 	void DrawShadowMaps();
 
+	MeshManager* meshManager;			//< The mesh manager
 	MaterialManager* materialManager;	//< The material manager
 	GameState gameState;				//< Current State of the gameloop
 	GUIManager* guiManager;				//< Paus Meny

@@ -22,7 +22,7 @@ public:
 	// \param color Color of the full quad, default as white
 	// \return Returns false if model or font could not be created
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f));
+	bool Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f));
 
 	void Stop();
 

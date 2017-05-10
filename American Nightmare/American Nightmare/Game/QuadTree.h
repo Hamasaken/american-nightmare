@@ -24,7 +24,6 @@ private:
 			{
 				for (Object* object : *objects)
 				{
-					object->Stop();
 					delete object;
 					object = nullptr;
 				}

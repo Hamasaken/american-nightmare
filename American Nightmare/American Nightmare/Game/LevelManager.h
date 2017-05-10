@@ -13,6 +13,9 @@
 #include "../SoundManager.h"
 #include "../ANNIE/ArchiveFile.h"
 #include "../ANNIE/LevelFile.h"
+#include "MeshManager.h"
+
+// include meshmanager
 
 class LevelManager
 {
@@ -25,10 +28,11 @@ public:
 	// \brief Starts class, gets the openGL ptr
 	// \param playerShader The specific shader for the player
 	// \param materialManager ptr to all the materials
+	// \param meshManager ptr to all the meshes
 	// \param particleManager ptr to the particle manager
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(GLuint playerShader, MaterialManager* materialManager, ParticleManager* particleManager, SoundManager* soundManager);
+	bool Start(GLuint playerShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -44,10 +48,11 @@ public:
 	// \brief Loads new map objects from a file and setting 
 	//	which specific shader to use for all those objects
 	// \param shader ID for the shader to be used
-	// \param levelFile Only the name of the file (path is already set)
+	// \param levelFile Only the name of the file (.anl)
+	// \param archiveFile Only the name of the archive file (.ana)
 	// \return Returns false if the map could not be loaded, otherwise true
 	////////////////////////////////////////////////////////////
-	bool LoadLevel(GLuint shader, std::string levelPath);
+	bool LoadLevel(GLuint shader, std::string levelPath, std::string archivePath);
 	void LoadTempLevel(GLuint shader);
 
 	////////////////////////////////////////////////////////////
@@ -88,6 +93,7 @@ private:
 	AArchiveHandler archive;
 	LLevelHandler levelFile;
 
+	MeshManager* meshManager;
 	ParticleManager* particleManager;
 	SoundManager* soundManager;
 	LightManager* lightManager;

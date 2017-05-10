@@ -72,11 +72,17 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	////////////////////////////////////////////////////////////
 	// Creating Models
 	////////////////////////////////////////////////////////////
+	meshManager = new MeshManager();
+	if (meshManager == nullptr) return false;
+	
+	// add quad mesh here later
 
-	// Creating a simple level
+	////////////////////////////////////////////////////////////
+	// Level Manager
+	////////////////////////////////////////////////////////////
 	levelManager = new LevelManager();
 	if (levelManager == nullptr) return false;
-	if (!levelManager->Start(shaderManager->getShader("texture_animation_normal"), materialManager, particleManager, soundManager))
+	if (!levelManager->Start(shaderManager->getShader("texture_animation_normal"), materialManager, meshManager, particleManager, soundManager))
 		return false;
 
 	////////////////////////////////////////////////////////////
@@ -86,9 +92,9 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
 	guiManager->setShader(shaderManager->getShader("texture"));
-	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.25f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.25f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.75f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.25f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr);
+	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.25f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr);
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.75f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr);
 	guiManager->AddText(glm::vec3(0.f, 0.75f, 0.f), 70.f, "Paused", "framd.ttf");
 	guiManager->setAlpha(0.f);
 
@@ -99,8 +105,8 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (uiManager == nullptr) return false;
 	if (!uiManager->Start(screenSize, screenPosition)) return false;
 	uiManager->setShader(shaderManager->getShader("texture"));
-	uiManager->AddButton(GUIManager::OK, glm::vec3(0, -0.95, 0), glm::vec2(0.15f, 0.05f), materialManager->getMaterial("groundmaterial"));
-	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.95f, -0.95, 0), glm::vec2(0.05f, 0.05f), materialManager->getMaterial("backgroundmaterial"));
+	uiManager->AddButton(GUIManager::OK, glm::vec3(0, -0.95, 0), glm::vec2(0.15f, 0.05f), materialManager->getMaterial("groundmaterial"), nullptr);
+	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.95f, -0.95, 0), glm::vec2(0.05f, 0.05f), materialManager->getMaterial("backgroundmaterial"), nullptr);
 	uiManager->setAlpha(1.f);
 
 	// Setting startvariables
@@ -118,7 +124,7 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 15));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "lvl.anl");
+	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "lvl_1.anl", ARCHIVE_PATH "lvl_1.ana");
 
 	// Adding shadow
 	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);

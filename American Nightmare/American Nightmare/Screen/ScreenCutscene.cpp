@@ -3,7 +3,7 @@
 
 ScreenCutscene::ScreenCutscene() : Screen() 
 { 
-	model = nullptr;
+
 }
 
 ScreenCutscene::ScreenCutscene(const ScreenCutscene& other) { }
@@ -13,14 +13,6 @@ ScreenCutscene::~ScreenCutscene() { }
 bool ScreenCutscene::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager)
 {
 	Screen::Start(screenSize, screenPosition, state, soundManager);
-
-	////////////////////////////////////////////////////////////
-	// Starting Model Class
-	////////////////////////////////////////////////////////////
-	model = new Model();
-	if (model == nullptr) return false;
-	if (!model->Start("Quad"))
-		return false;
 
 	SetStartVariables();
 
@@ -51,9 +43,6 @@ bool ScreenCutscene::StartCutscene(std::string movieName)
 
 void ScreenCutscene::SetStartVariables()
 {
-	// Building basic 1x4 quad for movie to be on
-	model->BuildQuadTexture();
-
 	// Starting cutscene
 	StartCutscene("nope.mp4");
 }
@@ -75,24 +64,5 @@ void ScreenCutscene::SkipCutscene()
 
 void ScreenCutscene::Draw()
 {
-	// Generating a texture
-	glGenTextures(1, &texture);
 
-	// Binding texture
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	// Getting the frame's pixel pointer and setting it into our binded texture ID
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, frame.getSize().x, frame.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, frame.getPixelsPtr());
-
-	// Making mip map and stuff
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	// Unbinding the texture
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	model->Draw();
 }

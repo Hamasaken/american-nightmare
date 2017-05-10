@@ -4,6 +4,7 @@
 #include "../Game/Model.h"
 #include "..\Accessories.h"
 #include <vector>
+#include "../ANNIE/ArchiveFile.h"
 
 class MeshManager
 {
@@ -13,7 +14,6 @@ public:
 		std::string name;
 		Model* model;
 
-		Mesh() : name(""), model(nullptr) { };
 		Mesh(std::string name, Model* model) : name(name), model(model) { };
 		Mesh(const Mesh& inMesh) : name(inMesh.name), model(inMesh.model) { };
 	};
@@ -24,11 +24,12 @@ public:
 	~MeshManager();
 
 	void Clear();
-	void AddMesh(std::string name, std::string meshPath);
+	bool AddMesh(std::string name, int nrOfVertices, std::vector<AVertex> vertices);
 
-	std::vector<Model*> getMeshList() const;
+	Mesh* getMesh(std::string name) const;
+	std::vector<Mesh*> getMeshList() const;
 private:
-	std::vector<Model*> meshList;
+	std::vector<Mesh*> meshList;
 };
 
 #endif // !MESHMANAGER_H

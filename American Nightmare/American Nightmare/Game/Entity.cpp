@@ -1,8 +1,8 @@
 #include "Entity.h"
 
-bool Entity::Start(std::string modelName, const MaterialManager::Material * material, b2World* world)
+bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World* world)
 {
-	Object::Start(modelName, material);
+	Object::Start(mesh, material);
 
 	hitbox = new Hitbox();
 	if (hitbox == nullptr) return false;
@@ -14,9 +14,9 @@ bool Entity::Start(std::string modelName, const MaterialManager::Material * mate
 	return false;
 }
 
-bool Entity::Start(std::string modelName, const MaterialManager::Material * material, b2World * world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType, bool fixedRotate, float density, float friction)
+bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World * world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType, bool fixedRotate, float density, float friction)
 {
-	Object::Start(modelName, material);
+	Object::Start(mesh, material);
 
 	hitbox = new Hitbox();
 	if (hitbox == nullptr) return false;
@@ -39,8 +39,6 @@ void Entity::Stop()
 		delete hitbox;
 		hitbox = nullptr;
 	}
-	
-	Object::Stop();
 }
 
 void Entity::Update(GLint deltaT)

@@ -28,13 +28,13 @@ void GUIManager::Update(GLuint deltaT)
 		button.first->Update(deltaT, mousePosition);
 }
 
-bool GUIManager::AddButton(Action action, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material)
+bool GUIManager::AddButton(Action action, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh)
 {
 	std::string texturePath = TEXTURE_PATH;
 
 	Button* btn = new Button();
 	if (btn == nullptr) return false;
-	if (!btn->Start(screenSize, position, size, material, glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
+	if (!btn->Start(screenSize, position, size, material, mesh, glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
 	btn->setShader(shader);
 
 	buttons.push_back(std::make_pair(btn, action));

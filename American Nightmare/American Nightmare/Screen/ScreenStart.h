@@ -40,6 +40,7 @@ public:
 	void Draw();
 
 private:
+	MeshManager* meshManager;
 	MaterialManager* materialManager;
 	GUIManager* guiManager;
 	ShaderManager* shaderManager;

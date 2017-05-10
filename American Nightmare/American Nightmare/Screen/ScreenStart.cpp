@@ -5,6 +5,7 @@ ScreenStart::ScreenStart() : Screen()
 	shaderManager = nullptr;
 	guiManager = nullptr;
 	materialManager = nullptr;
+	meshManager = nullptr;
 }
 
 ScreenStart::ScreenStart(const ScreenStart& other) { }
@@ -40,15 +41,21 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	if (materialManager->getMaterial("titlematerial") == nullptr) printf("Title Material not found\n");
 
 	////////////////////////////////////////////////////////////
+	// Creating Models
+	////////////////////////////////////////////////////////////
+	meshManager = new MeshManager();
+	if (meshManager == nullptr) return false;
+
+	////////////////////////////////////////////////////////////
 	// Creating a GUI manager	
 	////////////////////////////////////////////////////////////
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
 	guiManager->setShader(shaderManager->getShader("texture"));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(-0.85f, 0, 0), glm::vec2(0.15f, 0.30f), materialManager->getMaterial("titlematerial"));
-	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(-0.85f, 0, 0), glm::vec2(0.15f, 0.30f), materialManager->getMaterial("titlematerial"), nullptr);
+	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr);
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr);
 	guiManager->AddText(glm::vec3(0.f, 0.5f, 0.f), 40.f, "American Nightmare", "framd.ttf");
 	guiManager->setAlpha(1.f);
 

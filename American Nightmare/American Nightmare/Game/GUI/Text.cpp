@@ -26,9 +26,6 @@ bool Text::Start(glm::vec2 screenSize, std::string fontName, std::string text, f
 
 void Text::Stop()
 {
-	// Unloads model
-	Object::Stop();
-
 	// Unload Font
 	if (font != nullptr)
 	{

@@ -27,8 +27,8 @@
 #define ANIMATION_PATH "Data/Graphics/Animations/"
 #define SFX_PATH "Data/Sound/SFX/"
 #define MUSIC_PATH "Data/Sound/Music/"
-#define LEVEL_PATH "Data/Levels/"
-#define ARCHIVE_PATH "Data/Archive/"
+#define LEVEL_PATH "Data/"
+#define ARCHIVE_PATH "Data/"
 
 // Global variables
 #define GRAVITY 9.82f

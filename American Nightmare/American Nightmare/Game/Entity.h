@@ -7,8 +7,8 @@
 class Entity : public Object
 {
 public:
-	bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
-	bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, bool fixedRotate = false, float density = 0.f, float friction = 10.f);
+	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world);
+	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, bool fixedRotate = false, float density = 0.f, float friction = 10.f);
 
 	void Stop();
 	void Update(GLint deltaT);
