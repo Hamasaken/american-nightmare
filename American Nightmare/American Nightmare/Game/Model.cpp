@@ -121,7 +121,6 @@ void Model::BuildQuad()
 	delete[]indices; indices = nullptr;
 }
 
-
 // Temp function
 void Model::BuildQuadTexture()
 {

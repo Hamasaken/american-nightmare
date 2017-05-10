@@ -90,6 +90,9 @@ private:
 	void LoadLevelMeshes(std::vector<LMesh> meshes, GLuint shader);
 	void LoadLevelHitboxes(std::vector<LHitbox> hitboxes);
 	void LoadLevelLights(std::vector<LLight> lights);
+	void LoadLevelSpawners(std::vector<LSpawner> spawner, GLuint shader);
+	void LoadLevelTriggers(std::vector<LTrigger> triggers);
+	void LoadLevelEffects(std::vector<LEffect> effects);
 
 	std::vector<Object*> map;	//< Vector with level specific objects
 	std::vector<Hitbox*> hitboxes;

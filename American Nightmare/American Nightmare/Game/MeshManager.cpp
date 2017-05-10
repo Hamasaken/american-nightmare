@@ -19,8 +19,8 @@ void MeshManager::Clear()
 bool MeshManager::AddMesh(std::string name, int nrOfVertices, std::vector<AVertex> vertices)
 {
 	// Checking if mesh is already added
-//	if (getMesh(name) != nullptr)
-//		return false;
+	if (getMesh(name) != nullptr)
+		return false;
 
 	// Making model from file
 	Model* model;
@@ -50,9 +50,6 @@ bool MeshManager::AddMesh(std::string name, int nrOfVertices, std::vector<AVerte
 
 		// Pushing into our new vector
 		vertexUV.push_back(outV);
-
-		printf("vertex pos: %f, %f, %f\n", outV.x, outV.y, outV.z);
-
 	}
 
 	// Making model out of vertices
@@ -85,7 +82,7 @@ MeshManager::Mesh* MeshManager::getMesh(std::string name) const
 
 	// Could not find mesh
 	if (outMesh == nullptr)
-		printf("Could not find mesh: %s\n", name.c_str());
+		printf("Could not find mesh: %s, making quad instead\n", name.c_str());
 
 	return outMesh;
 }

@@ -131,6 +131,9 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	LoadLevelMeshes(levelFile.meshes, shader);
 	LoadLevelLights(levelFile.lights);
 	LoadLevelHitboxes(levelFile.hitboxes);
+	LoadLevelSpawners(levelFile.spawners, shader);
+	LoadLevelTriggers(levelFile.triggers);
+	LoadLevelEffects(levelFile.effects);
 
 	// Loading temp level
 	LoadTempLevel(shader);
@@ -149,7 +152,7 @@ void LevelManager::LoadArchiveVisuals(std::vector<AMesh> meshes)
 		if (meshManager->AddMesh(mesh.identifier.name, mesh.nrOfVerticies, mesh.vertices))
 			printf("Added mesh: %s\n", mesh.identifier.name);
 		else
-			printf("Could not add mesh.\n");
+			printf("Could not add mesh or mesh have already been added.\n");
 	}
 }
 
@@ -193,23 +196,85 @@ void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 	////////////////////////////////////////////////////////////
 	for (int i = 0; i < lights.size(); i++)
 	{
+		// temp
+		lightManager->AddPointLight(glm::vec4(lights[i].position[0], lights[i].position[1], lights[i].position[2], 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
+	}
+}
 
+void LevelManager::LoadLevelSpawners(std::vector<LSpawner> spawner, GLuint shader)
+{
+	////////////////////////////////////////////////////////////
+	// Loading Spawner
+	////////////////////////////////////////////////////////////
+	for (int i = 0; i < spawner.size(); i++)
+	{
+		LSpawner spawn = spawner[i];
+
+		switch (spawn.spawnerType)
+		{
+		case ESpawnerType::flying1:		break;
+		case ESpawnerType::skater1:		break;
+		case ESpawnerType::trash:		break;
+		case ESpawnerType::zombie1:		break;
+		case ESpawnerType::zombie2:		break;
+
+		}
+	}
+}
+
+void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
+{
+	////////////////////////////////////////////////////////////
+	// Loading Triggers
+	////////////////////////////////////////////////////////////
+	for (int i = 0; i < triggers.size(); i++)
+	{
+		LTrigger trigger = triggers[i];
+
+		Trigger* outTrigger = new Trigger();		
+		Trigger::TriggerType outTriggerType;
+		switch (trigger.triggerType)
+		{
+		case ETriggerType::door:		outTriggerType = Trigger::DOOR; break;
+		case ETriggerType::deathZone:	outTriggerType = Trigger::DOOR; break;
+		case ETriggerType::garbageBin:	outTriggerType = Trigger::DOOR; break;
+		case ETriggerType::poster:		outTriggerType = Trigger::DOOR; break;
+		}
+
+		LHitbox hitbox = triggers[i].hitbox;
+		outTrigger->InitializeTrigger(outTriggerType, world, glm::vec2(hitbox.position[0], hitbox.position[1]), glm::vec2(hitbox.scale[0], hitbox.scale[1]), trigger.data.data, true);
+		
+		// Adding trigger to vector
+		this->triggers.push_back(outTrigger);
 	}
 
+}
+
+void LevelManager::LoadLevelEffects(std::vector<LEffect> effects)
+{
 	////////////////////////////////////////////////////////////
-	// Lights (temporary)
+	// Loading Effects
 	////////////////////////////////////////////////////////////
-	lightManager->AddPointLight(glm::vec4(-20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
-	lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
-	lightManager->AddDirectionalLight(glm::vec4(5, 20, 20, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
+	for (int i = 0; i < effects.size(); i++)
+	{
+		LEffect effect = effects[i];
+		switch (effect.effectType)
+		{
+		case EEffectType::smoke: 
+		//	particleManager->EffectSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]));
+			break;
+		case EEffectType::dust:
+		//	particleManager->EffectDust(glm::vec3(effect.position[0], effect.position[1], effect.position[2])); 
+			break;
+		case EEffectType::steam:
+		//	particleManager->EffectSteam(glm::vec3(effect.position[0], effect.position[1], effect.position[2]));
+			break;
+		}
+	}
 }
 
 void LevelManager::LoadTempLevel(GLuint shader)
 {
-	// Gettings paths to files
-	std::string modelPath = MODEL_PATH;
-	std::string texturePath = TEXTURE_PATH;
-
 	////////////////////////////////////////////////////////////
 	// Level Music
 	////////////////////////////////////////////////////////////
