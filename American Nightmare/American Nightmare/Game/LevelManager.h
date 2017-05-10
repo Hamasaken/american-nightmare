@@ -83,6 +83,14 @@ private:
 	///////////////////////////////////////////////////////////
 	void CheckTriggers();
 
+	// Archive
+	void LoadArchiveVisuals(std::vector<AMesh> meshes);
+
+	// Level
+	void LoadLevelMeshes(std::vector<LMesh> meshes, GLuint shader);
+	void LoadLevelHitboxes(std::vector<LHitbox> hitboxes);
+	void LoadLevelLights(std::vector<LLight> lights);
+
 	std::vector<Object*> map;	//< Vector with level specific objects
 	std::vector<Hitbox*> hitboxes;
 	std::vector<Trigger*> triggers;

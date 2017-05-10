@@ -115,32 +115,55 @@ void LevelManager::StopMap()
 
 bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string archivePath)
 {
-	// Deleting current level
+	// Unload current level
 	StopMap();
 
 	////////////////////////////////////////////////////////////
-	// Loading Level Archive
+	// Loading Archive
 	////////////////////////////////////////////////////////////
 	archive.readFromFile(archivePath.c_str());
-	for (int i = 0; i < archive.meshes.size(); i++)
+	LoadArchiveVisuals(archive.meshes);
+
+	////////////////////////////////////////////////////////////
+	// Loading Level
+	////////////////////////////////////////////////////////////
+	levelFile.readFromFile(levelPath.c_str());
+	LoadLevelMeshes(levelFile.meshes, shader);
+	LoadLevelLights(levelFile.lights);
+	LoadLevelHitboxes(levelFile.hitboxes);
+
+	// Loading temp level
+	LoadTempLevel(shader);
+
+	return true;
+}
+
+void LevelManager::LoadArchiveVisuals(std::vector<AMesh> meshes)
+{
+	////////////////////////////////////////////////////////////
+	// Loading Archive Meshes
+	////////////////////////////////////////////////////////////
+	for (int i = 0; i < meshes.size(); i++)
 	{
-		AMesh mesh = archive.meshes[i];
+		AMesh mesh = meshes[i];
 		if (meshManager->AddMesh(mesh.identifier.name, mesh.nrOfVerticies, mesh.vertices))
 			printf("Added mesh: %s\n", mesh.identifier.name);
 		else
 			printf("Could not add mesh.\n");
 	}
+}
 
+void LevelManager::LoadLevelMeshes(std::vector<LMesh> meshes, GLuint shader)
+{
 	////////////////////////////////////////////////////////////
 	// Loading Meshes
 	////////////////////////////////////////////////////////////
-	levelFile.readFromFile(levelPath.c_str());
-	for (int i = 0; i < levelFile.meshes.size(); i++)
+	for (int i = 0; i < meshes.size(); i++)
 	{
 		Object* object = new Object();
 		object->setShader(shader);
 
-		LMesh mesh = levelFile.meshes[i];
+		LMesh mesh = meshes[i];
 		object->Start(meshManager->getMesh(mesh.name.data), materialManager->getMaterial("groundmaterial"));
 		object->setScale(glm::vec3(mesh.scale[0], mesh.scale[1], mesh.scale[2]));
 		object->setRotation(glm::vec3(mesh.rotation[0], mesh.rotation[1], mesh.rotation[2]));
@@ -148,35 +171,37 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 
 		map.push_back(object);
 	}
+}
 
+void LevelManager::LoadLevelHitboxes(std::vector<LHitbox> hitboxes)
+{
 	////////////////////////////////////////////////////////////
-	// Loading Level Hitboxes
+	// Loading Hitboxes
 	////////////////////////////////////////////////////////////
-	for (int i = 0; i < levelFile.hitboxes.size(); i++)
+	for (int i = 0; i < hitboxes.size(); i++)
 	{
 		Hitbox* hitbox = new Hitbox();
 		hitbox->InitializeHitbox(world, glm::vec2(levelFile.hitboxes[i].position[0], levelFile.hitboxes[i].position[1]), glm::vec2(levelFile.hitboxes[i].scale[0], levelFile.hitboxes[i].scale[1]), b2_staticBody);
-		hitboxes.push_back(hitbox);
+		this->hitboxes.push_back(hitbox);
 	}
+}
 
+void LevelManager::LoadLevelLights(std::vector<LLight> lights)
+{
 	////////////////////////////////////////////////////////////
 	// Loading Lights
 	////////////////////////////////////////////////////////////
-	for (int i = 0; i < levelFile.lights.size(); i++)
+	for (int i = 0; i < lights.size(); i++)
 	{
-		
+
 	}
 
 	////////////////////////////////////////////////////////////
-	// Lights
+	// Lights (temporary)
 	////////////////////////////////////////////////////////////
 	lightManager->AddPointLight(glm::vec4(-20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
 	lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
 	lightManager->AddDirectionalLight(glm::vec4(5, 20, 20, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
-
-	LoadTempLevel(shader);
-
-	return true;
 }
 
 void LevelManager::LoadTempLevel(GLuint shader)
