@@ -15,6 +15,7 @@ private:
 	int dirInt;
 	bool wasPressed;
 	bool isPressed;
+	int nrOfBullets;
 
 	//TEST of a crosshair
 	SDL_Cursor* cursor;
