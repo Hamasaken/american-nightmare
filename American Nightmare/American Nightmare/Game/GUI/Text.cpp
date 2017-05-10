@@ -44,6 +44,8 @@ bool Text::LoadFont(std::string fontName, float characterSize)
 	font = TTF_OpenFont((fontName).c_str(), characterSize);
 	if (font == nullptr)
 		return false;
+
+	return true;
 }
 
 void Text::CreateText(std::string text, glm::vec4 color)
