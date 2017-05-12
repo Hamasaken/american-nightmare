@@ -21,7 +21,7 @@ public:
 	Player(const Player& other);
 	~Player();
 
-	bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
+	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world);
 	void Update(GLint deltaT);
 
 	//Test-variable

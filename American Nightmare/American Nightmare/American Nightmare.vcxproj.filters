@@ -49,6 +49,12 @@
     <Filter Include="Header Files\Screen\Rendering">
       <UniqueIdentifier>{deb09880-4ba2-461b-9b88-f1c3e3d2b280}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ANNIE">
+      <UniqueIdentifier>{e8a8b458-ba2c-4458-bb10-8400bde6f9ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ANNIE">
+      <UniqueIdentifier>{207a2aad-b064-4ac8-b3e9-1eb175bb9e66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -162,6 +168,15 @@
     <ClCompile Include="Screen\Rendering\ShadowManager.cpp">
       <Filter>Source Files\Screen\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="ANNIE\LevelFile.cpp">
+      <Filter>Source Files\ANNIE</Filter>
+    </ClCompile>
+    <ClCompile Include="ANNIE\ArchiveFile.cpp">
+      <Filter>Source Files\ANNIE</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MeshManager.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h">
@@ -271,6 +286,18 @@
     </ClInclude>
     <ClInclude Include="Game\Particle\TextureParticle.h">
       <Filter>Header Files\Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="ANNIE\LevelFile.h">
+      <Filter>Header Files\ANNIE</Filter>
+    </ClInclude>
+    <ClInclude Include="ANNIE\Header.h">
+      <Filter>Header Files\ANNIE</Filter>
+    </ClInclude>
+    <ClInclude Include="ANNIE\ArchiveFile.h">
+      <Filter>Header Files\ANNIE</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MeshManager.h">
+      <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

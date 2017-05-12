@@ -21,7 +21,7 @@ public:
 	Enemy(const Enemy& other);
 	~Enemy();
 
-	bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
+	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world);
 	void Update(GLint deltaT, b2Vec2 playerPos);
 
 	Entity myEntity;

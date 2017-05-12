@@ -11,6 +11,11 @@
 #include "../Projectile.h"
 #include "../MyContactListener.h"
 #include "../SoundManager.h"
+#include "../ANNIE/ArchiveFile.h"
+#include "../ANNIE/LevelFile.h"
+#include "MeshManager.h"
+
+// include meshmanager
 
 class LevelManager
 {
@@ -23,10 +28,11 @@ public:
 	// \brief Starts class, gets the openGL ptr
 	// \param playerShader The specific shader for the player
 	// \param materialManager ptr to all the materials
+	// \param meshManager ptr to all the meshes
 	// \param particleManager ptr to the particle manager
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(GLuint playerShader, MaterialManager* materialManager, ParticleManager* particleManager, SoundManager* soundManager);
+	bool Start(GLuint playerShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -42,10 +48,11 @@ public:
 	// \brief Loads new map objects from a file and setting 
 	//	which specific shader to use for all those objects
 	// \param shader ID for the shader to be used
-	// \param levelFile Only the name of the file (path is already set)
+	// \param levelFile Only the name of the file (.anl)
+	// \param archiveFile Only the name of the archive file (.ana)
 	// \return Returns false if the map could not be loaded, otherwise true
 	////////////////////////////////////////////////////////////
-	bool LoadLevel(GLuint shader, std::string levelFile);
+	bool LoadLevel(GLuint shader, std::string levelPath, std::string archivePath);
 	void LoadTempLevel(GLuint shader);
 
 	////////////////////////////////////////////////////////////
@@ -76,6 +83,17 @@ private:
 	///////////////////////////////////////////////////////////
 	void CheckTriggers();
 
+	// Archive
+	void LoadArchiveVisuals(std::vector<AMesh> meshes);
+
+	// Level
+	void LoadLevelMeshes(std::vector<LMesh> meshes, GLuint shader);
+	void LoadLevelHitboxes(std::vector<LHitbox> hitboxes);
+	void LoadLevelLights(std::vector<LLight> lights);
+	void LoadLevelSpawners(std::vector<LSpawner> spawner, GLuint shader);
+	void LoadLevelTriggers(std::vector<LTrigger> triggers);
+	void LoadLevelEffects(std::vector<LEffect> effects);
+
 	std::vector<Object*> map;	//< Vector with level specific objects
 	std::vector<Hitbox*> hitboxes;
 	std::vector<Trigger*> triggers;
@@ -83,6 +101,10 @@ private:
 
 	Enemy* enemy;				//< A Enemy object
 
+	AArchiveHandler archive;
+	LLevelHandler levelFile;
+
+	MeshManager* meshManager;
 	ParticleManager* particleManager;
 	SoundManager* soundManager;
 	LightManager* lightManager;

@@ -6,25 +6,17 @@ Player::Player(const Player & other) { }
 
 Player::~Player() { }
 
-bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
+bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world)
 {
 	// Starting entity variables (including hitbox)
-	Entity::Start(modelName, material, world, glm::vec2(0, 20), glm::vec2(PLAYER_SIZE_X, PLAYER_SIZE_Y), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_DENSITY, PLAYER_FRICTION);
+	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_DENSITY, PLAYER_FRICTION);
 
 	// Setting starting variables
 	position = glm::vec3(0, 20, 0);
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_SIZE_Z);
 
-	// Creating model
-	model = new Model();
-	if (model == nullptr) return false;
-	if (!model->Start(modelName)) return false;
-
-	this->material = material;
-	model->BuildQuadTexture();
-
-
+	// Setting a self-pointer for collision detection
 	getBody()->SetUserData(this);
 
 	return true;

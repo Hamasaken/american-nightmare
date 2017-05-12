@@ -166,8 +166,6 @@ void main () {
 		result += directionalLightCalc(directionalLights[i].direction, directionalLights[i].diffuse, directionalLights[i].specular, directionalLights[i].strength, fragPos, bufferNormal, bufferDif, bufferSpec, shadow);
 	}
 
-	
-
 	if(result.x > bufferDif.x || result.y > bufferDif.y || result.z > bufferDif.z)
 		result = bufferDif;
 

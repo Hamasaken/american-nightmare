@@ -9,9 +9,9 @@ Button::Button(const Button & other) { }
 
 Button::~Button() { }
 
-bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, glm::vec4 color)
+bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh, glm::vec4 color)
 {
-	if (!Object::Start("", material))
+	if (!Object::Start(mesh, material))
 		return false;
 
 	this->position = position;
@@ -35,8 +35,6 @@ void Button::Stop()
 		delete text;
 		text = nullptr;
 	}
-
-	Object::Stop();
 }
 
 bool Button::StartText(std::string fontName, float characterSize)
