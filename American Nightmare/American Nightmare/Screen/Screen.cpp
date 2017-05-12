@@ -79,7 +79,7 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 	object->Draw();
 }
 
-void Screen::DrawObjectShadowMap(Object* object, ShaderManager* shaderManager, glm::mat4 lightSpaceMatrix)
+void Screen::DrawObjectDirShadowMap(Object* object, ShaderManager* shaderManager, glm::mat4 lightSpaceMatrix)
 {
 	// Getting matrices
 	glm::mat4 world = worldMatrix;
@@ -110,7 +110,7 @@ void Screen::DrawObjectShadowMap(Object* object, ShaderManager* shaderManager, g
 	object->Draw();
 }
 
-void Screen::DrawObjectShadowMapTransparent(Animation* animatedObj, ShaderManager* shaderManager, glm::mat4 lightSpaceMatrix)
+void Screen::DrawObjectDirShadowMapTransparent(Animation* animatedObj, ShaderManager* shaderManager, glm::mat4 lightSpaceMatrix)
 {
 	// Getting matrices
 	glm::mat4 world = worldMatrix;
@@ -145,6 +145,46 @@ void Screen::DrawObjectShadowMapTransparent(Animation* animatedObj, ShaderManage
 
 	// Drawing object
 	animatedObj->Draw();
+}
+
+void Screen::DrawObjectPointShadowMap(Object* object, ShaderManager* shaderManager, ShadowManager::PointShadowMap* pointShadowMap)
+{
+	// Getting matrices
+	glm::mat4 world = worldMatrix;
+	glm::mat4 view = camera->getViewMatrix();
+	glm::mat4 projection = projectionMatrix;
+
+	// Positioning object
+	glm::vec3 pos = object->getPosition();
+	world = glm::translate(world, pos);
+
+	// Rotating object
+	glm::vec3 rot = object->getRotation();
+	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
+	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
+	world = glm::rotate(world, rot.z, glm::vec3(0, 0, 1));
+
+	// Scaling object
+	glm::vec3 scale = object->getScale();
+
+	world = glm::scale(world, scale);
+
+	// Setting shader as active and setting parameters
+	shaderManager->SetParameters(world, view, projection);
+
+	glUniform4f(glGetUniformLocation(shaderManager->getShader(), "lightPosition"), pointShadowMap->lightPosition.x, pointShadowMap->lightPosition.y, pointShadowMap->lightPosition.z, pointShadowMap->lightPosition.w);
+	glUniform1f(glGetUniformLocation(shaderManager->getShader(), "lightFarPlane"), pointShadowMap->lightFarPlane);
+
+	std::string index;
+
+	for (int i = 0; i < 6; i++)
+	{
+		index = std::to_string(i);
+		glUniformMatrix4fv(glGetUniformLocation(shaderManager->getShader(), ("lightSpaceMatrices[" + index + "]").c_str()), 1, GL_FALSE, glm::value_ptr(pointShadowMap->lightSpaceMatrices[i]));
+	}
+
+	// Drawing object
+	object->Draw();
 }
 
 void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
@@ -320,9 +360,11 @@ void Screen::DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager
 	object->Draw();
 }
 
-void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, std::vector<ShadowManager::DirectionalShadowMap*> directionalShadowMapList, bool useShadow)
+void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, std::vector<ShadowManager::DirectionalShadowMap*> directionalShadowMapList, std::vector<ShadowManager::PointShadowMap*> pointShadowMapList, bool useShadow)
 {
 	Model* model = drRendering->getFinalRenderQuad();
+
+	GLint textureCounter = 0;
 
 	// Setting shader as active and setting parameters
 	shaderManager->setShader(drRendering->getLightShader());
@@ -345,9 +387,12 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drDiffuse"), 3);
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drSpecular"), 4);
 
+	textureCounter += 5;
+
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "nrOfPointLights"), pointLightList.size());
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "nrOfDirectionalLights"), directionalLightList.size());
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "nrOfDirectionalShadowMaps"), directionalShadowMapList.size());
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "nrOfPointShadowMaps"), pointShadowMapList.size());
 
 	std::string index;
 
@@ -380,11 +425,23 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 		for (int i = 0; i < directionalShadowMapList.size(); i++)
 		{
 			index = std::to_string(i);
-			glActiveTexture(GL_TEXTURE5 + i);
+			glActiveTexture(GL_TEXTURE0 + textureCounter);
 			glBindTexture(GL_TEXTURE_2D, directionalShadowMapList[i]->shadowMap);
-			glUniform1i(glGetUniformLocation(drRendering->getLightShader(), ("shadowMaps[" + index + "]").c_str()), 5 + i);
+			glUniform1i(glGetUniformLocation(drRendering->getLightShader(), ("shadowMaps[" + index + "]").c_str()), textureCounter);
+			textureCounter++;
 			glUniformMatrix4fv(glGetUniformLocation(drRendering->getLightShader(), ("lightSpace[" + index + "].matrix").c_str()), 1, GL_FALSE, glm::value_ptr(directionalShadowMapList[i]->lightSpaceMatrix));
 			glUniform4f(glGetUniformLocation(drRendering->getLightShader(), ("lightSpace[" + index + "].direction").c_str()), directionalShadowMapList[i]->lightDirection.x, directionalShadowMapList[i]->lightDirection.y, directionalShadowMapList[i]->lightDirection.z, directionalShadowMapList[i]->lightDirection.w);
+		}
+
+		for (int i = 0; i < pointShadowMapList.size(); i++)
+		{
+			index = std::to_string(i);
+			glActiveTexture(GL_TEXTURE0 + textureCounter);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, pointShadowMapList[i]->shadowCubeMap);
+			glUniform1i(glGetUniformLocation(drRendering->getLightShader(), ("pointShadowMaps[" + index + "]").c_str()), textureCounter);
+			textureCounter++;
+			glUniform4f(glGetUniformLocation(drRendering->getLightShader(), ("pointShadows[" + index + "].farPlane").c_str()), pointShadowMapList[i]->lightPosition.x, pointShadowMapList[i]->lightPosition.y, pointShadowMapList[i]->lightPosition.z, pointShadowMapList[i]->lightPosition.w);
+			glUniform1f(glGetUniformLocation(drRendering->getLightShader(), ("pointShadows[" + index + "].farPlane").c_str()), pointShadowMapList[i]->lightFarPlane);
 		}
 	}
 

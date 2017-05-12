@@ -259,10 +259,13 @@
     <None Include="Data\Graphics\Shaders\particle_texture_fs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_texture_gs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_texture_vs.glsl" />
-    <None Include="Data\Graphics\Shaders\shadowmap_fs.glsl" />
-    <None Include="Data\Graphics\Shaders\shadowmap_transparent_fs.glsl" />
-    <None Include="Data\Graphics\Shaders\shadowmap_transparent_vs.glsl" />
-    <None Include="Data\Graphics\Shaders\shadowmap_vs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_dir_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_dir_transparent_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_dir_transparent_vs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_dir_vs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_point_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_point_gs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_point_vs.glsl" />
     <None Include="Data\Graphics\Shaders\solid_fs.glsl" />
     <None Include="Data\Graphics\Shaders\solid_vs.glsl" />
     <None Include="Data\Graphics\Shaders\texture_animation_fs.glsl" />

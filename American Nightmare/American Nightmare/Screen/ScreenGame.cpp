@@ -21,40 +21,39 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	////////////////////////////////////////////////////////////
 	// Creating Shader Manager
 	////////////////////////////////////////////////////////////
-	std::string shaderPath = SHADER_PATH;
 	shaderManager = new ShaderManager();
 	if (shaderManager == nullptr) return false;
 
 	// Adding Shader Programs
-	shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
-	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
-	shaderManager->AddShader("texture_animation", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_fs.glsl");
-	shaderManager->AddShader("texture_animation_normal", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_animation_fs.glsl");
-	shaderManager->AddShader("particle_light", shaderPath + "particle_light_vs.glsl", shaderPath + "particle_light_gs.glsl", shaderPath + "particle_light_fs.glsl");
-	shaderManager->AddShader("deferred", shaderPath + "dr_vs.glsl", shaderPath + "dr_fs.glsl");
-	shaderManager->AddShader("deferred_final", shaderPath + "drfinal_vs.glsl", shaderPath + "drfinal_fs.glsl");
-	shaderManager->AddShader("shadow", shaderPath + "shadowmap_vs.glsl", shaderPath + "shadowmap_fs.glsl");
-	shaderManager->AddShader("shadowtransparent", shaderPath + "shadowmap_transparent_vs.glsl", shaderPath + "shadowmap_transparent_fs.glsl");
-	shaderManager->AddShader("debug", shaderPath + "debug_shader_vs.glsl", shaderPath + "debug_shader_fs.glsl");
+	shaderManager->AddShader("solid", SHADER_PATH "solid_vs.glsl", SHADER_PATH "solid_fs.glsl");
+	shaderManager->AddShader("texture", SHADER_PATH "texture_vs.glsl", SHADER_PATH "texture_fs.glsl");
+	shaderManager->AddShader("texture_animation", SHADER_PATH "texture_animation_vs.glsl", SHADER_PATH "texture_fs.glsl");
+	shaderManager->AddShader("texture_animation_normal", SHADER_PATH "texture_animation_vs.glsl", SHADER_PATH "texture_animation_fs.glsl");
+	shaderManager->AddShader("particle_light", SHADER_PATH "particle_light_vs.glsl", SHADER_PATH "particle_light_gs.glsl", SHADER_PATH "particle_light_fs.glsl");
+	shaderManager->AddShader("deferred", SHADER_PATH "dr_vs.glsl", SHADER_PATH "dr_fs.glsl");
+	shaderManager->AddShader("deferred_final", SHADER_PATH "drfinal_vs.glsl", SHADER_PATH "drfinal_fs.glsl");
+	shaderManager->AddShader("shadowdir", SHADER_PATH "shadowmap_dir_vs.glsl", SHADER_PATH "shadowmap_dir_fs.glsl");
+	shaderManager->AddShader("shadowdirtransparent", SHADER_PATH "shadowmap_dir_transparent_vs.glsl", SHADER_PATH "shadowmap_dir_transparent_fs.glsl");
+	shaderManager->AddShader("shadowpoint", SHADER_PATH "shadowmap_point_vs.glsl", SHADER_PATH "shadowmap_point_gs.glsl", SHADER_PATH "shadowmap_point_fs.glsl");
+	shaderManager->AddShader("debug", SHADER_PATH "debug_shader_vs.glsl", SHADER_PATH "debug_shader_fs.glsl");
 
 	// Initialize Deferred Rendering
 	drRendering.Start(screenSize, shaderManager->getShader("deferred_final"));
 
 	// Initialize Shadow Manager
-	shadowManager.Start(shaderManager->getShader("shadow"), shaderManager->getShader("shadowtransparent"));
+	shadowManager.Start(shaderManager->getShader("shadowdir"), shaderManager->getShader("shadowdirtransparent"), shaderManager->getShader("shadowpoint"), 0);
 
 	////////////////////////////////////////////////////////////
 	// Creating Material Manager and loading textures/materials
 	////////////////////////////////////////////////////////////
-	std::string texturePath = TEXTURE_PATH;
 	materialManager = new MaterialManager();
 	if (materialManager == nullptr) return false;
 
 	// Loading materials
-	materialManager->AddMaterial("playermaterial", glm::vec3(0.1), 1.f, "playertexture", texturePath + "Walk01.png");
-	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
-	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), 1.f, "groundtexture", texturePath + "temp_ground.jpg");
-	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), 1.f, "backgroundtexture", texturePath + "temp_background.jpg");
+	materialManager->AddMaterial("playermaterial", glm::vec3(0.1), 1.f, "playertexture", TEXTURE_PATH "Walk01.png");
+	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", TEXTURE_PATH "gammal-dammsugare.jpg");
+	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), 1.f, "groundtexture", TEXTURE_PATH "temp_ground.jpg");
+	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), 1.f, "backgroundtexture", TEXTURE_PATH "temp_background.jpg");
 	if (materialManager->getMaterial("playermaterial") == nullptr) printf("Player Material not found\n");
 	if (materialManager->getMaterial("lightmaterial") == nullptr) printf("Light Material not found\n");
 	if (materialManager->getMaterial("groundmaterial") == nullptr) printf("Ground Material not found\n");
@@ -127,10 +126,11 @@ void ScreenGame::SetStartVariables()
 	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "lvl_1.anl", ARCHIVE_PATH "lvl_1.ana");
 
 	// Adding shadow
-	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);
+	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, 50, -30.f, 50);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, 50, -30.f, 50);
-	shadowManager.setUseShadows(true);
+	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[0], glm::vec2(screenSize.x * 0.5, screenSize.y * 0.5), 45, 0.1f);
+	//shadowManager.setUseShadows(true);
 }
 
 void ScreenGame::Update(GLint deltaT)
@@ -148,10 +148,7 @@ void ScreenGame::Draw()
 {
 	// Draw shadow maps
 	if (shadowManager.getUseShadows())
-	{
-		for (int i = 0; i < 1; i++)
-			DrawShadowMaps();
-	}
+		DrawShadowMaps();
 
 	// Disable Blend for DR
 	glDisable(GL_BLEND);
@@ -182,7 +179,7 @@ void ScreenGame::Draw()
 	glEnable(GL_BLEND);
 
 	// DR: Light pass
-	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getUseShadows());
+	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
 	// Drawing player
 	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getUseShadows());
@@ -233,6 +230,7 @@ void ScreenGame::Draw()
 
 void ScreenGame::DrawShadowMaps()
 {
+	// Directional
 	for (int i = 0; i < shadowManager.getDirectionalShadowMapList().size(); i++)
 	{
 		// Set Viewport to resolution of shadow map
@@ -247,13 +245,43 @@ void ScreenGame::DrawShadowMaps()
 
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
-			DrawObjectShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+			DrawObjectDirShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
 		// Set shader for transparent objects
 		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
 
-		DrawObjectShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
-		DrawObjectShadowMapTransparent(levelManager->getEnemy(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+		DrawObjectDirShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+		DrawObjectDirShadowMapTransparent(levelManager->getEnemy(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+
+		// Unbind FBO
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// Reset Viewport to screen size
+		glViewport(0, 0, screenSize.x, screenSize.y);
+	}
+
+	// Point
+	for (int i = 0; i < shadowManager.getPointShadowMapList().size(); i++)
+	{
+		// Set Viewport to resolution of shadow map
+		glViewport(0, 0, shadowManager.getPointShadowMapList()[i]->resolution.x, shadowManager.getPointShadowMapList()[i]->resolution.y);
+		// Bind depth FBO
+		glBindFramebuffer(GL_FRAMEBUFFER, shadowManager.getPointShadowMapList()[i]->shadowFBO);
+
+		// Set shader
+		shaderManager->setShader(shadowManager.getPointShadowShader());
+
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		// Drawing shadowmap
+		for (Object* object : levelManager->getMap())
+			DrawObjectPointShadowMap(object, shaderManager, shadowManager.getPointShadowMapList()[i]);
+
+		// Set shader for transparent objects
+		//shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
+
+		//DrawObjectDirShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+		//DrawObjectDirShadowMapTransparent(levelManager->getEnemy(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
 		// Unbind FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
