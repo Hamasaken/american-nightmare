@@ -6,18 +6,18 @@
 // LIGHT PARTICLES DEFAULTS
 #define LIGHT_DEFAULT_COLOR		glm::vec4(1.f, 0.1f, 0.05f, 1.f)
 #define LIGHT_DEFAULT_AMOUNT	25
-#define LIGHT_SIZE				glm::vec2(2.f, 2.f)
+#define LIGHT_SIZE				glm::vec2(8.f, 8.f)
 
 // BLOOD PARTICLES DEFAULTS
 #define BLOOD_DEFAULT_COLOR		glm::vec4(1.f, 0.1f, 0.05f, 1.f)
 #define BLOOD_DEFAULT_AMOUNT	25
 #define BLOOD_DEFAULT_STRENGTH	0.08f
-#define BLOOD_SIZE				glm::vec2(2.f, 2.f)
+#define BLOOD_SIZE				glm::vec2(8.f, 8.f)
 
 // TEXTURE PARTICLES DEFAULTS
 #define TEXTURE_DEFAULT_COLOR	glm::vec4(1.f, 1.f, 1.f, 1.f)
 #define TEXTURE_DEFAULT_AMOUNT	10
-#define TEXTURE_SIZE			glm::vec2(2.f, 2.f)
+#define TEXTURE_SIZE			glm::vec2(8.f, 8.f)
 
 
 class ParticleManager

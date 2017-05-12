@@ -85,6 +85,8 @@ private:
 
 	// Archive
 	void LoadArchiveVisuals(std::vector<AMesh> meshes);
+	void LoadArchiveMaterials(std::vector<AMaterial> materials);
+	void LoadArchiveTextures(std::vector<ATexture> textures);
 
 	// Level
 	void LoadLevelMeshes(std::vector<LMesh> meshes, GLuint shader);

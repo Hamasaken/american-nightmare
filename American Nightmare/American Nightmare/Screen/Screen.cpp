@@ -34,7 +34,7 @@ bool Screen::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state,
 	worldMatrix = glm::mat4(1.f);
 
 	// Building a projection matrix
-	float fov = glm::radians(80.f);
+	float fov = glm::radians(45.f);
 	projectionMatrix = glm::perspective(fov, screenSize.x / screenSize.y, 0.1f, 50.f);
 
 	// Creating Camera Object
@@ -398,6 +398,7 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 
 void Screen::DrawParticles(ParticleManager* particleManager, ShaderManager * shaderManager)
 {
+	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	shaderManager->setShader(particleManager->getShader());
@@ -406,6 +407,7 @@ void Screen::DrawParticles(ParticleManager* particleManager, ShaderManager * sha
 	glDisable(GL_DEPTH_TEST);
 	particleManager->Draw();
 	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
 }
 
 void Screen::Stop()

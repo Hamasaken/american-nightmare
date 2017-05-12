@@ -68,7 +68,7 @@ void Hitbox::AddBodyToWorld(b2World* world, glm::vec2 position, b2BodyType type,
 	body = world->CreateBody(&bodyDef);
 }
 
-void Hitbox::ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density, float friction, bool isSensor)
+void Hitbox::ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float mass, float friction, bool isSensor)
 {
 	// Creating shape for body
 	b2PolygonShape shape;
@@ -79,9 +79,9 @@ void Hitbox::ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density,
 	b2FixtureDef fixtureDef;
 	fixtureDef.isSensor = isSensor;
 	fixtureDef.shape = &shape;
-	fixtureDef.density = density;		// in kg/m^2
-	fixtureDef.friction = friction;	// friction [0:1]
-	fixtureDef.restitution = 0;		// bouncy ball [0:1]
+	fixtureDef.density = mass / (size.x * size.y);		// in kg/m^2
+	fixtureDef.friction = friction;						// friction [0:1]
+	fixtureDef.restitution = 0.1f;							// bouncy ball [0:1]
 	fixture = body->CreateFixture(&fixtureDef);
 }
 

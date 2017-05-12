@@ -121,7 +121,7 @@ void ScreenGame::SetStartVariables()
 	gameState = PLAYING;
 
 	// Backing the camera a little bit backwards
-	camera->setPosition(glm::vec3(0, 0, 15));
+	camera->setPosition(glm::vec3(0, 0, 35));
 
 	// Making wall & floor bigger
 	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "lvl_1.anl", ARCHIVE_PATH "lvl_1.ana");

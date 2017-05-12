@@ -25,7 +25,16 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 
 	// Adding Shader Programs
 	shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
-	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
+	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");	
+	shaderManager->AddShader("particle_light", shaderPath + "particle_light_vs.glsl", shaderPath + "particle_light_gs.glsl", shaderPath + "particle_light_fs.glsl");
+
+	////////////////////////////////////////////////////////////
+	// Creating Particle Manager
+	////////////////////////////////////////////////////////////
+	particleManager = new ParticleManager();
+	if (particleManager == nullptr) return false;
+	if (!particleManager->Start()) return false;
+	particleManager->setShader(shaderManager->getShader("particle_light"));
 
 	////////////////////////////////////////////////////////////
 	// Creating Material Manager and loading textures/materials
@@ -79,6 +88,9 @@ void ScreenStart::Update(GLint deltaT)
 	// Updating Buttons
 	guiManager->Update(deltaT);
 
+	particleManager->EffectExplosionLights(glm::vec3(0, 0, 5), 1, glm::vec4(1.f, 1.f, 1.f, 0.1f));
+	particleManager->Update(deltaT);
+
 	for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
 	{
 		if (button.first->getPressed())
@@ -103,6 +115,9 @@ void ScreenStart::Draw()
 		DrawObjectGUI(button.first, shaderManager);
 	for (Text* object : *guiManager->getTextList())
 		DrawObjectGUI(object, shaderManager);
+
+	// Drawing particles
+	DrawParticles(particleManager, shaderManager);
 }
 
 void ScreenStart::Stop()
@@ -129,6 +144,13 @@ void ScreenStart::Stop()
 		guiManager->Stop();
 		delete guiManager;
 		guiManager = nullptr;
+	}
+
+	if (particleManager != nullptr)
+	{
+		particleManager->Stop();
+		delete particleManager;
+		particleManager = nullptr;
 	}
 
 	// Deletes Camera & OpenGL ptr
