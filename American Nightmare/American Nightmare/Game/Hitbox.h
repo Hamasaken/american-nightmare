@@ -29,7 +29,7 @@ public:
 	// \optional friction Friction of the shape, defaults as 10.f
 	// \optional isSensor If the hitbox have collision or not
 	////////////////////////////////////////////////////////////
-	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, bool fixedRotate = true, float mass = 1.f, float friction = 10.f, bool isBullet = false, bool isSensor = false);
+	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, bool fixedRotate = true, float mass = 25.0f, float friction = 0.75f, bool isBullet = false, bool isSensor = false);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads body from world
