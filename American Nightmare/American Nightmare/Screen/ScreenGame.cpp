@@ -227,44 +227,6 @@ void ScreenGame::Draw()
 		glDisable(GL_DEPTH_TEST);
 		drRendering.getFinalRenderQuad()->Draw();
 		glEnable(GL_DEPTH_TEST);
-	}
-
-	if (shadowManager.getUseShadows())
-	{
-		shaderManager->setShader("debug");
-
-		glm::mat4 tempWorld = glm::translate(glm::mat4(1.f), glm::vec3(0.75f, -0.75f, 0.f)) *
-			glm::scale(glm::mat4(1.f), glm::vec3(0.25f, 0.25f, 0.25f));
-
-		shaderManager->SetParameters(tempWorld, glm::mat4(), glm::mat4());
-
-		glEnable(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, shadowManager.getDirectionalShadowMapList()[1]->shadowMap);
-		glUniform1i(glGetUniformLocation(shaderManager->getShader(), "texture"), 0);
-
-		glDisable(GL_DEPTH_TEST);
-		drRendering.getFinalRenderQuad()->Draw();
-		glEnable(GL_DEPTH_TEST);
-	}
-
-	if (shadowManager.getUseShadows())
-	{
-		shaderManager->setShader("debug");
-
-		glm::mat4 tempWorld = glm::translate(glm::mat4(1.f), glm::vec3(0.f, -0.75f, 0.f)) *
-			glm::scale(glm::mat4(1.f), glm::vec3(0.25f, 0.25f, 0.25f));
-
-		shaderManager->SetParameters(tempWorld, glm::mat4(), glm::mat4());
-
-		glEnable(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, shadowManager.getDirectionalShadowMapList()[2]->shadowMap);
-		glUniform1i(glGetUniformLocation(shaderManager->getShader(), "texture"), 0);
-
-		glDisable(GL_DEPTH_TEST);
-		drRendering.getFinalRenderQuad()->Draw();
-		glEnable(GL_DEPTH_TEST);
 	}*/
 
 }
