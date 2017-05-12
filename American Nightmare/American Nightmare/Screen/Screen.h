@@ -67,7 +67,7 @@ public:
 	void DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, std::vector<ShadowManager::DirectionalShadowMap*> directionalShadowMapList, bool useShadow);
 	void DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager);
 	void DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, std::vector<ShadowManager::DirectionalShadowMap*> directionalShadowMapList, bool useShadow);
-	void DrawParticles(ParticleManager* particleManager, ShaderManager* shaderManager);
+	void DrawParticles(ParticleEmitter* particleEmitter, ShaderManager* shaderManager);
 
 protected:
 	Camera* camera;	//< Simple Camera object

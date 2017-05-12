@@ -31,7 +31,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	shaderManager->AddShader("texture_animation", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_fs.glsl");
 	shaderManager->AddShader("texture_animation_normal", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_animation_fs.glsl");
 	shaderManager->AddShader("particle_light", shaderPath + "particle_light_vs.glsl", shaderPath + "particle_light_gs.glsl", shaderPath + "particle_light_fs.glsl");
-//	shaderManager->AddShader("particle_texture", shaderPath + "particle_texture_vs.glsl", shaderPath + "particle_texture_gs.glsl", shaderPath + "particle_texture_fs.glsl");
+	shaderManager->AddShader("particle_texture", shaderPath + "particle_texture_vs.glsl", shaderPath + "particle_texture_gs.glsl", shaderPath + "particle_texture_fs.glsl");
 	shaderManager->AddShader("deferred", shaderPath + "dr_vs.glsl", shaderPath + "dr_fs.glsl");
 	shaderManager->AddShader("deferred_final", shaderPath + "drfinal_vs.glsl", shaderPath + "drfinal_fs.glsl");
 	shaderManager->AddShader("shadow", shaderPath + "shadowmap_vs.glsl", shaderPath + "shadowmap_fs.glsl");
@@ -56,19 +56,21 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
 	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), 1.f, "groundtexture", texturePath + "temp_ground.jpg");
 	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), 1.f, "backgroundtexture", texturePath + "temp_background.jpg");
+	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), 1.f, "smoketexture", texturePath + "smoke.png");
 	if (materialManager->getMaterial("playermaterial") == nullptr) printf("Player Material not found\n");
 	if (materialManager->getMaterial("lightmaterial") == nullptr) printf("Light Material not found\n");
 	if (materialManager->getMaterial("groundmaterial") == nullptr) printf("Ground Material not found\n");
 	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Background Material not found\n");
+	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
 
 	////////////////////////////////////////////////////////////
 	// Creating Particle Manager
 	////////////////////////////////////////////////////////////
 	particleManager = new ParticleManager();
 	if (particleManager == nullptr) return false;
-	if (!particleManager->Start())
-		return false;
-	particleManager->setShader(shaderManager->getShader("particle_light"));
+	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::LIGHT);
+	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::BLOOD);
+	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::TEXTURE);
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
@@ -191,8 +193,9 @@ void ScreenGame::Draw()
 	// Draw Enemy
 	DrawObjectAnimation(levelManager->getEnemy(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getUseShadows());
 
-	// Drawing vertices
-	DrawParticles(particleManager, shaderManager);
+	// Drawing particles
+	for (ParticleEmitter* emitter : *particleManager->getEmitters())
+		DrawParticles(emitter, shaderManager);
 
 	// Drawing gui Manager if we're paused
 	if (gameState != PLAYING)
@@ -298,7 +301,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
 		particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.80f, 1.f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::I))
-		particleManager->EffectTextureExplosion(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("lightmaterial")->getTextureID(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.80f, 1.f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
+		particleManager->EffectTextureExplosion(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.80f, 1.f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
 
 	// Updating particles effects
 	particleManager->Update(deltaT);

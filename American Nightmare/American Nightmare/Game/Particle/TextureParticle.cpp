@@ -1,10 +1,7 @@
 #include "TextureParticle.h"
 
-void TextureParticle::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size, GLuint texture)
+void TextureParticle::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size)
 {
-	// Getting texture
-	this->texture = texture;
-
 	// Setting parameters
 	isDead = false;
 	vertex.setPosition(position);
@@ -13,7 +10,9 @@ void TextureParticle::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size,
 
 	// Setting some random variables
 	lifeTime = TEXTURE_LIFETIME;
+	rotationSpeed = TEXTURE_ROTATION;
 	lifeTimeStart = lifeTime;
+	velocity = glm::vec3(TEXTURE_VELOCITY, TEXTURE_VELOCITY, randBetweenF(-0.01f, 0.01f));
 }
 
 void TextureParticle::Update(GLfloat deltaT)
@@ -28,10 +27,9 @@ void TextureParticle::Update(GLfloat deltaT)
 		isDead = true;
 
 	// Adds velocity fall-off for realistic effect
+	rotationSpeed += (0.f - rotationSpeed) * TEXTURE_ROTATION_FALL_OFF;
 	velocity += (glm::vec3(0, 0, 0) - velocity) * TEXTURE_VELOCITY_FALL_OFF;
 
-	// Moves the particle with velocity and frametime
+	// Moves the particle with velocity
 	vertex.setPosition(glm::vec3(vertex.x, vertex.y, vertex.z) + velocity * deltaT);
 }
-
-GLuint TextureParticle::getTexture() { return texture; }

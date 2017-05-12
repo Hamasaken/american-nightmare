@@ -396,16 +396,24 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 	glEnable(GL_DEPTH_TEST);
 }
 
-void Screen::DrawParticles(ParticleManager* particleManager, ShaderManager * shaderManager)
+void Screen::DrawParticles(ParticleEmitter* particleEmitter, ShaderManager *shaderManager)
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	shaderManager->setShader(particleManager->getShader());
+	shaderManager->setShader(particleEmitter->getShader());
 	shaderManager->SetParameters(worldMatrix, camera->getViewMatrix(), projectionMatrix);
 
+	if (particleEmitter->getTexture() != -1)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, particleEmitter->getTexture());
+		glUniform1i(glGetUniformLocation(particleEmitter->getShader(), "texture"), 0);
+	}
+
 	glDisable(GL_DEPTH_TEST);
-	particleManager->Draw();
+	particleEmitter->Draw();
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 }

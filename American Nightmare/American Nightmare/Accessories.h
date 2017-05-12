@@ -48,6 +48,14 @@ glm::vec4 arrayToVec4(float a[4]);
 glm::vec3 arrayToVec3(float a[3]);
 glm::vec2 arrayToVec2(float a[2]);
 
+// Particle Types
+enum ParticleType
+{
+	LIGHT,
+	BLOOD,
+	TEXTURE
+};
+
 // Game State
 enum State { Game, StartMeny, Options, Cutscene, Posters, Exit };
 

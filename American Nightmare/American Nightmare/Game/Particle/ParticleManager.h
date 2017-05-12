@@ -1,7 +1,9 @@
 #ifndef PARTICLEMANAGER_H
 #define PARTICLEMANAGER_H
 
+#include "../../Accessories.h"
 #include "ParticleEmitter.h"
+#include "../Shader/ShaderManager.h"
 
 // LIGHT PARTICLES DEFAULTS
 #define LIGHT_DEFAULT_COLOR		glm::vec4(1.f, 0.1f, 0.05f, 1.f)
@@ -27,10 +29,7 @@ public:
 	ParticleManager(const ParticleManager& other);
 	~ParticleManager();
 
-	bool Start();
 	void Stop();
-
-	void MakeVertices();
 
 	////////////////////////////////////////////////////////////
 	// \brief Creates an explosion with light particles
@@ -66,21 +65,17 @@ public:
 		int amount = TEXTURE_DEFAULT_AMOUNT,
 		glm::vec4 color = TEXTURE_DEFAULT_COLOR);
 
-
+	void ShaderPair(GLuint shader, ParticleType type);
+	GLuint getShaderFromPair(ParticleType type);
 	void Update(GLfloat deltaT);
-	void Draw();
 
-	GLuint getShader();
-	void setShader(GLuint shader);
+	std::vector<ParticleEmitter*>* getEmitters();
 
 private:
-
 	GLuint shader;
+	std::vector<std::pair<ParticleType, GLuint>> shaderPairs;
 	std::vector<Vertex> vertices;
 	std::vector<ParticleEmitter*> emitters;
-	unsigned int vertexArray;
-	unsigned int vertexBuffer;
-	int vertexCount;
 };
 
 #endif // !PARTICLEMANAGER_H

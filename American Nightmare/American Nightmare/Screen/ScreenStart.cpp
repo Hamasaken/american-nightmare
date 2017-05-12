@@ -25,16 +25,18 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 
 	// Adding Shader Programs
 	shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
-	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");	
+	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
 	shaderManager->AddShader("particle_light", shaderPath + "particle_light_vs.glsl", shaderPath + "particle_light_gs.glsl", shaderPath + "particle_light_fs.glsl");
+	shaderManager->AddShader("particle_texture", shaderPath + "particle_texture_vs.glsl", shaderPath + "particle_texture_gs.glsl", shaderPath + "particle_texture_fs.glsl");
 
 	////////////////////////////////////////////////////////////
 	// Creating Particle Manager
 	////////////////////////////////////////////////////////////
 	particleManager = new ParticleManager();
 	if (particleManager == nullptr) return false;
-	if (!particleManager->Start()) return false;
-	particleManager->setShader(shaderManager->getShader("particle_light"));
+	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::LIGHT);
+	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::BLOOD);
+	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::TEXTURE);
 
 	////////////////////////////////////////////////////////////
 	// Creating Material Manager and loading textures/materials
@@ -117,7 +119,8 @@ void ScreenStart::Draw()
 		DrawObjectGUI(object, shaderManager);
 
 	// Drawing particles
-	DrawParticles(particleManager, shaderManager);
+	for (ParticleEmitter* emitter : *particleManager->getEmitters())
+		DrawParticles(emitter, shaderManager);
 }
 
 void ScreenStart::Stop()
