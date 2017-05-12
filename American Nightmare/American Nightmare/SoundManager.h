@@ -5,8 +5,8 @@
 #include <SFML\Audio.hpp>
 
 // The maximum capicity of SFX and Songs
-#define SFX_CAPACITY	3
-#define SONG_CAPACITY	2
+#define SFX_CAPACITY	10
+#define SONG_CAPACITY	10
 
 // Volume of Music and SFX
 #define VOLUME_MUSIC	50

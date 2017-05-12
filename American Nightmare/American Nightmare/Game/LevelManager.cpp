@@ -24,9 +24,10 @@ bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, 
 	contactManager.Start(particleManager, soundManager);
 
 	// Starting world 
-	world = new b2World(b2Vec2(NULL, GRAVITY));
+	world = new b2World(b2Vec2(NULL, GRAVITY * GRAVITY_SCALE));
 	if (world == nullptr) return false;
 	world->SetContactListener(&contactManager);
+	world->SetAllowSleeping(true);
 
 	// Starting light Manager
 	lightManager = new LightManager();
@@ -123,6 +124,8 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	////////////////////////////////////////////////////////////
 	archive.readFromFile(archivePath.c_str());
 	LoadArchiveVisuals(archive.meshes);
+	LoadArchiveTextures(archive.textures);
+	LoadArchiveMaterials(archive.materials);
 
 	////////////////////////////////////////////////////////////
 	// Loading Level
@@ -135,6 +138,9 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	LoadLevelTriggers(levelFile.triggers);
 	LoadLevelEffects(levelFile.effects);
 
+	// Setting start position
+	player->setPosition(glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 1));
+
 	// Music
 	soundManager->playSong(SoundManager::SONG::MUSIC_BOOGIE);
 	
@@ -144,7 +150,7 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.1f);
 
 	// Loading temp level
-//	LoadTempLevel(shader);
+	LoadTempLevel(shader);
 
 	return true;
 }
@@ -164,6 +170,30 @@ void LevelManager::LoadArchiveVisuals(std::vector<AMesh> meshes)
 	}
 }
 
+void LevelManager::LoadArchiveMaterials(std::vector<AMaterial> materials)
+{
+	////////////////////////////////////////////////////////////
+	// Loading Archive Meshes
+	////////////////////////////////////////////////////////////
+	for (int i = 0; i < materials.size(); i++)
+	{
+		AMaterial material = materials[i];
+		materialManager->AddMaterial(material.identifier.name, arrayToVec3(material.ambient), material.specular[0], material.diffuseMap.name, TEXTURE_PATH"temp_background.jpg");
+	}
+}
+
+void LevelManager::LoadArchiveTextures(std::vector<ATexture> textures)
+{
+	////////////////////////////////////////////////////////////
+	// Loading Archive Meshes
+	////////////////////////////////////////////////////////////
+	for (int i = 0; i < textures.size(); i++)
+	{
+		ATexture texture = textures[i];	
+		materialManager->AddTexture(texture.identifier.name, TEXTURE_PATH + texture.texturePath);
+	}
+}
+
 void LevelManager::LoadLevelMeshes(std::vector<LMesh> meshes, GLuint shader)
 {
 	////////////////////////////////////////////////////////////
@@ -177,7 +207,7 @@ void LevelManager::LoadLevelMeshes(std::vector<LMesh> meshes, GLuint shader)
 		LMesh mesh = meshes[i];
 		object->Start(meshManager->getMesh(mesh.name.data), materialManager->getMaterial("groundmaterial"));
 		object->setScale(glm::vec3(mesh.scale[0], mesh.scale[1], mesh.scale[2]));
-		object->setRotation(glm::vec3(mesh.rotation[0], mesh.rotation[1], mesh.rotation[2]));
+		object->setRotation(glm::vec3(glm::radians(mesh.rotation[0]), glm::radians(mesh.rotation[1]), glm::radians(mesh.rotation[2])));
 		object->setPosition(glm::vec3(mesh.position[0], mesh.position[1], mesh.position[2]));
 
 		map.push_back(object);
@@ -205,8 +235,7 @@ void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 	for (int i = 0; i < lights.size(); i++)
 	{
 		// temp
-		lightManager->AddPointLight(glm::vec4(lights[i].position[0], lights[i].position[1], lights[i].position[2], 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
-	}
+		lightManager->AddPointLight(glm::vec4(lights[i].position[0], lights[i].position[1], lights[i].position[2], 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);	}
 }
 
 void LevelManager::LoadLevelSpawners(std::vector<LSpawner> spawner, GLuint shader)
@@ -225,7 +254,6 @@ void LevelManager::LoadLevelSpawners(std::vector<LSpawner> spawner, GLuint shade
 		case ESpawnerType::trash:		break;
 		case ESpawnerType::zombie1:		break;
 		case ESpawnerType::zombie2:		break;
-
 		}
 	}
 }
@@ -243,10 +271,10 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		Trigger::TriggerType outTriggerType;
 		switch (trigger.triggerType)
 		{
-		case ETriggerType::door:		outTriggerType = Trigger::DOOR; break;
-		case ETriggerType::deathZone:	outTriggerType = Trigger::DOOR; break;
-		case ETriggerType::garbageBin:	outTriggerType = Trigger::DOOR; break;
-		case ETriggerType::poster:		outTriggerType = Trigger::DOOR; break;
+		case ETriggerType::door:		outTriggerType = Trigger::EFFECT; break;
+		case ETriggerType::deathZone:	outTriggerType = Trigger::EFFECT; break;
+		case ETriggerType::garbageBin:	outTriggerType = Trigger::EFFECT; break;
+		case ETriggerType::poster:		outTriggerType = Trigger::EFFECT; break; 
 		}
 
 		LHitbox hitbox = triggers[i].hitbox;
@@ -351,7 +379,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	{
 		Entity* moveble = new Entity();
 		moveble->setShader(shader);
-		moveble->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("groundmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec3(0.5f, 0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 0.5f);
+		moveble->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("groundmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec3(0.5f, 0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.5f, 0.4f);
 		map.push_back(moveble);
 	}
 
@@ -443,7 +471,7 @@ void LevelManager::Update(GLint deltaT)
 	enemy->Update(deltaT, player->getBody()->GetPosition());
 
 	// Updating physics
-	world->Step(1 / 60.f, 3, 3);
+	world->Step(1 / 60.f, 10, 20);
 
 	// Updating every object on map
 	/*for (Object* object : map)
@@ -525,7 +553,7 @@ void LevelManager::CheckTriggers()
 			{
 				Entity* moveble = new Entity();
 				moveble->setShader(map[0]->getShader());
-				moveble->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("backgroundmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec3(randBetweenF(0.30f, 0.70f), randBetweenF(0.30f, 0.70f), randBetweenF(0.30f, 0.70f)), b2_dynamicBody, b2Shape::e_polygon, false, 1.f, 1.f);
+				moveble->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec3(randBetweenF(0.30f, 0.70f), randBetweenF(0.30f, 0.70f), randBetweenF(0.30f, 0.70f)), b2_dynamicBody, b2Shape::e_polygon, false, 2.5f, 1.f);
 				map.push_back(moveble);
 			}
 
