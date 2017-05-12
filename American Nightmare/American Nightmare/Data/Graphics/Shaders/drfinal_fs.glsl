@@ -23,11 +23,10 @@ struct DirectionalLight
 	float strength;
 };
 
-struct DirectionalShadowMaps
+struct LightSpace
 {
-	sampler2D shadowmap;
-	mat4 lightSpaceMatrix;
-	vec4 lightDirection;
+	mat4 matrix;
+	vec4 direction;
 };
 
 // Uniform
@@ -40,7 +39,8 @@ uniform DirectionalLight directionalLights[10];
 
 // Shadows
 uniform int nrOfDirectionalShadowMaps;
-uniform DirectionalShadowMaps directionalShadowMaps[5];
+uniform LightSpace lightSpace[5];
+uniform sampler2D shadowMaps[5];
 
 //uniform int nrOfPointShadowMaps;
 //uniform sampler2D pointShadowMaps[5];
@@ -63,20 +63,20 @@ layout(location = 0) out vec4 fragment_color;
 
 float calculateShadow(vec3 lightSpacePos, vec3 normal, int shadowMapIndex)
 {
-	float bias = max(0.01 * (1.0 - dot(normal, directionalShadowMaps[shadowMapIndex].lightDirection.xyz)), 0.005);
+	float bias = max(0.01 * (1.0 - dot(normal, lightSpace[shadowMapIndex].direction.xyz)), 0.005);
   
 	float currentDepth = lightSpacePos.z;
-	//float closestDepth = texture(directionalShadowMaps[shadowMapIndex].shadowmap, lightSpacePos.xy).r; 
+	//float closestDepth = texture(shadowMaps[shadowMapIndex], lightSpacePos.xy).r; 
 	//float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
 
 	// PCF
 	float shadow = 0.f;
-	vec2 texelSize = 1.0 / textureSize(directionalShadowMaps[shadowMapIndex].shadowmap, 0);
+	vec2 texelSize = 1.0 / textureSize(shadowMaps[shadowMapIndex], 0);
     for(int x = -1; x <= 1; ++x)
     {
         for(int y = -1; y <= 1; ++y)
         {
-            float pcfDepth = texture2D(directionalShadowMaps[shadowMapIndex].shadowmap, lightSpacePos.xy + vec2(x, y) * texelSize).r; 
+            float pcfDepth = texture2D(shadowMaps[shadowMapIndex], lightSpacePos.xy + vec2(x, y) * texelSize).r; 
             shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
         }    
     }
@@ -140,7 +140,7 @@ void main () {
 	{
 		for(int i = 0; i < nrOfDirectionalShadowMaps; i++)
 		{
-			vec4 lightSpacePos = directionalShadowMaps[i].lightSpaceMatrix * vec4(fragPos, 1.f);
+			vec4 lightSpacePos = lightSpace[i].matrix * vec4(fragPos, 1.f);
 			vec3 finalLightSpacePos = lightSpacePos.xyz / lightSpacePos.w;
 			finalLightSpacePos = finalLightSpacePos * 0.5f + 0.5f;
 
