@@ -24,7 +24,7 @@ bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, 
 	contactManager.Start(particleManager, soundManager);
 
 	// Starting world 
-	world = new b2World(b2Vec2(NULL, GRAVITY));
+	world = new b2World(b2Vec2(NULL, GRAVITY * GRAVITY_SCALE));
 	if (world == nullptr) return false;
 	world->SetContactListener(&contactManager);
 	world->SetAllowSleeping(true);

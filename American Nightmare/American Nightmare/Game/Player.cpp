@@ -52,21 +52,21 @@ void Player::Movement()
 	// Positioning
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
-		hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
+		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
 		directionIsRight = false;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 	{
-		hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
+		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
 		directionIsRight = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
 	{
-		hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
+		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
 	{
-		hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, PLAYER_VEL_Y), true);
+		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, PLAYER_VEL_Y), true);
 	}
 
 	// Move in Z axis

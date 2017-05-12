@@ -32,6 +32,7 @@
 
 // Global variables
 #define GRAVITY 9.82f
+#define GRAVITY_SCALE 4.f
 
 // Returns the angle in radians
 float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2);
