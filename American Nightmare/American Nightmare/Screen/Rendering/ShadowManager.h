@@ -8,7 +8,18 @@
 class ShadowManager
 {
 public:
-	struct DirectionalShadowMap;
+	struct DirectionalShadowMap
+	{
+		GLuint shadowMap;
+		GLuint shadowFBO;
+		glm::mat4 lightSpaceMatrix;
+		glm::vec4 lightDirection;
+		glm::vec2 resolution;
+
+		DirectionalShadowMap() : shadowMap(-1), shadowFBO(-1), lightSpaceMatrix(glm::mat4()), lightDirection(glm::vec4()), resolution(glm::vec2()) {}
+		DirectionalShadowMap(GLuint shadowMap, GLuint shadowFBO, glm::mat4 lightSpaceMatrix, glm::vec4 lightDirection, glm::vec2 resolution) : shadowMap(shadowMap), shadowFBO(shadowFBO), lightSpaceMatrix(lightSpaceMatrix), lightDirection(lightDirection), resolution(resolution) {}
+		DirectionalShadowMap(const DirectionalShadowMap& shadowMap) : shadowMap(shadowMap.shadowMap), shadowFBO(shadowMap.shadowFBO), lightSpaceMatrix(shadowMap.lightSpaceMatrix), lightDirection(shadowMap.lightDirection), resolution(shadowMap.resolution) {}
+	};
 
 	ShadowManager();
 	ShadowManager(const ShadowManager& other);
@@ -26,18 +37,6 @@ public:
 	GLuint getDirectionalShadowShaderTr() const;
 
 private:
-	struct DirectionalShadowMap
-	{
-		GLuint shadowMap;
-		GLuint shadowFBO;
-		glm::mat4 lightSpaceMatrix;
-		glm::vec4 lightDirection;
-		glm::vec2 resolution;
-
-		DirectionalShadowMap() : shadowMap(-1), shadowFBO(-1), lightSpaceMatrix(glm::mat4()), lightDirection(glm::vec4()), resolution(glm::vec2()) {}
-		DirectionalShadowMap(GLuint shadowMap, GLuint shadowFBO, glm::mat4 lightSpaceMatrix, glm::vec4 lightDirection, glm::vec2 resolution) : shadowMap(shadowMap), shadowFBO(shadowFBO), lightSpaceMatrix(lightSpaceMatrix), lightDirection(lightDirection), resolution(resolution) {}
-		DirectionalShadowMap(const DirectionalShadowMap& shadowMap) : shadowMap(shadowMap.shadowMap), shadowFBO(shadowMap.shadowFBO), lightSpaceMatrix(shadowMap.lightSpaceMatrix), lightDirection(shadowMap.lightDirection), resolution(shadowMap.resolution) {}
-	};
 
 	void createShadowBuffer(GLuint &shadowFBO, GLuint &shadowMap, glm::vec2 resolution);
 
