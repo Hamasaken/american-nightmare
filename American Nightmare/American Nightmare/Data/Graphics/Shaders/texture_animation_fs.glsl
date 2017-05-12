@@ -127,6 +127,10 @@ vec4 directionalLightCalc(vec4 lightDirection, vec4 lightDiffuse, vec4 lightSpec
 void main(void)
 {
 	vec4 bufferColor = texture2D(texture, vec2(textureUV.x, 1.f - textureUV.y));
+
+	if (bufferColor.a < 0.01f)
+		discard;
+
 	vec3 bufferNormal = texture2D(normal, vec2(textureUV.x, 1.f - textureUV.y)).rgb;
 	bufferNormal = normalize(bufferNormal * 2.0 - 1.0);
 
@@ -174,9 +178,6 @@ void main(void)
 
 	if(result.x > bufferColor.x || result.y > bufferColor.y || result.z > bufferColor.z)
 		result = bufferColor;
-
-	if (bufferColor.a < 0.01f)
-		discard;
 
 	fragment_color = vec4(result.rgb, bufferColor.a);
 
