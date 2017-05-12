@@ -62,7 +62,7 @@ void ShadowManager::createDirectionalShadowBuffer(GLuint &shadowFBO, GLuint &sha
 
 	// Check if FBO is complete
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		printf("Framebuffer not complete!\n");
+		printf("Dir Framebuffer not complete!\n");
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -111,6 +111,11 @@ void ShadowManager::createPointShadowBuffer(GLuint &shadowFBO, GLuint &shadowCub
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, shadowCubeMap, 0);
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
+
+	// Check if FBO is complete
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		printf("Point Framebuffer not complete!\n");
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
