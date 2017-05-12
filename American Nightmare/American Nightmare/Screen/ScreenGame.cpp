@@ -127,8 +127,9 @@ void ScreenGame::SetStartVariables()
 	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "lvl_1.anl", ARCHIVE_PATH "lvl_1.ana");
 
 	// Adding shadow
-	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, 50, -30.f, 50);
 	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);
+	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, 50, -30.f, 50);
+	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, 50, -30.f, 50);
 	shadowManager.setUseShadows(true);
 }
 
@@ -209,7 +210,7 @@ void ScreenGame::Draw()
 	}
 
 	// Temp shadow map debug
-	if (shadowManager.getUseShadows())
+	/*if (shadowManager.getUseShadows())
 	{
 		shaderManager->setShader("debug");
 
@@ -228,7 +229,7 @@ void ScreenGame::Draw()
 		glEnable(GL_DEPTH_TEST);
 	}
 
-	/*if (shadowManager.getUseShadows())
+	if (shadowManager.getUseShadows())
 	{
 		shaderManager->setShader("debug");
 

@@ -138,7 +138,7 @@ void main () {
 	
 	if(useShadow)
 	{
-		for(int i = 0; i < 3; i++)
+		for(int i = 0; i < nrOfDirectionalShadowMaps; i++)
 		{
 			vec4 lightSpacePos = directionalShadowMaps[i].lightSpaceMatrix * vec4(fragPos, 1.f);
 			vec3 finalLightSpacePos = lightSpacePos.xyz / lightSpacePos.w;
