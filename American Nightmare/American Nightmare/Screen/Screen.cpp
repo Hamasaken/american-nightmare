@@ -202,7 +202,7 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 	glDisable(GL_BLEND);
 }
 
-void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, glm::mat4 lightSpaceMatrix, glm::vec4 lightDirection, GLuint shadowMap, bool useShadow)
+void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, std::vector<ShadowManager::DirectionalShadowMap*> directionalShadowMapList, bool useShadow)
 {
 	// Getting matrices
 	glm::mat4 world = worldMatrix;
@@ -233,20 +233,14 @@ void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderMa
 	glBindTexture(GL_TEXTURE_2D, animatedObj->getTextureID());
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, animatedObj->getAnimationNormal());
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, shadowMap);
 
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "texture"), 0);
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "normal"), 1);
-	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "shadowmap"), 2);
 
 	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "viewPos"), camera->getPosition().x, camera->getPosition().y, camera->getPosition().z, 1.f);
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "nrOfPointLights"), pointLightList.size());
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "nrOfDirectionalLights"), directionalLightList.size());
-
-	glUniformMatrix4fv(glGetUniformLocation(animatedObj->getShader(), "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "useShadow"), useShadow);
-	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "lightDirection"), lightDirection.x, lightDirection.y, lightDirection.z, lightDirection.w);
+	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "nrOfDirectionalShadowMaps"), directionalShadowMapList.size());
 
 	std::string index;
 
@@ -270,6 +264,21 @@ void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderMa
 		glUniform4f(glGetUniformLocation(animatedObj->getShader(), ("directionalLights[" + index + "].diffuse").c_str()), directionalLightList[i]->diffuse.x, directionalLightList[i]->diffuse.y, directionalLightList[i]->diffuse.z, directionalLightList[i]->diffuse.w);
 		glUniform4f(glGetUniformLocation(animatedObj->getShader(), ("directionalLights[" + index + "].specular").c_str()), directionalLightList[i]->specular.x, directionalLightList[i]->specular.y, directionalLightList[i]->specular.z, directionalLightList[i]->specular.w);
 		glUniform1f(glGetUniformLocation(animatedObj->getShader(), ("directionalLights[" + index + "].strength").c_str()), directionalLightList[i]->strength);
+	}
+
+	if (useShadow)
+	{
+		glUniform1i(glGetUniformLocation(animatedObj->getShader(), "useShadow"), useShadow);
+
+		for (int i = 0; i < directionalShadowMapList.size(); i++)
+		{
+			index = std::to_string(i);
+			glActiveTexture(GL_TEXTURE2 + i);
+			glBindTexture(GL_TEXTURE_2D, directionalShadowMapList[i]->shadowMap);
+			glUniform1i(glGetUniformLocation(animatedObj->getShader(), ("directionalShadowMaps[" + index + "].shadowmap").c_str()), 2 + i);
+			glUniformMatrix4fv(glGetUniformLocation(animatedObj->getShader(), ("directionalShadowMaps[" + index + "].lightSpaceMatrix").c_str()), 1, GL_FALSE, glm::value_ptr(directionalShadowMapList[i]->lightSpaceMatrix));
+			glUniform4f(glGetUniformLocation(animatedObj->getShader(), ("directionalShadowMaps[" + index + "].lightDirection").c_str()), directionalShadowMapList[i]->lightDirection.x, directionalShadowMapList[i]->lightDirection.y, directionalShadowMapList[i]->lightDirection.z, directionalShadowMapList[i]->lightDirection.w);
+		}
 	}
 	
 	// Drawing object
@@ -311,7 +320,7 @@ void Screen::DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager
 	object->Draw();
 }
 
-void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, glm::mat4 lightSpaceMatrix, glm::vec4 lightDirection, GLuint shadowMap, bool useShadow)
+void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, std::vector<ShadowManager::DirectionalShadowMap*> directionalShadowMapList, bool useShadow)
 {
 	Model* model = drRendering->getFinalRenderQuad();
 
@@ -329,20 +338,16 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 	glBindTexture(GL_TEXTURE_2D, drRendering->getDRDiffuse());
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D, drRendering->getDRSpecular());
-	glActiveTexture(GL_TEXTURE5);
-	glBindTexture(GL_TEXTURE_2D, shadowMap);
 
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drPosition"), 0);
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drNormal"), 1);
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drAmbient"), 2);
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drDiffuse"), 3);
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "drSpecular"), 4);
-	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "shadowmap"), 5);
 
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "nrOfPointLights"), pointLightList.size());
 	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "nrOfDirectionalLights"), directionalLightList.size());
-
-	glUniform4f(glGetUniformLocation(drRendering->getLightShader(), "lightDirection"), lightDirection.x, lightDirection.y, lightDirection.z, lightDirection.w);
+	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "nrOfDirectionalShadowMaps"), directionalShadowMapList.size());
 
 	std::string index;
 
@@ -368,8 +373,20 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 		glUniform1f(glGetUniformLocation(drRendering->getLightShader(), ("directionalLights[" + index + "].strength").c_str()), directionalLightList[i]->strength);
 	}
 
-	glUniformMatrix4fv(glGetUniformLocation(drRendering->getLightShader(), "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-	glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "useShadow"), useShadow);
+	if (useShadow)
+	{
+		glUniform1i(glGetUniformLocation(drRendering->getLightShader(), "useShadow"), useShadow);
+
+		for (int i = 0; i < directionalShadowMapList.size(); i++)
+		{
+			index = std::to_string(i);
+			glActiveTexture(GL_TEXTURE5 + i);
+			glBindTexture(GL_TEXTURE_2D, directionalShadowMapList[i]->shadowMap);
+			glUniform1i(glGetUniformLocation(drRendering->getLightShader(), ("directionalShadowMaps[" + index + "].shadowmap").c_str()), 5 + i);
+			glUniformMatrix4fv(glGetUniformLocation(drRendering->getLightShader(), ("directionalShadowMaps[" + index + "].lightSpaceMatrix").c_str()), 1, GL_FALSE, glm::value_ptr(directionalShadowMapList[i]->lightSpaceMatrix));
+			glUniform4f(glGetUniformLocation(drRendering->getLightShader(), ("directionalShadowMaps[" + index + "].lightDirection").c_str()), directionalShadowMapList[i]->lightDirection.x, directionalShadowMapList[i]->lightDirection.y, directionalShadowMapList[i]->lightDirection.z, directionalShadowMapList[i]->lightDirection.w);
+		}
+	}
 
 	glDisable(GL_DEPTH_TEST);
 

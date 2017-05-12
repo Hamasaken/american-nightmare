@@ -23,48 +23,61 @@ struct DirectionalLight
 	float strength;
 };
 
-// Input
-in vec2 textureUV;
-in vec3 position;
-in vec3 normalw;
+struct DirectionalShadowMaps
+{
+	sampler2D shadowmap;
+	mat4 lightSpaceMatrix;
+	vec4 lightDirection;
+};
 
 // Uniform
+
+// Lights
 uniform int nrOfPointLights;
 uniform PointLight pointLights[100];
 
 uniform int nrOfDirectionalLights;
 uniform DirectionalLight directionalLights[10];
 
+// Shadows
+uniform DirectionalShadowMaps directionalShadowMaps[5];
+uniform int nrOfDirectionalShadowMaps;
+
+//uniform sampler2D pointShadowMaps[5];
+//uniform int nrOfPointShadowMaps;
+
 uniform vec4 viewPos;
 
 uniform sampler2D texture;
 uniform sampler2D normal;
-uniform sampler2D shadowmap;
 
-uniform mat4 lightSpaceMatrix;
 uniform vec4 lightDirection;
 uniform bool useShadow;
 uniform bool isRight;
 
+// Input
+in vec2 textureUV;
+in vec3 position;
+
 // Output
 layout(location = 0) out vec4 fragment_color;
 
-float calculateShadow(vec3 lightSpacePos, vec3 normal)
+float calculateShadow(vec3 lightSpacePos, vec3 normal, int shadowMapIndex)
 {
-	float bias = max(0.01 * (1.0 - dot(normal, lightDirection.xyz)), 0.005);
+	float bias = max(0.01 * (1.0 - dot(normal, directionalShadowMaps[shadowMapIndex].lightDirection.xyz)), 0.005);
   
 	float currentDepth = lightSpacePos.z;
-	//float closestDepth = texture(shadowmap, lightSpacePos.xy).r; 
+	//float closestDepth = texture(directionalShadowMaps[shadowMapIndex].shadowmap, lightSpacePos.xy).r; 
 	//float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
 
 	// PCF
 	float shadow = 0.f;
-	vec2 texelSize = 1.0 / textureSize(shadowmap, 0);
+	vec2 texelSize = 1.0 / textureSize(directionalShadowMaps[shadowMapIndex].shadowmap, 0);
     for(int x = -1; x <= 1; ++x)
     {
         for(int y = -1; y <= 1; ++y)
         {
-            float pcfDepth = texture2D(shadowmap, lightSpacePos.xy + vec2(x, y) * texelSize).r; 
+            float pcfDepth = texture2D(directionalShadowMaps[shadowMapIndex].shadowmap, lightSpacePos.xy + vec2(x, y) * texelSize).r; 
             shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
         }    
     }
@@ -116,17 +129,6 @@ void main(void)
 	vec3 bufferNormal = texture2D(normal, vec2(textureUV.x, 1.f - textureUV.y)).rgb;
 	bufferNormal = normalize(bufferNormal * 2.0 - 1.0);
 
-	float shadow = 0;
-
-	if(useShadow)
-	{
-		vec4 lightSpacePos = lightSpaceMatrix * vec4(position, 1.f);
-		vec3 finalLightSpacePos = lightSpacePos.xyz / lightSpacePos.w;
-		finalLightSpacePos = finalLightSpacePos * 0.5f + 0.5f;
-
-		shadow = calculateShadow(finalLightSpacePos, bufferNormal);
-	}
-
 	if (!isRight)
 		bufferNormal.x = bufferNormal.x * -1.f;
 
@@ -134,23 +136,42 @@ void main(void)
 
 	result += bufferColor * 0.1f;
 
-	for(int i = 0; i < nrOfPointLights; i++)
+	float shadow = 0;
+
+	if(useShadow)
+	{
+		for(int i = 0; i < nrOfDirectionalShadowMaps; i++)
+		{
+			vec4 lightSpacePos = directionalShadowMaps[i].lightSpaceMatrix * vec4(position, 1.f);
+			vec3 finalLightSpacePos = lightSpacePos.xyz / lightSpacePos.w;
+			finalLightSpacePos = finalLightSpacePos * 0.5f + 0.5f;
+
+			shadow += calculateShadow(finalLightSpacePos, bufferNormal, i);
+		}
+		shadow /= nrOfDirectionalShadowMaps;
+	}
+
+	for(int i = 0; i < nrOfPointLights; i++)	
 	{
 		float distance = length(pointLights[i].position.xyz - position);
 
 		if(distance < pointLights[i].radius)
-			result += pointLightCalc(pointLights[i].position, pointLights[i].diffuse, pointLights[i].strength, pointLights[i].constant, pointLights[i].linear, pointLights[i].quadratic, position, bufferNormal, bufferColor, distance, shadow);	
+				result += pointLightCalc(pointLights[i].position, pointLights[i].diffuse, pointLights[i].strength, pointLights[i].constant, pointLights[i].linear, pointLights[i].quadratic, position, bufferNormal, bufferColor, distance, shadow);	
 	}
 	
 	for(int i = 0; i < nrOfDirectionalLights; i++)
 	{
 		result += directionalLightCalc(directionalLights[i].direction, directionalLights[i].diffuse, directionalLights[i].specular, directionalLights[i].strength, position, bufferNormal, bufferColor, shadow);
 	}
+
+	
 	
 
 	if(result.x > bufferColor.x || result.y > bufferColor.y || result.z > bufferColor.z)
 		result = bufferColor;
 
+	if (bufferColor.a < 0.01f)
+		discard;
 
 	fragment_color = vec4(result.rgb, bufferColor.a);
 

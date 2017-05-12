@@ -7,6 +7,7 @@
 #include "../Game/Shader/ShaderManager.h"
 #include "Rendering/DeferredRendering.h"
 #include "../Game/LightManager.h"
+#include "../Screen/Rendering/ShadowManager.h"
 #include "../SoundManager.h"
 #include "../Game/Particle/ParticleManager.h"
 #include "../Game/GUI/Button.h"
@@ -63,9 +64,9 @@ public:
 	void DrawObjectShadowMap(Object* object, ShaderManager* shaderManager, glm::mat4 lightSpaceMatrix);
 	void DrawObjectShadowMapTransparent(Animation* animatedObj, ShaderManager* shaderManager, glm::mat4 lightSpaceMatrix);
 	void DrawObjectGUI(Object* object, ShaderManager* shaderManager);
-	void DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, glm::mat4 lightSpaceMatrix, glm::vec4 lightDirection, GLuint shadowMap, bool useShadow);
+	void DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, std::vector<ShadowManager::DirectionalShadowMap*> directionalShadowMapList, bool useShadow);
 	void DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager);
-	void DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, glm::mat4 lightSpaceMatrix, glm::vec4 lightDirection, GLuint shadowMap, bool useShadow);
+	void DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, std::vector<ShadowManager::DirectionalShadowMap*> directionalShadowMapList, bool useShadow);
 	void DrawParticles(ParticleManager* particleManager, ShaderManager* shaderManager);
 
 protected:

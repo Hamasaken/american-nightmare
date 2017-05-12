@@ -121,8 +121,10 @@ void ScreenGame::SetStartVariables()
 	levelManager->LoadLevel(shaderManager->getShader("deferred"), "0.lvl");
 
 	// Adding shadow
+	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, 50, -30.f, 50);
 	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);
-	shadowManager.setUseShadows(false);
+	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, 50, -30.f, 50);
+	shadowManager.setUseShadows(true);
 }
 
 void ScreenGame::Update(GLint deltaT)
@@ -140,7 +142,10 @@ void ScreenGame::Draw()
 {
 	// Draw shadow maps
 	if (shadowManager.getUseShadows())
-		DrawShadowMaps();		
+	{
+		for (int i = 0; i < 1; i++)
+			DrawShadowMaps();
+	}
 
 	// Disable Blend for DR
 	glDisable(GL_BLEND);
@@ -171,13 +176,13 @@ void ScreenGame::Draw()
 	glEnable(GL_BLEND);
 
 	// DR: Light pass
-	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix, shadowManager.getDirectionalShadowMapList()[0]->lightDirection, shadowManager.getDirectionalShadowMapList()[0]->shadowMap, shadowManager.getUseShadows());
+	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getUseShadows());
 
 	// Drawing player
-	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix, shadowManager.getDirectionalShadowMapList()[0]->lightDirection, shadowManager.getDirectionalShadowMapList()[0]->shadowMap, shadowManager.getUseShadows());
+	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getUseShadows());
 
 	// Draw Enemy
-	DrawObjectAnimation(levelManager->getEnemy(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix, shadowManager.getDirectionalShadowMapList()[0]->lightDirection, shadowManager.getDirectionalShadowMapList()[0]->shadowMap, shadowManager.getUseShadows());
+	DrawObjectAnimation(levelManager->getEnemy(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getUseShadows());
 
 	// Drawing vertices
 	DrawParticles(particleManager, shaderManager);
@@ -199,12 +204,12 @@ void ScreenGame::Draw()
 	}
 
 	// Temp shadow map debug
-	/*if (shadowManager.getUseShadows())
+	if (shadowManager.getUseShadows())
 	{
 		shaderManager->setShader("debug");
 
-		glm::mat4 tempWorld = glm::translate(glm::mat4(1.f), glm::vec3(-0.60f, -0.60f, 0.f)) *
-			glm::scale(glm::mat4(1.f), glm::vec3(0.4f, 0.4f, 0.4f));
+		glm::mat4 tempWorld = glm::translate(glm::mat4(1.f), glm::vec3(-0.75f, -0.75f, 0.f)) *
+			glm::scale(glm::mat4(1.f), glm::vec3(0.25f, 0.25f, 0.25f));
 
 		shaderManager->SetParameters(tempWorld, glm::mat4(), glm::mat4());
 
@@ -216,7 +221,46 @@ void ScreenGame::Draw()
 		glDisable(GL_DEPTH_TEST);
 		drRendering.getFinalRenderQuad()->Draw();
 		glEnable(GL_DEPTH_TEST);
-	}*/
+	}
+
+	if (shadowManager.getUseShadows())
+	{
+		shaderManager->setShader("debug");
+
+		glm::mat4 tempWorld = glm::translate(glm::mat4(1.f), glm::vec3(0.75f, -0.75f, 0.f)) *
+			glm::scale(glm::mat4(1.f), glm::vec3(0.25f, 0.25f, 0.25f));
+
+		shaderManager->SetParameters(tempWorld, glm::mat4(), glm::mat4());
+
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, shadowManager.getDirectionalShadowMapList()[1]->shadowMap);
+		glUniform1i(glGetUniformLocation(shaderManager->getShader(), "texture"), 0);
+
+		glDisable(GL_DEPTH_TEST);
+		drRendering.getFinalRenderQuad()->Draw();
+		glEnable(GL_DEPTH_TEST);
+	}
+
+	if (shadowManager.getUseShadows())
+	{
+		shaderManager->setShader("debug");
+
+		glm::mat4 tempWorld = glm::translate(glm::mat4(1.f), glm::vec3(0.f, -0.75f, 0.f)) *
+			glm::scale(glm::mat4(1.f), glm::vec3(0.25f, 0.25f, 0.25f));
+
+		shaderManager->SetParameters(tempWorld, glm::mat4(), glm::mat4());
+
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, shadowManager.getDirectionalShadowMapList()[2]->shadowMap);
+		glUniform1i(glGetUniformLocation(shaderManager->getShader(), "texture"), 0);
+
+		glDisable(GL_DEPTH_TEST);
+		drRendering.getFinalRenderQuad()->Draw();
+		glEnable(GL_DEPTH_TEST);
+	}
+
 }
 
 void ScreenGame::DrawShadowMaps()
@@ -235,7 +279,7 @@ void ScreenGame::DrawShadowMaps()
 
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
-			DrawObjectShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix);
+			DrawObjectShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
 		// Set shader for transparent objects
 		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
