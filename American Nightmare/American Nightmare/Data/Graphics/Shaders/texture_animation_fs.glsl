@@ -1,5 +1,7 @@
 #version 430
 
+#extension GL_NV_shadow_samplers_cube : enable
+
 struct PointLight
 {
 	vec4 position;
@@ -29,6 +31,12 @@ struct LightSpace
 	vec4 direction;
 };
 
+struct PointShadow
+{
+	vec4 position;
+	float farPlane;
+};
+
 // Uniform
 
 // Lights
@@ -42,10 +50,11 @@ uniform DirectionalLight directionalLights[10];
 
 uniform int nrOfDirectionalShadowMaps;
 uniform LightSpace lightSpace[5];
-uniform sampler2D shadowMaps[5];
+uniform sampler2D dirShadowMaps[5];
 
-//uniform sampler2D pointShadowMaps[5];
-//uniform int nrOfPointShadowMaps;
+uniform int nrOfPointShadowMaps;
+uniform PointShadow pointShadows[5];
+uniform samplerCube pointShadowMaps[5];
 
 uniform vec4 viewPos;
 
@@ -63,31 +72,47 @@ in vec3 position;
 // Output
 layout(location = 0) out vec4 fragment_color;
 
-float calculateShadow(vec3 lightSpacePos, vec3 normal, int shadowMapIndex)
+float calculateDirShadow(vec3 lightSpacePos, vec3 normal, int shadowMapIndex)
 {
 	float bias = max(0.01 * (1.0 - dot(normal, lightSpace[shadowMapIndex].direction.xyz)), 0.005);
   
 	float currentDepth = lightSpacePos.z;
-	//float closestDepth = texture(shadowMaps[shadowMapIndex], lightSpacePos.xy).r; 
-	//float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+	float closestDepth = texture2D(dirShadowMaps[shadowMapIndex], lightSpacePos.xy).r; 
+	float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
 
 	// PCF
-	float shadow = 0.f;
-	vec2 texelSize = 1.0 / textureSize(shadowMaps[shadowMapIndex], 0);
+	/*float shadow = 0.f;
+	vec2 texelSize = 1.0 / textureSize(dirShadowMaps[shadowMapIndex], 0);
     for(int x = -1; x <= 1; ++x)
     {
         for(int y = -1; y <= 1; ++y)
         {
-            float pcfDepth = texture2D(shadowMaps[shadowMapIndex], lightSpacePos.xy + vec2(x, y) * texelSize).r; 
+            float pcfDepth = texture2D(dirShadowMaps[shadowMapIndex], lightSpacePos.xy + vec2(x, y) * texelSize).r; 
             shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
         }    
     }
-    shadow /= 9.0;
+    shadow /= 9.0;*/
 
 	if(lightSpacePos.z > 1.0)
 		shadow = 0.f;
 
 	return shadow;
+}
+
+float calculatePointShadow(vec3 fragPos, int shadowMapIndex)
+{
+    vec3 fragToLight = fragPos - pointShadows[shadowMapIndex].position.xyz;
+	 
+    float closestDepth = textureCube(pointShadowMaps[shadowMapIndex], fragToLight).r;
+
+    closestDepth *= pointShadows[shadowMapIndex].farPlane;
+    
+    float currentDepth = length(fragToLight);
+    
+    float bias = 0.05;
+    float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+
+    return shadow;
 }
 
 vec4 pointLightCalc(vec4 lightPosition, vec4 lightDiffuse, float strength, float lightConstant, float lightLinear, float lightQuadratic, vec3 inFragPos, vec3 inNormal, vec4 inTexDiffuse, float inDistance, float shadow)
@@ -126,6 +151,7 @@ vec4 directionalLightCalc(vec4 lightDirection, vec4 lightDiffuse, vec4 lightSpec
 
 void main(void)
 {
+
 	vec4 bufferColor = texture2D(texture, vec2(textureUV.x, 1.f - textureUV.y));
 
 	if (bufferColor.a < 0.01f)
@@ -151,10 +177,15 @@ void main(void)
 			vec3 finalLightSpacePos = lightSpacePos.xyz / lightSpacePos.w;
 			finalLightSpacePos = finalLightSpacePos * 0.5f + 0.5f;
 
-			shadow += calculateShadow(finalLightSpacePos, bufferNormal, i);
+			shadow += calculateDirShadow(finalLightSpacePos, bufferNormal, i);
 		}
 
-		shadow /= nrOfDirectionalShadowMaps;
+		for(int i = 0; i < nrOfPointShadowMaps; i++)
+		{
+			shadow += calculatePointShadow(position, i);
+		}
+
+		shadow /= nrOfDirectionalShadowMaps + nrOfPointShadowMaps;
 
 		if(shadow > 1.f)
 			shadow = 1.f;

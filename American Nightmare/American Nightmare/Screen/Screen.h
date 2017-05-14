@@ -65,7 +65,7 @@ public:
 	void DrawObjectDirShadowMapTransparent(Animation* animatedObj, ShaderManager* shaderManager, glm::mat4 lightSpaceMatrix);
 	void DrawObjectPointShadowMap(Object* object, ShaderManager* shaderManager, ShadowManager::PointShadowMap* pointShadowMap);
 	void DrawObjectGUI(Object* object, ShaderManager* shaderManager);
-	void DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, std::vector<ShadowManager::DirectionalShadowMap*> directionalShadowMapList, bool useShadow);
+	void DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, std::vector<ShadowManager::DirectionalShadowMap*> directionalShadowMapList, std::vector<ShadowManager::PointShadowMap*> pointShadowMapList, bool useShadow);
 	void DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager);
 	void DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, std::vector<ShadowManager::DirectionalShadowMap*> directionalShadowMapList, std::vector<ShadowManager::PointShadowMap*> pointShadowMapList, bool useShadow);
 	void DrawParticles(ParticleEmitter* particleEmitter, ShaderManager* shaderManager);
