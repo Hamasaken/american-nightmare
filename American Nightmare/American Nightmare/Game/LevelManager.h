@@ -44,7 +44,6 @@ public:
 	bool LoadLevel(GLuint shader, std::string levelFile);
 	void LoadTempLevel(GLuint shader);
 
-
 	////////////////////////////////////////////////////////////
 	// \brief Updates every object on map
 	///////////////////////////////////////////////////////////
@@ -54,14 +53,14 @@ public:
 	// \brief Get the vector of objects to draw or do something with
 	///////////////////////////////////////////////////////////
 	std::vector<Object*> getMap();
-
-	std::vector<Projectile*> getProj();
+	//std::vector<Projectile*> getProj();
+	std::vector<Projectile*> getProjectiles();
 
 	const LightManager* getLightManager() const;
 	Player* getPlayer();
 	Enemy* getEnemy();
 	//Projectile* getProjectile();
-	ProjectileHandler* getProjectiles();
+	//ProjectileHandler* getProjectiles();
 
 	//////////////////////////////////////////////////////////////
 	// Shoot something
@@ -69,6 +68,7 @@ public:
 
 private:
 	std::vector<Object*> map;	//< Vector with level specific objects
+	std::vector<Projectile*> projectiles;
 	Player* player;				//< The player object
 
 	Enemy* enemy;				//< A Enemy object
@@ -81,7 +81,9 @@ private:
 	ProjectileHandler* myPH;
 	//ProjectileHandler* myPH;
 	//Projectile* myProjectile;
-	//Projectile* moveble;
+	Projectile* moveble;
+
+	void deleteProjects();
 
 };
 

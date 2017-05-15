@@ -12,26 +12,26 @@ private:
 	std::string modelPath;
 	std::string texturePath;
 
-	bool isFired;
-
 	MaterialManager materialManager;
 
-	bool right = false;
-	bool left = false;
-	bool up = false;
-	bool down = false;
+	int damage;
+	bool damageOn;
+	bool marked;
 
 public:
 	Projectile(b2World *world, GLuint shader);
 	Projectile();
 	~Projectile();
 
-
 	void fireBullet(b2World* world, glm::vec2 position, glm::vec2 direction);
-/*
-	void fireBullet(b2World* world, glm::vec2 position, int dirInt);*/
+
 	b2Vec2 normalize(const b2Vec2& source);
-	bool getIsFired();
+
+	void setDamageOn(bool damageOn);
+	bool getDamageOn()const;
+
+	void setmarked(bool marked);
+	bool getmarked()const;
 
 	void Update(GLint deltaT);
 	void Update(GLint deltaT, b2World* world, glm::vec2 position);

@@ -62,7 +62,8 @@ void Enemy::Movement(b2Vec2 playerPos)
 	//{
 	//	hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, ENEMY_VEL_Y), true);
 	//}
-
+	//
+	//
 	//// Move in Z axis
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) position.z += 0.15f;
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) position.z -= 0.15f;

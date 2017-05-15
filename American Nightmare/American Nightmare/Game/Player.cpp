@@ -1,13 +1,34 @@
 #include "Player.h"
 
-Player::Player() : Animation() { }
+//Player::Player() : Animation()
+//{
+//	this->myProjectileHandler = ProjectileHandler();
+//}
+//
+
+Player::Player(b2World *world, GLuint shader) : Animation()
+{
+	this->myProjectileHandler = ProjectileHandler(world, shader);
+}
+
+Player::Player() { }
 
 Player::Player(const Player & other) { }
 
 Player::~Player() { }
 
+void Player::initiateCursor()
+{
+	SDL_ShowCursor(SDL_ENABLE);
+	this->cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_CROSSHAIR);
+	SDL_SetCursor(cursor);
+}
+
 bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 {
+	//Sets the cursor for the player
+	initiateCursor();
+
 	// Starting entity variables (including hitbox)
 	Entity::Start(modelName, material, world, glm::vec2(0, -20), glm::vec2(PLAYER_SIZE_X, PLAYER_SIZE_Y), b2_dynamicBody, b2Shape::e_polygon, PLAYER_DENSITY, PLAYER_FRICTION);
 
@@ -24,19 +45,36 @@ bool Player::Start(std::string modelName, const MaterialManager::Material* mater
 	this->material = material;
 	model->BuildQuadTexture();
 
-
 	getBody()->SetUserData(this);
 
 	return true;
 }
 
-void Player::Update(GLint deltaT)
+//void Player::Update(GLint deltaT, b2World world, glm::vec2 pos)
+//{
+//	// Getting user input
+//	Movement();
+//
+//	// Updating animation texture
+//	updateAnimation(deltaT);
+//
+//	//Update ProjectileHandler
+//	myProjectileHandler->Update(deltaT, world, this->getPlayerPosAsGLM());
+//
+//	// Correcting texture to hitbox
+//	Entity::Update(deltaT);
+//}
+
+void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 {
 	// Getting user input
 	Movement();
 	
 	// Updating animation texture
 	updateAnimation(deltaT);
+
+	//Update ProjectileHandler
+	//myProjectileHandler->Update(deltaT, world, this->getPlayerPosAsGLM());
 
 	// Correcting texture to hitbox
 	Entity::Update(deltaT);
