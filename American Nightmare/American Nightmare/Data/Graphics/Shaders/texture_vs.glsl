@@ -3,6 +3,7 @@
 // Input
 layout(location = 0) in vec3 inputPosition;
 layout(location = 1) in vec2 inputTextureUV;
+layout(location = 2) in vec3 inputNormal;
 
 // Output
 out vec2 textureUV;
@@ -19,6 +20,4 @@ void main(void)
 
 	// Setting vertex position according to matrices
 	gl_Position = world * vec4(inputPosition, 1.f);
-	gl_Position = view * gl_Position;
-	gl_Position = projection * gl_Position;
 }

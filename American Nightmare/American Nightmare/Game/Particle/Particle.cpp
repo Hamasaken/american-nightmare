@@ -6,12 +6,13 @@ Particle::Particle(const Particle & other) { }
 
 Particle::~Particle() { }
 
-void Particle::Start(glm::vec3 position, glm::vec4 color)
+void Particle::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size)
 {
 	// Setting parameters
 	isDead = false;
 	vertex.setPosition(position);
 	vertex.setColor(color);
+	vertex.setSize(size);
 
 	// Setting some random variables
 	lifeTime = PARTICLE_LIFETIME;
@@ -39,6 +40,6 @@ void Particle::Update(GLfloat deltaT)
 	vertex.setPosition(glm::vec3(vertex.x, vertex.y, vertex.z) + velocity * deltaT);
 }
 
-Vertex Particle::getAsVertex() { return vertex; }
+Vertex* Particle::getAsVertex() { return &vertex; }
 
 bool Particle::getIsDead() { return isDead; }

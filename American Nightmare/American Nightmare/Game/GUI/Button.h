@@ -16,13 +16,13 @@ public:
 
 	////////////////////////////////////////////////////////////
 	// \brief Starts a button
-	// \param position Position of the center position of the button (0, 0 is lower left corner)
+	// \param position Position of the center position of the button
 	// \param size Size of the button & quad
-	// \param textureName The texture of this button (no path needed)
+	// \param material The material of this button (no path needed)
 	// \param color Color of the full quad, default as white
 	// \return Returns false if model or font could not be created
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, std::string textureName, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f));
+	bool Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f));
 
 	void Stop();
 
@@ -36,13 +36,13 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Checking if mouse pointer is inside button
 	////////////////////////////////////////////////////////////
-	bool isMouseInside();
+	bool isMouseInside(glm::vec2 mousePosition);
 
 	////////////////////////////////////////////////////////////
 	// \brief Updates button by checking if mouse is hovering/pressing/releasing
 	// \param deltaT The time between each frame in milliseconds
 	////////////////////////////////////////////////////////////
-	void Update(GLint deltaT);	
+	void Update(GLint deltaT, glm::vec2 mousePosition);
 
 	////////////////////////////////////////////////////////////
 	// \brief Draws the model and the text on top
@@ -59,18 +59,17 @@ public:
 	State getState();
 	glm::vec2 getSize();
 	glm::vec4 getColor();
+	bool getPressed();
+	void setPressed(bool pressed);
 
 private:
-	////////////////////////////////////////////////////////////
-	// \brief Updates the vertices into a new quad
-	////////////////////////////////////////////////////////////
-	void UpdateQuad();
-
+	bool pressed;			//< If the button have been pressed or not
 	Text* text;				//< Optional text object
 	glm::vec2 screenSize;	//< The screensize of the screen
 	glm::vec2 size;			//< Size of the button in (width, height)
 	glm::vec4 color;		//< Color of the button
 	State state;			//< Current state of the button
+	State prevState;		//< The previous state of the button (for optimazition)
 };
 
 #endif // !BUTTON_H

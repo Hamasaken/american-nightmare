@@ -126,7 +126,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\External\SFML\SFML-32\include;..\External\glew\include;..\External\SDL2\include;..\External\sfeMovie\sfeMovie-32\include;..\External\SDL2_ttf\SDL2_ttf-32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\External\SFML\SFML-32\include;..\External\glew\include;..\External\SDL2\include;..\External\sfeMovie\sfeMovie-32\include;..\External\SDL2_ttf\SDL2_ttf-32\include;..\External\Box2D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,7 +134,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>sfml-window.lib;sfml-audio.lib;sfml-system.lib;sfml-graphics.lib;glew32.lib;SDL2.lib;SDL2main.lib;opengl32.lib;SDL2_ttf.lib;Box2DLib-X32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\External\SFML\SFML-32\lib;..\External\glew\lib\Release\Win32;..\External\SDL2\lib\x86;..\External\sfeMovie\sfeMovie-32\lib;..\External\SDL2_ttf\SDL2_ttf-32\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\External\SFML\SFML-32\lib;..\External\glew\lib\Release\Win32;..\External\SDL2\lib\x86;..\External\sfeMovie\sfeMovie-32\lib;..\External\SDL2_ttf\SDL2_ttf-32\lib;..\External\Box2D;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -165,19 +165,23 @@
     <ClCompile Include="Game\Entity.cpp" />
     <ClCompile Include="Game\Frustum.cpp" />
     <ClCompile Include="Game\GUI\Button.cpp" />
+    <ClCompile Include="Game\GUI\GUIManager.cpp" />
     <ClCompile Include="Game\GUI\Text.cpp" />
     <ClCompile Include="Game\Hitbox.cpp" />
     <ClCompile Include="Game\LevelManager.cpp" />
     <ClCompile Include="Game\LightManager.cpp" />
     <ClCompile Include="Game\Model.cpp" />
     <ClCompile Include="Game\Object.cpp" />
+    <ClCompile Include="Game\Particle\BloodParticle.cpp" />
     <ClCompile Include="Game\Particle\Particle.cpp" />
     <ClCompile Include="Game\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Game\Particle\ParticleManager.cpp" />
+    <ClCompile Include="Game\Particle\TextureParticle.cpp" />
     <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\QuadTree.cpp" />
     <ClCompile Include="Game\Shader\ShaderManager.cpp" />
     <ClCompile Include="Game\MaterialManager.cpp" />
+    <ClCompile Include="Game\Trigger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyContactListener.cpp" />
     <ClCompile Include="Program.cpp" />
@@ -187,6 +191,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Screen\Rendering\DeferredRendering.cpp" />
+    <ClCompile Include="Screen\Rendering\ShadowManager.cpp" />
     <ClCompile Include="Screen\Screen.cpp" />
     <ClCompile Include="Screen\ScreenCutscene.cpp" />
     <ClCompile Include="Screen\ScreenGame.cpp" />
@@ -206,19 +211,23 @@
     <ClInclude Include="Game\Entity.h" />
     <ClInclude Include="Game\Frustum.h" />
     <ClInclude Include="Game\GUI\Button.h" />
+    <ClInclude Include="Game\GUI\GUIManager.h" />
     <ClInclude Include="Game\GUI\Text.h" />
     <ClInclude Include="Game\Hitbox.h" />
     <ClInclude Include="Game\LevelManager.h" />
     <ClInclude Include="Game\LightManager.h" />
     <ClInclude Include="Game\Model.h" />
     <ClInclude Include="Game\Object.h" />
+    <ClInclude Include="Game\Particle\BloodParticle.h" />
     <ClInclude Include="Game\Particle\Particle.h" />
     <ClInclude Include="Game\Particle\ParticleEmitter.h" />
     <ClInclude Include="Game\Particle\ParticleManager.h" />
+    <ClInclude Include="Game\Particle\TextureParticle.h" />
     <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Game\QuadTree.h" />
     <ClInclude Include="Game\Shader\ShaderManager.h" />
     <ClInclude Include="Game\MaterialManager.h" />
+    <ClInclude Include="Game\Trigger.h" />
     <ClInclude Include="MyContactListener.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="Projectile.h" />
@@ -227,6 +236,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Screen\Rendering\DeferredRendering.h" />
+    <ClInclude Include="Screen\Rendering\ShadowManager.h" />
     <ClInclude Include="Screen\Screen.h" />
     <ClInclude Include="Screen\ScreenCutscene.h" />
     <ClInclude Include="Screen\ScreenGame.h" />
@@ -239,15 +249,21 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Graphics\Shaders\debug_shader_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\debug_shader_vs.glsl" />
     <None Include="Data\Graphics\Shaders\drfinal_fs.glsl" />
     <None Include="Data\Graphics\Shaders\drfinal_vs.glsl" />
     <None Include="Data\Graphics\Shaders\dr_fs.glsl" />
-    <None Include="Data\Graphics\Shaders\particle_fs.glsl" />
-    <None Include="Data\Graphics\Shaders\particle_gs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_light_fs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_light_gs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_light_vs.glsl" />
-    <None Include="Data\Graphics\Shaders\particle_vs.glsl" />
+    <None Include="Data\Graphics\Shaders\particle_texture_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\particle_texture_gs.glsl" />
+    <None Include="Data\Graphics\Shaders\particle_texture_vs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_transparent_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_transparent_vs.glsl" />
+    <None Include="Data\Graphics\Shaders\shadowmap_vs.glsl" />
     <None Include="Data\Graphics\Shaders\solid_fs.glsl" />
     <None Include="Data\Graphics\Shaders\solid_vs.glsl" />
     <None Include="Data\Graphics\Shaders\texture_animation_fs.glsl" />

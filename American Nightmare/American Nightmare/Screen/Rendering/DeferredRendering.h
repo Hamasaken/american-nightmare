@@ -2,7 +2,8 @@
 #define DEFERREDRENDERING_H
 
 #include "../../Accessories.h"
-#include "../../Game\Model.h"
+#include "../../Game/Model.h"
+#include "../../Game/LightManager.h"
 
 class DeferredRendering
 {
@@ -15,11 +16,13 @@ public:
 	void Stop();
 
 	GLuint getDRFBO() const;
+
 	GLuint getDRPosition() const;
 	GLuint getDRNormal() const;
 	GLuint getDRAmbient() const;
 	GLuint getDRDiffuse() const;
 	GLuint getDRSpecular() const;
+
 	GLuint getLightShader() const;
 
 	Model* getFinalRenderQuad();
@@ -41,6 +44,7 @@ private:
 
 	Model finalRenderQuad;
 	GLuint lightShader;
+	GLuint shadowShader;
 };
 
 #endif // !DEFERREDRENDERING_H

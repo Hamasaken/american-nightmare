@@ -1,8 +1,10 @@
 #ifndef ACCESSORIES_H
 #define ACCESSORIES_H
 
+// Various includes
 #include <Windows.h>
 #include <GL/glew.h>
+#include <string>
 
 // Including various opengl math classes & functions
 #include <glm/glm.hpp>	
@@ -12,12 +14,9 @@
 #include <glm/gtc/type_ptr.hpp>		// value_ptr
 #include <glm/gtx/rotate_vector.hpp>	// rotating vectors and matrices
 
-// Including full smfl libary
+// Including parts of SFML
 #include <SFML\Audio.hpp>			// Sound and SFX
 #include <SFML\Window\Keyboard.hpp>	// Input Keyboard	
-
-// Various includes
-#include <string>
 
 // Paths
 #define SHADER_PATH "Data/Graphics/Shaders/"
@@ -41,12 +40,24 @@ int radianToDegree(float radian);
 //float test = 180 / PI;
 
 // Functions
+// Returns the angle in radians
+float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2);
+
+// Returns a random number between your two parameters
 float randBetweenF(float low, float high);
 glm::vec3 fromScreenToWorld(glm::vec2 position, glm::vec2 screenSize, glm::mat4 view, glm::mat4 projection);
 glm::vec3 fromScreenToWorld(glm::vec2 position);
 glm::vec2 fromScreenToNDC(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
 //glm::vec2 Angel(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
 // Vertex Struct for vertex buffers, etc
+
+// Returns the screen cordinates to NDC
+glm::vec3 fromScreenToNDC(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
+
+// Game State
+enum State { Game, StartMeny, Options, Cutscene, Posters, Exit };
+
+// Vertex struct for particles
 struct Vertex
 {
 	void setPosition(glm::vec3 position)
@@ -63,10 +74,18 @@ struct Vertex
 		b = color.b;
 		a = color.a;
 	}
+	void setSize(glm::vec2 size)
+	{
+		w = size.x;
+		h = size.y;
+	}
+
 	float x, y, z;
-	float r, g, b, a; 
+	float r, g, b, a;
+	float w, h;
 };
 
+// Vertex struct for textures/models
 struct VertexUV
 {
 	void setPosition(glm::vec3 position)

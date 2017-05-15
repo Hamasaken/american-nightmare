@@ -10,6 +10,7 @@ void ShaderManager::Start() { currentShaderProgram = -1; }
 
 void ShaderManager::Stop()
 {
+	glUseProgram(0);
 	// Deleting shader programs
 	while (shaderList.size() > 0)
 	{
@@ -80,10 +81,6 @@ void ShaderManager::AddShader(std::string name, std::string vs, std::string gs, 
 	glAttachShader(shaderProgram, geometryShader);
 	glAttachShader(shaderProgram, fragmentShader);
 
-	// Attributes locations
-	//glBindAttribLocation(shaderProgram, 0, "inputPosition");
-	//glBindAttribLocation(shaderProgram, 1, "inputColor");
-
 	// Link program
 	glLinkProgram(shaderProgram);
 
@@ -129,6 +126,11 @@ GLuint ShaderManager::getShader() const
 GLuint ShaderManager::getShader(std::string name) const
 {
 	return findShader(name);
+}
+
+std::string ShaderManager::getShader(GLuint id) const
+{
+	return findShader(id);
 }
 
 bool ShaderManager::SetParameters(glm::mat4 world, glm::mat4 view, glm::mat4 projection)
@@ -197,6 +199,21 @@ GLint ShaderManager::findShader(std::string name) const
 		if (shaderList[i].name == name)
 		{
 			shaderProgram = shaderList[i].id;
+		}
+	}
+
+	return shaderProgram;
+}
+
+std::string ShaderManager::findShader(GLuint id) const
+{
+	std::string shaderProgram = "unknownshader";
+
+	for (int i = 0; i < shaderList.size() && shaderProgram == "unknownshader"; i++)
+	{
+		if (shaderList[i].id == id)
+		{
+			shaderProgram = shaderList[i].name;
 		}
 	}
 

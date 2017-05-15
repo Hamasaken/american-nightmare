@@ -1,26 +1,41 @@
 #include "ParticleEmitter.h"
 
-ParticleEmitter::ParticleEmitter() { }
+ParticleEmitter::ParticleEmitter() 
+{
+	isComplete = false;
+}
 
 ParticleEmitter::ParticleEmitter(const ParticleEmitter & other) { }
 
 ParticleEmitter::~ParticleEmitter() { }
 
-void ParticleEmitter::CreateParticles(glm::vec3 position, glm::vec4 color, int amount)
+void ParticleEmitter::LightExplosion(glm::vec3 position, glm::vec4 color, glm::vec2 size, int amount)
 {
-	this->position = position;
-	this->isComplete = false;
-
-	switch (type)
+	for (int i = 0; i < amount; i++)
 	{
-	case TRIANGLE:
-		for (int i = 0; i < amount; i++)
-		{
-			Particle* particle = new Particle;
-			particle->Start(position, color);
-			particles.push_back(particle);
-		}
-	break;
+		Particle* particle = new Particle;
+		particle->Start(position, color, size);
+		particles.push_back(particle);
+	}
+}
+
+void ParticleEmitter::BloodSplatter(glm::vec3 position, float angle, float strength, glm::vec4 color, glm::vec2 size, int amount)
+{
+	for (int i = 0; i < amount; i++)
+	{
+		BloodParticle* particle = new BloodParticle;
+		particle->Start(position, color, size, angle, strength);
+		particles.push_back(particle);
+	}
+}
+
+void ParticleEmitter::TextureExplosion(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount)
+{
+	for (int i = 0; i < amount; i++)
+	{
+		TextureParticle* particle = new TextureParticle;
+		particle->Start(position, color, size, texture);
+		particles.push_back(particle);
 	}
 }
 
@@ -59,13 +74,14 @@ void ParticleEmitter::Update(GLfloat deltaT)
 		isComplete = true;
 }
 
-std::vector<Vertex> ParticleEmitter::getParticlesAsVertices() 
+std::vector<Vertex*>* ParticleEmitter::getParticlesAsVertices() 
 {
-	std::vector<Vertex> vertices;
+	vertices.clear();
+
 	for (Particle* p : particles)
 		vertices.push_back(p->getAsVertex());
 
-	return vertices;
+	return &vertices;
 }
 
 void ParticleEmitter::setPosition(glm::vec3 position) { this->position = position; }

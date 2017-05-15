@@ -9,7 +9,7 @@ Enemy::~Enemy() { }
 bool Enemy::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 {
 	// Starting entity variables (including hitbox)
-	Entity::Start(modelName, material, world, glm::vec2(0, -20), glm::vec2(ENEMY_SIZE_X, ENEMY_SIZE_Y), b2_dynamicBody, b2Shape::e_polygon, ENEMY_DENSITY, ENEMY_FRICTION);
+	Entity::Start(modelName, material, world, glm::vec2(0, 20), glm::vec2(ENEMY_SIZE_X, ENEMY_SIZE_Y), b2_dynamicBody, b2Shape::e_polygon, ENEMY_DENSITY, ENEMY_FRICTION);
 
 	// Setting starting variables
 	position = glm::vec3(0, 0, 0);
@@ -80,12 +80,12 @@ void Enemy::Movement(b2Vec2 playerPos)
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y)) rotation.z += 2.f;
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) rotation.z -= 2.f;
 
-	if (playerPos.x < hitbox->getBody()->GetPosition().x - 0.1f)
+	if (playerPos.x < hitbox->getBody()->GetPosition().x - 0.3f)
 	{
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2( -ENEMY_VEL_X, hitbox->getBody()->GetLinearVelocity().y), true );
 		directionIsRight = true;
 	}
-	else if (playerPos.x > hitbox->getBody()->GetPosition().x + 0.1f)
+	else if (playerPos.x > hitbox->getBody()->GetPosition().x + 0.3f)
 	{
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2( ENEMY_VEL_X, hitbox->getBody()->GetLinearVelocity().y), true );
 		directionIsRight = false;

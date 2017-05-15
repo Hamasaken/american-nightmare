@@ -1,14 +1,19 @@
 #include "ScreenStart.h"
 
-ScreenStart::ScreenStart() : Screen() { }
+ScreenStart::ScreenStart() : Screen() 
+{
+	shaderManager = nullptr;
+	guiManager = nullptr;
+	materialManager = nullptr;
+}
 
 ScreenStart::ScreenStart(const ScreenStart& other) { }
 
 ScreenStart::~ScreenStart() { }
 
-bool ScreenStart::Start(glm::vec2 screenSize, SoundManager* soundManager)
+bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager)
 {
-	Screen::Start(screenSize, soundManager);
+	Screen::Start(screenSize, screenPosition, state, soundManager);
 
 	////////////////////////////////////////////////////////////
 	// Creating Shader Manager
@@ -22,43 +27,30 @@ bool ScreenStart::Start(glm::vec2 screenSize, SoundManager* soundManager)
 	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
 
 	////////////////////////////////////////////////////////////
-	// Creating Meny Buttons
+	// Creating Material Manager and loading textures/materials
 	////////////////////////////////////////////////////////////
 	std::string texturePath = TEXTURE_PATH;
-	std::string fontPath = FONT_PATH;
+	materialManager = new MaterialManager();
+	if (materialManager == nullptr) return false;
 
-	start = new Button();
-	if (start == nullptr) return false;
-	if (!start->Start(screenSize, glm::vec2(20, 190), glm::vec2(200, 50), texturePath + "gammal-dammsugare.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
-	if (!start->StartText(fontPath + "framd.ttf", 40)) return false;
-	start->setShader(shaderManager->getShader("solid"));
+	// Loading materials
+	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
+	materialManager->AddMaterial("titlematerial", glm::vec3(1.f), 0.f, "titletexture", texturePath + "title.jpg");
+	if (materialManager->getMaterial("lightmaterial") == nullptr) printf("Light Material not found\n");
+	if (materialManager->getMaterial("titlematerial") == nullptr) printf("Title Material not found\n");
 
-	// Poster Button
-	posters = new Button();
-	if (posters == nullptr) return false;
-	if (!posters->Start(screenSize, glm::vec2(20, 260), glm::vec2(200, 50), texturePath + "temp_ground.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
-	if (!posters->StartText(fontPath + "framd.ttf", 40)) return false;
-	posters->setShader(shaderManager->getShader("texture"));
-
-	// Options Button
-	options = new Button();
-	if (options == nullptr) return false;
-	if (!options->Start(screenSize, glm::vec2(20, 330), glm::vec2(200, 50), texturePath + "gammal-dammsugare.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
-	if (!options->StartText(fontPath + "framd.ttf", 40)) return false;
-	options->setShader(shaderManager->getShader("texture"));
-
-	// Exit Button
-	exit = new Button();
-	if (exit == nullptr) return false;
-	if (!exit->Start(screenSize, glm::vec2(20, 400), glm::vec2(200, 50), texturePath + "temp_ground.jpg", glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
-	if (!exit->StartText(fontPath + "framd.ttf", 40)) return false;
-	exit->setShader(shaderManager->getShader("texture"));
-
-	// Logo Text
-	logo = new Text();
-	if (logo == nullptr) return false;
-	if (!logo->Start(screenSize, fontPath+ "framd.ttf", 90, glm::vec3(290, 20, 0))) return false;
-	logo->setShader(shaderManager->getShader("texture"));
+	////////////////////////////////////////////////////////////
+	// Creating a GUI manager	
+	////////////////////////////////////////////////////////////
+	guiManager = new GUIManager();
+	if (guiManager == nullptr) return false;
+	if (!guiManager->Start(screenSize, screenPosition)) return false;
+	guiManager->setShader(shaderManager->getShader("texture"));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(-0.7f, 0, 0), glm::vec2(0.30f, 0.60f), materialManager->getMaterial("titlematerial"));
+	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
+	guiManager->AddText(glm::vec3(0, 0.0, 0), 400.f, "What", "framd.ttf");
+	guiManager->setAlpha(1.f);
 
 	// Setting starting variables
 	SetStartVariables();
@@ -69,19 +61,30 @@ bool ScreenStart::Start(glm::vec2 screenSize, SoundManager* soundManager)
 void ScreenStart::SetStartVariables()
 {
 	// Backing the camera a little bit backwards
-	camera->setPosition(glm::vec3(0, 0, 0));
-	
-	// Creating Logo Text
-	logo->CreateText("American Nightmare", glm::vec4(1.f, 0.6f, 0.3f, 1.f));
+	camera->setPosition(glm::vec3(0, 0, 15));
+
+	// Setting meny music
+	soundManager->playSong(SoundManager::SONG::MUSIC_WOOP);
 }
 
 void ScreenStart::Update(GLint deltaT)
 {
-	// Drawing Buttons
-	start->Update(deltaT);
-	posters->Update(deltaT);
-	options->Update(deltaT);
-	exit->Update(deltaT);
+	// Updating Buttons
+	guiManager->Update(deltaT);
+
+	for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
+	{
+		if (button.first->getPressed())
+		{
+			switch (button.second)
+			{
+			case GUIManager::Action::PLAY:		*state = State::Game;		break;
+			case GUIManager::Action::OPTIONS:	*state = State::Options;	break;
+			case GUIManager::Action::EXIT:		*state = State::Exit;		break;
+			}
+			button.first->setPressed(false);
+		}
+	}
 }
 
 void ScreenStart::Draw()
@@ -89,56 +92,36 @@ void ScreenStart::Draw()
 	// Getting view matrix from camera
 	camera->buildViewMatrix();
 
-	// Drawing button
-	DrawObject(start, shaderManager);
-	DrawObject(posters, shaderManager);
-	DrawObject(options, shaderManager);
-	DrawObject(exit, shaderManager);
-	DrawObject(logo, shaderManager);
+	for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
+		DrawObjectGUI(button.first, shaderManager);
+	for (Text* object : *guiManager->getTextList())
+		DrawObjectGUI(object, shaderManager);
 }
 
 void ScreenStart::Stop()
 {
+	// Deleting shaders
 	if (shaderManager != nullptr)
 	{
 		shaderManager->Stop();
 		delete shaderManager;
 		shaderManager = nullptr;
 	}
-
-	// Deleting buttons
-	if (start != nullptr)
+	
+	// Deleting material manager
+	if (materialManager != nullptr)
 	{
-		start->Stop();
-		delete start;
-		start = nullptr;
-	}
-	if (posters != nullptr)
-	{
-		posters->Stop();
-		delete posters;
-		posters = nullptr;
-	}
-	if (options != nullptr)
-	{
-		options->Stop();
-		delete options;
-		options = nullptr;
+		materialManager->Clear();
+		delete materialManager;
+		materialManager = nullptr;
 	}
 
-	if (exit != nullptr)
+	// Deleting gui
+	if (guiManager != nullptr)
 	{
-		exit->Stop();
-		delete exit;
-		exit = nullptr;
-	}
-
-	// Deleting texts
-	if (logo != nullptr)
-	{
-		logo->Stop();
-		delete logo;
-		logo = nullptr;
+		guiManager->Stop();
+		delete guiManager;
+		guiManager = nullptr;
 	}
 
 	// Deletes Camera & OpenGL ptr

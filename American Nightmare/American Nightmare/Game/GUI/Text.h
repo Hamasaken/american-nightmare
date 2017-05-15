@@ -15,12 +15,13 @@ public:
 	// \brief Starts a new instance of a text
 	// \param screenSize The screen size
 	// \param fontName The name of the font file (path needed)
+	// \param text The actual string of the text object
 	// \param characterSize The size of each character of font
 	// \optional position Position of this text, (0, 0, 0) is upper left corner
 	// \optional rotation The rotation of the final texture of the text in degrees
 	// \optional scale The scale of the final texture of the text
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, std::string fontName, float characterSize, 
+	bool Start(glm::vec2 screenSize, std::string fontName, std::string text, float characterSize, 
 		glm::vec3 position = glm::vec3(0.f, 0.f, 0.f), glm::vec3 rotation = glm::vec3(0.f,0.f,0.f), glm::vec3 scale = glm::vec3(1.f, 1.f, 1.f));
 	
 	////////////////////////////////////////////////////////////
@@ -42,8 +43,8 @@ public:
 
 	// Set & Get functions
 	std::string getString();
-	glm::vec2 getSize();
 	glm::vec4 getColor();
+	GLuint getTexture() const;
 	void setString(std::string text);
 	void setColor(glm::vec4 color);
 
@@ -56,9 +57,9 @@ private:
 	////////////////////////////////////////////////////////////
 	bool LoadFont(std::string fontName, float characterSize);
 
+	GLuint texture;			//< This text's texture 
 	TTF_Font* font;			//< The font of this text
 	std::string text;		//< The string of text to be displayed
-	glm::vec2 size;			//< The texture dimension of the full text, can't be changed
 	glm::vec4 color;		//< Text color
 	glm::vec2 screenSize;	//< The overall screen size
 };

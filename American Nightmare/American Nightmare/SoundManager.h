@@ -9,12 +9,12 @@
 #define SONG_CAPACITY	50
 
 // Volume of Music and SFX
-#define VOLUME_MUSIC	20
-#define VOLUME_SFX	100
+#define VOLUME_MUSIC	100
+#define VOLUME_SFX		100
 
 // Turn Music & SFX on/off for testing
-#define MUSIC_ON	false	
-#define SFX_ON		false
+#define MUSIC_ON	true	
+#define SFX_ON		true
 
 class SoundManager
 {
@@ -22,13 +22,16 @@ public:
 	// Put sfx names here, and then load them in the loadSFXs function
 	enum SFX
 	{
-		SFX_PROP
+		SFX_BIP, 
+		SFX_HIT,
+		SFX_POWERUP
 	};
 
 	// Put song names here, and then load them in the loadSongs functions
 	enum SONG
 	{
-		MUSIC_PROP
+		MUSIC_WOOP, 
+		MUSIC_BOOGIE
 	};
 
 	SoundManager();
@@ -80,12 +83,6 @@ public:
 	void playSong(SONG song);
 
 	////////////////////////////////////////////////////////////
-	// \brief Stops the current music and plays new song
-	// \param song The num name of the new Song
-	////////////////////////////////////////////////////////////
-	void switchToMusic(SONG song);
-
-	////////////////////////////////////////////////////////////
 	// \brief Stops the current music
 	////////////////////////////////////////////////////////////
 	void stopMusic();
@@ -115,15 +112,15 @@ private:
 	////////////////////////////////////////////////////////////
 	float getRandomFloat(float low, float high);
 
-	int		volumeMusic;
-	int		volumeEffect;
-	int		nrOfMusicPlayingCurrently;
+	int				volumeMusic;
+	int				volumeEffect;
+	int				nrOfMusicPlayingCurrently;
 
 	sf::Listener	listener;			//< The listener for sfx
 	sf::SoundBuffer buffer[SFX_CAPACITY];		//< The buffers of all sounds to load in sound
-	sf::Sound	sfx[SFX_CAPACITY];		//< Array with sfx
-	sf::Music	song[SONG_CAPACITY];		//< Array with songs
-	int		nrOfSound;			//< The current number of the bufferloading
+	sf::Sound		sfx[SFX_CAPACITY];		//< Array with sfx
+	sf::Music		song[SONG_CAPACITY];		//< Array with songs
+	int				nrOfSound;			//< The current number of the bufferloading
 };
 
 #endif // !SFXMANAGER_H
