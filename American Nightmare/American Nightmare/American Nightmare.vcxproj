@@ -193,7 +193,10 @@
     <ClCompile Include="Screen\ScreenManager.cpp" />
     <ClCompile Include="Screen\ScreenStart.cpp" />
     <ClCompile Include="SoundManager.cpp" />
-    <ClCompile Include="vacuum.cpp" />
+    <ClCompile Include="Trash.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Accessories.h" />
@@ -230,7 +233,10 @@
     <ClInclude Include="Screen\ScreenManager.h" />
     <ClInclude Include="Screen\ScreenStart.h" />
     <ClInclude Include="SoundManager.h" />
-    <ClInclude Include="vacuum.h" />
+    <ClInclude Include="Trash.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Graphics\Shaders\drfinal_fs.glsl" />

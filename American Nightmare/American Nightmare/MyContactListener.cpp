@@ -6,7 +6,6 @@
 #include "vacuum.h"
 #include "Projectile.h"
 
-
 MyContactListener::MyContactListener()
 {
 }
@@ -46,11 +45,23 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			//printf("Enemy is hurting you!!!\n");
 			//enemy->getBody()->ApplyForce(b2Vec2(0, -1000), b2Vec2(), true);
 			
+			printf("Enemy is hurting you!!!\n");
+			player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
 		}
 	}
 
-
-
+	//Collisons with projectile
+	if (player)
+	{
+		Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
+		if (myProjectile)
+		{
+			printf("Player touched a projectile AAAAA\n");
+			//player->getBody()->ApplyForce(b2Vec2(0, -10), b2Vec2(), true);
+			//Delet projectile in Projctile-vector, and --nrOfProjectiles inside projectileHandler class
+			myProjectile->setmarked(true);
+ 		}
+	}
 }
 
 void MyContactListener::EndContact(b2Contact* contact)
@@ -62,5 +73,6 @@ void MyContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifo
 {
 	/* handle pre-solve event */
 }
+
 void MyContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
 {	/* handle post-solve event */}

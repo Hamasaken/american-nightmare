@@ -1,70 +1,92 @@
 #include "ProjectileHandler.h"
+#include <iostream>
 
+//ProjectileHandler::ProjectileHandler(b2World* world, GLuint shader, int CAP)
+//{
+//	this->dirInt = 0;
+//	this->myShader = shader;
+//	this->wasPressed = false;
+//	this->nrOfBullets = 0;
+//	this->CAP = CAP;
+//
+//	//for (int i = 0; i < CAP; i++)
+//	//{
+//	//	myProjtileVector.push_back(new Projectile(world, myShader));
+//	//	this->nrOfBullets++;
+//	//}
+//}
 
-ProjectileHandler::ProjectileHandler(b2World *world, GLuint shader, int CAP)
+void ProjectileHandler::initiateProjectiles(b2World *world, GLuint shader)
 {
-	this->dirInt = 0;
-	this->myShader = shader;
 	this->wasPressed = false;
-	
+	this->CAP = 5;
+	this->currentBullet = CAP - 1;
+	this->myProjectiles = new Projectile*[this->CAP];
 
-	//this->tempProj = new Projectile(world, myShader);
-	//myProjtileVector.push_back(tempProj);
+	for (int i = 0; i < this->CAP; i++)
+		this->myProjectiles[i] = new Projectile(world, shader);
 }
 
 ProjectileHandler::ProjectileHandler() {}
 
+ProjectileHandler::ProjectileHandler(b2World *world, GLuint shader)
+{
+	this->initiateProjectiles(world, shader);
+
+	//for (int i = 0; i < CAP; i++)
+	//{
+	//	myProjtileVector.push_back(new Projectile(world, myShader));
+	//	this->nrOfBullets++;
+	//}
+}
+
+//ProjectileHandler::ProjectileHandler() {}
+
 ProjectileHandler::~ProjectileHandler()
 {
-	//for (int i = 0; i < myProjtileVector.size(); i++)
-	//myProjtileVector[i] = myProjtileVector.erase();
+	for (int i = 0; i < CAP; i++)
+	{
+		delete this->myProjectiles[i];
+	}
+	delete[]this->myProjectiles;
 }
 
 void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 {
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	//{
-	//	myProjtileVector.push_back(new Projectile(world, myShader));
-	//	dirInt = 1;
-	//	myProjtileVector.back()->fireBullet(world, position, dirInt);
-	//}
-	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	//{
-	//	myProjtileVector.push_back(new Projectile(world, myShader));
-	//	dirInt = 2;
-	//	myProjtileVector.back()->fireBullet(world, position, dirInt);
-	//}
-	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	//{
-	//	myProjtileVector.push_back(new Projectile(world, myShader));
-	//	dirInt = 3;
-	//	myProjtileVector.back()->fireBullet(world, position, dirInt);
-	//}
-	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	//{
-	//	myProjtileVector.push_back(new Projectile(world, myShader));
-	//	dirInt = 4;
-	//	myProjtileVector.back()->fireBullet(world, position, dirInt);
-	//}
-
-
 	this->isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 	if (isPressed && !wasPressed)
 	{
 		this->wasPressed = true;
-		myProjtileVector.push_back(new Projectile(world, myShader));
-		myProjtileVector.back()->fireBullet(world, position, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1920, 1080 }, glm::vec2{ 0, 0 }));
+		std::cout << "Something will happen!!!" << std::endl;
+
+		//
+		//myProjtileVector[nrOfBullets]->fireBullet(world, position, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1280, 720 }, glm::vec2{ 320, 180 }));
+		//this->nrOfBullets--;
+		//
+		//myProjtileVector.back()->fireBullet(world, position, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1280, 720 }, glm::vec2{ 320, 180 }));
+		//myProjtileVector.pop_back();
 	}
 
-	for (int i = 0; i < myProjtileVector.size(); i++)
+	for (int i = 0; i < CAP; i++)
 	{
-		myProjtileVector[i]->Update(deltaT);
+		myProjectiles[i]->Update(deltaT);
 	}
 
 	this->wasPressed = isPressed;
 }
 
-std::vector<Projectile*> ProjectileHandler::getBullets()
+void ProjectileHandler::deleteProjectiles()
 {
-	return myProjtileVector;
+	for (int i = 0; i < this->CAP; i++)
+	{
+		if (myProjectiles[i]->getmarked() == true)
+		{
+			delete this->myProjectiles[i];
+		}
+	}
 }
+
+//std::vector<Projectile*> ProjectileHandler::getBullets()
+//{
+//	return projectileVector;
+//}

@@ -94,6 +94,14 @@ void Program::StartSDLWindow()
 	glEnable(GL_DEPTH_TEST);						// Enable Depth test
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+
+
+	////Test for the cursor
+	//SDL_ShowCursor(SDL_ENABLE);
+	//cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_CROSSHAIR);
+	//SDL_SetCursor(cursor);
+
+
 }
 
 void Program::Stop()

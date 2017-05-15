@@ -154,14 +154,24 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	background->setPosition(glm::vec3(0, 20, -1));
 	map.push_back(background);
 
+	//// Making some boxes to reload with
+	for (int i = 0; i < 10; i++)
+	{
+		Projectile* moveble = new Projectile();
+		moveble->setShader(shader);
+		moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
+		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
+		projectiles.push_back(moveble);
+	}
+
 	//// Making some boxes to move around
 	//for (int i = 0; i < 100; i++)
 	//{
-	//	Entity* moveble = new Entity();
-	//	moveble->setShader(shader);
-	//	moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
-	//	moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
-	//	map.push_back(moveble);
+		//Entity* moveble = new Entity();
+		//moveble->setShader(shader);
+		//moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
+		//moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
+		//map.push_back(moveble);
 	//}
 	//
 	//A Projectile
@@ -191,9 +201,8 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	lightManager->AddPointLight(glm::vec4(+10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 
 	//myPH = new ProjectileHandler(world, shader);
-	myPH = new ProjectileHandler(world, shader, 10);
+	//myPH = new ProjectileHandler(world, shader, 10);
 	
-
 	//moveble = new Projectile(world, shader);
 
 	//myProjectile = new Projectile(world, shader);
@@ -207,17 +216,20 @@ void LevelManager::Update(GLint deltaT)
 	world->Step(1 / 30.f, 3, 3);
 
 	// Updating player
-	player->Update(deltaT);
+	//player->Update(deltaT);
+	player->Update(deltaT, world, player->getPlayerPosAsGLM());
 
 	//Update Projectile
-	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
+	//myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
 	//moveble->Update(deltaT, world, player->getPlayerPosAsGLM());
 
 	enemy->Update(deltaT, player->getBody()->GetPosition());
 
 	// Updating every object on map
-	// for (Object* object : map)
-	//	 object->Update(deltaT);
+	deleteProjects();
+
+	 for (Projectile* proj : projectiles)
+		 proj->Update(deltaT);
 
 	for (Object* object : map)
 		object->Update(deltaT);
@@ -227,14 +239,35 @@ std::vector<Object*> LevelManager::getMap()
 {
 	return map;
 }
+//
+//std::vector<Projectile*> LevelManager::getProj()
+//{
+//	return this->myPH->getBullets();
+//}
 
-std::vector<Projectile*> LevelManager::getProj()
+std::vector<Projectile*> LevelManager::getProjectiles()
 {
-	return this->myPH->getBullets();
+	return this->projectiles;
 }
 
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
 Player* LevelManager::getPlayer() { return player; }
 Enemy* LevelManager::getEnemy() { return enemy; }
+
+void LevelManager::deleteProjects()
+{
+	for (int i = 0; i < this->projectiles.size(); i++)
+	{
+		
+		if (this->projectiles[i]->getmarked() == true)
+		{
+			printf("Kaffe");
+			//delete this->projectiles[i];
+			this->projectiles[i]->~Projectile();
+			projectiles.pop_back();
+		}
+	}
+}
+
 //ProjectileHandler* LevelManager::getProjectiles() { return myPH; }
 //Projectile* LevelManager::getProjectile() { return moveble; }
