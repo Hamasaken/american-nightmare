@@ -9,10 +9,10 @@ out vec4 fragPos;
 
 void main()
 {
-    for(int face = 0; face < 6; ++face)
+    for(int face = 0; face < 6; face++)
     {
         gl_Layer = face; // built-in variable that specifies to which face we render.
-        for(int i = 0; i < 3; ++i) // for each triangle's vertices
+        for(int i = 0; i < 3; i++) // for each triangle's vertices
         {
             fragPos = gl_in[i].gl_Position;
             gl_Position = lightSpaceMatrices[face] * fragPos;

@@ -27,7 +27,15 @@ void ShadowManager::Stop()
 		delete shadowMap;
 	}
 
+	for (PointShadowMap* shadowMap : pointShadowMapList)
+	{
+		glDeleteFramebuffers(1, &shadowMap->shadowFBO);
+		glDeleteTextures(1, &shadowMap->shadowCubeMap);
+		delete shadowMap;
+	}
+
 	directionalShadowMapList.clear();
+	pointShadowMapList.clear();
 }
 
 void ShadowManager::AddDirectional(LightManager::DirectionalLight* light, glm::vec2 resolution, GLfloat size, GLfloat nearPlane, GLfloat farPlane)
@@ -88,17 +96,19 @@ void ShadowManager::AddPoint(LightManager::PointLight* light, glm::vec2 resoluti
 	tempShadowMap->lightSpaceMatrices.push_back(lightProjection *
 		glm::lookAt(glm::vec3(light->position.x, light->position.y, light->position.z), glm::vec3(light->position.x, light->position.y, light->position.z) + glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, -1.f, 0.f)));
 
-	createDirectionalShadowBuffer(tempShadowMap->shadowFBO, tempShadowMap->shadowCubeMap, resolution);
+	createPointShadowBuffer(tempShadowMap->shadowFBO, tempShadowMap->shadowCubeMap, resolution);
 
 	pointShadowMapList.push_back(tempShadowMap);
 }
 
 void ShadowManager::createPointShadowBuffer(GLuint &shadowFBO, GLuint &shadowCubeMap, glm::vec2 resolution)
 {
+	glGenFramebuffers(1, &shadowFBO);
+
 	glGenTextures(1, &shadowCubeMap);
 
 	glBindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMap);
-	for (GLuint i = 0; i < 6; ++i)
+	for (GLuint i = 0; i < 6; i++)
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, resolution.x, resolution.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
