@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "Animation.h"
+#include "../vacuum.h"
 
 #define PLAYER_SIZE_X 2.f
 #define PLAYER_SIZE_Y 2.f
@@ -16,12 +17,15 @@
 
 class Player : public Animation
 {
+private:
+	Vacuum* vac;
+
 public:
 	Player();
 	Player(const Player& other);
 	~Player();
 
-	bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
+	bool Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
 	void Update(GLint deltaT);
 
 	//Test-variable
@@ -33,8 +37,10 @@ public:
 	void Movement();
 	
 	b2Body* getBody();
+	Vacuum* getVac();
 
 	glm::vec2 getPlayerPosAsGLM();
-};
 
+
+};
 #endif // !PLAYER_H

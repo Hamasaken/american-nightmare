@@ -96,3 +96,8 @@ void Enemy::Movement(b2Vec2 playerPos)
 	if (hitbox->getBody()->GetLinearVelocity().y > ENEMY_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, ENEMY_MAX_VEL_Y));
 	if (hitbox->getBody()->GetLinearVelocity().y < -ENEMY_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, -ENEMY_MAX_VEL_Y));
 }
+
+b2Body* Enemy::getBody()
+{
+	return hitbox->getBody();
+}

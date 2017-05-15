@@ -1,6 +1,19 @@
 #include "Accessories.h"
 #include <iostream>
 
+float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2)
+{
+	float dY = p1.y - p2.y;
+	float dX = p1.x - p2.x;
+	return atan2(dY, dX);
+}
+
+int radianToDegree(float radian)
+{
+	int degree;
+	return degree = (radian * 180) / PI;
+}
+
 float randBetweenF(float low, float high)
 {
 	return low + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (high - low)));
@@ -36,6 +49,14 @@ glm::vec2 fromScreenToNDC(glm::vec2 position, glm::vec2 screenSize, glm::vec2 sc
 {
 	glm::vec2 tomas = glm::vec2(((position.x / screenSize.x) - screenPos.x / screenSize.x) * 2.f - 1.f,
 		((position.y / screenSize.y) - screenPos.y / screenSize.y) * 2.f - 1.f);
-		std::cout << tomas.x << ", " << tomas.y << std::endl;
+		//std::cout << tomas.x << ", " << tomas.y << std::endl;
 	return tomas; // temp
 }
+
+//glm::vec2 Angel(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos)
+//{
+//	glm::vec2 tomas = glm::vec2(((position.x / screenSize.x) - screenPos.x / screenSize.x) * 2.f - 1.f,
+//		((position.y / screenSize.y) - screenPos.y / screenSize.y) * 2.f - 1.f);
+//	std::cout << tomas.x << ", " << tomas.y << std::endl;
+//	return glm::vec2(tomas.x * test, tomas.y * test); // temp
+//}

@@ -6,7 +6,7 @@ LevelManager::LevelManager(const LevelManager & other) { }
 
 LevelManager::~LevelManager() { }
 
-bool LevelManager::Start(GLuint playerShader)
+bool LevelManager::Start(GLuint playerShader, GLuint mapShader)
 {
 	world = new b2World(b2Vec2(NULL, GRAVITY));
 	world->SetContactListener(&contactManager);
@@ -17,6 +17,15 @@ bool LevelManager::Start(GLuint playerShader)
 	std::string texturePath = TEXTURE_PATH;
 	std::string animationPath = ANIMATION_PATH;
 
+	// Loading in materials
+	materialManager.AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
+	materialManager.AddMaterial("groundmaterial", glm::vec3(0.1f), 1.f, "groundtexture", texturePath + "temp_ground.jpg");
+	materialManager.AddMaterial("backgroundmaterial", glm::vec3(0.1f), 1.f, "backgroundtexture", texturePath + "temp_background.jpg");
+	if (materialManager.getMaterial("lightmaterial") == nullptr) printf("Material not found\n");
+	if (materialManager.getMaterial("groundmaterial") == nullptr) printf("Material not found\n");
+	if (materialManager.getMaterial("backgroundmaterial") == nullptr) printf("Material not found\n");
+
+
 	materialManager.AddMaterial("playermaterial", glm::vec3(0.1), 1.f, "playertexture", texturePath + "Walk01.png");
 	GLint tempNomralMapIndex = materialManager.AddTexture("playernormalmap", texturePath + "Walk01_nor.png");
 
@@ -25,14 +34,15 @@ bool LevelManager::Start(GLuint playerShader)
 	if (player == nullptr) return false;
 
 	const MaterialManager::Material* playerMaterial = materialManager.getMaterial("playermaterial");
+	const MaterialManager::Material* vacuumMaterial = materialManager.getMaterial("lightmaterial");
 
-	if (!player->Start(modelPath + "model.m", playerMaterial, world))
+	if (!player->Start(modelPath + "model.m", playerMaterial, vacuumMaterial, world))
 		return false;
 	player->setShader(playerShader);
 	player->AddAnimation(playerMaterial, materialManager.getTextureID(tempNomralMapIndex), animationPath + "testanimationnormalmap.txt");
 	// Backing the player up a little to the screen
 	player->setPosition(glm::vec3(0.f, 0.f, 0.f));
-	
+	player->getVac()->setShader(mapShader);
 
 	// Making a Enemy
 	enemy = new Enemy();
@@ -98,14 +108,6 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Gettings paths to files
 	std::string modelPath = MODEL_PATH;
 	std::string texturePath = TEXTURE_PATH;
-
-	// Loading in materials
-	materialManager.AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
-	materialManager.AddMaterial("groundmaterial", glm::vec3(0.1f), 1.f, "groundtexture", texturePath + "temp_ground.jpg");
-	materialManager.AddMaterial("backgroundmaterial", glm::vec3(0.1f), 1.f, "backgroundtexture", texturePath + "temp_background.jpg");
-	if (materialManager.getMaterial("lightmaterial") == nullptr) printf("Material not found\n");
-	if (materialManager.getMaterial("groundmaterial") == nullptr) printf("Material not found\n");
-	if (materialManager.getMaterial("backgroundmaterial") == nullptr) printf("Material not found\n");
 
 	// Dammsugare in the middle of the screen
 	Entity* box = new Entity();

@@ -12,6 +12,8 @@ Projectile::Projectile(b2World *world, GLuint shader)
 	setScale(glm::vec3(0.25f, 0.25f, 1));
 
 	isFired = false;
+
+	
 }
 
 Projectile::Projectile(){}

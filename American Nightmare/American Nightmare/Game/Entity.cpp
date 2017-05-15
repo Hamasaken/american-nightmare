@@ -1,5 +1,34 @@
 #include "Entity.h"
 
+bool Entity::Start(std::string modelName, const MaterialManager::Material * material, b2World* world, b2Body* player)
+{
+	Object::Start(modelName, material);
+	hitbox = new Hitbox();
+	//if (hitbox == nullptr) return false;
+	//if (!hitbox->InitializeHitbox(world))
+	//	return false;
+
+	if (!hitbox->InitializeHitboxVacuum(world, player))
+
+	hitbox->getBody()->SetUserData(this);
+
+	return true;
+}
+
+//bool Entity::StartVacuum(std::string modelName, const MaterialManager::Material * material, b2World* world)
+//{
+//	Object::Start(modelName, material);
+//
+//	hitbox = new Hitbox();
+//	//if (hitbox == nullptr) return false;
+//	//if (!hitbox->InitializeHitbox(world))
+//	//	return false;
+//
+//	//hitbox->getBody()->SetUserData(this);
+//
+//	return false;
+//}
+
 bool Entity::Start(std::string modelName, const MaterialManager::Material * material, b2World* world)
 {
 	Object::Start(modelName, material);
@@ -11,7 +40,7 @@ bool Entity::Start(std::string modelName, const MaterialManager::Material * mate
 
 	hitbox->getBody()->SetUserData(this);
 
-	return false;
+	return true;
 }
 
 bool Entity::Start(std::string modelName, const MaterialManager::Material * material, b2World * world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType, float density, float friction)
@@ -25,7 +54,7 @@ bool Entity::Start(std::string modelName, const MaterialManager::Material * mate
 
 	hitbox->getBody()->SetUserData(this);
 
-	return false;
+	return true;
 }
 
 void Entity::Stop()

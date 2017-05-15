@@ -31,13 +31,21 @@
 
 // Global variables
 #define GRAVITY 9.82f
+#define PI 3.14159265359
+
+// Returns the angle in radians
+float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2);
+
+int radianToDegree(float radian);
+
+//float test = 180 / PI;
 
 // Functions
 float randBetweenF(float low, float high);
 glm::vec3 fromScreenToWorld(glm::vec2 position, glm::vec2 screenSize, glm::mat4 view, glm::mat4 projection);
 glm::vec3 fromScreenToWorld(glm::vec2 position);
 glm::vec2 fromScreenToNDC(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
-
+//glm::vec2 Angel(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
 // Vertex Struct for vertex buffers, etc
 struct Vertex
 {

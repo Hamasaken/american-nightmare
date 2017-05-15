@@ -193,6 +193,7 @@
     <ClCompile Include="Screen\ScreenManager.cpp" />
     <ClCompile Include="Screen\ScreenStart.cpp" />
     <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="vacuum.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Accessories.h" />
@@ -229,6 +230,7 @@
     <ClInclude Include="Screen\ScreenManager.h" />
     <ClInclude Include="Screen\ScreenStart.h" />
     <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="vacuum.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Graphics\Shaders\drfinal_fs.glsl" />

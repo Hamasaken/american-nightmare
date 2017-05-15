@@ -3,6 +3,8 @@
 #include "Game\Entity.h"
 #include "Game\Player.h"
 #include "Enemy.h"
+#include "vacuum.h"
+#include "Projectile.h"
 
 
 MyContactListener::MyContactListener()
@@ -23,8 +25,27 @@ void MyContactListener::BeginContact(b2Contact* contact)
 	{
 		if (dynamic_cast<Enemy*>(bodyB))
 		{
-			printf("Enemy is hurting you!!!\n");
-			player->getBody()->ApplyForce(b2Vec2(0, -1000), b2Vec2(), true);
+			//printf("Enemy is hurting you!!!\n");
+			//player->getBody()->ApplyForce(b2Vec2(0, -1000), b2Vec2(), true);
+		}
+	}
+
+	//Fixa Senare
+
+	Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
+	Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
+	if (vacuumA || vacuumB)
+	{
+		printf("vacuum\n");
+		//printf("vacuum IS ALIVE First\n");
+		Projectile* enemyA = dynamic_cast<Projectile*>(bodyA);
+		Projectile* enemyB = dynamic_cast<Projectile*>(bodyB);
+		if (enemyA || enemyB)
+		{
+			printf("vacuum IS ALIVE Second\n");
+			//printf("Enemy is hurting you!!!\n");
+			//enemy->getBody()->ApplyForce(b2Vec2(0, -1000), b2Vec2(), true);
+			
 		}
 	}
 

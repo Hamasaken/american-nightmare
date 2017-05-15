@@ -52,7 +52,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, SoundManager* soundManager)
 	// Creating a simple level
 	levelManager = new LevelManager();
 	if (levelManager == nullptr) return false;
-	if (!levelManager->Start(shaderManager->getShader("texture_animation_normal")))
+	if (!levelManager->Start(shaderManager->getShader("texture_animation_normal"), shaderManager->getShader("deferred")))
 		return false;
 
 	// Setting startvariables
@@ -102,11 +102,11 @@ void ScreenGame::Draw()
 	for (Object* object : levelManager->getMap())
 		DrawObjectGeometryPass(object, shaderManager);
 
-
 	//TEST
 	for(Projectile* proj : levelManager->getProj())
 		DrawObjectGeometryPass(proj, shaderManager);
 
+	DrawObjectGeometryPass(levelManager->getPlayer()->getVac(), shaderManager);
 
 	//Draw Projectile///////////////////////////////////////////////////////
 	////TESTING

@@ -6,7 +6,7 @@ Player::Player(const Player & other) { }
 
 Player::~Player() { }
 
-bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
+bool Player::Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world)
 {
 	// Starting entity variables (including hitbox)
 	Entity::Start(modelName, material, world, glm::vec2(0, -20), glm::vec2(PLAYER_SIZE_X, PLAYER_SIZE_Y), b2_dynamicBody, b2Shape::e_polygon, PLAYER_DENSITY, PLAYER_FRICTION);
@@ -24,6 +24,8 @@ bool Player::Start(std::string modelName, const MaterialManager::Material* mater
 	this->material = material;
 	model->BuildQuadTexture();
 
+	vac = new Vacuum();
+	vac->startVac(modelName, material2, world, getBody());
 
 	getBody()->SetUserData(this);
 
@@ -40,6 +42,8 @@ void Player::Update(GLint deltaT)
 
 	// Correcting texture to hitbox
 	Entity::Update(deltaT);
+
+	vac->Update(getBody()->GetPosition(), deltaT);
 }
 
 void Player::Movement()
@@ -103,6 +107,11 @@ void Player::Movement()
 b2Body* Player::getBody()
 {
 	return hitbox->getBody();
+}
+
+Vacuum * Player::getVac()
+{
+	return vac;
 }
 
 glm::vec2 Player::getPlayerPosAsGLM()

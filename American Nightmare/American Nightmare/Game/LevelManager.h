@@ -22,7 +22,7 @@ public:
 	// \brief Starts class, gets the openGL ptr
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(GLuint playerShader);
+	bool Start(GLuint playerShader, GLuint mapShader);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level

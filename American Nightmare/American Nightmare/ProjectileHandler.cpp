@@ -53,7 +53,7 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 	{
 		this->wasPressed = true;
 		myProjtileVector.push_back(new Projectile(world, myShader));
-		myProjtileVector.back()->fireBullet(world, position, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1920, 1080 }, glm::vec2{ 320, 180 }));
+		myProjtileVector.back()->fireBullet(world, position, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1920, 1080 }, glm::vec2{ 0, 0 }));
 	}
 
 	for (int i = 0; i < myProjtileVector.size(); i++)

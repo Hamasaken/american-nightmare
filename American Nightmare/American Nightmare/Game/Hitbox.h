@@ -27,6 +27,8 @@ public:
 	// \optional friction Friction of the shape, defaults as 10.f
 	////////////////////////////////////////////////////////////
 	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, float density = 1000.f, float friction = 1.f, bool isBullet = false);
+	
+	bool InitializeHitboxVacuum(b2World* world, b2Body* player);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads body from world
