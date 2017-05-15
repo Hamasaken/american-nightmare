@@ -132,7 +132,7 @@ void ScreenGame::SetStartVariables()
 	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, 50, -30.f, 50);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, 50, -30.f, 50);
-	shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[0], glm::vec2(1024, 1024), 45, 0.1f);
+	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[0], glm::vec2(1024, 1024), 45, 0.1f);
 	shadowManager.setUseShadows(true);
 }
 
@@ -215,7 +215,7 @@ void ScreenGame::Draw()
 	}
 
 	// Temp shadow map debug
-	if (shadowManager.getUseShadows())
+	/*if (shadowManager.getUseShadows())
 	{
 		shaderManager->setShader("debug");
 
@@ -232,7 +232,7 @@ void ScreenGame::Draw()
 		glDisable(GL_DEPTH_TEST);
 		drRendering.getFinalRenderQuad()->Draw();
 		glEnable(GL_DEPTH_TEST);
-	}
+	}*/
 
 }
 
