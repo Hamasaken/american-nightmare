@@ -19,8 +19,7 @@
 // TEXTURE PARTICLES DEFAULTS
 #define TEXTURE_DEFAULT_COLOR	glm::vec4(1.f, 1.f, 1.f, 1.f)
 #define TEXTURE_DEFAULT_AMOUNT	10
-#define TEXTURE_SIZE			glm::vec2(8.f, 8.f)
-
+#define TEXTURE_SIZE			glm::vec2(1.f, 1.f)
 
 class ParticleManager
 {

@@ -76,15 +76,22 @@ struct Vertex
 		b = color.b;
 		a = color.a;
 	}
+
 	void setSize(glm::vec2 size)
 	{
 		w = size.x;
 		h = size.y;
 	}
 
+	void setRotation(float rotation)
+	{
+		rot = rotation;
+	}
+
 	float x, y, z;
 	float r, g, b, a;
 	float w, h;
+	float rot;
 };
 
 // Vertex struct for textures/models

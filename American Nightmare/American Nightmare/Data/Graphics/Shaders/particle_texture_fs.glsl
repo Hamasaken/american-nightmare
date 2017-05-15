@@ -3,7 +3,6 @@
 // Input
 in fData
 {
-	vec3 position;
     vec4 color;
 	vec2 tex;
 }frag;  

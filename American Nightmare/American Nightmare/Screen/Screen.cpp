@@ -468,11 +468,16 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 
 void Screen::DrawParticles(ParticleEmitter* particleEmitter, ShaderManager *shaderManager)
 {
+	// Getting matrices
+	glm::mat4 world = glm::mat4(1.f);
+	glm::mat4 view = camera->getViewMatrix();
+	glm::mat4 projection = projectionMatrix;
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	shaderManager->setShader(particleEmitter->getShader());
-	shaderManager->SetParameters(worldMatrix, camera->getViewMatrix(), projectionMatrix);
+	shaderManager->SetParameters(world, view, projection);
 
 	if (particleEmitter->getTexture() != -1)
 	{

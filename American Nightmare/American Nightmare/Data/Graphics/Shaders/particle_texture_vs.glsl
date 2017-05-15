@@ -4,13 +4,14 @@
 layout(location = 0) in vec3 inputPosition;
 layout(location = 1) in vec4 inputColor;
 layout(location = 2) in vec2 inputSize;
+layout(location = 3) in float inputRotation;
 
 // Output
 out vData
 {
-	vec3 position;
     vec4 color;
 	vec2 size;
+	float rotation;
 }vertex;
 
 // Uniform
@@ -23,8 +24,8 @@ void main(void)
 	// Setting color + size + middle position
 	vertex.color = inputColor;
 	vertex.size = inputSize;
-	vertex.position = vec3(projection * view* world * vec4(inputPosition, 1.f));
+	vertex.rotation = inputRotation;
 
 	// Setting vertex position according to matrices
-	gl_Position = projection * view * world * vec4(inputPosition, 1.f);
+	gl_Position = vec4(inputPosition, 1.f);
 }

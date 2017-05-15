@@ -36,7 +36,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// Sets & Gets
 	////////////////////////////////////////////////////////////
-	void setPosition(glm::vec3 position);
+	virtual void setPosition(glm::vec3 position);
 	glm::vec3 getPosition() const;
 	glm::vec3 getCenter() const;
 	void setRotation(glm::vec3 rotation);

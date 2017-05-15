@@ -61,8 +61,8 @@ void Hitbox::AddBodyToWorld(b2World* world, glm::vec2 position, b2BodyType type,
 	// Adding body to the world object
 	b2BodyDef bodyDef;
 	bodyDef.type = type;
-	bodyDef.position = b2Vec2(position.x, -position.y);
 	bodyDef.bullet = isBullet;
+	bodyDef.position = b2Vec2(position.x, -position.y);
 	bodyDef.fixedRotation = canRotate;
 	bodyDef.active = true;
 	body = world->CreateBody(&bodyDef);
@@ -83,6 +83,7 @@ void Hitbox::ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float mass, fl
 	fixtureDef.friction = friction;						// friction [0:1]
 	fixtureDef.restitution = 0.0f;							// bouncy ball [0:1]
 	fixture = body->CreateFixture(&fixtureDef);
+//	body->SetTransform(b2Vec2(0, 0), 0.f);
 }
 
 b2Body * Hitbox::getBody()
