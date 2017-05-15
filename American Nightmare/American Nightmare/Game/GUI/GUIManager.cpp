@@ -28,25 +28,28 @@ void GUIManager::Update(GLuint deltaT)
 		button.first->Update(deltaT, mousePosition);
 }
 
-bool GUIManager::AddButton(Action action, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh)
+bool GUIManager::AddButton(Action action, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh, std::string text, std::string fontName, float characterSize, glm::vec4 textColor)
 {
-	std::string texturePath = TEXTURE_PATH;
-
 	Button* btn = new Button();
 	if (btn == nullptr) return false;
-	if (!btn->Start(screenSize, position, size, material, mesh, glm::vec4(0.8f, 1.f, 0.8f, 1.f))) return false;
-	btn->setShader(shader);
+	if (!btn->Start(screenSize, position, size, material, mesh)) return false;
 
+	// Adding optional text on button
+	if (!text.empty())
+	{
+		if (!btn->StartText(text, fontName, characterSize, textColor)) 
+			return false;
+	}
+
+	btn->setShader(shader);
 	buttons.push_back(std::make_pair(btn, action));
 }
 
 bool GUIManager::AddText(glm::vec3 position, float characterSize, std::string text, std::string fontName)
 {
-	std::string fontPath = FONT_PATH;
-
 	Text* txt = new Text();
 	if (txt == nullptr) return false;
-	if (!txt->Start(screenSize, fontPath + fontName, text, characterSize, position)) return false;
+	if (!txt->Start(screenSize, fontName, characterSize, position)) return false;
 	txt->setShader(shader);
 
 	txt->CreateText(text);
@@ -57,7 +60,7 @@ bool GUIManager::AddText(glm::vec3 position, float characterSize, std::string te
 void GUIManager::setAlpha(float alpha)
 {
 	for (std::pair<Button*, Action> button : buttons)
-		button.first->setColor(glm::vec4(glm::vec3(button.first->getColor()), alpha));
+		button.first->setAlpha(alpha);
 	for (Text* text : texts)
 		text->setColor(glm::vec4(glm::vec3(text->getColor()), alpha));
 }

@@ -166,22 +166,22 @@ public:
 	~AArchiveHandler();
 
 	
-	const uint16_t getUniqueID();
+	uint16_t getUniqueID();
 
-	const AMesh* getMesh(const uint16_t uid) const;
-	const AMesh* getMesh(const char* name) const;
+	AMesh* getMesh(const uint16_t uid);
+	AMesh* getMesh(const char* name);
 
-	const ATexture* getTexture(const uint16_t uid) const;
-	const ATexture* getTexture(const char* name) const;
+	ATexture* getTexture(const uint16_t uid);
+	ATexture* getTexture(const char* name);
 
-	const AMaterial* getMaterial(const uint16_t uid) const;
-	const AMaterial* getMaterial(const char* name) const;
+	AMaterial* getMaterial(const uint16_t uid);
+	AMaterial* getMaterial(const char* name);
 
-	const ACamera* getCamera(const uint16_t uid) const;
-	const ACamera* getCamera(const char* name) const;
+	ACamera* getCamera(const uint16_t uid);
+	ACamera* getCamera(const char* name);
 
-	const ALight* getLight(const uint16_t uid) const;
-	const ALight* getLight(const char* name) const;
+	ALight* getLight(const uint16_t uid);
+	ALight* getLight(const char* name);
 
 
 

@@ -6,7 +6,7 @@ Text::Text(const Text & other) { }
 
 Text::~Text() { }
 
-bool Text::Start(glm::vec2 screenSize, std::string fontName, std::string text, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
 	this->position = position;
 	this->rotation = rotation;

@@ -19,7 +19,7 @@ public:
 
 	void Update(GLuint deltaT);
 
-	bool AddButton(Action action, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh);
+	bool AddButton(Action action, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh, std::string text = "", std::string fontName = "", float characterSize = 10.f, glm::vec4 color = glm::vec4(1, 1, 1, 1));
 	bool AddText(glm::vec3 position, float characterSize, std::string text, std::string fontName);
 
 	void setShader(GLuint shader);

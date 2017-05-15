@@ -59,7 +59,8 @@ bool MeshManager::AddMesh(std::string name, int nrOfVertices, std::vector<AVerte
 	// Make model into mesh
 	Mesh* mesh;
 	mesh = new Mesh(name, model);
-	
+	if (mesh == nullptr) return false;
+
 	// Adding mesh to list
 	meshList.push_back(mesh);
 
@@ -79,10 +80,6 @@ MeshManager::Mesh* MeshManager::getMesh(std::string name) const
 			break;
 		}
 	}
-
-	// Could not find mesh
-	if (outMesh == nullptr)
-		printf("Could not find mesh: %s, making quad instead\n", name.c_str());
 
 	return outMesh;
 }
