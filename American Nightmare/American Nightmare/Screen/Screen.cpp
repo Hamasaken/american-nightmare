@@ -212,7 +212,6 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 	shaderManager->setShader(object->getShader());
 	shaderManager->SetParameters(world, view, projection);
 
-
 	glEnable(GL_BLEND);
 
 
@@ -223,7 +222,7 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 		glBindTexture(GL_TEXTURE_2D, object->getTextureID());
 
 		glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
-		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), dynamic_cast<Button*>(object)->getColor().a);
+		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), dynamic_cast<Button*>(object)->getAlpha());
 	}
 	else if (dynamic_cast<Text*>(object) != nullptr)
 	{
@@ -469,11 +468,16 @@ void Screen::DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* 
 
 void Screen::DrawParticles(ParticleEmitter* particleEmitter, ShaderManager *shaderManager)
 {
+	// Getting matrices
+	glm::mat4 world = glm::mat4(1.f);
+	glm::mat4 view = camera->getViewMatrix();
+	glm::mat4 projection = projectionMatrix;
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	shaderManager->setShader(particleEmitter->getShader());
-	shaderManager->SetParameters(worldMatrix, camera->getViewMatrix(), projectionMatrix);
+	shaderManager->SetParameters(world, view, projection);
 
 	if (particleEmitter->getTexture() != -1)
 	{

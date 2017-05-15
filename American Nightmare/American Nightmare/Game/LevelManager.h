@@ -84,7 +84,7 @@ private:
 	void CheckTriggers();
 
 	// Archive
-	void LoadArchiveVisuals(std::vector<AMesh> meshes);
+	void LoadArchiveMeshes(std::vector<AMesh> meshes);
 	void LoadArchiveMaterials(std::vector<AMaterial> materials);
 	void LoadArchiveTextures(std::vector<ATexture> textures);
 

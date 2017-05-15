@@ -4,15 +4,18 @@ void TextureParticle::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size)
 {
 	// Setting parameters
 	isDead = false;
+
+	// Making vertex
 	vertex.setPosition(position);
 	vertex.setColor(color);
 	vertex.setSize(size);
+	vertex.setRotation(randBetweenF(0.f, 360.f));
 
 	// Setting some random variables
 	lifeTime = TEXTURE_LIFETIME;
 	rotationSpeed = TEXTURE_ROTATION;
 	lifeTimeStart = lifeTime;
-	velocity = glm::vec3(TEXTURE_VELOCITY, TEXTURE_VELOCITY, randBetweenF(-0.01f, 0.01f));
+	velocity = glm::vec3(0, 0, 0);
 }
 
 void TextureParticle::Update(GLfloat deltaT)

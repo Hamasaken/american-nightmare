@@ -12,7 +12,11 @@ public:
 
 	void Stop();
 	void Update(GLint deltaT);
+
+	// overdriven set functions for box2d
 	void setScale(glm::vec3 scale);
+	void setPosition(glm::vec3 position);
+	
 	Hitbox* getHitbox();
 
 protected:

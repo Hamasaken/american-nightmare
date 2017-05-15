@@ -51,5 +51,6 @@ void Entity::Update(GLint deltaT)
 	Object::Update(deltaT);
 }
 
+void Entity::setPosition(glm::vec3 position) { this->position = position; }
 void Entity::setScale(glm::vec3 scale) { this->scale = scale; }
 Hitbox * Entity::getHitbox() { return hitbox; }

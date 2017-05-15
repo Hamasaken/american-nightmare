@@ -94,10 +94,10 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
 	guiManager->setShader(shaderManager->getShader("texture"));
-	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.25f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr);
-	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.25f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr);
-	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.75f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr);
-	guiManager->AddText(glm::vec3(0.f, 0.75f, 0.f), 70.f, "Paused", "framd.ttf");
+	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.25f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr, "Start Meny", FONT_PATH "framd.ttf");
+	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.25f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr, "Back", FONT_PATH "framd.ttf");
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.75f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr, "Exit to Desktop", FONT_PATH "framd.ttf");
+	guiManager->AddText(glm::vec3(0.f, 0.75f, 0.f), 70.f, "Paused", FONT_PATH "framd.ttf");
 	guiManager->setAlpha(0.f);
 
 	////////////////////////////////////////////////////////////
@@ -126,7 +126,7 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 35));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "lvl_1.anl", ARCHIVE_PATH "lvl_1.ana");
+	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "Level1.anl", ARCHIVE_PATH "Level1.ana");
 
 	// Adding shadow
 	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);
@@ -198,7 +198,11 @@ void ScreenGame::Draw()
 	if (gameState != PLAYING)
 	{
 		for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
+		{
 			DrawObjectGUI(button.first, shaderManager);
+			if (button.first->getText() != nullptr) 
+				DrawObjectGUI(button.first->getText(), shaderManager);
+		}
 		for (Text* object : *guiManager->getTextList())
 			DrawObjectGUI(object, shaderManager);
 	}

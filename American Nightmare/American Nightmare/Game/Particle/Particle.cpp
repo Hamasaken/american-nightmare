@@ -13,6 +13,7 @@ void Particle::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size)
 	vertex.setPosition(position);
 	vertex.setColor(color);
 	vertex.setSize(size);
+	vertex.setRotation(0.f);
 
 	// Setting some random variables
 	lifeTime = PARTICLE_LIFETIME;

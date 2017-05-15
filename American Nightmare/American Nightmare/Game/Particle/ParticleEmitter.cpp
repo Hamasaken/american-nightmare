@@ -61,6 +61,7 @@ void ParticleEmitter::Stop()
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
+	glDisableVertexAttribArray(3);
 
 	// Deleteing buffers
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -125,12 +126,14 @@ void ParticleEmitter::MakeVertices()
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
 
 	// Setting the location and size of the attributes
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), 0);
 	glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(3 * sizeof(float)));
 	glVertexAttribPointer(2, 2, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(7 * sizeof(float)));
+	glVertexAttribPointer(3, 1, GL_FLOAT, false, sizeof(Vertex), (unsigned char*)(9 * sizeof(float)));
 }
 
 void ParticleEmitter::Draw()

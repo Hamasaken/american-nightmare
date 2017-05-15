@@ -123,10 +123,10 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	// Loading Archive
 	////////////////////////////////////////////////////////////
 	archive.readFromFile(archivePath.c_str());
-	LoadArchiveVisuals(archive.meshes);
 	LoadArchiveTextures(archive.textures);
 	LoadArchiveMaterials(archive.materials);
-/*
+	LoadArchiveMeshes(archive.meshes);
+
 	////////////////////////////////////////////////////////////
 	// Loading Level
 	////////////////////////////////////////////////////////////
@@ -140,7 +140,7 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 
 	// Setting start position
 	player->setPosition(glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 1));
-*/
+
 	// Music
 	soundManager->playSong(SoundManager::SONG::MUSIC_BOOGIE);
 	
@@ -150,12 +150,12 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.1f);
 
 	// Loading temp level
-	LoadTempLevel(shader);
+//	LoadTempLevel(shader);
 
 	return true;
 }
 
-void LevelManager::LoadArchiveVisuals(std::vector<AMesh> meshes)
+void LevelManager::LoadArchiveMeshes(std::vector<AMesh> meshes)
 {
 	////////////////////////////////////////////////////////////
 	// Loading Archive Meshes
@@ -178,7 +178,7 @@ void LevelManager::LoadArchiveMaterials(std::vector<AMaterial> materials)
 	for (int i = 0; i < materials.size(); i++)
 	{
 		AMaterial material = materials[i];
-		materialManager->AddMaterial(material.identifier.name, arrayToVec3(material.ambient), material.specular[0], material.diffuseMap.name, TEXTURE_PATH"temp_background.jpg");
+		materialManager->AddMaterial(material.identifier.name, arrayToVec3(material.ambient), material.specular[0], material.diffuseMap.name, archive.getTexture(material.diffuseMap.uid)->texturePath /*"temp_background.jpg"*/);
 	}
 }
 
@@ -190,7 +190,7 @@ void LevelManager::LoadArchiveTextures(std::vector<ATexture> textures)
 	for (int i = 0; i < textures.size(); i++)
 	{
 		ATexture texture = textures[i];	
-		materialManager->AddTexture(texture.identifier.name, TEXTURE_PATH + texture.texturePath);
+		materialManager->AddTexture(texture.identifier.name, "Data/Graphics/" + texture.texturePath);
 	}
 }
 
@@ -204,11 +204,16 @@ void LevelManager::LoadLevelMeshes(std::vector<LMesh> meshes, GLuint shader)
 		Object* object = new Object();
 		object->setShader(shader);
 
-		LMesh mesh = meshes[i];
-		object->Start(meshManager->getMesh(mesh.name.data), materialManager->getMaterial("groundmaterial"));
-		object->setScale(glm::vec3(mesh.scale[0], mesh.scale[1], mesh.scale[2]));
-		object->setRotation(glm::vec3(glm::radians(mesh.rotation[0]), glm::radians(mesh.rotation[1]), glm::radians(mesh.rotation[2])));
-		object->setPosition(glm::vec3(mesh.position[0], mesh.position[1], mesh.position[2]));
+		LMesh* mesh = &meshes[i];
+
+		if (meshManager->getMesh(mesh->name.data) != nullptr)
+			printf("Loading Object with mesh: %s\n", mesh->name.data);
+		else printf("Could not find mesh: %s\n", mesh->name.data);
+
+		object->Start(meshManager->getMesh(mesh->name.data), materialManager->getMaterial("groundmaterial"));
+		object->setScale(glm::vec3(mesh->scale[0], mesh->scale[1], mesh->scale[2]));
+		object->setRotation(glm::vec3(glm::radians(mesh->rotation[0]), glm::radians(mesh->rotation[1]), glm::radians(mesh->rotation[2])));
+		object->setPosition(glm::vec3(mesh->position[0], mesh->position[1], mesh->position[2]));
 
 		map.push_back(object);
 	}
@@ -234,8 +239,9 @@ void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 	////////////////////////////////////////////////////////////
 	for (int i = 0; i < lights.size(); i++)
 	{
-		// temp
-		lightManager->AddPointLight(glm::vec4(lights[i].position[0], lights[i].position[1], lights[i].position[2], 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);	}
+		ALight* light = archive.getLight(lights[i].name.data);
+		lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), 1.f, 1, 0.01f, 0.01f);
+	}
 }
 
 void LevelManager::LoadLevelSpawners(std::vector<LSpawner> spawner, GLuint shader)
@@ -375,7 +381,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	////////////////////////////////////////////////////////////
 	// Fun boxes
 	////////////////////////////////////////////////////////////
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 25; i++)
 	{
 		Entity* moveble = new Entity();
 		moveble->setShader(shader);

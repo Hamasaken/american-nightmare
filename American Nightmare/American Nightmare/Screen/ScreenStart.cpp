@@ -41,13 +41,12 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	////////////////////////////////////////////////////////////
 	// Creating Material Manager and loading textures/materials
 	////////////////////////////////////////////////////////////
-	std::string texturePath = TEXTURE_PATH;
 	materialManager = new MaterialManager();
 	if (materialManager == nullptr) return false;
 
 	// Loading materials
-	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
-	materialManager->AddMaterial("titlematerial", glm::vec3(1.f), 0.f, "titletexture", texturePath + "title.jpg");
+	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", TEXTURE_PATH "gammal-dammsugare.jpg");
+	materialManager->AddMaterial("titlematerial", glm::vec3(1.f), 0.f, "titletexture", TEXTURE_PATH "title.jpg");
 	if (materialManager->getMaterial("lightmaterial") == nullptr) printf("Light Material not found\n");
 	if (materialManager->getMaterial("titlematerial") == nullptr) printf("Title Material not found\n");
 
@@ -67,7 +66,7 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	guiManager->AddButton(GUIManager::OK, glm::vec3(-0.85f, 0, 0), glm::vec2(0.15f, 0.30f), materialManager->getMaterial("titlematerial"), nullptr);
 	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr);
 	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr);
-	guiManager->AddText(glm::vec3(0.f, 0.5f, 0.f), 40.f, "American Nightmare", "framd.ttf");
+	guiManager->AddText(glm::vec3(0.f, 0.5f, 0.f), 40.f, "American Nightmare", FONT_PATH "framd.ttf");
 	guiManager->setAlpha(1.f);
 
 	// Setting starting variables

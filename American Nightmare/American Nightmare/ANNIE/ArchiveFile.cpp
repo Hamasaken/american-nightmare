@@ -1,12 +1,10 @@
 #include "ArchiveFile.h"
 
-
 AArchiveHeader::AArchiveHeader()
 {
 	nameSize = NAME_SIZE;
 	version = ARCHIVE_FILE_VERSION;
 
-	
 	srand(time(NULL));
 	uid = rand() % 65036 + 500; //The 500 first uid's are reserved
 	nextID = 1; //Slot 0 is reserved
@@ -19,24 +17,16 @@ AArchiveHeader::AArchiveHeader()
 	nrOfTextures = 0;
 }
 
-AArchiveHandler::AArchiveHandler()
-{
-}
+AArchiveHandler::AArchiveHandler() { }
 
-AArchiveHandler::~AArchiveHandler()
-{
-}
+AArchiveHandler::~AArchiveHandler() { }
 
-
-
-
-const uint16_t AArchiveHandler::getUniqueID()
+uint16_t AArchiveHandler::getUniqueID()
 {
 	return archiveHeader.nextID++;
 }
 
-
-const AMesh* AArchiveHandler::getMesh(const uint16_t uid) const
+AMesh* AArchiveHandler::getMesh(const uint16_t uid)
 {
 	for (int i = 0; i < meshes.size(); i++)
 	{
@@ -47,11 +37,11 @@ const AMesh* AArchiveHandler::getMesh(const uint16_t uid) const
 	}
 	return nullptr;
 }
-const AMesh* AArchiveHandler::getMesh(const char* name) const
+AMesh* AArchiveHandler::getMesh(const char* name)
 {
 	for (int i = 0; i < meshes.size(); i++)
 	{
-		if (meshes[i].identifier.name == name)
+		if (strcmp(meshes[i].identifier.name, name) == 0)
 		{
 			return &meshes[i];
 		}
@@ -60,7 +50,7 @@ const AMesh* AArchiveHandler::getMesh(const char* name) const
 }
 
 
-const ATexture* AArchiveHandler::getTexture(const uint16_t uid) const
+ATexture* AArchiveHandler::getTexture(const uint16_t uid)
 {
 	for (int i = 0; i < textures.size(); i++)
 	{
@@ -71,11 +61,11 @@ const ATexture* AArchiveHandler::getTexture(const uint16_t uid) const
 	}
 	return nullptr;
 }
-const ATexture* AArchiveHandler::getTexture(const char* name) const
+ATexture* AArchiveHandler::getTexture(const char* name)
 {
 	for (int i = 0; i < textures.size(); i++)
 	{
-		if (textures[i].identifier.name == name)
+		if (strcmp(textures[i].identifier.name, name) == 0)
 		{
 			return &textures[i];
 		}
@@ -84,7 +74,7 @@ const ATexture* AArchiveHandler::getTexture(const char* name) const
 }
 
 
-const AMaterial* AArchiveHandler::getMaterial(const uint16_t uid) const
+AMaterial* AArchiveHandler::getMaterial(const uint16_t uid)
 {
 	for (int i = 0; i < materials.size(); i++)
 	{
@@ -95,11 +85,11 @@ const AMaterial* AArchiveHandler::getMaterial(const uint16_t uid) const
 	}
 	return nullptr;
 }
-const AMaterial* AArchiveHandler::getMaterial(const char* name) const
+AMaterial* AArchiveHandler::getMaterial(const char* name)
 {
 	for (int i = 0; i < materials.size(); i++)
 	{
-		if (materials[i].identifier.name == name)
+		if (strcmp(materials[i].identifier.name, name) == 0)
 		{
 			return &materials[i];
 		}
@@ -108,7 +98,7 @@ const AMaterial* AArchiveHandler::getMaterial(const char* name) const
 }
 
 
-const ACamera* AArchiveHandler::getCamera(const uint16_t uid) const
+ACamera* AArchiveHandler::getCamera(const uint16_t uid)
 {
 	for (int i = 0; i < cameras.size(); i++)
 	{
@@ -119,11 +109,11 @@ const ACamera* AArchiveHandler::getCamera(const uint16_t uid) const
 	}
 	return nullptr;
 }
-const ACamera* AArchiveHandler::getCamera(const char* name) const
+ACamera* AArchiveHandler::getCamera(const char* name)
 {
 	for (int i = 0; i < cameras.size(); i++)
 	{
-		if (cameras[i].identifier.name == name)
+		if (strcmp(cameras[i].identifier.name, name) == 0)
 		{
 			return &cameras[i];
 		}
@@ -132,7 +122,7 @@ const ACamera* AArchiveHandler::getCamera(const char* name) const
 }
 
 
-const ALight* AArchiveHandler::getLight(const uint16_t uid) const
+ALight* AArchiveHandler::getLight(const uint16_t uid)
 {
 	for (int i = 0; i < lights.size(); i++)
 	{
@@ -143,20 +133,17 @@ const ALight* AArchiveHandler::getLight(const uint16_t uid) const
 	}
 	return nullptr;
 }
-const ALight* AArchiveHandler::getLight(const char* name) const
+ALight* AArchiveHandler::getLight(const char* name)
 {
 	for (int i = 0; i < lights.size(); i++)
 	{
-		if (lights[i].identifier.name == name)
+		if (strcmp(lights[i].identifier.name, name) == 0)
 		{
 			return &lights[i];
 		}
 	}
 	return nullptr;
 }
-
-
-
 
 void AArchiveHandler::emptyArchive()
 {
@@ -265,11 +252,11 @@ void AArchiveHandler::readFromFile(const char* path)
 
 		//Read all materials
 		materials.resize(archiveHeader.nrOfMaterials);
-		in.read((reinterpret_cast<char*>(&materials[0])), sizeof(AMaterial) * archiveHeader.nrOfMaterials);
+		in.read((reinterpret_cast<char*>(materials.data())), sizeof(AMaterial) * archiveHeader.nrOfMaterials);
 
 		//Read all cameras
 		cameras.resize(archiveHeader.nrOfCameras);
-		in.read(reinterpret_cast<char*>(&cameras[0]), sizeof(ACamera) * archiveHeader.nrOfCameras);
+		in.read(reinterpret_cast<char*>(cameras.data()), sizeof(ACamera) * archiveHeader.nrOfCameras);
 
 		//Read all lights
 		lights.resize(archiveHeader.nrOfLights);

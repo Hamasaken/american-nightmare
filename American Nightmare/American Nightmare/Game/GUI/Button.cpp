@@ -9,7 +9,7 @@ Button::Button(const Button & other) { }
 
 Button::~Button() { }
 
-bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh, glm::vec4 color)
+bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh)
 {
 	if (!Object::Start(mesh, material))
 		return false;
@@ -19,10 +19,10 @@ bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, con
 	this->scale = glm::vec3(1 * size.x, 1 * size.y, 1);
 	this->screenSize = screenSize;
 	this->size = size;
-	this->color = color;
 	this->state = Nothing;
 	this->prevState = Nothing;
 	this->pressed = false;
+	this->alpha = BTN_ALPHA_NORMAL;
 
 	return true;
 }
@@ -37,13 +37,16 @@ void Button::Stop()
 	}
 }
 
-bool Button::StartText(std::string fontName, float characterSize)
+bool Button::StartText(std::string str, std::string fontName, float characterSize, glm::vec4 textColor)
 {
 	// Creating text object
 	text = new Text();
 	if (text == nullptr) return false;
-	if (!text->Start(screenSize, fontName, "BTN text", characterSize, position, rotation))
+	if (!text->Start(screenSize, fontName, characterSize, position, rotation, scale))
 		return false;
+
+	// Adding text to it
+	text->CreateText(str, textColor);
 
 	return true;
 }
@@ -63,16 +66,16 @@ void Button::Update(GLint deltaT, glm::vec2 mousePosition)
 		switch (state)
 		{
 		case Hovering:
-			setColor(glm::vec4(1, 1, 1, 0.8f));
+			setAlpha(BTN_ALPHA_HOVER);
 			break;
 		case Pressed:
-			setColor(glm::vec4(1, 1, 1, 0.25f));
+			setAlpha(BTN_ALPHA_PRESSED);
 			break;
 		case Released:
 			pressed = true;
 			break;
 		case Nothing:
-			setColor(glm::vec4(1, 1, 1, 1.f));
+			setAlpha(BTN_ALPHA_NORMAL);
 			break;
 		}
 		prevState = state;
@@ -97,11 +100,7 @@ void Button::Update(GLint deltaT, glm::vec2 mousePosition)
 
 void Button::Draw()
 {
-	// Draws the actual button quad
 	Object::Draw();
-
-//	if (text != nullptr)
-//		text->Draw();
 }
 
 void Button::setShader(GLuint shader)
@@ -113,17 +112,11 @@ void Button::setShader(GLuint shader)
 }
 
 void Button::setState(State state) { this->state = state; }
-
 void Button::setSize(glm::vec2 size) { this->size = size; scale.x = size.x; scale.y = size.y; }
-
-void Button::setColor(glm::vec4 color) { this->color = color; }
-
+void Button::setAlpha(float alpha) { this->alpha = alpha; }
+void Button::setPressed(bool pressed) { this->pressed = pressed; }
+Text * Button::getText() { return text; }
 Button::State Button::getState() { return state; }
-
 glm::vec2 Button::getSize() { return size; }
-
-glm::vec4 Button::getColor() { return color; }
-
+float Button::getAlpha() { return alpha; }
 bool Button::getPressed() { return pressed; }
-
-void Button::setPressed(bool pressed) {	this->pressed = pressed; }
