@@ -265,11 +265,11 @@ void AArchiveHandler::readFromFile(const char* path)
 
 		//Read all materials
 		materials.resize(archiveHeader.nrOfMaterials);
-		in.read((reinterpret_cast<char*>(&materials[0])), sizeof(AMaterial) * archiveHeader.nrOfMaterials);
+		in.read((reinterpret_cast<char*>(materials.data())), sizeof(AMaterial) * archiveHeader.nrOfMaterials);
 
 		//Read all cameras
 		cameras.resize(archiveHeader.nrOfCameras);
-		in.read(reinterpret_cast<char*>(&cameras[0]), sizeof(ACamera) * archiveHeader.nrOfCameras);
+		in.read(reinterpret_cast<char*>(cameras.data()), sizeof(ACamera) * archiveHeader.nrOfCameras);
 
 		//Read all lights
 		lights.resize(archiveHeader.nrOfLights);

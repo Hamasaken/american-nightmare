@@ -55,7 +55,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", TEXTURE_PATH "gammal-dammsugare.jpg");
 	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), 1.f, "groundtexture", TEXTURE_PATH "temp_ground.jpg");
 	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), 1.f, "backgroundtexture", TEXTURE_PATH "temp_background.jpg"); 
-	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), 1.f, "smoketexture", texturePath + "smoke.png");
+	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
 	if (materialManager->getMaterial("playermaterial") == nullptr) printf("Player Material not found\n");
 	if (materialManager->getMaterial("lightmaterial") == nullptr) printf("Light Material not found\n");
 	if (materialManager->getMaterial("groundmaterial") == nullptr) printf("Ground Material not found\n");
@@ -126,14 +126,14 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 35));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "lvl_1.anl", ARCHIVE_PATH "lvl_1.ana");
+	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "Level1.anl", ARCHIVE_PATH "Level1.ana");
 
 	// Adding shadow
-	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);
-	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, 50, -30.f, 50);
-	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, 50, -30.f, 50);
+	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);
+	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, 50, -30.f, 50);
+	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, 50, -30.f, 50);
 	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[0], glm::vec2(screenSize.x * 0.5, screenSize.y * 0.5), 45, 0.1f);
-	//shadowManager.setUseShadows(true);
+	shadowManager.setUseShadows(true);
 }
 
 void ScreenGame::Update(GLint deltaT)
