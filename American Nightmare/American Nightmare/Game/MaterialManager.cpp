@@ -38,6 +38,7 @@ bool MaterialManager::AddMaterial(std::string matName, glm::vec3 ambient, GLfloa
 	if (textureIndex != -1)
 	{
 		tempMaterial->texture = textureList[textureIndex];
+		materialList.push_back(tempMaterial);
 		return true;
 	}
 	else
