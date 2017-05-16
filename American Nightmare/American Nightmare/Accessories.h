@@ -58,7 +58,8 @@ enum ParticleType
 {
 	LIGHT,
 	BLOOD,
-	TEXTURE
+	TEXTURE,
+	LIGHT_DUST
 };
 
 // Game State

@@ -41,6 +41,16 @@ void ParticleEmitter::TextureExplosion(glm::vec3 position, GLuint texture, glm::
 	}
 }
 
+void ParticleEmitter::LightDust(glm::vec3 position, glm::vec4 color, glm::vec2 size, int amount)
+{
+	for (int i = 0; i < amount; i++)
+	{
+		DustParticle* particle = new DustParticle;
+		particle->Start(position, color, size);
+		particles.push_back(particle);
+	}
+}
+
 void ParticleEmitter::Stop()
 {
 	// Erasing everything in vector

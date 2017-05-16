@@ -340,6 +340,8 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 		particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.60f, 0.80f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::I))
 		particleManager->EffectTextureExplosion(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.80f, 1.f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::O))
+		particleManager->EffectLightDust(levelManager->getPlayer()->getPosition());
 
 	// Updating particles effects
 	particleManager->Update(deltaT);

@@ -76,6 +76,19 @@ void ParticleManager::EffectTextureExplosion(glm::vec3 position, GLuint texture,
 	emitters.push_back(emitter);
 }
 
+
+void ParticleManager::EffectLightDust(glm::vec3 position, int amount, glm::vec4 color)
+{
+	// Creating a emmiter with a specific type
+	ParticleEmitter* emitter = new ParticleEmitter();
+	emitter->setType(ParticleType::LIGHT_DUST);
+	emitter->setShader(getShaderFromPair(emitter->getType()));
+
+	// Creating particles with inputted variables into emitter
+	emitter->LightDust(position, color, LIGHT_DUST_SIZE, amount);
+	emitters.push_back(emitter);
+}
+
 void ParticleManager::Update(GLfloat deltaT)
 {
 	for (int i = 0; i < int(emitters.size()); i++)

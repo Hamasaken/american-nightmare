@@ -21,6 +21,11 @@
 #define TEXTURE_DEFAULT_AMOUNT	10
 #define TEXTURE_SIZE			glm::vec2(1.f, 1.f)
 
+// LIGHT DUST PARTICLES DEFAULTS
+#define LIGHT_DUST_DEFAULT_AMOUNT	100
+#define LIGHT_DUST_DEFAULT_COLOR	glm::vec4(1.f, 1.f, 1.f, 1.f)
+#define LIGHT_DUST_SIZE				glm::vec2(5.f, 5.f)
+
 class ParticleManager
 {
 public:
@@ -63,6 +68,16 @@ public:
 	void EffectTextureExplosion(glm::vec3 position, GLuint texture,
 		int amount = TEXTURE_DEFAULT_AMOUNT,
 		glm::vec4 color = TEXTURE_DEFAULT_COLOR);
+
+	////////////////////////////////////////////////////////////
+	// \brief Creates an explosion with given texture
+	// \param position The position of explosion
+	// \optional amount The amount of spawned blood particles
+	// \optional color The color of the most blood
+	////////////////////////////////////////////////////////////
+	void EffectLightDust(glm::vec3 position, 
+		int amount = LIGHT_DUST_DEFAULT_AMOUNT,
+		glm::vec4 color = LIGHT_DUST_DEFAULT_COLOR);
 
 	void ShaderPair(GLuint shader, ParticleType type);
 	GLuint getShaderFromPair(ParticleType type);
