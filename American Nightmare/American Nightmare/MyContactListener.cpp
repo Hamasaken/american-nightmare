@@ -25,9 +25,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 	{
 		if (dynamic_cast<Enemy*>(bodyB))
 		{
-			player->getBody()->ApplyForce(b2Vec2(0, -100000), b2Vec2(), true);
-		
-			particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter())); // temp blood effect
+			particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f)); // temp blood effect
 			soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
 		}
 	}
