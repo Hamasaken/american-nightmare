@@ -11,7 +11,7 @@
 #define VELOCITY_FALL_OFF		randBetweenF(0.35f, 0.50f)
 #define PARTICLE_LIFETIME		randBetweenF(100.f, 1100.f)
 
-struct Particle
+class Particle
 {
 public:
 	Particle();

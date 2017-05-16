@@ -11,7 +11,7 @@
 #define LIGHT_DUST_DEFAULT_DIMENSIONS	glm::vec3(40.f, 25.f, 0.f)
 #define LIGHT_DUST_DEFAULT_CENTER		glm::vec3(0, 0, 0)
 
-struct DustParticle : public Particle
+class DustParticle : public Particle
 {
 public:
 

@@ -7,13 +7,14 @@
 #define TEXTURE_DEFAULT_COLOR		glm::vec4(1.f, 1.f, 1.f, 1.f)
 #define TEXTURE_DEFAULT_AMOUNT		10
 #define TEXTURE_SIZE				1.f
-#define TEXTURE_VELOCITY			randBetweenF(-0.01f, 0.01f)
-#define TEXTURE_VELOCITY_FALL_OFF	randBetweenF(0.001f, 0.0067f)
+#define TEXTURE_VELOCITY			randBetweenF(-0.001f, 0.001f)
+#define TEXTURE_VELOCITY_FALL_OFF	randBetweenF(0.005f, 0.01f)
 #define TEXTURE_LIFETIME			randBetweenF(1500.f, 3000.f)
-#define TEXTURE_ROTATION			randBetweenF(-0.25f, 0.25f)
-#define TEXTURE_ROTATION_FALL_OFF	randBetweenF(0.35f, 0.50f)
+#define TEXTURE_ROTATION			randBetweenF(-0.001f, 0.001f)
+#define TEXTURE_ROTATION_FALL_OFF	randBetweenF(0.005f, 0.005f)
+#define TEXTURE_BLENDING			0.25f
 
-struct TextureParticle : public Particle
+class TextureParticle : public Particle
 {
 public:
 
@@ -36,6 +37,7 @@ public:
 	virtual void Update(GLfloat deltaT);
 
 private:
+	float rotation;
 	float rotationSpeed;
 };
 
