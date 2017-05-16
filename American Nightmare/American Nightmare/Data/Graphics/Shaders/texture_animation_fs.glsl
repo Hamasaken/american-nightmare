@@ -122,7 +122,7 @@ float calculatePointShadow(vec3 fragPos, int shadowMapIndex)
     return shadow;
 }
 
-vec4 pointLightCalc(vec4 lightPosition, vec4 lightDiffuse, vec4 lightSpecular, float strength, float lightConstant, float lightLinear, float lightQuadratic, vec3 inFragPos, vec3 inNormal, vec4 inTex, float inDistance, float shadow)
+vec4 pointLightCalc(vec4 lightPosition, vec4 lightDiffuse, vec4 lightSpecular, float strength, float lightConstant, float lightLinear, float lightQuadratic, vec3 inFragPos, vec3 inNormal, vec4 inTex, float distanceToLight, float shadow)
 {
 	vec3 normal = normalize(inNormal);
 
@@ -132,10 +132,10 @@ vec4 pointLightCalc(vec4 lightPosition, vec4 lightDiffuse, vec4 lightSpecular, f
 	vec3 viewDir = normalize(viewPos.xyz - inFragPos);
 	vec3 reflectDir = reflect(-lightDir, normal);
 
-	float specular = pow(max(dot(viewDir, reflectDir), 0.f), 32);
+	float specular = pow(max(dot(viewDir, reflectDir), 0.f), material.specularExponent * 1000.f);
 	vec4 specularLight = specular * vec4(material.specular, 1.f) * lightSpecular;
 
-	float attenuation = 1.0 / (1.0 + lightLinear * inDistance + lightQuadratic * inDistance * inDistance);
+	float attenuation = 1.0 / (1.0 + lightLinear * distanceToLight + lightQuadratic * distanceToLight * distanceToLight);
 
 	return strength * (1.f - shadow) * (diffuseLight * attenuation + specularLight * attenuation);
 }
@@ -150,7 +150,7 @@ vec4 directionalLightCalc(vec4 lightDirection, vec4 lightDiffuse, vec4 lightSpec
 	vec3 viewDir = normalize(viewPos.xyz - inFragPos);
 	vec3 reflectDir = reflect(-lightDir, normal);
 
-	float specular = pow(max(dot(viewDir, reflectDir), 0.f), 32);
+	float specular = pow(max(dot(viewDir, reflectDir), 0.f), material.specularExponent * 1000.f);
 	vec4 specularLight = specular * vec4(material.specular, 1.f) * lightSpecular;
 
 	return strength * (1.f - shadow) * (diffuseLight + specularLight);
@@ -200,10 +200,10 @@ void main(void)
 
 	for(int i = 0; i < nrOfPointLights; i++)	
 	{
-		float distance = length(pointLights[i].position.xyz - position);
+		float distanceToLight = length(pointLights[i].position.xyz - position);
 
-		if(distance < pointLights[i].radius)
-				result += pointLightCalc(pointLights[i].position, pointLights[i].diffuse, pointLights[i].specular, pointLights[i].strength, pointLights[i].constant, pointLights[i].linear, pointLights[i].quadratic, position, bufferNormal, bufferColor, distance, shadow);	
+		if(distanceToLight < pointLights[i].radius)
+				result += pointLightCalc(pointLights[i].position, pointLights[i].diffuse, pointLights[i].specular, pointLights[i].strength, pointLights[i].constant, pointLights[i].linear, pointLights[i].quadratic, position, bufferNormal, bufferColor, distanceToLight, shadow);	
 	}
 	
 	for(int i = 0; i < nrOfDirectionalLights; i++)

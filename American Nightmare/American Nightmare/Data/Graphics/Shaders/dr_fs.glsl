@@ -28,5 +28,5 @@ void main () {
 	out_ambient = tex * vec4(material.ambient, 1.f);
 	out_diffuse = tex * vec4(material.diffuse, 1.f);
 	out_specular.rgb = tex.rgb * material.specular;
-	out_specular.a = material.specularExponent * 0.001f;
+	out_specular.a = material.specularExponent;
 }
