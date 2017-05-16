@@ -41,6 +41,7 @@ void QuadTree::Stop()
 bool QuadTree::IsRectangleInside(glm::vec3 center, glm::vec3 dimensions)
 {
 	
+	return true;
 }
 
 void QuadTree::StopNode(Node* node)
