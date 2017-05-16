@@ -25,7 +25,9 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 void Player::Update(GLint deltaT)
 {
 	// Getting user input
-	Movement();
+	InputKeyboard();
+	InputTesting();
+	if (CONTROLLER_ON) InputController();
 	
 	// Updating animation texture
 	updateAnimation(deltaT);
@@ -34,22 +36,27 @@ void Player::Update(GLint deltaT)
 	Entity::Update(deltaT);
 }
 
-void Player::Movement()
+void Player::InputTesting()
 {
-	// Temporary movement & rotation & scaling for testing :)
-	
-	// Temp gravity
-	/*velocity.y -= 0.02f;
-	position += glm::vec3(velocity, 0);*/
+	// Move in Z axis
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) position.z += 0.15f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) position.z -= 0.15f;
 
-	if (position.y < 0.f)
-		position.y = 0.f;
+	// Scaling
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::T)) scale += 0.025f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::G)) scale -= 0.025f;
 
-	// Jumping
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && position.y == 0) velocity.y = 0.35f;
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && !jumping) velocity.y = 0.35f;
+	// Rotation in X
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) rotation.z += 0.1f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E)) rotation.z -= 0.1f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) rotation.y += 0.1f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) rotation.y -= 0.1f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y)) rotation.x += 0.1f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) rotation.x -= 0.1f;
+}
 
-	// Positioning
+void Player::InputKeyboard()
+{
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
@@ -69,21 +76,44 @@ void Player::Movement()
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, PLAYER_VEL_Y), true);
 	}
 
-	// Move in Z axis
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) position.z += 0.15f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) position.z -= 0.15f;
+	// Thresholds in velocity
+	if (hitbox->getBody()->GetLinearVelocity().x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(PLAYER_MAX_VEL_X, hitbox->getBody()->GetLinearVelocity().y));
+	if (hitbox->getBody()->GetLinearVelocity().x < -PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(-PLAYER_MAX_VEL_X, hitbox->getBody()->GetLinearVelocity().y));
+	if (hitbox->getBody()->GetLinearVelocity().y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, PLAYER_MAX_VEL_Y));
+	if (hitbox->getBody()->GetLinearVelocity().y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, -PLAYER_MAX_VEL_Y));
+}
 
-	// Scaling
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::T)) scale += 0.025f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::G)) scale -= 0.025f;
+void Player::InputController()
+{
+	sf::Joystick::update();
+	if (sf::Joystick::isConnected(0))
+	{
+		if (sf::Joystick::isButtonPressed(0, BTN_A))
+			hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
+		if (sf::Joystick::isButtonPressed(0, BTN_X))
+			hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, PLAYER_VEL_Y), true);
+		if (sf::Joystick::isButtonPressed(0, BTN_Y))
+			printf("Y.\n");
+		if (sf::Joystick::isButtonPressed(0, BTN_B))
+			printf("B.\n");
+		if (sf::Joystick::isButtonPressed(0, BTN_LB))
+			printf("LB.\n");
+		if (sf::Joystick::isButtonPressed(0, BTN_RB))
+			printf("RB.\n");
+		if (sf::Joystick::isButtonPressed(0, BTN_BACK))
+			printf("Back.\n");
+		if (sf::Joystick::isButtonPressed(0, BTN_START))
+			printf("Start.\n");
+		if (sf::Joystick::isButtonPressed(0, BTN_LT))
+			printf("LT.\n");
+		if (sf::Joystick::isButtonPressed(0, BTN_RT))
+			printf("RT.\n");
 
-	// Rotation in X
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) rotation.z += 0.1f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E)) rotation.z -= 0.1f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) rotation.y += 0.1f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) rotation.y -= 0.1f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y)) rotation.x += 0.1f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) rotation.x -= 0.1f;
+		float leftAxis = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X) / 100.f;
+		hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X * leftAxis, 0), true);
+		if (leftAxis > 0.f) directionIsRight = false;
+		else if (leftAxis < 0.f) directionIsRight = true;
+	}
 
 	// Thresholds in velocity
 	if (hitbox->getBody()->GetLinearVelocity().x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(PLAYER_MAX_VEL_X, hitbox->getBody()->GetLinearVelocity().y));
