@@ -5,27 +5,6 @@
 #include "ParticleEmitter.h"
 #include "../Shader/ShaderManager.h"
 
-// LIGHT PARTICLES DEFAULTS
-#define LIGHT_DEFAULT_COLOR		glm::vec4(1.f, 0.1f, 0.05f, 1.f)
-#define LIGHT_DEFAULT_AMOUNT	25
-#define LIGHT_SIZE				glm::vec2(8.f, 8.f)
-
-// BLOOD PARTICLES DEFAULTS
-#define BLOOD_DEFAULT_COLOR		glm::vec4(1.f, 0.1f, 0.05f, 1.f)
-#define BLOOD_DEFAULT_AMOUNT	25
-#define BLOOD_DEFAULT_STRENGTH	0.08f
-#define BLOOD_SIZE				glm::vec2(8.f, 8.f)
-
-// TEXTURE PARTICLES DEFAULTS
-#define TEXTURE_DEFAULT_COLOR	glm::vec4(1.f, 1.f, 1.f, 1.f)
-#define TEXTURE_DEFAULT_AMOUNT	10
-#define TEXTURE_SIZE			glm::vec2(1.f, 1.f)
-
-// LIGHT DUST PARTICLES DEFAULTS
-#define LIGHT_DUST_DEFAULT_AMOUNT	100
-#define LIGHT_DUST_DEFAULT_COLOR	glm::vec4(1.f, 1.f, 1.f, 1.f)
-#define LIGHT_DUST_SIZE				glm::vec2(5.f, 5.f)
-
 class ParticleManager
 {
 public:
@@ -71,11 +50,13 @@ public:
 
 	////////////////////////////////////////////////////////////
 	// \brief Creates an explosion with given texture
-	// \param position The position of explosion
+	// \optional center The Center position of the dust effect
+	// \optional dimensions The spawn area of light dust particles
 	// \optional amount The amount of spawned blood particles
 	// \optional color The color of the most blood
 	////////////////////////////////////////////////////////////
-	void EffectLightDust(glm::vec3 position, 
+	void EffectLightDust(glm::vec3 center = LIGHT_DUST_DEFAULT_CENTER, 
+		glm::vec3 dimensions = LIGHT_DUST_DEFAULT_DIMENSIONS,
 		int amount = LIGHT_DUST_DEFAULT_AMOUNT,
 		glm::vec4 color = LIGHT_DUST_DEFAULT_COLOR);
 

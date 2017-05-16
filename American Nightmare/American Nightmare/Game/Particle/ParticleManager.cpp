@@ -48,7 +48,8 @@ void ParticleManager::EffectExplosionLights(glm::vec3 position, int amount, glm:
 	emitter->setShader(getShaderFromPair(emitter->getType()));
 
 	// Creating particles with inputted variables into emitter
-	emitter->LightExplosion(position, color, LIGHT_SIZE, amount);
+	glm::vec2 size(LIGHT_SIZE, LIGHT_SIZE);
+	emitter->LightExplosion(position, color, size, amount);
 	emitters.push_back(emitter);
 }
 
@@ -60,7 +61,8 @@ void ParticleManager::EffectBloodSplatter(glm::vec3 position, float angle, float
 	emitter->setShader(getShaderFromPair(emitter->getType()));
 
 	// Creating particles with inputted variables into emitter
-	emitter->BloodSplatter(position, angle, strength, color, BLOOD_SIZE, amount);
+	glm::vec2 size(BLOOD_SIZE, BLOOD_SIZE);
+	emitter->BloodSplatter(position, angle, strength, color, size, amount);
 	emitters.push_back(emitter);
 }
 
@@ -72,12 +74,13 @@ void ParticleManager::EffectTextureExplosion(glm::vec3 position, GLuint texture,
 	emitter->setShader(getShaderFromPair(emitter->getType()));
 
 	// Creating particles with inputted variables into emitter
-	emitter->TextureExplosion(position, texture, color, TEXTURE_SIZE, amount);
+	glm::vec2 size(TEXTURE_SIZE, TEXTURE_SIZE);
+	emitter->TextureExplosion(position, texture, color, size, amount);
 	emitters.push_back(emitter);
 }
 
 
-void ParticleManager::EffectLightDust(glm::vec3 position, int amount, glm::vec4 color)
+void ParticleManager::EffectLightDust(glm::vec3 center, glm::vec3 dimensions, int amount, glm::vec4 color)
 {
 	// Creating a emmiter with a specific type
 	ParticleEmitter* emitter = new ParticleEmitter();
@@ -85,7 +88,8 @@ void ParticleManager::EffectLightDust(glm::vec3 position, int amount, glm::vec4 
 	emitter->setShader(getShaderFromPair(emitter->getType()));
 
 	// Creating particles with inputted variables into emitter
-	emitter->LightDust(position, color, LIGHT_DUST_SIZE, amount);
+	glm::vec2 size(LIGHT_DUST_SIZE, LIGHT_DUST_SIZE);
+	emitter->LightDust(center, dimensions, color, size, amount);
 	emitters.push_back(emitter);
 }
 

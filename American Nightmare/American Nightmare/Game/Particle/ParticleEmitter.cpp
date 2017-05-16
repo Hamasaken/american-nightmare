@@ -41,12 +41,18 @@ void ParticleEmitter::TextureExplosion(glm::vec3 position, GLuint texture, glm::
 	}
 }
 
-void ParticleEmitter::LightDust(glm::vec3 position, glm::vec4 color, glm::vec2 size, int amount)
+void ParticleEmitter::LightDust(glm::vec3 center, glm::vec3 dimensions, glm::vec4 color, glm::vec2 size, int amount)
 {
 	for (int i = 0; i < amount; i++)
 	{
 		DustParticle* particle = new DustParticle;
-		particle->Start(position, color, size);
+
+		glm::vec3 pos;
+		pos.x = center.x + randBetweenF(-dimensions.x, dimensions.x);
+		pos.y = center.y + randBetweenF(-dimensions.y, dimensions.y);
+		pos.z = center.z + randBetweenF(-dimensions.z, dimensions.z);
+
+		particle->Start(pos, color, size);
 		particles.push_back(particle);
 	}
 }

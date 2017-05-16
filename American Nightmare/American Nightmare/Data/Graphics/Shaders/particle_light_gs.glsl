@@ -17,6 +17,7 @@ out fData
 	vec3 position;
 	vec3 center;
     vec4 color;
+	float size;
 }frag;    
 
 
@@ -31,6 +32,7 @@ void main()
 	frag.color = vertices[0].color;
 	frag.position = vertices[0].position + vec3(left, top, 0.0);
 	frag.center = gl_in[0].gl_Position.xyz;
+	frag.size = vertices[0].size.x;
     gl_Position = gl_in[0].gl_Position + vec4(left, top, 0.0, 0.0);
     EmitVertex();
 
@@ -38,6 +40,7 @@ void main()
 	frag.color = vertices[0].color;
 	frag.position = vertices[0].position + vec3(left, bottom, 0.0);
 	frag.center = gl_in[0].gl_Position.xyz;
+	frag.size = vertices[0].size.x;
 	gl_Position = gl_in[0].gl_Position + vec4(left, bottom, 0.0, 0.0);
     EmitVertex();
 
@@ -45,6 +48,7 @@ void main()
 	frag.color = vertices[0].color;
 	frag.position = vertices[0].position + vec3(right, top, 0.0);
 	frag.center = gl_in[0].gl_Position.xyz;
+	frag.size = vertices[0].size.x;
     gl_Position = gl_in[0].gl_Position + vec4(right, top, 0.0, 0.0);
     EmitVertex();
 
@@ -54,6 +58,7 @@ void main()
 	frag.color = vertices[0].color;
 	frag.position = vertices[0].position + vec3(left, bottom, 0.0);
 	frag.center = gl_in[0].gl_Position.xyz;
+	frag.size = vertices[0].size.x;
 	gl_Position = gl_in[0].gl_Position + vec4(left, bottom, 0.0, 0.0);
     EmitVertex();
 
@@ -61,6 +66,7 @@ void main()
 	frag.color = vertices[0].color;
 	frag.position = vertices[0].position + vec3(right, bottom, 0.0);
 	frag.center = gl_in[0].gl_Position.xyz;
+	frag.size = vertices[0].size.x;
     gl_Position = gl_in[0].gl_Position + vec4(right, bottom, 0.0, 0.0);
     EmitVertex();
 
@@ -68,6 +74,7 @@ void main()
 	frag.color = vertices[0].color;
 	frag.position = vertices[0].position + vec3(right, top, 0.0);
 	frag.center = gl_in[0].gl_Position.xyz;
+	frag.size = vertices[0].size.x;
     gl_Position = gl_in[0].gl_Position + vec4(right, top, 0.0, 0.0);
     EmitVertex();
 

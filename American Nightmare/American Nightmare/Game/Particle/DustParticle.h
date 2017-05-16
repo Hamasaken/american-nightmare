@@ -3,8 +3,13 @@
 
 #include "Particle.h"
 
-#define DUST_VELOCITY			randBetweenF(-0.05f, 0.05f)
-#define DUST_VELOCITY_FALL_OFF	randBetweenF(0.15f, 0.225f)
+#define LIGHT_DUST_DEFAULT_AMOUNT		50
+#define LIGHT_DUST_DEFAULT_COLOR		glm::vec4(0.4, 0.4, 0.4, 1.f)
+#define LIGHT_DUST_SIZE					randBetweenF(0.10f, 0.20f)
+#define LIGHT_DUST_VELOCITY				randBetweenF(-0.0001f, 0.0001f)
+#define LIGHT_DUST_PULLING_STRENGTH		0.03f
+#define LIGHT_DUST_DEFAULT_DIMENSIONS	glm::vec3(40.f, 25.f, 0.f)
+#define LIGHT_DUST_DEFAULT_CENTER		glm::vec3(0, 0, 0)
 
 struct DustParticle : public Particle
 {
@@ -28,6 +33,7 @@ public:
 
 protected:
 	float angle;
+	glm::vec3 startPosition;
 };
 
 #endif // !DUSTPARTICLE_H
