@@ -155,7 +155,7 @@ void main () {
 
 	vec4 result = vec4(0);
 
-	result += bufferAmb * 0.3f;
+	result += bufferAmb;
 
 	float shadow = 0;
 	

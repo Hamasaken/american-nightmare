@@ -172,7 +172,7 @@ void main(void)
 
 	vec4 result = vec4(0);
 
-	result += bufferColor * 0.1f;
+	result += vec4(material.ambient, 1.f) * bufferColor;
 
 	float shadow = 0;
 
