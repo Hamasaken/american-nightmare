@@ -34,6 +34,11 @@
 #define GRAVITY 9.82f
 #define GRAVITY_SCALE 4.f
 
+// TEXT
+#define INGAME_FONT "404ERROR.ttf"
+#define OPTIONS_FONT "framd.ttf"
+// #define TITLE_FONT "404ERROR.ttf"
+
 // Returns the angle in radians
 float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2);
 

@@ -97,10 +97,10 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
-	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.15f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Start Meny", FONT_PATH "framd.ttf", 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.15f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Back", FONT_PATH "framd.ttf", 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.45f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Exit to Desktop", FONT_PATH "framd.ttf", 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddText(glm::vec3(0.f, 0.75f, 0.f), 70.f, "Paused", FONT_PATH "framd.ttf");
+	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.15f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Start Meny", FONT_PATH INGAME_FONT, 35.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.15f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Back", FONT_PATH INGAME_FONT, 35.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.45f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Exit to Desktop", FONT_PATH INGAME_FONT, 35.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddText(glm::vec3(0.f, 0.75f, 0.f), 70.f, "Paused", FONT_PATH INGAME_FONT);
 	guiManager->setAlpha(0.f);
 	guiManager->setShader(shaderManager->getShader("texture"));
 
