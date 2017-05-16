@@ -192,6 +192,9 @@
     <ClCompile Include="Game\MaterialManager.cpp">
       <Filter>Source Files\Game\Level</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Particle\DustParticle.cpp">
+      <Filter>Source Files\Game\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h">
@@ -316,6 +319,9 @@
     </ClInclude>
     <ClInclude Include="Game\LevelManager.h">
       <Filter>Header Files\Game\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Particle\DustParticle.h">
+      <Filter>Header Files\Game\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

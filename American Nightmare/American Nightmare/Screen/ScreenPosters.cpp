@@ -89,8 +89,7 @@ void ScreenPosters::Update(GLint deltaT)
 	{
 		if (button.first->getPressed())
 		{
-			switch (button.second)
-			{ case GUIManager::Action::STARTMENY: *state = State::StartMeny;	break; }
+			switch (button.second) { case GUIManager::Action::STARTMENY: *state = State::Game; break; }
 			button.first->setPressed(false);
 		}
 	}
@@ -110,6 +109,10 @@ void ScreenPosters::Draw()
 	}
 	for (Text* object : *guiManager->getTextList())
 		DrawObjectGUI(object, shaderManager);
+
+	// Drawing particles
+	for (ParticleEmitter* emitter : *particleManager->getEmitters())
+		DrawParticles(emitter, shaderManager);
 }
 
 void ScreenPosters::Stop()

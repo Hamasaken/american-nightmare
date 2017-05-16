@@ -1,19 +1,17 @@
-#ifndef TEXTUREPARTICLE_H
-#define TEXTUREPARTICLE_H
+#ifndef DUSTPARTICLE_H
+#define DUSTPARTICLE_H
 
 #include "Particle.h"
 
-// TEXTURE PARTICLES DEFAULTS
-#define TEXTURE_DEFAULT_COLOR		glm::vec4(1.f, 1.f, 1.f, 1.f)
-#define TEXTURE_DEFAULT_AMOUNT		10
-#define TEXTURE_SIZE				1.f
-#define TEXTURE_VELOCITY			randBetweenF(-0.01f, 0.01f)
-#define TEXTURE_VELOCITY_FALL_OFF	randBetweenF(0.001f, 0.0067f)
-#define TEXTURE_LIFETIME			randBetweenF(1500.f, 3000.f)
-#define TEXTURE_ROTATION			randBetweenF(-0.25f, 0.25f)
-#define TEXTURE_ROTATION_FALL_OFF	randBetweenF(0.35f, 0.50f)
+#define LIGHT_DUST_DEFAULT_AMOUNT		50
+#define LIGHT_DUST_DEFAULT_COLOR		glm::vec4(0.4, 0.4, 0.4, 1.f)
+#define LIGHT_DUST_SIZE					randBetweenF(0.10f, 0.20f)
+#define LIGHT_DUST_VELOCITY				randBetweenF(-0.0001f, 0.0001f)
+#define LIGHT_DUST_PULLING_STRENGTH		0.03f
+#define LIGHT_DUST_DEFAULT_DIMENSIONS	glm::vec3(40.f, 25.f, 0.f)
+#define LIGHT_DUST_DEFAULT_CENTER		glm::vec3(0, 0, 0)
 
-struct TextureParticle : public Particle
+struct DustParticle : public Particle
 {
 public:
 
@@ -22,8 +20,6 @@ public:
 	// \param position The starting position of the particle
 	// \param color The starting color of the particle
 	// \param size The size in w/h of the particle quad
-	// \param angle The angle of the impact in radians
-	// \param strength Impact strength of the hit (amount of dmg done)
 	////////////////////////////////////////////////////////////
 	virtual void Start(glm::vec3 position, glm::vec4 color, glm::vec2 size);
 
@@ -35,8 +31,9 @@ public:
 	////////////////////////////////////////////////////////////
 	virtual void Update(GLfloat deltaT);
 
-private:
-	float rotationSpeed;
+protected:
+	float angle;
+	glm::vec3 startPosition;
 };
 
-#endif // !TEXTUREPARTICLE_H
+#endif // !DUSTPARTICLE_H

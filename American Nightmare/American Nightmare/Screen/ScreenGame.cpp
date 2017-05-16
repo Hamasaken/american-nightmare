@@ -72,6 +72,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	particleManager = new ParticleManager();
 	if (particleManager == nullptr) return false;
 	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::LIGHT);
+	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::LIGHT_DUST);
 	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::BLOOD);
 	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::TEXTURE);
 
@@ -337,7 +338,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	// Particle Managare Testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
-		particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.80f, 1.f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
+		particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.60f, 0.80f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::I))
 		particleManager->EffectTextureExplosion(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.80f, 1.f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
 

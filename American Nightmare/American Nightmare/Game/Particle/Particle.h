@@ -3,9 +3,13 @@
 
 #include "../../Accessories.h"
 
-#define VELOCITY			randBetweenF(-0.25f, 0.25f)
-#define VELOCITY_FALL_OFF	randBetweenF(0.35f, 0.50f)
-#define PARTICLE_LIFETIME	randBetweenF(100.f, 1100.f)
+// PARTICLES DEFAULTS
+#define LIGHT_DEFAULT_COLOR		glm::vec4(1.f, 0.1f, 0.05f, 1.f)
+#define LIGHT_DEFAULT_AMOUNT	25
+#define LIGHT_SIZE				randBetweenF(0.9f, 1.1f)
+#define VELOCITY				randBetweenF(-0.25f, 0.25f)
+#define VELOCITY_FALL_OFF		randBetweenF(0.35f, 0.50f)
+#define PARTICLE_LIFETIME		randBetweenF(100.f, 1100.f)
 
 struct Particle
 {

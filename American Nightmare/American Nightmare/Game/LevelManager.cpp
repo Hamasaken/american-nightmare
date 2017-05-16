@@ -161,6 +161,9 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	// Music
 	soundManager->playSong(SoundManager::SONG::MUSIC_BOOGIE);
 	
+	// Dust effect
+	particleManager->EffectLightDust(glm::vec3(0, 10, 0));
+
 	// Temp directional light for shadows
 	lightManager->AddDirectionalLight(glm::vec4(5, 20, 20, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.1f);
 	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.1f);
@@ -553,7 +556,7 @@ void LevelManager::CheckTriggers()
 
 				// Effects
 				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BIP, 50, 0.5f);
-				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 1, glm::vec4(1, 1, 1, 1));
+				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 1, glm::vec4(0.6f, 0.6f, 0.6f, 1));
 
 				// Temporary effect, clear all lights and a new light
 				lightManager->Clear(); 	
