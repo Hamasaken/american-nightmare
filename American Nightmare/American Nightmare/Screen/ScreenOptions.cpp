@@ -44,7 +44,7 @@ bool ScreenOptions::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	if (materialManager == nullptr) return false;
 
 	// Loading materials
-	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.1f), glm::vec3(0.1f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.4f, 0.4f, 0.6f), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 
 	////////////////////////////////////////////////////////////

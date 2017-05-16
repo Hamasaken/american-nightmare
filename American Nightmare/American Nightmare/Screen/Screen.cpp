@@ -222,6 +222,8 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 
 		glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
 		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), dynamic_cast<Button*>(object)->getAlpha());
+
+		glUniform3f(glGetUniformLocation(object->getShader(), "diffuse"), object->getMaterial()->diffuse.x, object->getMaterial()->diffuse.y, object->getMaterial()->diffuse.z);
 	}
 	else if (dynamic_cast<Text*>(object) != nullptr)
 	{
@@ -233,6 +235,7 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 		glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
 		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), -1.f);
 	}
+
 
 	// Drawing object
 	object->Draw();
