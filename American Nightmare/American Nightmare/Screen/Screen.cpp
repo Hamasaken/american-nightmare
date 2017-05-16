@@ -214,7 +214,6 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 
 	glEnable(GL_BLEND);
 
-
 	if (dynamic_cast<Button*>(object) != nullptr)
 	{
 		glEnable(GL_TEXTURE_2D);

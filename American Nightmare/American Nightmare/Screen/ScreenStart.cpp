@@ -47,8 +47,10 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	// Loading materials
 	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", TEXTURE_PATH "gammal-dammsugare.jpg");
 	materialManager->AddMaterial("titlematerial", glm::vec3(1.f), 0.f, "titletexture", TEXTURE_PATH "title.jpg");
+	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	if (materialManager->getMaterial("lightmaterial") == nullptr) printf("Light Material not found\n");
 	if (materialManager->getMaterial("titlematerial") == nullptr) printf("Title Material not found\n");
+	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
@@ -62,12 +64,12 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
-	guiManager->setShader(shaderManager->getShader("texture"));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(-0.85f, 0, 0), glm::vec2(0.15f, 0.30f), materialManager->getMaterial("titlematerial"), nullptr);
-	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr);
-	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"), nullptr);
+	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0.15f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Play", FONT_PATH "framd.ttf", 40.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddButton(GUIManager::OPTIONS, glm::vec3(0, -0.15f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Options", FONT_PATH "framd.ttf", 40.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.45f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Quit", FONT_PATH "framd.ttf", 40.f, glm::vec4(1, 1, 1, 1));
 	guiManager->AddText(glm::vec3(0.f, 0.5f, 0.f), 40.f, "American Nightmare", FONT_PATH "framd.ttf");
 	guiManager->setAlpha(1.f);
+	guiManager->setShader(shaderManager->getShader("texture"));
 
 	// Setting starting variables
 	SetStartVariables();
@@ -89,7 +91,8 @@ void ScreenStart::Update(GLint deltaT)
 	// Updating Buttons
 	guiManager->Update(deltaT);
 
-	particleManager->EffectExplosionLights(glm::vec3(0, 0, 5), 1, glm::vec4(1.f, 1.f, 1.f, 0.1f));
+	particleManager->EffectExplosionLights(glm::vec3(13, 3, 0), 1, glm::vec4(1.f, 0.5f, 1.f, 0.1f));
+	particleManager->EffectExplosionLights(glm::vec3(-13, 3, 0), 1, glm::vec4(0.5f, 1.f, 1.f, 0.1f));
 	particleManager->Update(deltaT);
 
 	for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
@@ -111,9 +114,14 @@ void ScreenStart::Draw()
 {
 	// Getting view matrix from camera
 	camera->buildViewMatrix();
-
+	
+	// Drawing GUI
 	for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
+	{
 		DrawObjectGUI(button.first, shaderManager);
+		if (button.first->getText() != nullptr)
+			DrawObjectGUI(button.first->getText(), shaderManager);
+	}
 	for (Text* object : *guiManager->getTextList())
 		DrawObjectGUI(object, shaderManager);
 

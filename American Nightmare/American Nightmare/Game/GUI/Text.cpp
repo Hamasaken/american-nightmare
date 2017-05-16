@@ -9,6 +9,7 @@ Text::~Text() { }
 bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
 	this->position = position;
+	this->position.z -= 0.001f; // pushing the text a tiny notch to be in front of buttons & bars
 	this->rotation = rotation;
 	this->scale = scale;
 	this->screenSize = screenSize;
