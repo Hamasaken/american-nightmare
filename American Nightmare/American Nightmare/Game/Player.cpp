@@ -110,9 +110,12 @@ void Player::InputController()
 			printf("RT.\n");
 
 		float leftAxis = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X) / 100.f;
-		hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X * leftAxis, 0), true);
-		if (leftAxis > 0.f) directionIsRight = false;
-		else if (leftAxis < 0.f) directionIsRight = true;
+		if (leftAxis < -0.1f || leftAxis > 0.1f) // Controller offset
+		{
+			hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X * leftAxis, 0), true);
+			if (leftAxis > 0) directionIsRight = false;
+			else if (leftAxis < 0) directionIsRight = true;
+		}
 	}
 
 	// Thresholds in velocity
