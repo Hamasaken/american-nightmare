@@ -122,7 +122,6 @@ vec4 pointLightCalc(vec4 lightPosition, vec4 lightDiffuse, vec4 lightSpecular, f
 	vec3 reflectDir = reflect(-lightDir, normal);
 
 	float specular = pow(max(dot(viewDir, reflectDir), 0.f), inSpecular.a * 1000.f);
-
 	vec4 specularLight = specular * vec4(inSpecular.rgb, 1.f) * lightSpecular;
 
 	float attenuation = 1.0 / (1.0 + lightLinear * distanceToLight + lightQuadratic * distanceToLight * distanceToLight);
@@ -141,9 +140,6 @@ vec4 directionalLightCalc(vec4 lightDirection, vec4 lightDiffuse, vec4 lightSpec
 	vec3 reflectDir = reflect(-lightDir, normal);
 
 	float specular = pow(max(dot(viewDir, reflectDir), 0.f), inSpecular.a * 1000.f);
-
-
-
 	vec4 specularLight = specular * vec4(inSpecular.rgb, 1.f) * lightSpecular;
 
 	return strength * (1.f - shadow) * (diffuseLight + specularLight);
