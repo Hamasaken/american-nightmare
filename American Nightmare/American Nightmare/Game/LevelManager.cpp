@@ -170,7 +170,7 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.1f);
 
 	// Loading temp level
-	LoadTempLevel(shader);
+//	LoadTempLevel(shader);
 
 	return true;
 }
