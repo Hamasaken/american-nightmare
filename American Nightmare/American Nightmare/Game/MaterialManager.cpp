@@ -22,7 +22,7 @@ void MaterialManager::Clear()
 	textureList.clear();
 }
 
-bool MaterialManager::AddMaterial(std::string matName, glm::vec3 ambient, GLfloat specular, std::string textureName, std::string texturePath)
+bool MaterialManager::AddMaterial(std::string matName, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, GLfloat specularExponent, std::string textureName, std::string texturePath)
 {
 	// Check if material exists
 	if (findMaterial(matName) != -1) return false;
@@ -31,7 +31,9 @@ bool MaterialManager::AddMaterial(std::string matName, glm::vec3 ambient, GLfloa
 
 	tempMaterial->name = matName;
 	tempMaterial->ambient = ambient;
+	tempMaterial->diffuse = diffuse;
 	tempMaterial->specular = specular;
+	tempMaterial->specularExponent = specularExponent;
 
 	// Check if texture exists
 	GLint textureIndex = findTexture(textureName);
