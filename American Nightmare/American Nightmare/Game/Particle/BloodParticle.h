@@ -12,7 +12,7 @@
 #define BLOOD_VELOCITY_FALL_OFF	randBetweenF(0.15f, 0.225f)
 #define BLOOD_LIFETIME			randBetweenF(100.f, 700.f)
 
-struct BloodParticle : public Particle
+class BloodParticle : public Particle
 {
 public:
 
