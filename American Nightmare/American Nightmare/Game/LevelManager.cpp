@@ -6,6 +6,7 @@ LevelManager::LevelManager()
 	this->meshManager = nullptr;
 	this->particleManager = nullptr;
 	this->soundManager = nullptr;
+	this->quadTree = nullptr;
 }
 
 LevelManager::LevelManager(const LevelManager & other) { }
@@ -54,6 +55,13 @@ bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, 
 	enemy->setShader(playerShader);
 	enemy->AddAnimation(materialManager->getMaterial("playermaterial"), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
 
+	////////////////////////////////////////////////////////////
+	// Creating the Quad Tree Object
+	////////////////////////////////////////////////////////////
+	quadTree = new QuadTree();
+	if (quadTree == nullptr) return false;
+	if (!quadTree->Start(glm::vec2(1280, 720))) return false;
+
 	return true;
 }
 
@@ -66,6 +74,15 @@ void LevelManager::Stop()
 		delete player;
 		player = nullptr;
 	}
+
+	// Deleting quadtree
+	if (quadTree != nullptr)
+	{
+		quadTree->Stop();
+		delete quadTree;
+		quadTree = nullptr;
+	}
+
 	// Unloads the map objects
 	StopMap();
 	lightManager->Clear();

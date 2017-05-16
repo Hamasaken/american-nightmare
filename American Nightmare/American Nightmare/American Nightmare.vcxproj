@@ -165,7 +165,6 @@
     <ClCompile Include="Game\Animation.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\Entity.cpp" />
-    <ClCompile Include="Game\Frustum.cpp" />
     <ClCompile Include="Game\GUI\Button.cpp" />
     <ClCompile Include="Game\GUI\GUIManager.cpp" />
     <ClCompile Include="Game\GUI\Text.cpp" />
@@ -199,6 +198,8 @@
     <ClCompile Include="Screen\ScreenCutscene.cpp" />
     <ClCompile Include="Screen\ScreenGame.cpp" />
     <ClCompile Include="Screen\ScreenManager.cpp" />
+    <ClCompile Include="Screen\ScreenOptions.cpp" />
+    <ClCompile Include="Screen\ScreenPosters.cpp" />
     <ClCompile Include="Screen\ScreenStart.cpp" />
     <ClCompile Include="SoundManager.cpp" />
   </ItemGroup>
@@ -211,7 +212,6 @@
     <ClInclude Include="Game\Animation.h" />
     <ClInclude Include="Game\Camera.h" />
     <ClInclude Include="Game\Entity.h" />
-    <ClInclude Include="Game\Frustum.h" />
     <ClInclude Include="Game\GUI\Button.h" />
     <ClInclude Include="Game\GUI\GUIManager.h" />
     <ClInclude Include="Game\GUI\Text.h" />
@@ -244,6 +244,8 @@
     <ClInclude Include="Screen\ScreenCutscene.h" />
     <ClInclude Include="Screen\ScreenGame.h" />
     <ClInclude Include="Screen\ScreenManager.h" />
+    <ClInclude Include="Screen\ScreenOptions.h" />
+    <ClInclude Include="Screen\ScreenPosters.h" />
     <ClInclude Include="Screen\ScreenStart.h" />
     <ClInclude Include="SoundManager.h" />
   </ItemGroup>

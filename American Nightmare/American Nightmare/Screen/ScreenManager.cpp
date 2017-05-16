@@ -6,6 +6,8 @@ ScreenManager::ScreenManager()
 	screenGame = nullptr;
 	screenStart = nullptr;
 	screenCutscene = nullptr;
+	screenOptions = nullptr;
+	screenPosters = nullptr;
 }
 
 ScreenManager::ScreenManager(const ScreenManager & other) { }
@@ -36,9 +38,6 @@ bool ScreenManager::Start(glm::vec2 screenSize, glm::vec2 screenPosition, HWND h
 
 void ScreenManager::Stop()
 {
-	// Unloads every screen just to be sure
-
-	// Unload game screen
 	if (screenGame != nullptr) 
 	{
 		screenGame->Stop();
@@ -58,6 +57,20 @@ void ScreenManager::Stop()
 		screenCutscene->Stop();
 		delete screenCutscene;
 		screenCutscene = nullptr;
+	}
+
+	if (screenOptions != nullptr)
+	{
+		screenOptions->Stop();
+		delete screenOptions;
+		screenOptions = nullptr;
+	}
+
+	if (screenPosters != nullptr)
+	{
+		screenPosters->Stop();
+		delete screenPosters;
+		screenPosters = nullptr;
 	}
 }
 
@@ -92,6 +105,24 @@ bool ScreenManager::StartCurrentScreen()
 			return false;
 		}
 		break;
+	case State::Options:
+		screenOptions = new ScreenOptions();
+		if (screenOptions == nullptr) return false;
+		if (!screenOptions->Start(screenSize, screenPosition, &currentState, soundManager))
+		{
+			MessageBox(hwnd, L"Could not start Options Screen class.", L"Woops", MB_OKCANCEL);
+			return false;
+		}
+		break;
+	case State::Posters:
+		screenPosters = new ScreenPosters();
+		if (screenPosters == nullptr) return false;
+		if (!screenPosters->Start(screenSize, screenPosition, &currentState, soundManager))
+		{
+			MessageBox(hwnd, L"Could not start Posters Screen class.", L"Woops", MB_OKCANCEL);
+			return false;
+		}
+		break;
 	}
 
 	return true;
@@ -122,6 +153,20 @@ void ScreenManager::StopScreen(State state)
 			screenCutscene = nullptr;
 		}
 		break;
+	case State::Options:
+		if (screenOptions != nullptr)
+		{
+			screenOptions->Stop();
+			screenOptions = nullptr;
+		}
+		break;
+	case State::Posters:
+		if (screenPosters != nullptr)
+		{
+			screenPosters->Stop();
+			screenPosters = nullptr;
+		}
+		break;
 	}
 }
 
@@ -145,9 +190,9 @@ void ScreenManager::Update(GLint deltaT)
 	// Temporary state switching
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F1))		{ goToState(Game); }
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F2))	{ goToState(StartMeny); }
-//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F3))	{ goToState(Options); }
-//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F4))	{ goToState(Cutscene); }
-//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F5))	{ goToState(Posters); }
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F3)) { goToState(Options); }
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F4))	{ goToState(Posters); }
+//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F5))	{ goToState(Cutscene); }
 
 	prevState = currentState;
 	switch (currentState)
@@ -155,6 +200,8 @@ void ScreenManager::Update(GLint deltaT)
 	case State::Game: screenGame->Update(deltaT); break;
 	case State::StartMeny: screenStart->Update(deltaT); break;
 	case State::Cutscene: screenCutscene->Update(deltaT); break;
+	case State::Options: screenOptions->Update(deltaT); break;
+	case State::Posters: screenPosters->Update(deltaT); break;
 	}
 
 	if (prevState != currentState)
@@ -174,6 +221,8 @@ void ScreenManager::Draw(SDL_Window* window, glm::vec4 color)
 	case State::Game: screenGame->Draw(); break;
 	case State::StartMeny: screenStart->Draw(); break;
 	case State::Cutscene: screenCutscene->Draw(); break;
+	case State::Options: screenOptions->Draw(); break;
+	case State::Posters: screenPosters->Draw(); break;
 	}
 
 	SDL_GL_SwapWindow(window);

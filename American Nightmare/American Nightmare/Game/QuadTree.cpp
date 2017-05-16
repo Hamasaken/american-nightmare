@@ -9,28 +9,39 @@ QuadTree::QuadTree(const QuadTree & other) { }
 
 QuadTree::~QuadTree() { }
 
-bool QuadTree::Start(glm::vec3 origin, glm::vec3 dimensions, std::vector<Object*>* objects)
+bool QuadTree::Start(glm::vec2 screenSize)
 {	
 	// Creating the parent node, containing everything on level
 	parent = new Node();
 	if (parent == nullptr) return false;
 
-	// Creating tree
-	MakeTree(parent, objects, dimensions, origin);
+	return true;
+}
 
-	return false;
+bool QuadTree::StartTree(Node * node, std::vector<Object*>* objects)
+{
+	// Calculate origin and dimensions of the full map
+	glm::vec2 origin = glm::vec2(0, 0);
+	glm::vec2 dimensions = glm::vec2(1000, 1000);
+
+	MakeTree(node, objects, origin, dimensions);
+
+	return true;
 }
 
 void QuadTree::Stop()
 {
-	// Resetting frustum
-	// frustum->Stop();
-
 	// Unloading everything inside node
 	if (parent != nullptr)
 	{
 		StopNode(parent);
 	}
+}
+
+bool QuadTree::IsRectangleInside(glm::vec3 center, glm::vec3 dimensions)
+{
+	
+	return true;
 }
 
 void QuadTree::StopNode(Node* node)
@@ -50,7 +61,7 @@ void QuadTree::StopNode(Node* node)
 	node = nullptr;
 }
 
-void QuadTree::MakeTree(Node* node, std::vector<Object*>* objects, glm::vec3 parentDimensions, glm::vec3 parentOrigin)
+void QuadTree::MakeTree(Node* node, std::vector<Object*>* objects, glm::vec2 parentDimensions, glm::vec2 parentOrigin)
 {
 	node->dimensions = parentDimensions;
 	node->origin = parentOrigin;
@@ -63,7 +74,7 @@ void QuadTree::MakeTree(Node* node, std::vector<Object*>* objects, glm::vec3 par
 	if (nrOfObjects > QUAD_TREE_MAX_OBJECTS)
 	{
 		glm::vec2 offset;
-		glm::vec3 newPos;
+		glm::vec2 newPos;
 		for (int i = 0; i < 4; i++)
 		{
 			// Splitting the quad up into four new quads, does not bother changing the Z pos, because of sidescroller
@@ -71,7 +82,6 @@ void QuadTree::MakeTree(Node* node, std::vector<Object*>* objects, glm::vec3 par
 			offset.y = (((i % 4) < 2) ? -1.0f : 1.0f) * (parentDimensions.y / 4.0f);
 			newPos.x = parentOrigin.x + offset.x;
 			newPos.y = parentOrigin.y + offset.y;
-			newPos.z = parentOrigin.z;
 			
 			// Counting objects in specific quad
 			nrOfObjects = CountObjects(newPos, (parentDimensions / 2.f));
@@ -96,13 +106,13 @@ void QuadTree::MakeTree(Node* node, std::vector<Object*>* objects, glm::vec3 par
 	}
 }
 
-int QuadTree::CountObjects(glm::vec3 origin, glm::vec3 dimensions)
+int QuadTree::CountObjects(glm::vec2 origin, glm::vec2 dimensions)
 {
 
 	return 0;
 }
 
-void QuadTree::FindQuadAt(glm::vec3 position, Node * node)
+void QuadTree::FindQuadAt(glm::vec2 position, Node * node)
 {
 }
 

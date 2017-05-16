@@ -64,10 +64,11 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
-	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0.15f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Play", FONT_PATH "framd.ttf", 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddButton(GUIManager::OPTIONS, glm::vec3(0, -0.15f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Options", FONT_PATH "framd.ttf", 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.45f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Quit", FONT_PATH "framd.ttf", 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddText(glm::vec3(0.f, 0.5f, 0.f), 40.f, "American Nightmare", FONT_PATH "framd.ttf");
+	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0.30f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Play", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddButton(GUIManager::OPTIONS, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Options", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddButton(GUIManager::POSTERS, glm::vec3(0, -0.30f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Posters", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.60f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Quit", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddText(glm::vec3(0.f, 0.6f, 0.f), 40.f, "American Nightmare", FONT_PATH INGAME_FONT);
 	guiManager->setAlpha(1.f);
 	guiManager->setShader(shaderManager->getShader("texture"));
 
@@ -103,6 +104,7 @@ void ScreenStart::Update(GLint deltaT)
 			{
 			case GUIManager::Action::PLAY:		*state = State::Game;		break;
 			case GUIManager::Action::OPTIONS:	*state = State::Options;	break;
+			case GUIManager::Action::POSTERS:	*state = State::Posters;	break;
 			case GUIManager::Action::EXIT:		*state = State::Exit;		break;
 			}
 			button.first->setPressed(false);

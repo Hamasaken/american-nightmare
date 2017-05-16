@@ -9,8 +9,7 @@
 #include "../Game/Particle/ParticleManager.h"
 #include "../Game/GUI/GUIManager.h"
 
-#define CLEAR_COLOR glm::vec4(0.1f, 0.1, 0.1, 1)
-#define PAUS_TIMER 500.f // 0.5 sec
+#define PAUS_TIMER 300.f 
 
 class ScreenGame : public Screen
 {
