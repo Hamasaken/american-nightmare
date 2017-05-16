@@ -1,6 +1,12 @@
 #version 430
 
-#extension GL_NV_shadow_samplers_cube : enable
+struct Material
+{
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	float specularExponent;
+};
 
 struct PointLight
 {
@@ -60,6 +66,7 @@ uniform vec4 viewPos;
 
 uniform sampler2D texture;
 uniform sampler2D normal;
+uniform Material material;
 
 uniform vec4 lightDirection;
 uniform bool useShadow;
@@ -77,11 +84,11 @@ float calculateDirShadow(vec3 lightSpacePos, vec3 normal, int shadowMapIndex)
 	float bias = max(0.01 * (1.0 - dot(normal, lightSpace[shadowMapIndex].direction.xyz)), 0.005);
   
 	float currentDepth = lightSpacePos.z;
-	float closestDepth = texture2D(dirShadowMaps[shadowMapIndex], lightSpacePos.xy).r; 
-	float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+	//float closestDepth = texture2D(dirShadowMaps[shadowMapIndex], lightSpacePos.xy).r; 
+	//float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
 
 	// PCF
-	/*float shadow = 0.f;
+	float shadow = 0.f;
 	vec2 texelSize = 1.0 / textureSize(dirShadowMaps[shadowMapIndex], 0);
     for(int x = -1; x <= 1; ++x)
     {
@@ -91,7 +98,7 @@ float calculateDirShadow(vec3 lightSpacePos, vec3 normal, int shadowMapIndex)
             shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
         }    
     }
-    shadow /= 9.0;*/
+    shadow /= 9.0;
 
 	if(lightSpacePos.z > 1.0)
 		shadow = 0.f;
@@ -115,38 +122,38 @@ float calculatePointShadow(vec3 fragPos, int shadowMapIndex)
     return shadow;
 }
 
-vec4 pointLightCalc(vec4 lightPosition, vec4 lightDiffuse, float strength, float lightConstant, float lightLinear, float lightQuadratic, vec3 inFragPos, vec3 inNormal, vec4 inTexDiffuse, float inDistance, float shadow)
+vec4 pointLightCalc(vec4 lightPosition, vec4 lightDiffuse, vec4 lightSpecular, float strength, float lightConstant, float lightLinear, float lightQuadratic, vec3 inFragPos, vec3 inNormal, vec4 inTex, float inDistance, float shadow)
 {
 	vec3 normal = normalize(inNormal);
 
 	vec3 lightDir = normalize(lightPosition.xyz - inFragPos);
-	vec4 diffuseLight = inTexDiffuse * max(dot(normal, lightDir), 0.f);
+	vec4 diffuseLight = lightDiffuse * vec4(material.diffuse, 1.f) * inTex * max(dot(normal, lightDir), 0.f);
 
 	vec3 viewDir = normalize(viewPos.xyz - inFragPos);
 	vec3 reflectDir = reflect(-lightDir, normal);
 
 	float specular = pow(max(dot(viewDir, reflectDir), 0.f), 32);
-	vec4 specularLight = specular * vec4(0, 0, 0, 1);
+	vec4 specularLight = specular * vec4(material.specular, 1.f) * lightSpecular;
 
 	float attenuation = 1.0 / (1.0 + lightLinear * inDistance + lightQuadratic * inDistance * inDistance);
 
-	return strength * (1.f - shadow) * (diffuseLight * lightDiffuse * attenuation + specularLight * attenuation);
+	return strength * (1.f - shadow) * (diffuseLight * attenuation + specularLight * attenuation);
 }
 
-vec4 directionalLightCalc(vec4 lightDirection, vec4 lightDiffuse, vec4 lightSpecular, float strength, vec3 inFragPos, vec3 inNormal, vec4 inDiffuse, float shadow)
+vec4 directionalLightCalc(vec4 lightDirection, vec4 lightDiffuse, vec4 lightSpecular, float strength, vec3 inFragPos, vec3 inNormal, vec4 inTex, float shadow)
 {
 	vec3 normal = normalize(inNormal);
 	vec3 lightDir = normalize(-lightDirection.xyz);
 
-	vec4 diffuseLight = inDiffuse * max(dot(normal, lightDir), 0.f);
+	vec4 diffuseLight = lightDiffuse * vec4(material.diffuse, 1.f) * inTex * max(dot(normal, lightDir), 0.f);
 
 	vec3 viewDir = normalize(viewPos.xyz - inFragPos);
 	vec3 reflectDir = reflect(-lightDir, normal);
 
 	float specular = pow(max(dot(viewDir, reflectDir), 0.f), 32);
-	vec4 specularLight = specular * vec4(0, 0, 0, 1) * lightSpecular;
+	vec4 specularLight = specular * vec4(material.specular, 1.f) * lightSpecular;
 
-	return strength * (1.f - shadow) * (diffuseLight * lightDiffuse + specularLight * 0.2);
+	return strength * (1.f - shadow) * (diffuseLight + specularLight);
 }
 
 void main(void)
@@ -196,7 +203,7 @@ void main(void)
 		float distance = length(pointLights[i].position.xyz - position);
 
 		if(distance < pointLights[i].radius)
-				result += pointLightCalc(pointLights[i].position, pointLights[i].diffuse, pointLights[i].strength, pointLights[i].constant, pointLights[i].linear, pointLights[i].quadratic, position, bufferNormal, bufferColor, distance, shadow);	
+				result += pointLightCalc(pointLights[i].position, pointLights[i].diffuse, pointLights[i].specular, pointLights[i].strength, pointLights[i].constant, pointLights[i].linear, pointLights[i].quadratic, position, bufferNormal, bufferColor, distance, shadow);	
 	}
 	
 	for(int i = 0; i < nrOfDirectionalLights; i++)

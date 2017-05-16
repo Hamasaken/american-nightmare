@@ -46,6 +46,7 @@ public:
 	virtual void setShader(GLuint shader);
 	GLuint getShader() const;
 	GLuint getTextureID() const;
+	const MaterialManager::Material* getMaterial() const;
 
 protected:
 	glm::vec3 position;	//< Object position

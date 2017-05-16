@@ -1,7 +1,5 @@
 #version 430 core
 
-//#extension GL_NV_shadow_samplers_cube : enable
-
 struct PointLight
 {
 	vec4 position;
@@ -124,11 +122,11 @@ vec4 pointLightCalc(vec4 lightPosition, vec4 lightDiffuse, vec4 lightSpecular, f
 	vec3 reflectDir = reflect(-lightDir, normal);
 
 	float specular = pow(max(dot(viewDir, reflectDir), 0.f), 32);
-	vec4 specularLight = specular * inSpecular * lightSpecular;
+	vec4 specularLight = specular * vec4(inSpecular.rgb, 1.f) * lightSpecular;
 
 	float attenuation = 1.0 / (1.0 + lightLinear * inDistance + lightQuadratic * inDistance * inDistance);
 
-	return strength * (1.f - shadow) * (diffuseLight * lightDiffuse * attenuation + specularLight * 0.2 * attenuation);
+	return strength * (1.f - shadow) * (diffuseLight * lightDiffuse * attenuation + specularLight * attenuation);
 }
 
 vec4 directionalLightCalc(vec4 lightDirection, vec4 lightDiffuse, vec4 lightSpecular, float strength, vec3 inFragPos, vec3 inNormal, vec4 inDiffuse, vec4 inSpecular, float shadow)
@@ -142,9 +140,9 @@ vec4 directionalLightCalc(vec4 lightDirection, vec4 lightDiffuse, vec4 lightSpec
 	vec3 reflectDir = reflect(-lightDir, normal);
 
 	float specular = pow(max(dot(viewDir, reflectDir), 0.f), 32);
-	vec4 specularLight = specular * inSpecular * lightSpecular;
+	vec4 specularLight = specular * vec4(inSpecular.rgb, 1.f) * lightSpecular;
 
-	return strength * (1.f - shadow) * (diffuseLight * lightDiffuse + specularLight * 0.2);
+	return strength * (1.f - shadow) * (diffuseLight * lightDiffuse + specularLight);
 }
 
 void main () {

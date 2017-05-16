@@ -268,16 +268,23 @@ void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderMa
 
 	GLint textureCounter = 0;
 
+	const MaterialManager::Material* tmpMaterial = animatedObj->getMaterial();
+
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, animatedObj->getTextureID());
+	glBindTexture(GL_TEXTURE_2D, tmpMaterial->getTextureID());
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, animatedObj->getAnimationNormal());
 
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "texture"), 0);
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "normal"), 1);
-
 	textureCounter += 2;
+
+	glUniform3f(glGetUniformLocation(animatedObj->getShader(), "material.ambient"), tmpMaterial->ambient.x, tmpMaterial->ambient.y, tmpMaterial->ambient.z);
+	glUniform3f(glGetUniformLocation(animatedObj->getShader(), "material.diffuse"), tmpMaterial->diffuse.x, tmpMaterial->diffuse.y, tmpMaterial->diffuse.z);
+	glUniform3f(glGetUniformLocation(animatedObj->getShader(), "material.specular"), tmpMaterial->specular.x, tmpMaterial->specular.y, tmpMaterial->specular.z);
+	glUniform1f(glGetUniformLocation(animatedObj->getShader(), "material.specularExponent"), tmpMaterial->specularExponent);
+
 
 	glUniform4f(glGetUniformLocation(animatedObj->getShader(), "viewPos"), camera->getPosition().x, camera->getPosition().y, camera->getPosition().z, 1.f);
 	glUniform1i(glGetUniformLocation(animatedObj->getShader(), "nrOfPointLights"), pointLightList.size());
@@ -363,11 +370,18 @@ void Screen::DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager
 	shaderManager->setShader(object->getShader());
 	shaderManager->SetParameters(world, view, projection);
 
+	const MaterialManager::Material* tmpMaterial = object->getMaterial();
+
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, object->getTextureID());
+	glBindTexture(GL_TEXTURE_2D, tmpMaterial->getTextureID());
 
 	glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
+
+	glUniform3f(glGetUniformLocation(object->getShader(), "material.ambient"), tmpMaterial->ambient.x, tmpMaterial->ambient.y, tmpMaterial->ambient.z);
+	glUniform3f(glGetUniformLocation(object->getShader(), "material.diffuse"), tmpMaterial->diffuse.x, tmpMaterial->diffuse.y, tmpMaterial->diffuse.z);
+	glUniform3f(glGetUniformLocation(object->getShader(), "material.specular"), tmpMaterial->specular.x, tmpMaterial->specular.y, tmpMaterial->specular.z);
+	glUniform1f(glGetUniformLocation(object->getShader(), "material.specularExponent"), tmpMaterial->specularExponent);
 
 	// Drawing object
 	object->Draw();
