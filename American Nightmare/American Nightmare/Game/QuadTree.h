@@ -21,12 +21,12 @@ private:
 		{
 			if (objects != nullptr)
 			{
-				for (Object* object : *objects)
-				{
-					delete object;
-					object = nullptr;
-				}
-				delete objects;
+//				for (Object* object : *objects)
+//				{
+				//	delete object;
+				//	object = nullptr;
+//				}
+			//	delete objects;
 				objects = nullptr;
 			}
 		}
