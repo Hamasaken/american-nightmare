@@ -1,6 +1,6 @@
 #version 430 core
 
-#extension GL_NV_shadow_samplers_cube : enable
+//#extension GL_NV_shadow_samplers_cube : enable
 
 struct PointLight
 {
@@ -75,11 +75,11 @@ float calculateDirShadow(vec3 lightSpacePos, vec3 normal, int shadowMapIndex)
 	float bias = max(0.01 * (1.0 - dot(normal, lightSpace[shadowMapIndex].direction.xyz)), 0.005);
   
 	float currentDepth = lightSpacePos.z;
-	float closestDepth = texture2D(dirShadowMaps[shadowMapIndex], lightSpacePos.xy).r; 
-	float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+	//float closestDepth = texture2D(dirShadowMaps[shadowMapIndex], lightSpacePos.xy).r; 
+	//float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
 
 	// PCF
-	/*float shadow = 0.f;
+	float shadow = 0.f;
 	vec2 texelSize = 1.0 / textureSize(dirShadowMaps[shadowMapIndex], 0);
     for(int x = -1; x <= 1; ++x)
     {
@@ -89,7 +89,7 @@ float calculateDirShadow(vec3 lightSpacePos, vec3 normal, int shadowMapIndex)
             shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
         }    
     }
-    shadow /= 9.0;*/
+    shadow /= 9.0;
 
 	if(lightSpacePos.z > 1.0)
 		shadow = 0.f;
@@ -104,7 +104,7 @@ float calculatePointShadow(vec3 fragPos, int shadowMapIndex)
     float closestDepth = textureCube(pointShadowMaps[shadowMapIndex], fragToLight).r;
 
     closestDepth *= pointShadows[shadowMapIndex].farPlane;
-    
+
     float currentDepth = length(fragToLight);
     
     float bias = 0.05;

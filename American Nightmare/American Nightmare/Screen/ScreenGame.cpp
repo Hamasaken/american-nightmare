@@ -132,7 +132,7 @@ void ScreenGame::SetStartVariables()
 	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, 50, -30.f, 50);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, 50, -30.f, 50);
-	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[0], glm::vec2(screenSize.x * 0.5, screenSize.y * 0.5), 45, 0.1f);
+	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[0], glm::vec2(1024, 1024), 45, 0.1f);
 	shadowManager.setUseShadows(true);
 }
 
@@ -226,7 +226,7 @@ void ScreenGame::Draw()
 
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, shadowManager.getDirectionalShadowMapList()[0]->shadowMap);
+		glBindTexture(GL_TEXTURE_CUBE_MAP_POSITIVE_X, shadowManager.getPointShadowMapList()[0]->shadowCubeMap);
 		glUniform1i(glGetUniformLocation(shaderManager->getShader(), "texture"), 0);
 
 		glDisable(GL_DEPTH_TEST);
@@ -279,7 +279,9 @@ void ScreenGame::DrawShadowMaps()
 		// Set shader
 		shaderManager->setShader(shadowManager.getPointShadowShader());
 
+		//glClearDepth(0);
 		glClear(GL_DEPTH_BUFFER_BIT);
+		glClearDepth(1);
 
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())

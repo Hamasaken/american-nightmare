@@ -139,9 +139,7 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	LoadLevelEffects(levelFile.effects);
 
 	// Setting start position
-	//	player->setPosition(glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 1));
-
-	player->setPosition(glm::vec3(0, 100.f, 0));
+	player->setPosition(glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 1));
 
 	// Music
 	soundManager->playSong(SoundManager::SONG::MUSIC_BOOGIE);
@@ -383,7 +381,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	////////////////////////////////////////////////////////////
 	// Fun boxes
 	////////////////////////////////////////////////////////////
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 25; i++)
 	{
 		Entity* moveble = new Entity();
 		moveble->setShader(shader);
@@ -455,7 +453,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	map.push_back(light);
 
 	// Temp lights
-	lightManager->AddPointLight(glm::vec4(-20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
+	lightManager->AddPointLight(glm::vec4(-30, 3, -5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
 	lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
 
 	//lightManager->AddDirectionalLight(glm::vec4(5, 20, 20, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.1f);
