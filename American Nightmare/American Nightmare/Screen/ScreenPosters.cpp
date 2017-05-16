@@ -89,7 +89,7 @@ void ScreenPosters::Update(GLint deltaT)
 	{
 		if (button.first->getPressed())
 		{
-			switch (button.second) { case GUIManager::Action::STARTMENY: *state = State::Game; break; }
+			switch (button.second) { case GUIManager::Action::STARTMENY: *state = State::StartMeny; break; }
 			button.first->setPressed(false);
 		}
 	}
