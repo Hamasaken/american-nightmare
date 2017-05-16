@@ -14,8 +14,7 @@
 #include "../ANNIE/ArchiveFile.h"
 #include "../ANNIE/LevelFile.h"
 #include "MeshManager.h"
-
-// include meshmanager
+#include "QuadTree.h"
 
 class LevelManager
 {
@@ -113,6 +112,7 @@ private:
 	MaterialManager* materialManager;
 	b2World *world;
 	MyContactListener contactManager;
+	QuadTree* quadTree;
 
 	//ProjectileHandler* myPH;
 

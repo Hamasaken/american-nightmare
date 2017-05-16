@@ -55,6 +55,18 @@
     <Filter Include="Header Files\ANNIE">
       <UniqueIdentifier>{207a2aad-b064-4ac8-b3e9-1eb175bb9e66}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\QuadTree">
+      <UniqueIdentifier>{b4c13895-b220-4b09-9fd4-b443dbf21da1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\QuadTree">
+      <UniqueIdentifier>{e0999463-1a22-4bee-b9e8-de3deada804b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\Level">
+      <UniqueIdentifier>{bc5cc718-9ed9-48ec-b5f7-03f866519340}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Level">
+      <UniqueIdentifier>{e77ddf2a-02a2-4b2e-b17d-2ea2b1f6c15a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -93,9 +105,6 @@
     <ClCompile Include="Game\Shader\ShaderManager.cpp">
       <Filter>Source Files\Game\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Game\LevelManager.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Particle\ParticleEmitter.cpp">
       <Filter>Source Files\Game\Particle</Filter>
     </ClCompile>
@@ -117,23 +126,11 @@
     <ClCompile Include="Screen\ScreenCutscene.cpp">
       <Filter>Source Files\Screen</Filter>
     </ClCompile>
-    <ClCompile Include="Game\LightManager.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Screen\Rendering\DeferredRendering.cpp">
       <Filter>Source Files\Screen\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="Game\GUI\Text.cpp">
       <Filter>Source Files\Game\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\MaterialManager.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\QuadTree.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Frustum.cpp">
-      <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="Game\Entity.cpp">
       <Filter>Source Files</Filter>
@@ -174,14 +171,26 @@
     <ClCompile Include="ANNIE\ArchiveFile.cpp">
       <Filter>Source Files\ANNIE</Filter>
     </ClCompile>
-    <ClCompile Include="Game\MeshManager.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Screen\ScreenPosters.cpp">
       <Filter>Source Files\Screen</Filter>
     </ClCompile>
     <ClCompile Include="Screen\ScreenOptions.cpp">
       <Filter>Source Files\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\QuadTree.cpp">
+      <Filter>Source Files\QuadTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\LevelManager.cpp">
+      <Filter>Source Files\Game\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\LightManager.cpp">
+      <Filter>Source Files\Game\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MeshManager.cpp">
+      <Filter>Source Files\Game\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MaterialManager.cpp">
+      <Filter>Source Files\Game\Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -221,9 +230,6 @@
     <ClInclude Include="Game\Shader\ShaderManager.h">
       <Filter>Header Files\Game\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Game\LevelManager.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Particle\ParticleEmitter.h">
       <Filter>Header Files\Game\Particle</Filter>
     </ClInclude>
@@ -242,23 +248,11 @@
     <ClInclude Include="Screen\ScreenCutscene.h">
       <Filter>Header Files\Screen</Filter>
     </ClInclude>
-    <ClInclude Include="Game\LightManager.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GUI\Text.h">
       <Filter>Header Files\Game\GUI</Filter>
     </ClInclude>
     <ClInclude Include="Screen\Rendering\DeferredRendering.h">
       <Filter>Header Files\Screen\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\MaterialManager.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Frustum.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\QuadTree.h">
-      <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Projectile.h">
       <Filter>Header Files\Game</Filter>
@@ -296,9 +290,6 @@
     <ClInclude Include="ANNIE\ArchiveFile.h">
       <Filter>Header Files\ANNIE</Filter>
     </ClInclude>
-    <ClInclude Include="Game\MeshManager.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Entity.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
@@ -310,6 +301,21 @@
     </ClInclude>
     <ClInclude Include="Screen\ScreenOptions.h">
       <Filter>Header Files\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\QuadTree.h">
+      <Filter>Header Files\Game\QuadTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MeshManager.h">
+      <Filter>Header Files\Game\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MaterialManager.h">
+      <Filter>Header Files\Game\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\LightManager.h">
+      <Filter>Header Files\Game\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\LevelManager.h">
+      <Filter>Header Files\Game\Level</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
