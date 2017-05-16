@@ -16,14 +16,14 @@ void TextureParticle::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size)
 	lifeTime = TEXTURE_LIFETIME;
 	rotationSpeed = TEXTURE_ROTATION;
 	lifeTimeStart = lifeTime;
-	velocity = glm::vec3(TEXTURE_VELOCITY, TEXTURE_VELOCITY, randBetweenF(-0.005f, 0.005f));
+	velocity = glm::vec3(TEXTURE_VELOCITY, TEXTURE_VELOCITY, randBetweenF(-0.0035f, 0.0035f));
 }
 
 void TextureParticle::Update(GLfloat deltaT)
 {
 	// Makes color alpha with the rest of lifetime
-	float alpha = lifeTime / lifeTimeStart;
-	vertex.a = alpha * TEXTURE_BLENDING;
+	float alpha = (lifeTime - lifeTimeStart / 1.5f) / lifeTimeStart;
+	vertex.a = (alpha) * TEXTURE_BLENDING;
 
 	// Removes from lifetime and checks if particle is dead
 	lifeTime -= deltaT;
