@@ -140,6 +140,5 @@ void GUIManager::clearTexts()
 		delete text;
 		text = nullptr;
 	}
-
 	texts.clear();
 }

@@ -32,6 +32,8 @@ bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, con
 
 void Button::Stop()
 {
+	Object::~Object();
+
 	if (text != nullptr)
 	{
 		text->Stop();

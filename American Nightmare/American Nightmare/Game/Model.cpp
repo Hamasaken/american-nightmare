@@ -215,7 +215,6 @@ void Model::BuildQuadTextureBig()
 
 	//for (int i = 0; i < indexCount; i++)
 	//	indices[i] = i;
-
 	indices[0] = 0;
 	indices[1] = 3;
 	indices[2] = 2;

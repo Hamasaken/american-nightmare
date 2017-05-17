@@ -75,6 +75,13 @@ void LevelManager::Stop()
 		player = nullptr;
 	}
 
+	if (enemy != nullptr)
+	{
+		enemy->Stop();
+		delete enemy;
+		enemy = nullptr;
+	}
+
 	// Deleting quadtree
 	if (quadTree != nullptr)
 	{
@@ -83,12 +90,29 @@ void LevelManager::Stop()
 		quadTree = nullptr;
 	}
 
+	// Delete projectile
+	if (myProjectile != nullptr)
+	{
+//		myProjectile->Stop();
+//		delete myProjectile;
+//		myProjectile = nullptr;
+	}
+
 	// Unloads the map objects
 	StopMap();
+
+	// Removes the world object
+	if (world != nullptr)
+	{
+		world->Dump();
+		delete world;
+		world = nullptr;
+	}
+
 	lightManager->Clear();
 	delete lightManager;
 
-	// These are getting removed in screen instead
+	// These are getting removed somewhere else
 	materialManager = nullptr;
 	meshManager = nullptr;
 	particleManager = nullptr;
