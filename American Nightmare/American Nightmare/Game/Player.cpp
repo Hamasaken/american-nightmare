@@ -6,9 +6,9 @@
 //}
 //
 
-Player::Player(b2World *world, GLuint shader) : Animation()
+Player::Player(b2World *world, GLuint shader, glm::vec2 getPlayerPosAsGLM()) : Animation()
 {
-	this->myProjectileHandler = ProjectileHandler(world, shader);
+	this->myProjectileHandler = ProjectileHandler(world, shader, getPlayerPosAsGLM());
 }
 
 Player::Player() { }
@@ -26,6 +26,8 @@ void Player::initiateCursor()
 
 bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 {
+	this->checkValue = false;
+
 	//Sets the cursor for the player
 	initiateCursor();
 
@@ -67,6 +69,9 @@ bool Player::Start(std::string modelName, const MaterialManager::Material* mater
 
 void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 {
+	/*if (getCheckValue() == true)
+		myProjectileHandler.addProjectile(world);*/
+
 	// Getting user input
 	Movement();
 	
@@ -74,7 +79,7 @@ void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 	updateAnimation(deltaT);
 
 	//Update ProjectileHandler
-	//myProjectileHandler->Update(deltaT, world, this->getPlayerPosAsGLM());
+	myProjectileHandler.Update(deltaT, world, this->getPlayerPosAsGLM());
 
 	// Correcting texture to hitbox
 	Entity::Update(deltaT);
@@ -152,3 +157,21 @@ glm::vec2 Player::getPlayerPosAsGLM()
 
 	return myVec;
 }
+
+/*bool Player::addPlayerProjectiles()
+{
+	if (myProjectileHandler.getNrOffProjectiles() >= myProjectileHandler.getCAP())
+		return false;
+	else
+		return true;
+}
+
+void Player::setCheckForProjectilePickUp(bool checkValue)
+{ 
+		this->checkValue = checkValue;
+}
+
+bool Player::getCheckValue()const
+{
+	return this->checkValue;
+}*/

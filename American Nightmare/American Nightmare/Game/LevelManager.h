@@ -78,7 +78,7 @@ private:
 	b2World *world;
 	MyContactListener contactManager;
 
-	ProjectileHandler* myPH;
+	//ProjectileHandler* myPH;
 	//ProjectileHandler* myPH;
 	//Projectile* myProjectile;
 	Projectile* moveble;

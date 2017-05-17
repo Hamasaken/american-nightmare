@@ -8,31 +8,26 @@
 class ProjectileHandler : public Entity
 {
 private:
-	/*std::vector <Projectile*> myProjtileVector;
+	std::vector <Projectile*> myProjtileVector;
 	GLuint myShader;
 	bool wasPressed;
 	bool isPressed;
-	int nrOfBullets;
-	int CAP;*/
-	//Variables for shooting
-	bool wasPressed;
-	bool isPressed;
-
-	//Variables for ProjectileHandler
 	int currentBullet;
+	int nrOfProjectiles;
 	int CAP;
-	sf::Vector2f projectileVector[5];
-	Projectile* *myProjectiles;
-	void initiateProjectiles(b2World *world, GLuint shader);
+	
+	void initiateProjectiles(b2World *world, GLuint shader, glm::vec2 pos);
 
 public:
 	//ProjectileHandler(b2World* world, GLuint shader, int CAP = 10);
-	ProjectileHandler(b2World *world, GLuint shader);
+	ProjectileHandler(b2World *world, GLuint shader, glm::vec2 pos);
 	ProjectileHandler();
 	~ProjectileHandler();
 
 	void Update(GLint deltaT, b2World* world, glm::vec2 position);
-	void deleteProjectiles();
+	void addProjectile(b2World* world);
+	int getNrOffProjectiles()const;
+	int getCAP()const;
 	//std::vector<Projectile*> getBullets();
 };
 

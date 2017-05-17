@@ -18,8 +18,10 @@ private:
 	bool damageOn;
 	bool marked;
 
+	glm::vec2 playerPosition;
+
 public:
-	Projectile(b2World *world, GLuint shader);
+	Projectile(b2World *world, GLuint shader, glm::vec2 pos);
 	Projectile();
 	~Projectile();
 

@@ -26,9 +26,11 @@ private:
 	//variable & function for cursor
 	SDL_Cursor* cursor;
 	void initiateCursor();
+
+	bool checkValue;
 public:
 	Player();
-	Player(b2World *world, GLuint shader);
+	Player(b2World *world, GLuint shader, glm::vec2 getPlayerPosAsGLM());
 	Player(const Player& other);
 	~Player();
 
@@ -44,6 +46,9 @@ public:
 	b2Body* getBody();
 
 	glm::vec2 getPlayerPosAsGLM();
+	bool addPlayerProjectiles();
+	void setCheckForProjectilePickUp(bool checkValue);
+	bool getCheckValue()const;
 };
 
 #endif // !PLAYER_H

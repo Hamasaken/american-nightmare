@@ -16,22 +16,34 @@
 //	//}
 //}
 
-void ProjectileHandler::initiateProjectiles(b2World *world, GLuint shader)
+//void ProjectileHandler::initiateProjectiles(b2World *world, GLuint shader)
+//{
+//	this->wasPressed = false;
+//	this->CAP = 5;
+//	this->currentBullet = CAP - 1;
+//	this->myProjectiles = new Projectile*[this->CAP];
+//
+//	for (int i = 0; i < this->CAP; i++)
+//		this->myProjectiles[i] = new Projectile(world, shader);
+//}
+
+void ProjectileHandler::initiateProjectiles(b2World *world, GLuint shader, glm::vec2 pos)
 {
 	this->wasPressed = false;
 	this->CAP = 5;
-	this->currentBullet = CAP - 1;
-	this->myProjectiles = new Projectile*[this->CAP];
+	this->nrOfProjectiles = 0;
+	this->currentBullet = CAP;
+	this->myShader = shader;
 
 	for (int i = 0; i < this->CAP; i++)
-		this->myProjectiles[i] = new Projectile(world, shader);
+		myProjtileVector.push_back(new Projectile(world, myShader, pos));
 }
 
 ProjectileHandler::ProjectileHandler() {}
 
-ProjectileHandler::ProjectileHandler(b2World *world, GLuint shader)
+ProjectileHandler::ProjectileHandler(b2World *world, GLuint shader, glm::vec2 pos)
 {
-	this->initiateProjectiles(world, shader);
+	this->initiateProjectiles(world, shader, pos);
 
 	//for (int i = 0; i < CAP; i++)
 	//{
@@ -40,15 +52,13 @@ ProjectileHandler::ProjectileHandler(b2World *world, GLuint shader)
 	//}
 }
 
-//ProjectileHandler::ProjectileHandler() {}
-
 ProjectileHandler::~ProjectileHandler()
 {
-	for (int i = 0; i < CAP; i++)
+	/*for (int i = 0; i < CAP; i++)
 	{
 		delete this->myProjectiles[i];
 	}
-	delete[]this->myProjectiles;
+	delete[]this->myProjectiles;*/
 }
 
 void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
@@ -60,8 +70,8 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 		std::cout << "Something will happen!!!" << std::endl;
 
 		//
-		//myProjtileVector[nrOfBullets]->fireBullet(world, position, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1280, 720 }, glm::vec2{ 320, 180 }));
-		//this->nrOfBullets--;
+		//myProjtileVector[nrOfProjectiles]->fireBullet(world, position, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1280, 720 }, glm::vec2{ 320, 180 }));
+		this->nrOfProjectiles++;
 		//
 		//myProjtileVector.back()->fireBullet(world, position, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1280, 720 }, glm::vec2{ 320, 180 }));
 		//myProjtileVector.pop_back();
@@ -69,23 +79,26 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 
 	for (int i = 0; i < CAP; i++)
 	{
-		myProjectiles[i]->Update(deltaT);
+		myProjtileVector[i]->Update(deltaT);
 	}
 
 	this->wasPressed = isPressed;
 }
 
-void ProjectileHandler::deleteProjectiles()
+void ProjectileHandler::addProjectile(b2World* world)
 {
-	for (int i = 0; i < this->CAP; i++)
-	{
-		if (myProjectiles[i]->getmarked() == true)
-		{
-			delete this->myProjectiles[i];
-		}
-	}
+	myProjtileVector.push_back(new Projectile(world, myShader));
 }
 
+int ProjectileHandler::getNrOffProjectiles()const
+{
+	return this->nrOfProjectiles;
+}
+
+int ProjectileHandler::getCAP()const
+{
+	return this->CAP;
+}
 //std::vector<Projectile*> ProjectileHandler::getBullets()
 //{
 //	return projectileVector;

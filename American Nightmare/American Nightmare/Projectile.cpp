@@ -1,13 +1,15 @@
 #include "Projectile.h"
 
-Projectile::Projectile(b2World *world, GLuint shader)
+Projectile::Projectile(b2World *world, GLuint shader, glm::vec2 pos)
 {
 	std::string modelPath = MODEL_PATH;
 	std::string texturePath = TEXTURE_PATH;
 	materialManager.AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
-		
+	
+	this->playerPosition = pos;
+
 	setShader(shader);
-	Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(-10, -20), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_circle, 1.f, 0.5f);
+	Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, playerPosition, glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_circle, 1.f, 0.5f);
 	//Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_circle, 1.f, 0.5f);
 	setScale(glm::vec3(0.25f, 0.25f, 1));
 
@@ -68,8 +70,8 @@ void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)
 	Entity::Update(deltaT);
 }
 
-void Projectile::Update(GLint deltaT)
-{
-	Entity::Update(deltaT);
-}
+//void Projectile::Update(GLint deltaT)
+//{
+//	Entity::Update(deltaT);
+//}
 

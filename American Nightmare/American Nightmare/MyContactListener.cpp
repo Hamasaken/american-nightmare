@@ -37,7 +37,17 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			printf("Player touched a projectile AAAAA\n");
 			//player->getBody()->ApplyForce(b2Vec2(0, -10), b2Vec2(), true);
 			//Delet projectile in Projctile-vector, and --nrOfProjectiles inside projectileHandler class
+			
 			myProjectile->setmarked(true);
+			/*if (player->addPlayerProjectiles() == true)
+			{
+				
+				player->setCheckForProjectilePickUp(true);
+			}
+			else
+			{
+				player->setCheckForProjectilePickUp(false);
+			}*/
  		}
 	}
 }

@@ -152,7 +152,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	map.push_back(background);
 
 	//// Making some boxes to reload with
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 50; i++)
 	{
 		Projectile* moveble = new Projectile();
 		moveble->setShader(shader);
@@ -253,14 +253,17 @@ Enemy* LevelManager::getEnemy() { return enemy; }
 
 void LevelManager::deleteProjects()
 {
+	
 	for (int i = 0; i < this->projectiles.size(); i++)
 	{
 		
 		if (this->projectiles[i]->getmarked() == true)
 		{
-			printf("Kaffe");
-			//delete this->projectiles[i];
-			this->projectiles[i]->~Projectile();
+			Projectile* temp;
+			temp = this->projectiles[i];
+			this->projectiles[i] = this->projectiles.back();
+			this->projectiles.back() = temp;
+			this->projectiles.back()->~Projectile();
 			projectiles.pop_back();
 		}
 	}
