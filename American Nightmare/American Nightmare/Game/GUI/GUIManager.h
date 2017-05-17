@@ -4,6 +4,8 @@
 #include "Button.h"
 #include "Text.h"
 
+#define GUI_SPEED 0.15f
+
 class GUIManager
 {
 public:
@@ -22,6 +24,8 @@ public:
 	bool AddButton(Action action, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh, std::string text = "", std::string fontName = "", float characterSize = 10.f, glm::vec4 color = glm::vec4(1, 1, 1, 1));
 	bool AddText(glm::vec3 position, float characterSize, std::string text, std::string fontName);
 
+	void setInstantCenter(glm::vec2 center);
+	void setCenter(glm::vec2 center);
 	void setShader(GLuint shader);
 	void setAlpha(float alpha);
 
@@ -35,6 +39,8 @@ private:
 	void clearButtons();
 	void clearTexts();
 
+	glm::vec2 currentCenter;
+	glm::vec2 targetCenter;
 	glm::vec2 screenSize;
 	glm::vec2 screenPosition;
 	GLuint shader;

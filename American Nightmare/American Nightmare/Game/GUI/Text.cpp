@@ -8,6 +8,8 @@ Text::~Text() { }
 
 bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
+	this->startPosition = position;
+	this->startPosition.z -= 0.001f;
 	this->position = position;
 	this->position.z -= 0.001f; // pushing the text a tiny notch to be in front of buttons & bars
 	this->rotation = rotation;
@@ -87,6 +89,7 @@ void Text::Draw()
 	Object::Draw();
 }
 
+glm::vec3 Text::getStartPosition() { return startPosition; }
 std::string Text::getString() { return text; }
 GLuint Text::getTexture() const { return texture; }
 glm::vec4 Text::getColor() { return color; }
