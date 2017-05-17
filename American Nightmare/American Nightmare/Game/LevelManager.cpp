@@ -165,7 +165,7 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	particleManager->EffectLightDust(glm::vec3(0, 10, 0));
 
 	// Temp directional light for shadows
-	lightManager->AddDirectionalLight(glm::vec4(5, 20, 20, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.f);
+	//lightManager->AddDirectionalLight(glm::vec4(5, 20, 20, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.f);
 	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 
@@ -273,7 +273,7 @@ void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 	for (int i = 0; i < lights.size(); i++)
 	{
 		ALight* light = archive.getLight(lights[i].name.data);
-		lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.001, 1, 0.01f, 0.01f);
+		lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.01, 1, 0.5f, 0.5f);
 	}
 }
 
@@ -483,12 +483,12 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	light = new Object();
 	light->setShader(shader);
 	light->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"));
-	light->setPosition(glm::vec3(10, 5, 5));
+	light->setPosition(glm::vec3(5, 7, 0));
 	map.push_back(light);
 
 	// Temp lights
-	lightManager->AddPointLight(glm::vec4(-15, 1.5, -2.5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
-	lightManager->AddPointLight(glm::vec4(10, 5, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
+	lightManager->AddPointLight(glm::vec4(-15, 1.5, -2.5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 5, 1, 0.5f, 0.5f);
+	lightManager->AddPointLight(glm::vec4(5, 7, 0, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
 
 	lightManager->AddDirectionalLight(glm::vec4(2.5, 10, 10, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.1f);
 	//lightManager->AddDirectionalLight(glm::vec4(-2.5, 10, 10, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.1f);
