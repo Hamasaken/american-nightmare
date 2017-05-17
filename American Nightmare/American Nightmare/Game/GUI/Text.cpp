@@ -17,7 +17,6 @@ bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize
 	// Creating a empty model class
 	model = new Model();
 	if (model == nullptr) return false;
-	model->BuildQuadTextureBig();
 
 	// Loading font, setting default variables
 	if (!LoadFont(fontName, characterSize))
@@ -80,7 +79,7 @@ void Text::CreateText(std::string text, glm::vec4 color)
 	SDL_FreeSurface(surface);
 
 	// Creating quad for this text
-	model->BuildQuadTexture();
+	model->BuildQuadTextureBig();
 }
 
 void Text::Draw()

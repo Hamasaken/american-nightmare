@@ -57,7 +57,7 @@ void SmokeParticle::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size)
 
 	// Setting some random variables
 	rotationSpeed = SMOKE_TEXTURE_ROTATION;
-	velocity = glm::vec3(SMOKE_TEXTURE_VELOCITY, SMOKE_TEXTURE_VELOCITY, randBetweenF(-0.00035f, 0.00035f));
+	velocity = glm::vec3(SMOKE_TEXTURE_VELOCITY, SMOKE_TEXTURE_VELOCITY, randBetweenF(-0.00075f, 0.00075f));
 }
 
 void SmokeParticle::Update(GLfloat deltaT)

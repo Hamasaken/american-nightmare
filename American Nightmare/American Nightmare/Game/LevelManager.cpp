@@ -567,14 +567,8 @@ void LevelManager::CheckTriggers()
 			// Effect - Starts an particle effect
 			////////////////////////////////////////////////////////////
 			case Trigger::EFFECT:
-
-				// Effects
 				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BIP, 50, 0.5f);
 				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 1, glm::vec4(0.6f, 0.6f, 0.6f, 1));
-
-				// Temporary effect, clear all lights and a new light
-				lightManager->Clear(); 	
-				lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 0.25f, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.001f);
 				break;
 
 			////////////////////////////////////////////////////////////
