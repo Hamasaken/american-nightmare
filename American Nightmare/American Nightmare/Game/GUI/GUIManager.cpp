@@ -10,6 +10,8 @@ bool GUIManager::Start(glm::vec2 screenSize, glm::vec2 screenPosition)
 {
 	this->screenSize = screenSize;
 	this->screenPosition = screenPosition;
+	this->targetCenter = glm::vec2(0, 0);
+	this->currentCenter = glm::vec2(0, 0);
 
 	return true;
 }
@@ -22,6 +24,19 @@ void GUIManager::Stop()
 
 void GUIManager::Update(GLuint deltaT)
 {
+	// Update center position
+	if (currentCenter != targetCenter)
+	{
+		currentCenter += (targetCenter - currentCenter) * GUI_SPEED;
+		if (abs(currentCenter.x - targetCenter.x) < 0.001f &&
+			abs(currentCenter.y - targetCenter.y) < 0.001f) currentCenter = targetCenter;
+
+		for (std::pair<Button*, Action> button : buttons)
+			button.first->setPosition(button.first->getStartPosition() - glm::vec3(currentCenter, 0));
+		for (Text* text : texts)
+			text->setPosition(text->getStartPosition() - glm::vec3(currentCenter, 0));
+	}
+
 	glm::vec2 mousePosition = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), screenSize, screenPosition);
 
 	for (std::pair<Button*, Action> button : buttons)
@@ -70,6 +85,22 @@ Button * GUIManager::getButton(int id)
 	return buttons[id].first;
 }
 
+void GUIManager::setCenter(glm::vec2 center)
+{
+	this->targetCenter = center;
+}
+
+void GUIManager::setInstantCenter(glm::vec2 center)
+{
+	this->targetCenter = center;
+	this->currentCenter = center;
+
+	for (std::pair<Button*, Action> button : buttons)
+		button.first->setPosition(button.first->getStartPosition() - glm::vec3(currentCenter, 0));
+	for (Text* text : texts)
+		text->setPosition(text->getStartPosition() - glm::vec3(currentCenter, 0));
+}
+
 void GUIManager::setShader(GLuint shader)
 {
 	this->shader = shader;
@@ -109,6 +140,5 @@ void GUIManager::clearTexts()
 		delete text;
 		text = nullptr;
 	}
-
 	texts.clear();
 }

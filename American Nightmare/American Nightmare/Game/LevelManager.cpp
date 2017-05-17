@@ -77,6 +77,13 @@ void LevelManager::Stop()
 		player = nullptr;
 	}
 
+	if (enemy != nullptr)
+	{
+		enemy->Stop();
+		delete enemy;
+		enemy = nullptr;
+	}
+
 	// Deleting quadtree
 	if (quadTree != nullptr)
 	{
@@ -85,12 +92,29 @@ void LevelManager::Stop()
 		quadTree = nullptr;
 	}
 
+	// Delete projectile
+	if (myProjectile != nullptr)
+	{
+//		myProjectile->Stop();
+//		delete myProjectile;
+//		myProjectile = nullptr;
+	}
+
 	// Unloads the map objects
 	StopMap();
+
+	// Removes the world object
+	if (world != nullptr)
+	{
+		world->Dump();
+		delete world;
+		world = nullptr;
+	}
+
 	lightManager->Clear();
 	delete lightManager;
 
-	// These are getting removed in screen instead
+	// These are getting removed somewhere else
 	materialManager = nullptr;
 	meshManager = nullptr;
 	particleManager = nullptr;
@@ -285,7 +309,7 @@ void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 	for (int i = 0; i < lights.size(); i++)
 	{
 		ALight* light = archive.getLight(lights[i].name.data);
-		lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.001, 1, 0.01f, 0.01f);
+		lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.01, 1, 0.5f, 0.5f);
 	}
 }
 
@@ -381,7 +405,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Background
 	Object* background = new Object();
 	background->setShader(shader);
-	background->Start(nullptr, materialManager->getMaterial("backgroundmaterial"));
+	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
 	background->setScale(glm::vec3(40, 20, 1));
 	background->setPosition(glm::vec3(0, 10, -5));
 	map.push_back(background);
@@ -389,7 +413,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Ground
 	background = new Object();
 	background->setShader(shader);
-	background->Start(nullptr, materialManager->getMaterial("groundmaterial"));
+	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"));
 	background->setScale(glm::vec3(40, 20, 1));
 	background->setPosition(glm::vec3(0, 0.5f, 0));
 	background->setRotation(glm::vec3(1.5 * 3.14, 0, 0));
@@ -398,7 +422,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Right wall
 	background = new Object();
 	background->setShader(shader);
-	background->Start(nullptr, materialManager->getMaterial("backgroundmaterial"));
+	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
 	background->setScale(glm::vec3(40, 20, 1));
 	background->setPosition(glm::vec3(19, 10, 0));
 	background->setRotation(glm::vec3(0, 1.5 * 3.14, 0));
@@ -407,7 +431,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Left wall
 	background = new Object();
 	background->setShader(shader);
-	background->Start(nullptr, materialManager->getMaterial("backgroundmaterial"));
+	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
 	background->setScale(glm::vec3(40, 20, 1));
 	background->setPosition(glm::vec3(-19, 10, 0));
 	background->setRotation(glm::vec3(0, -1.5 * 3.14, 0));
@@ -416,7 +440,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Left platform
 	background = new Object();
 	background->setShader(shader);
-	background->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("groundmaterial"));
+	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"));
 	background->setScale(glm::vec3(8, 5, 3));
 	background->setPosition(glm::vec3(-5, 0, 0));
 	map.push_back(background);
@@ -424,7 +448,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Right platform cave
 	background = new Object();
 	background->setShader(shader);
-	background->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("groundmaterial"));
+	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"));
 	background->setScale(glm::vec3(10.f, 15.f, 1));
 	background->setPosition(glm::vec3(10, 4.25, 0));
 	background->setRotation(glm::vec3(-45, 0, 0));
@@ -437,7 +461,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	{
 		Entity* moveble = new Entity();
 		moveble->setShader(shader);
-		moveble->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("groundmaterial"), world, glm::vec2((rand() % 20) - 10, (rand() % 20)), glm::vec3(0.5f, 0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.5f, 0.4f);
+		moveble->Start(meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"), world, glm::vec2((rand() % 20) - 10, (rand() % 20)), glm::vec3(0.5f, 0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.5f, 0.4f);
 		map.push_back(moveble);
 	}
 
@@ -474,7 +498,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Triggers visual
 	background = new Object();
 	background->setShader(shader);
-	background->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"));
+	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
 	background->setScale(glm::vec3(1, 1, 1));
 	background->setPosition(glm::vec3(5, 10, 0));
 	background->setRotation(glm::vec3(0, 0, 0));
@@ -483,7 +507,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Trigger visual
 	background = new Object();
 	background->setShader(shader);
-	background->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"));
+	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
 	background->setScale(glm::vec3(1, 1, 1));
 	background->setPosition(glm::vec3(-5, 7.5, 0));
 	background->setRotation(glm::vec3(0, 0, 0));
@@ -513,19 +537,19 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	////////////////////////////////////////////////////////////
 	Object* light = new Object();
 	light->setShader(shader);
-	light->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"));
+	light->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
 	light->setPosition(glm::vec3(-15, 1.5, -2.5));
 	map.push_back(light);
 
 	light = new Object();
 	light->setShader(shader);
-	light->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"));
-	light->setPosition(glm::vec3(10, 5, 5));
+	light->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
+	light->setPosition(glm::vec3(5, 7, 0));
 	map.push_back(light);
 
 	// Temp lights
-	lightManager->AddPointLight(glm::vec4(-15, 1.5, -2.5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
-	lightManager->AddPointLight(glm::vec4(10, 5, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
+	lightManager->AddPointLight(glm::vec4(-15, 1.5, -2.5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 5, 1, 0.5f, 0.5f);
+	lightManager->AddPointLight(glm::vec4(5, 7, 0, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
 
 }
 
@@ -623,7 +647,7 @@ void LevelManager::CheckTriggers()
 			{
 				Entity* moveble = new Entity();
 				moveble->setShader(map[0]->getShader());
-				moveble->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec3(randBetweenF(0.30f, 0.70f), randBetweenF(0.30f, 0.70f), randBetweenF(0.30f, 0.70f)), b2_dynamicBody, b2Shape::e_polygon, false, 2.5f, 1.f);
+				moveble->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, glm::vec2((rand() % 40) - 20, (rand() % 40)), glm::vec3(randBetweenF(0.30f, 0.70f), randBetweenF(0.30f, 0.70f), randBetweenF(0.30f, 0.70f)), b2_dynamicBody, b2Shape::e_polygon, false, 2.5f, 1.f);
 				map.push_back(moveble);
 			}
 

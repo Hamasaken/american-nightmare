@@ -41,6 +41,7 @@ public:
 	void Draw();
 
 	// Set & Get functions
+	glm::vec3 getStartPosition();
 	std::string getString();
 	glm::vec4 getColor();
 	GLuint getTexture() const;
@@ -56,6 +57,7 @@ private:
 	////////////////////////////////////////////////////////////
 	bool LoadFont(std::string fontName, float characterSize);
 
+	glm::vec3 startPosition;//< This text's start position
 	GLuint texture;			//< This text's texture 
 	TTF_Font* font;			//< The font of this text
 	std::string text;		//< The string of text to be displayed

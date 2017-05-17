@@ -72,6 +72,12 @@ void ScreenManager::Stop()
 		delete screenPosters;
 		screenPosters = nullptr;
 	}
+
+	if (soundManager != nullptr)
+	{
+		delete soundManager;
+		soundManager = nullptr;
+	}
 }
 
 bool ScreenManager::StartCurrentScreen()

@@ -43,7 +43,7 @@ public:
 private:
 	MeshManager* meshManager;			//< Mesh Manager
 	MaterialManager* materialManager;	//< Materials & Textures
-	GUIManager* guiManager;				//< Buttons & Text
+	GUIManager* posterListGUI;			//< Buttons & Text
 	ShaderManager* shaderManager;		//< Shader Manager
 	ParticleManager* particleManager;	//< Manager for particle effects
 };

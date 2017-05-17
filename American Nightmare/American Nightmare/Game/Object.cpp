@@ -17,14 +17,10 @@ bool Object::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(1, 1, 1);
 
-	// Adding model (Creating a quad if a mesh is not found)
-	if (mesh == nullptr || mesh->model == nullptr)
-	{
-	//	printf("Mesh or model not inputted, creating quad instead.\n");
-		model = new Model;
-		model->BuildQuadTexture();
-	}
-	else model = mesh->model;
+	// Adding model 
+	this->model = mesh->model;
+	if (model == nullptr)
+		return false;
 
 	// Adding material
 	this->material = material;

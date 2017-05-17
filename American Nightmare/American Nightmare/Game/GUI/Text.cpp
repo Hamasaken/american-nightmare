@@ -4,10 +4,20 @@ Text::Text() { }
 
 Text::Text(const Text & other) { }
 
-Text::~Text() { }
+Text::~Text() 
+{
+	if (model != nullptr)
+	{
+		model->Stop();
+		delete model;
+		model = nullptr;
+	}
+}
 
 bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
+	this->startPosition = position;
+	this->startPosition.z -= 0.001f;
 	this->position = position;
 	this->position.z -= 0.001f; // pushing the text a tiny notch to be in front of buttons & bars
 	this->rotation = rotation;
@@ -17,6 +27,7 @@ bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize
 	// Creating a empty model class
 	model = new Model();
 	if (model == nullptr) return false;
+	texture = -1;
 
 	// Loading font, setting default variables
 	if (!LoadFont(fontName, characterSize))
@@ -27,6 +38,8 @@ bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize
 
 void Text::Stop()
 {
+	Object::~Object();
+
 	// Unload Font
 	if (font != nullptr)
 	{
@@ -42,6 +55,9 @@ bool Text::LoadFont(std::string fontName, float characterSize)
 	font = TTF_OpenFont((fontName).c_str(), characterSize);
 	if (font == nullptr)
 		return false;
+
+	glDeleteTextures(1, &texture);
+	texture = -1;
 
 	return true;
 }
@@ -61,6 +77,7 @@ void Text::CreateText(std::string text, glm::vec4 color)
 	scale = glm::vec3(surface->w / screenSize.x, surface->h / screenSize.y, 1.f);
 
 	// Create OpenGL Texture
+	if (texture == 0) glDeleteTextures(1, &texture);
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, surface->pixels);
@@ -87,6 +104,7 @@ void Text::Draw()
 	Object::Draw();
 }
 
+glm::vec3 Text::getStartPosition() { return startPosition; }
 std::string Text::getString() { return text; }
 GLuint Text::getTexture() const { return texture; }
 glm::vec4 Text::getColor() { return color; }
