@@ -16,21 +16,21 @@ out vec2 textureUV;
 
 void main() {
 
-	if(inputPosition.x == -1.f && inputPosition.y == 1.f)
+	if(inputPosition.x == -0.5f && inputPosition.y == 0.5f)
 	{
 		if(isRight)
 			textureUV = uvTopLeft;
 		else
 			textureUV = uvTopRight;
 	}
-	else if(inputPosition.x == 1.f && inputPosition.y == 1.f)
+	else if(inputPosition.x == 0.5f && inputPosition.y == 0.5f)
 	{
 		if(isRight)
 			textureUV = uvTopRight;
 		else
 			textureUV = uvTopLeft;
 	}
-	else if(inputPosition.x == -1.f && inputPosition.y == -1.f)
+	else if(inputPosition.x == -0.5f && inputPosition.y == -0.5f)
 	{
 		if(isRight)
 			textureUV = uvBotLeft;
