@@ -234,6 +234,7 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 
 		glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
 		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), -1.f);
+		glUniform3f(glGetUniformLocation(object->getShader(), "diffuse"), dynamic_cast<Text*>(object)->getColor().r, dynamic_cast<Text*>(object)->getColor().g, dynamic_cast<Text*>(object)->getColor().b);
 	}
 
 
