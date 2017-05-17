@@ -17,11 +17,9 @@ bool Hitbox::InitializeHitbox(b2World* world)
 
 	// Adding body to world
 	AddBodyToWorld(world, glm::vec2(1.f, 1.f), b2_dynamicBody, false, false);
-	AddBodyToWorld(world, glm::vec2(5.f, 1.f), b2_dynamicBody, false);
 
 	// Creating shape for body
 	ModifyShape(glm::vec2(1.f, 1.f), b2Shape::e_polygon, 0.f, 10.f, false);
-	ModifyShape(glm::vec2(40.f, 40.f), b2Shape::e_polygon, 100.f, 1.f);
 
 	return true;
 }

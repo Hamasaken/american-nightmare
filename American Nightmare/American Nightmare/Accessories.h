@@ -52,7 +52,7 @@ glm::vec2 fromScreenToNDC(glm::vec2 position, glm::vec2 screenSize, glm::vec2 sc
 // Vertex Struct for vertex buffers, etc
 
 // Returns the screen cordinates to NDC
-glm::vec3 fromScreenToNDC(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
+//glm::vec3 fromScreenToNDC(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
 
 // Game State
 enum State { Game, StartMeny, Options, Cutscene, Posters, Exit };

@@ -77,7 +77,6 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	levelManager = new LevelManager();
 	if (levelManager == nullptr) return false;
 	if (!levelManager->Start(shaderManager->getShader("texture_animation_normal"), materialManager, particleManager, soundManager))
-	if (!levelManager->Start(shaderManager->getShader("texture_animation_normal"), shaderManager->getShader("deferred")))
 		return false;
 
 	////////////////////////////////////////////////////////////
@@ -161,10 +160,10 @@ void ScreenGame::Draw()
 	for (Projectile* projectiles : levelManager->getProjectiles())
 		DrawObjectGeometryPass(projectiles, shaderManager);
 	//TEST
-	for(Projectile* proj : levelManager->getProj())
-		DrawObjectGeometryPass(proj, shaderManager);
+	//for(Projectile* proj : levelManager->getProj())
+	//	DrawObjectGeometryPass(proj, shaderManager);
 
-	DrawObjectGeometryPass(levelManager->getPlayer()->getVac(), shaderManager);
+	//DrawObjectGeometryPass(levelManager->getPlayer()->getVac(), shaderManager);
 
 	//Draw Projectile///////////////////////////////////////////////////////
 	////TESTING

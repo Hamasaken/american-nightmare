@@ -6,7 +6,6 @@ LevelManager::LevelManager(const LevelManager & other) { }
 
 LevelManager::~LevelManager() { }
 
-bool LevelManager::Start(GLuint playerShader, GLuint mapShader)
 bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, ParticleManager* particleManager, SoundManager* soundManager)
 {
 	this->materialManager = materialManager;
@@ -26,33 +25,32 @@ bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, 
 
 	GLint tempNomralMapIndex = materialManager->AddTexture("playernormalmap", texturePath + "Walk01_nor.png");
 	// Loading in materials
-	materialManager.AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
-	materialManager.AddMaterial("groundmaterial", glm::vec3(0.1f), 1.f, "groundtexture", texturePath + "temp_ground.jpg");
-	materialManager.AddMaterial("backgroundmaterial", glm::vec3(0.1f), 1.f, "backgroundtexture", texturePath + "temp_background.jpg");
-	if (materialManager.getMaterial("lightmaterial") == nullptr) printf("Material not found\n");
-	if (materialManager.getMaterial("groundmaterial") == nullptr) printf("Material not found\n");
-	if (materialManager.getMaterial("backgroundmaterial") == nullptr) printf("Material not found\n");
+	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
+	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), 1.f, "groundtexture", texturePath + "temp_ground.jpg");
+	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), 1.f, "backgroundtexture", texturePath + "temp_background.jpg");
+	if (materialManager->getMaterial("lightmaterial") == nullptr) printf("Material not found\n");
+	if (materialManager->getMaterial("groundmaterial") == nullptr) printf("Material not found\n");
+	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Material not found\n");
 
 
-	materialManager.AddMaterial("playermaterial", glm::vec3(0.1), 1.f, "playertexture", texturePath + "Walk01.png");
-	GLint tempNomralMapIndex = materialManager.AddTexture("playernormalmap", texturePath + "Walk01_nor.png");
+	materialManager->AddMaterial("playermaterial", glm::vec3(0.1), 1.f, "playertexture", texturePath + "Walk01.png");
+	//GLint tempNomralMapIndex = materialManager->AddTexture("playernormalmap", texturePath + "Walk01_nor.png");
 
 	// Creating the player object
 	player = new Player();
 	if (player == nullptr) return false;
 
-	const MaterialManager::Material* playerMaterial = materialManager.getMaterial("playermaterial");
-	const MaterialManager::Material* vacuumMaterial = materialManager.getMaterial("lightmaterial");
 	const MaterialManager::Material* playerMaterial = materialManager->getMaterial("playermaterial");
+	const MaterialManager::Material* vacuumMaterial = materialManager->getMaterial("lightmaterial");
 
-	if (!player->Start(modelPath + "model.m", playerMaterial, vacuumMaterial, world))
+	if (!player->Start(modelPath + "model.m", playerMaterial, /*vacuumMaterial, */world))
 		return false;
 	player->setShader(playerShader);
 	player->AddAnimation(playerMaterial, materialManager->getTextureID(tempNomralMapIndex), animationPath + "testanimationnormalmap.txt");
 	// Backing the player up a little to the screen
 	player->setPosition(glm::vec3(0.f, 0.f, 0.f));
 	
-	player->getVac()->setShader(mapShader);
+	//player->getVac()->setShader(mapShader);
 
 	// Making a Enemy
 	enemy = new Enemy();
@@ -160,7 +158,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Dammsugare in the middle of the screen
 	Entity* box = new Entity();
 	box->setShader(shader);
-	box->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(-10, 0), glm::vec2(8.f, 5.f), b2_staticBody);
+	box->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"), world, glm::vec2(-10, 0), glm::vec2(8.f, 5.f), b2_staticBody);
 	box->setScale(glm::vec3(8, 5, 3));
 	map.push_back(box);
 
@@ -241,21 +239,21 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	////////////////////////////////////////////////////////////
 	// Map Collision (Invisible)
 	////////////////////////////////////////////////////////////
-	Hitbox* hitbox = new Hitbox();
-	hitbox->InitializeHitbox(world, glm::vec2(0, 0), glm::vec2(40.f, 1), b2_staticBody);	 // ground
-	hitboxes.push_back(hitbox);
-	hitbox = new Hitbox();
-	hitbox->InitializeHitbox(world, glm::vec2(20, 7.5f), glm::vec2(10.f, 1), b2_staticBody);	// platform
-	hitboxes.push_back(hitbox);
-	hitbox = new Hitbox();
-	hitbox->InitializeHitbox(world, glm::vec2(-40, 0), glm::vec2(1.f, 20.f), b2_staticBody);	// left wall
-	hitboxes.push_back(hitbox);
-	hitbox = new Hitbox();
-	hitbox->InitializeHitbox(world, glm::vec2(40, 0), glm::vec2(1.f, 20.f), b2_staticBody);	// right wall
-	hitboxes.push_back(hitbox);
-	hitbox = new Hitbox();
-	hitbox->InitializeHitbox(world, glm::vec2(-10, 0), glm::vec2(8.f, 5.f), b2_staticBody);	// dammsugare
-	hitboxes.push_back(hitbox);
+	//Hitbox* hitbox = new Hitbox();
+	//hitbox->InitializeHitbox(world, glm::vec2(0, 0), glm::vec2(40.f, 1), b2_staticBody);	 // ground
+	//hitboxes.push_back(hitbox);
+	//hitbox = new Hitbox();
+	//hitbox->InitializeHitbox(world, glm::vec2(20, 7.5f), glm::vec2(10.f, 1), b2_staticBody);	// platform
+	//hitboxes.push_back(hitbox);
+	//hitbox = new Hitbox();
+	//hitbox->InitializeHitbox(world, glm::vec2(-40, 0), glm::vec2(1.f, 20.f), b2_staticBody);	// left wall
+	//hitboxes.push_back(hitbox);
+	//hitbox = new Hitbox();
+	//hitbox->InitializeHitbox(world, glm::vec2(40, 0), glm::vec2(1.f, 20.f), b2_staticBody);	// right wall
+	//hitboxes.push_back(hitbox);
+	//hitbox = new Hitbox();
+	//hitbox->InitializeHitbox(world, glm::vec2(-10, 0), glm::vec2(8.f, 5.f), b2_staticBody);	// dammsugare
+	//hitboxes.push_back(hitbox);
 
 	////////////////////////////////////////////////////////////
 	// Action Triggers
@@ -285,12 +283,14 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	background->setPosition(glm::vec3(-10, 15, 0));
 	background->setRotation(glm::vec3(0, 0, 0));
 	map.push_back(background);
+
+
 	//// Making some boxes to reload with
 	for (int i = 0; i < 50; i++)
 	{
 		Projectile* moveble = new Projectile();
 		moveble->setShader(shader);
-		moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
+		moveble->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
 		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
 		projectiles.push_back(moveble);
 	}
@@ -326,12 +326,12 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	light->setPosition(glm::vec3(20, 10, 15));
 	map.push_back(light);
 
-	// Temp lights
-	lightManager->AddPointLight(glm::vec4(-20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
-	lightManager->AddPointLight(glm::vec4(+20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
+	//// Temp lights
+	//lightManager->AddPointLight(glm::vec4(-20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
+	//lightManager->AddPointLight(glm::vec4(+20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
 
-	lightManager->AddPointLight(glm::vec4(-10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
-	lightManager->AddPointLight(glm::vec4(+10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
+	//lightManager->AddPointLight(glm::vec4(-10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
+	//lightManager->AddPointLight(glm::vec4(+10, 5, 15, 0), glm::vec4(1, 1, 1, 1), glm::vec4(10, 10, 10, 10), 10, 10, 10);
 
 	//myPH = new ProjectileHandler(world, shader);
 	//myPH = new ProjectileHandler(world, shader, 10);
@@ -339,9 +339,9 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	//moveble = new Projectile(world, shader);
 
 	//myProjectile = new Projectile(world, shader);
-	lightManager->AddPointLight(glm::vec4(-20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
+	/*lightManager->AddPointLight(glm::vec4(-20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
 	lightManager->AddPointLight(glm::vec4(+20, 5, 15, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 1);
-	lightManager->AddPointLight(glm::vec4(-20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
+	*/lightManager->AddPointLight(glm::vec4(-20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
 	lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
 
 	lightManager->AddDirectionalLight(glm::vec4(5, 20, 20, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);

@@ -28,7 +28,7 @@ public:
 	// \param particleManager ptr to the particle manager
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(GLuint playerShader, GLuint mapShader);
+	//bool Start(GLuint playerShader, GLuint mapShader);
 	bool Start(GLuint playerShader, MaterialManager* materialManager, ParticleManager* particleManager, SoundManager* soundManager);
 
 	////////////////////////////////////////////////////////////

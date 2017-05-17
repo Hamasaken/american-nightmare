@@ -27,7 +27,7 @@ private:
 	SDL_Cursor* cursor;
 	void initiateCursor();
 private:
-	Vacuum* vac;
+	//Vacuum* vac;
 
 
 	bool checkValue;
@@ -40,8 +40,8 @@ public:
 	bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
 	//void Update(GLint deltaT);
 	void Update(GLint deltaT, b2World* world, glm::vec2 pos);
-	bool Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
-	void Update(GLint deltaT);
+	//bool Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
+	//void Update(GLint deltaT);
 
 	//Test-variable
 
@@ -52,11 +52,12 @@ public:
 	void Movement();
 	
 	b2Body* getBody();
-	Vacuum* getVac();
+	//Vacuum* getVac();
 
+	//glm::vec2 getPlayerPosAsGLM();
 	glm::vec2 getPlayerPosAsGLM();
-	bool addPlayerProjectiles();
+	/*bool addPlayerProjectiles();
 	void setCheckForProjectilePickUp(bool checkValue);
-	bool getCheckValue()const;
+	bool getCheckValue()const;*/
 };
 #endif // !PLAYER_H
