@@ -69,6 +69,8 @@ public:
 
 	//glm::vec2 getPlayerPosAsGLM();
 	glm::vec2 getPlayerPosAsGLM();
+private:
+	bool hasJumped;
 	/*bool addPlayerProjectiles();
 	void setCheckForProjectilePickUp(bool checkValue);
 	bool getCheckValue()const;*/

@@ -273,9 +273,11 @@ void ScreenGame::DrawShadowMaps()
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 
+		glCullFace(GL_FRONT);
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
 			DrawObjectDirShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+		glCullFace(GL_BACK);
 
 		// Set shader for transparent objects
 		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
