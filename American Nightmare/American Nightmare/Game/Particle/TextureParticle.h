@@ -14,6 +14,12 @@
 #define TEXTURE_ROTATION_FALL_OFF	randBetweenF(0.005f, 0.005f)
 #define TEXTURE_BLENDING			0.55f
 
+// TEXTURE SMOKE DEFAULTS
+#define SMOKE_TEXTURE_ROTATION		randBetweenF(-0.0001f, 0.0001f)
+#define SMOKE_TEXTURE_VELOCITY		randBetweenF(-0.00025f, 0.00025f)
+#define SMOKE_TEXTURE_PULL			0.035f
+#define SMOKE_TEXTURE_ALPHA			randBetweenF(0.025f, 0.10f)
+
 class TextureParticle : public Particle
 {
 public:
@@ -43,7 +49,11 @@ protected:
 
 class SmokeParticle : public TextureParticle
 {
+public:
+	virtual void Start(glm::vec3 position, glm::vec4 color, glm::vec2 size);
 	virtual void Update(GLfloat deltaT);
+protected: 
+	glm::vec3 startPosition;
 };
 
 #endif // !TEXTUREPARTICLE_H

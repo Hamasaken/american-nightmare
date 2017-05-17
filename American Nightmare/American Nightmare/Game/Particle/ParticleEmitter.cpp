@@ -30,12 +30,23 @@ void ParticleEmitter::BloodSplatter(glm::vec3 position, float angle, float stren
 	}
 }
 
-void ParticleEmitter::TextureExplosion(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount)
+void ParticleEmitter::SmokeCloud(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount)
 {
 	this->texture = texture;
 	for (int i = 0; i < amount; i++)
 	{
 		TextureParticle* particle = new TextureParticle;
+		particle->Start(position, color, size);
+		particles.push_back(particle);
+	}
+}
+
+void ParticleEmitter::ConstantSmoke(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount)
+{
+	this->texture = texture;
+	for (int i = 0; i < amount; i++)
+	{
+		SmokeParticle* particle = new SmokeParticle;
 		particle->Start(position, color, size);
 		particles.push_back(particle);
 	}
