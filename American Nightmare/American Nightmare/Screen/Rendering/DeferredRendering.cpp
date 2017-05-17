@@ -4,11 +4,12 @@ DeferredRendering::DeferredRendering() { }
 
 DeferredRendering::DeferredRendering(const DeferredRendering & other) { }
 
-DeferredRendering::~DeferredRendering() { }
+DeferredRendering::~DeferredRendering() { Stop(); }
 
 bool DeferredRendering::Start(glm::vec2 screenSize, GLuint lightShader)
 {
 	this->lightShader = lightShader;
+	this->shadowShader = shadowShader;
 	createDRBuffer(screenSize);
 	finalRenderQuad.BuildQuadTexture();
 	return true;
@@ -16,18 +17,19 @@ bool DeferredRendering::Start(glm::vec2 screenSize, GLuint lightShader)
 
 void DeferredRendering::Stop()
 {
-	GLuint* textureList = new GLuint[5];
+	GLuint* textureList = new GLuint[6];
 	textureList[0] = drPosition;
 	textureList[1] = drNormal;
 	textureList[2] = drAmbient;
 	textureList[3] = drDiffuse;
 	textureList[4] = drSpecular;
 
-	glDeleteTextures(5, textureList);
+	glDeleteTextures(6, textureList);
 
 	delete[] textureList;
-}
 
+	glDeleteFramebuffers(1, &drFBO);
+}
 
 void DeferredRendering::createDRBuffer(glm::vec2 screenSize)
 {

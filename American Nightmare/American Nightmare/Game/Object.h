@@ -40,14 +40,13 @@ public:
 	////////////////////////////////////////////////////////////
 	void setPosition(glm::vec3 position);
 	glm::vec3 getPosition() const;
+	glm::vec3 getCenter() const;
 	void setRotation(glm::vec3 rotation);
 	glm::vec3 getRotation() const;
-	glm::vec3 getRotationInRadians() const;
-	void setScale(glm::vec3 scale);
+	virtual void setScale(glm::vec3 scale);
 	glm::vec3 getScale() const;
 	virtual void setShader(GLuint shader);
 	GLuint getShader() const;
-	GLuint getTexture() const;
 	GLuint getTextureID() const;
 
 protected:
@@ -58,7 +57,6 @@ protected:
 
 protected:	// Note: Make this private when loadModel is implemented!
 	Model* model;	//< This object's model
-	GLuint texture;	//< This object's texture 
 	const MaterialManager::Material* material; //< This object's material
 };
 

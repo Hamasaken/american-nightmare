@@ -8,6 +8,8 @@
 #include "Rendering/DeferredRendering.h"
 #include "../Game/LightManager.h"
 #include "../SoundManager.h"
+#include "../Game/Particle/ParticleManager.h"
+#include "../Game/GUI/Button.h"
 
 class Screen
 {
@@ -20,7 +22,7 @@ public:
 	// \brief Loads all needed objects, also runs SetStartVariables
 	// \return Returrns true if every object could be created
 	////////////////////////////////////////////////////////////
-	virtual bool Start(glm::vec2 screenSize, SoundManager* soundManager);
+	virtual bool Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager);
 	
 	////////////////////////////////////////////////////////////
 	// \brief A combined function that runs both Stop & Start
@@ -58,15 +60,21 @@ public:
 	// \note Replace the solid shader with an abstract "Shader" instead
 	////////////////////////////////////////////////////////////
 	void DrawObject(Object* object, ShaderManager* shaderManager);
-	void DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, LightManager::PointLight* light);
+	void DrawObjectShadowMap(Object* object, ShaderManager* shaderManager, glm::mat4 lightSpaceMatrix);
+	void DrawObjectShadowMapTransparent(Animation* animatedObj, ShaderManager* shaderManager, glm::mat4 lightSpaceMatrix);
+	void DrawObjectGUI(Object* object, ShaderManager* shaderManager);
+	void DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, glm::mat4 lightSpaceMatrix, glm::vec4 lightDirection, GLuint shadowMap, bool useShadow);
 	void DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager);
-	void DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, LightManager::PointLight* light);
+	void DrawObjectLightPass(DeferredRendering* drRendering, ShaderManager* shaderManager, std::vector<LightManager::PointLight*> pointLightList, std::vector<LightManager::DirectionalLight*> directionalLightList, glm::mat4 lightSpaceMatrix, glm::vec4 lightDirection, GLuint shadowMap, bool useShadow);
+	void DrawParticles(ParticleManager* particleManager, ShaderManager* shaderManager);
 
 protected:
 	Camera* camera;	//< Simple Camera object
 	SoundManager* soundManager; // Sound Manager
+	State* state;
 
 	glm::vec2 screenSize;
+	glm::vec2 screenPosition;
 	glm::mat4 worldMatrix;
 	glm::mat4 projectionMatrix;
 };

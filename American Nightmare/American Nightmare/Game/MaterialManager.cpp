@@ -9,20 +9,14 @@ MaterialManager::~MaterialManager() { Clear(); }
 
 void MaterialManager::Clear()
 {
-	GLuint* tempTextureList = new GLuint[textureList.size()];
-
 	for (int i = 0; i < textureList.size(); i++)
-		tempTextureList[i] = textureList[i]->textureID;
+		glDeleteTextures(1, &textureList[i]->textureID);
 
-	for (int i = 0; i < materialList.size(); i++)
-		delete materialList[i];
+	for (Material* material : materialList)
+		delete material;
 
-	for (int i = 0; i < textureList.size(); i++)
-		delete textureList[i];
-
-	glDeleteTextures(textureList.size(), tempTextureList);
-
-	delete[] tempTextureList;
+	for (Texture* texture : textureList)
+		delete texture;
 
 	materialList.clear();
 	textureList.clear();
@@ -75,7 +69,6 @@ GLint MaterialManager::AddTexture(std::string name, std::string texturePath)
 
 GLuint MaterialManager::loadTexture(std::string inImage)
 {
-
 	sf::Image* sfImage = new sf::Image();
 	if (!sfImage->loadFromFile(inImage))
 	{

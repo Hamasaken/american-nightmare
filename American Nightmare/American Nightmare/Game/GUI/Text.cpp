@@ -6,9 +6,9 @@ Text::Text(const Text & other) { }
 
 Text::~Text() { }
 
-bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+bool Text::Start(glm::vec2 screenSize, std::string fontName, std::string text, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
-	this->position = fromScreenToWorld(position);
+	this->position = position;
 	this->rotation = rotation;
 	this->scale = scale;
 	this->screenSize = screenSize;
@@ -20,9 +20,6 @@ bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize
 	// Loading font, setting default variables
 	if (!LoadFont(fontName, characterSize))
 		return false;
-
-	// Creating a default string 
-	CreateText("Default");
 
 	return true;
 }
@@ -56,24 +53,24 @@ void Text::CreateText(std::string text, glm::vec4 color)
 	this->color = color;
 
 	// Text Color
-	SDL_Color clr = { color.r * 255.f, color.g * 255.f, color.b * 255.f, color.a * 255.f};
+	SDL_Color clr = { 255.f, 255.f, 255.f, 255.f };
 
 	// Create Surface
 	SDL_Surface* surface;
 	surface = TTF_RenderText_Blended(font, text.c_str(), clr);
-	size = glm::vec2(surface->w, surface->h);
+	scale = glm::vec3(0.5f, 0.5f, 1.f);
 
 	// Create OpenGL Texture
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_BGR, GL_UNSIGNED_BYTE, surface->pixels);
 
 	// Setting some important parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glGenerateMipmap(GL_TEXTURE_2D);
+//	glGenerateMipmap(GL_TEXTURE_2D);
 
 	// Unbinding
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -82,7 +79,7 @@ void Text::CreateText(std::string text, glm::vec4 color)
 	SDL_FreeSurface(surface);
 
 	// Creating quad for this text
-	model->BuildQuad(screenSize, position, color, size);
+	model->BuildQuadTexture();
 }
 
 void Text::Draw()
@@ -91,7 +88,7 @@ void Text::Draw()
 }
 
 std::string Text::getString() { return text; }
-glm::vec2 Text::getSize() { return size; }
+GLuint Text::getTexture() const { return texture; }
 glm::vec4 Text::getColor() { return color; }
 void Text::setString(std::string text) { this->text = text; CreateText(text, color); }
 void Text::setColor(glm::vec4 color) { this->color = color; CreateText(text, color); }

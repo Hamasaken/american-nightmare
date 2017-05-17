@@ -2,6 +2,8 @@
 #define PARTICLEEMITTER_H
 
 #include "Particle.h"
+#include "BloodParticle.h"
+#include "TextureParticle.h"
 
 class ParticleEmitter
 {
@@ -9,20 +11,18 @@ public:
 	// Different particle types
 	enum ParticleType
 	{
-		TRIANGLE
+		LIGHT, 
+		BLOOD, 
+		TEXTURE
 	};
 
 	ParticleEmitter();
 	ParticleEmitter(const ParticleEmitter& other);
 	~ParticleEmitter();
 
-	////////////////////////////////////////////////////////////
-	// \brief Creates particles in this emitter
-	// \param position The start position of the particles
-	// \param color The start color of the particles
-	// \param amount The total number of particles to be created
-	////////////////////////////////////////////////////////////
-	void CreateParticles(glm::vec3 position, glm::vec4 color, int amount);
+	void LightExplosion(glm::vec3 position, glm::vec4 color, glm::vec2 size, int amount);
+	void BloodSplatter(glm::vec3 position, float angle, float strength, glm::vec4 color, glm::vec2 size, int amount);
+	void TextureExplosion(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads every particle in this vector
@@ -38,7 +38,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Returns every particle as a vector in this emitter
 	////////////////////////////////////////////////////////////
-	std::vector<Vertex> getParticlesAsVertices();
+	std::vector<Vertex*>* getParticlesAsVertices();
 
 	// Get & Set functions
 	void setPosition(glm::vec3 position);
@@ -49,9 +49,10 @@ public:
 	int getNumberOfParticles();
 
 private:
-	bool isComplete;			//< If this emitter is finished or not
-	glm::vec3 position;			//< The starting position of this emitter (will use for optimaztion later on)
-	ParticleType type;			//< The type of particles inside this emitter
+	bool isComplete;					//< If this emitter is finished or not
+	glm::vec3 position;					//< The starting position of this emitter (will use for optimaztion later on)
+	ParticleType type;					//< The type of particles inside this emitter
+	std::vector<Vertex*> vertices;		//< The vertices in this emitter in a vector
 	std::vector<Particle*> particles;	//< The particles in this emitter in a vector
 };
 

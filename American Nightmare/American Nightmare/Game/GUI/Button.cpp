@@ -1,29 +1,28 @@
 #include "Button.h"
 
-Button::Button() : Object() { }
+Button::Button() : Object() 
+{
+	text = nullptr;
+}
 
 Button::Button(const Button & other) { }
 
 Button::~Button() { }
 
-bool Button::Start(glm::vec2 screenSize, glm::vec2 position, glm::vec2 size, std::string textureName, glm::vec4 color)
+bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, glm::vec4 color)
 {
-	//Object::Start("", textureName);
+	if (!Object::Start("", material))
+		return false;
 
-	// Setting starting variables and inserting parameters
-	this->position = fromScreenToWorld(position);
+	this->position = position;
 	this->rotation = glm::vec3(0, 0, 0);
-	this->scale = glm::vec3(1, 1, 1);
+	this->scale = glm::vec3(1 * size.x, 1 * size.y, 1);
 	this->screenSize = screenSize;
 	this->size = size;
 	this->color = color;
-
-	// Creating model object
-	model = new Model();
-	if (model == nullptr) return false;
-
-	// Updating quad model
-	UpdateQuad();
+	this->state = Nothing;
+	this->prevState = Nothing;
+	this->pressed = false;
 
 	return true;
 }
@@ -45,43 +44,51 @@ bool Button::StartText(std::string fontName, float characterSize)
 	// Creating text object
 	text = new Text();
 	if (text == nullptr) return false;
-	if (!text->Start(screenSize, fontName, characterSize, position, rotation, scale))
+	if (!text->Start(screenSize, fontName, "BTN text", characterSize, position, rotation))
 		return false;
-
-	text->CreateText("Default");
 
 	return true;
 }
 
-bool Button::isMouseInside()
+bool Button::isMouseInside(glm::vec2 mousePosition)
 {
-	glm::vec2 mousePosition = fromScreenToWorld(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y));
-	return (mousePosition.x > position.x && mousePosition.x < position.x + size.x &&
-		mousePosition.y > position.y && mousePosition.y < position.y + size.y);
+	return (mousePosition.x > position.x - size.x &&
+			mousePosition.y > -position.y - size.y &&
+			mousePosition.x < position.x + size.x &&
+			mousePosition.y < -position.y + size.y);
 }
 
-void Button::Update(GLint deltaT)
+void Button::Update(GLint deltaT, glm::vec2 mousePosition)
 {
-	switch (state)
+	if (prevState != state)
 	{
-	case Hovering:
-	case Pressed:
-	case Released:
-		position.x += 1;
-		break;
-	case Nothing:
-		break;
+		switch (state)
+		{
+		case Hovering:
+			setColor(glm::vec4(1, 1, 1, 0.8f));
+			break;
+		case Pressed:
+			setColor(glm::vec4(1, 1, 1, 0.25f));
+			break;
+		case Released:
+			pressed = true;
+			break;
+		case Nothing:
+			setColor(glm::vec4(1, 1, 1, 1.f));
+			break;
+		}
+		prevState = state;
 	}
 
 	// Checking if pressed or not
 	if (state == State::Pressed)
 	{
 		if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			state = isMouseInside() ? State::Released : State::Nothing;
+			state = isMouseInside(mousePosition) ? State::Released : State::Nothing;
 	}
 	else
 	{
-		if (isMouseInside())
+		if (isMouseInside(mousePosition))
 		{
 			state = sf::Mouse::isButtonPressed(sf::Mouse::Left) ? State::Pressed : State::Hovering;
 		}
@@ -90,19 +97,13 @@ void Button::Update(GLint deltaT)
 	}
 }
 
-void Button::UpdateQuad()
-{
-	// Updating vertices with new variables
-	model->BuildQuad(screenSize, position, color, size);
-}
-
 void Button::Draw()
 {
 	// Draws the actual button quad
 	Object::Draw();
 
-	if (text != nullptr)
-		text->Draw();
+//	if (text != nullptr)
+//		text->Draw();
 }
 
 void Button::setShader(GLuint shader)
@@ -115,12 +116,16 @@ void Button::setShader(GLuint shader)
 
 void Button::setState(State state) { this->state = state; }
 
-void Button::setSize(glm::vec2 size) { this->size = size; UpdateQuad(); }
+void Button::setSize(glm::vec2 size) { this->size = size; scale.x = size.x; scale.y = size.y; }
 
-void Button::setColor(glm::vec4 color) { this->color = color; UpdateQuad(); }
+void Button::setColor(glm::vec4 color) { this->color = color; }
 
 Button::State Button::getState() { return state; }
 
 glm::vec2 Button::getSize() { return size; }
 
 glm::vec4 Button::getColor() { return color; }
+
+bool Button::getPressed() { return pressed; }
+
+void Button::setPressed(bool pressed) {	this->pressed = pressed; }

@@ -27,6 +27,17 @@ public:
 		GLuint getTextureID() const { return texture->textureID; }
 	};
 
+
+	struct Texture
+	{
+		std::string name; // temp identifier
+		GLuint textureID;
+
+		Texture() : name(""), textureID(0) { };
+		Texture(std::string name, GLuint textureID) : name(name), textureID(textureID) { };
+		Texture(const Texture& inTexture) : name(inTexture.name), textureID(inTexture.textureID) { };
+	};
+
 	MaterialManager();
 	MaterialManager(const MaterialManager& other);
 	~MaterialManager();
@@ -40,15 +51,6 @@ public:
 	GLuint getTextureID(std::string name) const;
 
 private:
-	struct Texture
-	{
-		std::string name; // temp identifier
-		GLuint textureID;
-
-		Texture() : name(""), textureID(0) { };
-		Texture(std::string name, GLuint textureID) : name(name), textureID(textureID) { };
-		Texture(const Texture& inTexture) : name(inTexture.name), textureID(inTexture.textureID) { };
-	};
 
 	GLuint loadTexture(std::string inImage);						// Return identifier for glTexture that was created
 	GLint findMaterial(std::string name) const;						// Returns index for material in materialList

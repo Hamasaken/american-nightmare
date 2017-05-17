@@ -18,6 +18,6 @@ uniform mat4 projection;
 void main() {
 	position = vec3(world * vec4(inputPosition, 1.f));
 	textureUV = inputTextureUV;
-	normal = vec3(world * vec4(inputNormal, 1.f));
+	normal = mat3(transpose(inverse(world))) * inputNormal;
 	gl_Position = projection * view * world * vec4(inputPosition, 1.f);
 }

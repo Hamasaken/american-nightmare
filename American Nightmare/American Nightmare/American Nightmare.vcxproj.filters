@@ -141,13 +141,31 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GUI\GUIManager.cpp">
+      <Filter>Source Files\Game\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Trigger.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
     <ClCompile Include="ProjectileHandler.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="MyContactListener.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Particle\BloodParticle.cpp">
+      <Filter>Source Files\Game\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Particle\TextureParticle.cpp">
+      <Filter>Source Files\Game\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen\Rendering\ShadowManager.cpp">
+      <Filter>Source Files\Screen\Rendering</Filter>
+    </ClCompile>
     <ClCompile Include="Trash.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="vacuum.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -239,14 +257,32 @@
     <ClInclude Include="Enemy.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Game\GUI\GUIManager.h">
+      <Filter>Header Files\Game\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Trigger.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
     <ClInclude Include="ProjectileHandler.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="MyContactListener.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="vacuum.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
     <ClInclude Include="Trash.h">
       <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Particle\BloodParticle.h">
+      <Filter>Header Files\Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen\Rendering\ShadowManager.h">
+      <Filter>Header Files\Screen\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Particle\TextureParticle.h">
+      <Filter>Header Files\Game\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -260,15 +296,6 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Data\Graphics\Shaders\texture_vs.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Data\Graphics\Shaders\particle_fs.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Data\Graphics\Shaders\particle_gs.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Data\Graphics\Shaders\particle_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Data\Graphics\Shaders\texture_animation_vs.glsl">
@@ -296,6 +323,33 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Data\Graphics\Shaders\particle_light_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\shadowmap_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\shadowmap_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\debug_shader_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\debug_shader_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\shadowmap_transparent_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\shadowmap_transparent_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_texture_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_texture_gs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_texture_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
