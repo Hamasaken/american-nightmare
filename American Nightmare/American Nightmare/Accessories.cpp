@@ -8,6 +8,12 @@ float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2)
 	return atan2(dY, dX);
 }
 
+int radianToDegree(float radian)
+{
+	int degree;
+	return degree = (radian * 180) / PI;
+}
+
 float randBetweenF(float low, float high)
 {
 	return low + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (high - low)));

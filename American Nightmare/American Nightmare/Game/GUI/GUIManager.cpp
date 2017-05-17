@@ -65,6 +65,11 @@ void GUIManager::setAlpha(float alpha)
 		text->setColor(glm::vec4(glm::vec3(text->getColor()), alpha));
 }
 
+Button * GUIManager::getButton(int id)
+{
+	return buttons[id].first;
+}
+
 void GUIManager::setShader(GLuint shader)
 {
 	this->shader = shader;

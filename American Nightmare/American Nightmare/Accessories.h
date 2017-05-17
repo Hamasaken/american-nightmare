@@ -33,6 +33,7 @@
 // Global variables
 #define GRAVITY 9.82f
 #define GRAVITY_SCALE 2.f
+#define PI 3.14159265359
 
 // TEXT
 #define INGAME_FONT "404ERROR.ttf"
@@ -52,6 +53,9 @@ glm::vec3 fromScreenToNDC(glm::vec2 position, glm::vec2 screenSize, glm::vec2 sc
 glm::vec4 arrayToVec4(float a[4]);
 glm::vec3 arrayToVec3(float a[3]);
 glm::vec2 arrayToVec2(float a[2]);
+
+// Deggre from radian
+int radianToDegree(float radian);
 
 // Particle Types
 enum ParticleType
