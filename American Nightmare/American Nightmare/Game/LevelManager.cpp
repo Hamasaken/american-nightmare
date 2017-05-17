@@ -212,8 +212,7 @@ void LevelManager::LoadArchiveMaterials(std::vector<AMaterial> materials)
 			else
 				materialManager->AddMaterial(material.identifier.name, arrayToVec3(material.ambient), arrayToVec3(material.diffuse), glm::vec3(0, 0, 0), 1.f, material.diffuseMap.name, TEXTURE_PATH "MissingTexture.png");
 		}
-
-		}
+	}
 }
 
 void LevelManager::LoadArchiveTextures(std::vector<ATexture> textures)
