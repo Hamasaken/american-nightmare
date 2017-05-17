@@ -27,7 +27,7 @@
 //		this->myProjectiles[i] = new Projectile(world, shader);
 //}
 
-void ProjectileHandler::initiateProjectiles(b2World *world, GLuint shader, glm::vec2 pos)
+void ProjectileHandler::initiateProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos)
 {
 	this->wasPressed = false;
 	this->CAP = 5;
@@ -36,14 +36,15 @@ void ProjectileHandler::initiateProjectiles(b2World *world, GLuint shader, glm::
 	this->myShader = shader;
 
 	for (int i = 0; i < this->CAP; i++)
-		myProjtileVector.push_back(new Projectile(world, myShader, pos));
+		myProjtileVector.push_back(new Projectile(mesh, material, world, pos));
+		//myProjtileVector.push_back(new Projectile(world, myShader, pos));
 }
 
 ProjectileHandler::ProjectileHandler() {}
 
-ProjectileHandler::ProjectileHandler(b2World *world, GLuint shader, glm::vec2 pos)
+ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos)
 {
-	this->initiateProjectiles(world, shader, pos);
+	this->initiateProjectiles(mesh, material, world, pos);
 
 	//for (int i = 0; i < CAP; i++)
 	//{
@@ -81,7 +82,7 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 	{
 		if (myProjtileVector[i]->getIsFired() == true)
 		{
-			myProjtileVector[i]->Update(deltaT, world, position);
+			myProjtileVector[i]->Update(deltaT, world, glm::vec3(position.x, position.y, 0.5f));
 		}
 		else
 		{

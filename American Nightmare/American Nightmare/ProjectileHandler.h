@@ -16,11 +16,11 @@ private:
 	int nrOfProjectiles;
 	int CAP;
 	
-	void initiateProjectiles(b2World *world, GLuint shader, glm::vec2 pos);
+	void initiateProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos);
 
 public:
 	//ProjectileHandler(b2World* world, GLuint shader, int CAP = 10);
-	ProjectileHandler(b2World *world, GLuint shader, glm::vec2 pos);
+	ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos);
 	ProjectileHandler();
 	~ProjectileHandler();
 

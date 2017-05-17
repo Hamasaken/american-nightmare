@@ -38,6 +38,8 @@ bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, 
 	// Creating the Player object
 	////////////////////////////////////////////////////////////
 	GLint tempNomralMapIndex = materialManager->AddTexture("playernormalmap", TEXTURE_PATH "Walk01_nor.png");
+
+	//Test with a player who has a gun too fire with
 	player = new Player();
 	if (player == nullptr) return false;
 	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), world))
@@ -168,6 +170,16 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	lightManager->AddDirectionalLight(glm::vec4(5, 20, 20, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.8f);
 	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
+
+	//// Making some boxes to reload with
+	for (int i = 0; i < 50; i++)
+	{
+		Projectile* moveble = new Projectile(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
+		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
+		moveble->setShader(shader);
+		projectiles.push_back(moveble);
+	}
+
 
 	// Loading temp level
 	//LoadTempLevel(shader);
@@ -478,15 +490,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	map.push_back(background);
 
 
-	//// Making some boxes to reload with
-	for (int i = 0; i < 50; i++)
-	{
-		Projectile* moveble = new Projectile();
-		moveble->setShader(shader);
-		moveble->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec3(0.5f, 0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
-		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
-		projectiles.push_back(moveble);
-	}
+	
 
 	//// Making some boxes to move around
 	//for (int i = 0; i < 100; i++)
@@ -523,25 +527,19 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	lightManager->AddPointLight(glm::vec4(-30, 3, -5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
 	lightManager->AddPointLight(glm::vec4(20, 10, 5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
 
-	//lightManager->AddDirectionalLight(glm::vec4(5, 20, 20, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.1f);
-	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.1f);
-	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.1f);
 }
 
 void LevelManager::Update(GLint deltaT)
 {
 	// Updating player
 	//player->Update(deltaT);
-	player->Update(deltaT, world, player->getPlayerPosAsGLM());
+	player->Update(deltaT, world, glm::vec3(player->getPlayerPosAsGLM().x, player->getPlayerPosAsGLM().y, 0.5f));
 
 	//Update Projectile
 	//myPH->Update(deltaT, world);
 
 	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
 	
-	//moveble->Update(deltaT);
-	//myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
-	//moveble->Update(deltaT, world, player->getPlayerPosAsGLM());
 
 	// Updating enemies
 	enemy->Update(deltaT, player->getBody()->GetPosition());
@@ -655,11 +653,6 @@ std::vector<Object*> LevelManager::getMap()
 {
 	return map;
 }
-//
-//std::vector<Projectile*> LevelManager::getProj()
-//{
-//	return this->myPH->getBullets();
-//}
 
 std::vector<Projectile*> LevelManager::getProjectiles()
 {

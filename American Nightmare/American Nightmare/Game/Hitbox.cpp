@@ -35,7 +35,6 @@ bool Hitbox::InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size
 	// Creating shape for body
 	ModifyShape(size, shapeType, density, friction, isSensor);
 	
-
 	return true;
 }
 

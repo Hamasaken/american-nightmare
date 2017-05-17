@@ -36,7 +36,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			printf("Player touched a projectile AAAAA\n");
 			player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
 			myProjectile->setmarked(true);
-			particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter())); // temp blood effect
+			//particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter())); // temp blood effect
 			soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
 			
 			/*if (player->addPlayerProjectiles() == true)
@@ -50,8 +50,6 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			}*/
 		}
 	}
-	
-
 
 	//Fixa Senare
 

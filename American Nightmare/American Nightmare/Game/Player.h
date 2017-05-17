@@ -48,7 +48,7 @@ private:
 	bool checkValue;
 public:
 	Player();
-	Player(b2World *world, GLuint shader, glm::vec2 getPlayerPosAsGLM());
+	//Player(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world);
 	Player(const Player& other);
 	~Player();
 

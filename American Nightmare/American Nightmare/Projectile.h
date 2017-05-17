@@ -22,7 +22,8 @@ private:
 	glm::vec2 playerPosition;
 
 public:
-	Projectile(b2World *world, GLuint shader, glm::vec2 pos);
+	//Projectile(b2World *world, GLuint shader, glm::vec2 pos);
+	Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos);
 	Projectile();
 	~Projectile();
 

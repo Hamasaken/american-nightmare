@@ -6,10 +6,10 @@
 //}
 //
 
-Player::Player(b2World *world, GLuint shader, glm::vec2 getPlayerPosAsGLM()) : Animation()
-{
-	this->myProjectileHandler = ProjectileHandler(world, shader, getPlayerPosAsGLM());
-}
+//Player::Player(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world) : Animation()
+//{
+//	
+//}
 
 Player::Player() { }
 
@@ -28,6 +28,8 @@ void Player::initiateCursor()
 bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world)
 {
 	this->checkValue = false;
+
+	this->myProjectileHandler = ProjectileHandler(mesh, material, world, this->getPlayerPosAsGLM());
 
 	//Sets the cursor for the player
 	initiateCursor();
@@ -58,25 +60,14 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	return true;
 }
 
-//void Player::Update(GLint deltaT, b2World world, glm::vec2 pos)
-//{
-//	// Getting user input
-//	Movement();
-//
-//	// Updating animation texture
-//	updateAnimation(deltaT);
-//
-//	//Update ProjectileHandler
-//	myProjectileHandler->Update(deltaT, world, this->getPlayerPosAsGLM());
-//
-//	// Correcting texture to hitbox
-//	Entity::Update(deltaT);
-//}
-
 void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 {
 	/*if (getCheckValue() == true)
 		myProjectileHandler.addProjectile(world);*/
+
+	//	//Update ProjectileHandler
+	//	myProjectileHandler->Update(deltaT, world, this->getPlayerPosAsGLM());
+
 
 	// Getting user input
 	InputKeyboard();
@@ -87,7 +78,7 @@ void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 	updateAnimation(deltaT);
 
 	//Update ProjectileHandler
-	myProjectileHandler.Update(deltaT, world, this->getPlayerPosAsGLM());
+	myProjectileHandler.Update(deltaT, world, glm::vec3(pos.x,pos.y, 0.5f));
 
 	// Correcting texture to hitbox
 	Entity::Update(deltaT);
@@ -216,7 +207,7 @@ glm::vec2 Player::getPlayerPosAsGLM()
 
 	myVec.x = hitbox->getPosition().x;
 	myVec.y = hitbox->getPosition().y;
-	//myVec.z = hitbox->getPosition().z;
+	//myVec.z = 0.5f;
 	return myVec;
 }
 
