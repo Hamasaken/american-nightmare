@@ -156,7 +156,7 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	LoadLevelEffects(levelFile.effects);
 	
 	// Setting start position
-	player->setPosition(glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 1));
+	player->setPosition(glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 0));
 
 	// Music
 	soundManager->playSong(SoundManager::SONG::MUSIC_BOOGIE);
@@ -321,6 +321,7 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		
 		// Adding trigger to vector
 		this->triggers.push_back(outTrigger);
+		particleManager->EffectConstantSmoke(glm::vec3(outTrigger->getPosition(), 0.f), materialManager->getTextureID("smoketexture"), 30);
 	}
 
 }

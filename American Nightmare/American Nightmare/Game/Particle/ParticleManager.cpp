@@ -66,7 +66,7 @@ void ParticleManager::EffectBloodSplatter(glm::vec3 position, float angle, float
 	emitters.push_back(emitter);
 }
 
-void ParticleManager::EffectTextureExplosion(glm::vec3 position, GLuint texture, int amount, glm::vec4 color)
+void ParticleManager::EffectSmokeCloud(glm::vec3 position, GLuint texture, int amount, glm::vec4 color)
 {
 	// Creating a emmiter with a specific type
 	ParticleEmitter* emitter = new ParticleEmitter();
@@ -75,10 +75,22 @@ void ParticleManager::EffectTextureExplosion(glm::vec3 position, GLuint texture,
 
 	// Creating particles with inputted variables into emitter
 	glm::vec2 size(TEXTURE_SIZE, TEXTURE_SIZE);
-	emitter->TextureExplosion(position, texture, color, size, amount);
+	emitter->SmokeCloud(position, texture, color, size, amount);
 	emitters.push_back(emitter);
 }
 
+void ParticleManager::EffectConstantSmoke(glm::vec3 position, GLuint texture, int amount, glm::vec4 color)
+{
+	// Creating a emmiter with a specific type
+	ParticleEmitter* emitter = new ParticleEmitter();
+	emitter->setType(ParticleType::SMOKE);
+	emitter->setShader(getShaderFromPair(emitter->getType()));
+
+	// Creating particles with inputted variables into emitter
+	glm::vec2 size(TEXTURE_SIZE, TEXTURE_SIZE);
+	emitter->ConstantSmoke(position, texture, color, size, amount);
+	emitters.push_back(emitter);
+}
 
 void ParticleManager::EffectLightDust(glm::vec3 center, glm::vec3 dimensions, int amount, glm::vec4 color)
 {

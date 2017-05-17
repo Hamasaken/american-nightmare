@@ -59,6 +59,7 @@ enum ParticleType
 	LIGHT,
 	BLOOD,
 	TEXTURE,
+	SMOKE,
 	LIGHT_DUST
 };
 

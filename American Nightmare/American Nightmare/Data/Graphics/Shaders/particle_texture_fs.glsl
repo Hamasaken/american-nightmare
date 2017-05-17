@@ -19,6 +19,6 @@ void main(void)
 	if (textureColor.a < 0.15f)
 		discard;
 
-	outputColor = vec4(textureColor.r, textureColor.g, textureColor.b, frag.color.a);	
+	outputColor = vec4(textureColor.r * frag.color.r, textureColor.g * frag.color.g, textureColor.b * frag.color.b, frag.color.a);	
 }
 

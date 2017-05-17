@@ -44,7 +44,18 @@ public:
 	// \optional amount The amount of spawned blood particles
 	// \optional color The color of the most blood
 	////////////////////////////////////////////////////////////
-	void EffectTextureExplosion(glm::vec3 position, GLuint texture,
+	void EffectSmokeCloud(glm::vec3 position, GLuint texture,
+		int amount = TEXTURE_DEFAULT_AMOUNT,
+		glm::vec4 color = TEXTURE_DEFAULT_COLOR);
+
+	////////////////////////////////////////////////////////////
+	// \brief Creates an explosion with given texture
+	// \param position The position of explosion
+	// \param texture The texture of each pixels (smoke/blood/whatevs)
+	// \optional amount The amount of spawned blood particles
+	// \optional color The color of the most blood
+	////////////////////////////////////////////////////////////
+	void EffectConstantSmoke(glm::vec3 position, GLuint texture,
 		int amount = TEXTURE_DEFAULT_AMOUNT,
 		glm::vec4 color = TEXTURE_DEFAULT_COLOR);
 
