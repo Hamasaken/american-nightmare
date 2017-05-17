@@ -135,9 +135,9 @@ void ScreenGame::SetStartVariables()
 	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "Level2.anl", ARCHIVE_PATH "Assets2.ana");
 
 	// Adding shadow
-	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);
-	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, 50, -30.f, 50);
-	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, 50, -30.f, 50);
+	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, glm::vec2(60, 30), -30.f, 50);
+	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, glm::vec2(60, 30), -30.f, 50);
+	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, glm::vec2(60, 30), -30.f, 50);
 	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[0], glm::vec2(1024, 1024), 45, 0.1f);
 	shadowManager.setUseShadows(true);
 }
@@ -257,9 +257,11 @@ void ScreenGame::DrawShadowMaps()
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 
+		glCullFace(GL_FRONT);
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
 			DrawObjectDirShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+		glCullFace(GL_BACK);
 
 		// Set shader for transparent objects
 		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
@@ -279,15 +281,14 @@ void ScreenGame::DrawShadowMaps()
 	{
 		// Set Viewport to resolution of shadow map
 		glViewport(0, 0, shadowManager.getPointShadowMapList()[i]->resolution.x, shadowManager.getPointShadowMapList()[i]->resolution.y);
+		glDisable(GL_CULL_FACE);
 		// Bind depth FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, shadowManager.getPointShadowMapList()[i]->shadowFBO);
 
 		// Set shader
 		shaderManager->setShader(shadowManager.getPointShadowShader());
 
-		//glClearDepth(0);
 		glClear(GL_DEPTH_BUFFER_BIT);
-		glClearDepth(1);
 
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
@@ -304,6 +305,7 @@ void ScreenGame::DrawShadowMaps()
 
 		// Reset Viewport to screen size
 		glViewport(0, 0, screenSize.x, screenSize.y);
+		glEnable(GL_CULL_FACE);
 	}
 	
 }
