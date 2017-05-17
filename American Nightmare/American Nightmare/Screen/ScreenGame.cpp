@@ -236,7 +236,7 @@ void ScreenGame::Draw()
 
 		shaderManager->SetParameters(tempWorld, glm::mat4(), glm::mat4());
 
-		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_TEXTURE_CUBE_MAP);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP_POSITIVE_X, shadowManager.getPointShadowMapList()[0]->shadowCubeMap);
 		glUniform1i(glGetUniformLocation(shaderManager->getShader(), "texture"), 0);
@@ -263,11 +263,9 @@ void ScreenGame::DrawShadowMaps()
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 
-		glCullFace(GL_FRONT);
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
 			DrawObjectDirShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
-		glCullFace(GL_BACK);
 
 		// Set shader for transparent objects
 		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
