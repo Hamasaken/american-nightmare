@@ -112,8 +112,8 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager = new GUIManager();
 	if (uiManager == nullptr) return false;
 	if (!uiManager->Start(screenSize, screenPosition)) return false;
-	uiManager->AddButton(GUIManager::OK, glm::vec3(0, -0.95, 0), glm::vec2(0.15f, 0.05f), materialManager->getMaterial("groundmaterial"), nullptr);
-	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.95f, -0.95, 0), glm::vec2(0.05f, 0.05f), materialManager->getMaterial("backgroundmaterial"), nullptr);
+	uiManager->AddButton(GUIManager::OK, glm::vec3(0, -0.95, 0), glm::vec2(0.15f, 0.05f), materialManager->getMaterial("GUI_1_mat"), nullptr, "HP: 3/3", FONT_PATH INGAME_FONT, 20.f);
+	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.95f, -0.95, 0), glm::vec2(0.05f, 0.05f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Pause", FONT_PATH INGAME_FONT, 17.5f);
 	uiManager->setAlpha(1.f);
 	uiManager->setShader(shaderManager->getShader("texture"));
 
@@ -215,7 +215,11 @@ void ScreenGame::Draw()
 	else
 	{
 		for (std::pair<Button*, GUIManager::Action> button : *uiManager->getButtonList())
+		{
 			DrawObjectGUI(button.first, shaderManager);
+			if (button.first->getText() != nullptr)
+				DrawObjectGUI(button.first->getText(), shaderManager);
+		}
 		for (Text* object : *uiManager->getTextList())
 			DrawObjectGUI(object, shaderManager);
 	}
