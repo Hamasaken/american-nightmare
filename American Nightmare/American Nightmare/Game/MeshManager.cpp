@@ -1,6 +1,16 @@
 #include "MeshManager.h"
 
-MeshManager::MeshManager() { }
+MeshManager::MeshManager()
+{
+	// Making basic quad mesh
+	Model* model;
+	model = new Model();
+	model->BuildQuadTexture();
+	Mesh* mesh;
+	mesh = new Mesh("quad", model);
+
+	meshList.push_back(mesh);
+}
 
 MeshManager::MeshManager(const MeshManager& other) { }
 
@@ -69,7 +79,8 @@ bool MeshManager::AddMesh(std::string name, int nrOfVertices, std::vector<AVerte
 
 MeshManager::Mesh* MeshManager::getMesh(std::string name) const
 {
-	Mesh* outMesh = nullptr;
+	// Returning a quad if failed
+	Mesh* outMesh = meshList[0];
 
 	// Finding the correct mesh, returns nullptr if not found
 	for (Mesh* mesh : meshList)

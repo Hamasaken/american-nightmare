@@ -4,7 +4,15 @@ Text::Text() { }
 
 Text::Text(const Text & other) { }
 
-Text::~Text() { }
+Text::~Text() 
+{
+	if (model != nullptr)
+	{
+		model->Stop();
+		delete model;
+		model = nullptr;
+	}
+}
 
 bool Text::Start(glm::vec2 screenSize, std::string fontName, float characterSize, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {

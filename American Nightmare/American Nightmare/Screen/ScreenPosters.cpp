@@ -63,7 +63,7 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	posterListGUI = new GUIManager();
 	if (posterListGUI == nullptr) return false;
 	if (!posterListGUI->Start(screenSize, screenPosition)) return false;
-	posterListGUI->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.85f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Back", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
+	posterListGUI->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.85f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
 	posterListGUI->AddText(glm::vec3(0.f, 0.85f, 0.f), 40.f, "Posters", FONT_PATH INGAME_FONT);
 	
 	// Posters
@@ -71,12 +71,12 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	for (int i = 0; i < 10; i++)
 	{
 		if (i == 5) { y -= 0.5f; x = -0.6f; }
-		posterListGUI->AddButton(GUIManager::OK, glm::vec3(x, y, 0), glm::vec2(0.100f, 0.200f), materialManager->getMaterial("titlematerial"), nullptr);
+		posterListGUI->AddButton(GUIManager::OK, glm::vec3(x, y, 0), glm::vec2(0.100f, 0.200f), materialManager->getMaterial("titlematerial"), meshManager->getMesh("quad"));
 		x += 0.30f;
 	}
 
 	// Right side hidden
-	posterListGUI->AddButton(GUIManager::CANCEL, glm::vec3(2.f, 0, 0), glm::vec2(0.400f, 0.800f), materialManager->getMaterial("titlematerial"), nullptr);
+	posterListGUI->AddButton(GUIManager::CANCEL, glm::vec3(2.f, 0, 0), glm::vec2(0.400f, 0.800f), materialManager->getMaterial("titlematerial"), meshManager->getMesh("quad"));
 	
 	posterListGUI->setAlpha(1.f);
 	posterListGUI->setShader(shaderManager->getShader("texture"));
