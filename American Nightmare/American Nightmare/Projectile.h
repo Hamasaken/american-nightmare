@@ -17,6 +17,7 @@ private:
 	int damage;
 	bool damageOn;
 	bool marked;
+	bool isProjectileFired;
 
 	glm::vec2 playerPosition;
 
@@ -35,8 +36,11 @@ public:
 	void setmarked(bool marked);
 	bool getmarked()const;
 
-	void Update(GLint deltaT);
+	//void Update(GLint deltaT);
 	void Update(GLint deltaT, b2World* world, glm::vec2 position);
+
+	void setIsFired(bool isProjectileFired);
+	bool getIsFired()const;
 };
 
 #endif // !PROJECTILE_H

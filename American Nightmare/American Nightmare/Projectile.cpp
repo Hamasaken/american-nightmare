@@ -75,3 +75,12 @@ void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)
 //	Entity::Update(deltaT);
 //}
 
+void Projectile::setIsFired(bool isProjectileFired)
+{
+	this->isProjectileFired = isProjectileFired;
+}
+
+bool Projectile::getIsFired()const
+{
+	return this->isProjectileFired;
+}

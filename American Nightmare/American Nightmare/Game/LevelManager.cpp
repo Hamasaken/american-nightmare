@@ -226,7 +226,7 @@ void LevelManager::Update(GLint deltaT)
 	deleteProjects();
 
 	 for (Projectile* proj : projectiles)
-		 proj->Update(deltaT);
+		 proj->Update(deltaT, world, player->getPlayerPosAsGLM());
 
 	for (Object* object : map)
 		object->Update(deltaT);

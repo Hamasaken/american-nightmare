@@ -154,7 +154,7 @@ glm::vec2 Player::getPlayerPosAsGLM()
 
 	myVec.x = hitbox->getPosition().x;
 	myVec.y = hitbox->getPosition().y;
-
+	//myVec.z = hitbox->getPosition().z;
 	return myVec;
 }
 

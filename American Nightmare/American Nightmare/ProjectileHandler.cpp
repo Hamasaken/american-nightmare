@@ -79,7 +79,14 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 
 	for (int i = 0; i < CAP; i++)
 	{
-		myProjtileVector[i]->Update(deltaT);
+		if (myProjtileVector[i]->getIsFired() == true)
+		{
+			myProjtileVector[i]->Update(deltaT, world, position);
+		}
+		else
+		{
+			//myProjtileVector[i]->setPosition(position);
+		}
 	}
 
 	this->wasPressed = isPressed;
@@ -87,7 +94,7 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 
 void ProjectileHandler::addProjectile(b2World* world)
 {
-	myProjtileVector.push_back(new Projectile(world, myShader));
+	//myProjtileVector.push_back(new Projectile(world, myShader));
 }
 
 int ProjectileHandler::getNrOffProjectiles()const
