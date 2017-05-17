@@ -105,6 +105,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	guiManager->AddText(glm::vec3(0.f, 0.75f, 0.f), 70.f, "Paused", FONT_PATH INGAME_FONT);
 	guiManager->setAlpha(0.f);
 	guiManager->setShader(shaderManager->getShader("texture"));
+	guiManager->setInstantCenter(glm::vec2(0, 2));
 
 	////////////////////////////////////////////////////////////
 	// Creating a UI manager	
@@ -116,6 +117,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.95f, -0.95, 0), glm::vec2(0.05f, 0.05f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Pause", FONT_PATH INGAME_FONT, 17.5f);
 	uiManager->setAlpha(1.f);
 	uiManager->setShader(shaderManager->getShader("texture"));
+	uiManager->setInstantCenter(glm::vec2(0, 0));
 
 	// Setting startvariables
 	SetStartVariables();
@@ -318,6 +320,7 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 {
 	// Updating Buttons
 	guiManager->Update(deltaT);
+	uiManager->Update(deltaT);
 
 	for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
 	{
@@ -325,23 +328,35 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 		{
 			switch (button.second)
 			{
-			case GUIManager::Action::OK:  gameState = UNPAUSING; break;
+			case GUIManager::Action::OK:		
+				gameState = UNPAUSING; 
+				guiManager->setCenter(glm::vec2(0, 2));
+				uiManager->setCenter(glm::vec2(0, 0));
+				break;
 			case GUIManager::Action::STARTMENY: *state = State::StartMeny; break;
-			case GUIManager::Action::EXIT: *state = State::Exit; break;
+			case GUIManager::Action::EXIT:		*state = State::Exit; break;
 			}
 			button.first->setPressed(false);
 		}
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
+	{
+		guiManager->setCenter(glm::vec2(0, 2));
+		uiManager->setCenter(glm::vec2(0, 0));
 		gameState = UNPAUSING;
+	}
 }
 
 void ScreenGame::UpdatePlaying(GLint deltaT)
 {
 	// Check if user is pausing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
+	{
+		guiManager->setCenter(glm::vec2(0, 0));
+		uiManager->setCenter(glm::vec2(0, 2));
 		gameState = PAUSING;
+	}
 
 	// Particle Managare Testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
@@ -370,7 +385,13 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 		if (button.first->getPressed())
 		{
 			switch (button.second)
-			{ case GUIManager::Action::PAUSE:  gameState = PAUSING; break; }
+			{ 
+			case GUIManager::Action::PAUSE:  
+				gameState = PAUSING; 
+				guiManager->setCenter(glm::vec2(0, 0));
+				uiManager->setCenter(glm::vec2(0, 2));
+				break; 
+			}
 			button.first->setPressed(false);
 		}
 	}
@@ -386,6 +407,8 @@ void ScreenGame::UpdatePausing(GLint deltaT)
 		pausTimer = 0.f;
 		gameState = PAUSED;
 	}
+	guiManager->Update(deltaT);
+	uiManager->Update(deltaT);
 }
 
 void ScreenGame::UpdateUnpausing(GLint deltaT)
@@ -398,6 +421,8 @@ void ScreenGame::UpdateUnpausing(GLint deltaT)
 		unpausTimer = PAUS_TIMER;
 		gameState = PLAYING;
 	}
+	guiManager->Update(deltaT);
+	uiManager->Update(deltaT);
 }
 
 void ScreenGame::Stop()

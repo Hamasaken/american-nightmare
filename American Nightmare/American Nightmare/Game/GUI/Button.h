@@ -54,8 +54,10 @@ public:
 	////////////////////////////////////////////////////////////
 	void Draw();
 
-	// Overdrivven set shader to also set text shader
+	// Overdrivven setfunctions
 	void setShader(GLuint shader);
+	void setPosition(glm::vec3 position);
+	glm::vec3 getStartPosition();
 
 	// Set & Get functions
 	void setState(State state);
@@ -69,6 +71,7 @@ public:
 	bool getPressed();
 
 private:
+	glm::vec3 startPosition;//< The starting position of this button
 	bool pressed;			//< If the button have been pressed or not
 	Text* text;				//< Optional text object
 	glm::vec2 screenSize;	//< The screensize of the screen

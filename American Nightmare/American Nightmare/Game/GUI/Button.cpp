@@ -14,6 +14,7 @@ bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, con
 	if (!Object::Start(mesh, material))
 		return false;
 
+	this->startPosition = position;
 	this->position = position;
 	this->rotation = glm::vec3(0, 0, 0);
 	this->scale = glm::vec3(1 * size.x, 1 * size.y, 1);
@@ -115,6 +116,14 @@ void Button::setShader(GLuint shader)
 		this->text->setShader(shader);
 }
 
+void Button::setPosition(glm::vec3 position)
+{
+	this->position = position;
+	if (text != nullptr) 
+		text->setPosition(glm::vec3(position.x, position.y, position.z - 0.001f));
+}
+
+glm::vec3 Button::getStartPosition() { return startPosition; }
 void Button::setState(State state) { this->state = state; }
 void Button::setSize(glm::vec2 size) { this->size = size; scale.x = size.x; scale.y = size.y; }
 void Button::setAlpha(float alpha) { this->alpha = alpha; }
