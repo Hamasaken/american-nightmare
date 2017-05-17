@@ -1,4 +1,6 @@
 #include "Program.h"
+#include "Accessories.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +14,8 @@ int main(int argc, char *argv[])
 
 	// Delete everything
 	pgr->Stop();
+	delete pgr;
 
+	_CrtDumpMemoryLeaks();
 	return NULL;
 }
