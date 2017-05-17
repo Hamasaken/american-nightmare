@@ -473,8 +473,16 @@ void ScreenGame::Stop()
 		uiManager = nullptr;
 	}
 
+	if (meshManager != nullptr)
+	{
+		meshManager->Clear();
+		delete meshManager;
+		meshManager = nullptr;
+	}
+
 	// Stoping Deferred rendering
 	drRendering.Stop();
+
 	// Stoping Shadowmaps
 	shadowManager.Stop();
 

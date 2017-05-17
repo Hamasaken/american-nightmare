@@ -165,6 +165,13 @@ void ScreenStart::Stop()
 		particleManager = nullptr;
 	}
 
+	if (meshManager != nullptr)
+	{
+		meshManager->Clear();
+		delete meshManager;
+		meshManager = nullptr;
+	}
+
 	// Deletes Camera & OpenGL ptr
 	Screen::Stop();
 }

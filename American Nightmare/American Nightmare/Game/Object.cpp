@@ -8,7 +8,14 @@ Object::Object()
 
 Object::Object(const Object& other) { }
 
-Object::~Object() { }
+Object::~Object() 
+{
+	if (model != nullptr)
+	{
+		model->Stop();
+		model = nullptr;
+	}
+}
 
 bool Object::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material)
 {
