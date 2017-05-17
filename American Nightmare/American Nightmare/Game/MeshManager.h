@@ -16,6 +16,7 @@ public:
 
 		Mesh(std::string name, Model* model) : name(name), model(model) { };
 		Mesh(const Mesh& inMesh) : name(inMesh.name), model(inMesh.model) { };
+		~Mesh() { model->Stop(); delete model; };
 	};
 
 public:

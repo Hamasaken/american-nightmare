@@ -142,6 +142,7 @@ void ScreenManager::StopScreen(State state)
 		if (screenGame != nullptr) 
 		{
 			screenGame->Stop();
+			delete screenGame;
 			screenGame = nullptr;
 		}
 		break;
@@ -149,6 +150,7 @@ void ScreenManager::StopScreen(State state)
 		if (screenStart != nullptr)
 		{
 			screenStart->Stop();
+			delete screenStart;
 			screenStart = nullptr;
 		}
 		break;
@@ -156,6 +158,7 @@ void ScreenManager::StopScreen(State state)
 		if (screenCutscene != nullptr)
 		{
 			screenCutscene->Stop();
+			delete screenCutscene;
 			screenCutscene = nullptr;
 		}
 		break;
@@ -163,6 +166,7 @@ void ScreenManager::StopScreen(State state)
 		if (screenOptions != nullptr)
 		{
 			screenOptions->Stop();
+			delete screenOptions;
 			screenOptions = nullptr;
 		}
 		break;
@@ -170,6 +174,7 @@ void ScreenManager::StopScreen(State state)
 		if (screenPosters != nullptr)
 		{
 			screenPosters->Stop();
+			delete screenPosters;
 			screenPosters = nullptr;
 		}
 		break;
