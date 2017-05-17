@@ -194,8 +194,8 @@ void main () {
 		result += directionalLightCalc(directionalLights[i].direction, directionalLights[i].diffuse, directionalLights[i].specular, directionalLights[i].strength, fragPos, bufferNormal, bufferDif, bufferSpec, shadow);
 	}
 
-	if(result.x > bufferDif.x || result.y > bufferDif.y || result.z > bufferDif.z)
-		result = bufferDif;
+	//if(result.x > bufferDif.x || result.y > bufferDif.y || result.z > bufferDif.z)
+		//result = bufferDif;
 
 	fragment_color = vec4(result.rgb, 1.f);
 }

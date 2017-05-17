@@ -42,7 +42,7 @@ public:
 	void Start(GLuint directionalShadowShader, GLuint directionalShadowShaderTr, GLuint pointShadowShader, GLuint pointShadowShaderTr);
 	void Stop();
 
-	void AddDirectional(LightManager::DirectionalLight* light, glm::vec2 resolution, GLfloat size, GLfloat nearPlane, GLfloat farPlane);
+	void AddDirectional(LightManager::DirectionalLight* light, glm::vec2 resolution, glm::vec2 size, GLfloat nearPlane, GLfloat farPlane);
 	void AddPoint(LightManager::PointLight* light, glm::vec2 resolution, GLfloat fov, GLfloat nearPlane);
 
 	std::vector<ShadowManager::DirectionalShadowMap*> getDirectionalShadowMapList() const;

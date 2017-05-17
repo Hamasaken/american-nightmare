@@ -214,8 +214,8 @@ void main(void)
 	
 	
 
-	if(result.x > bufferColor.x || result.y > bufferColor.y || result.z > bufferColor.z)
-		result = bufferColor;
+	//if(result.x > bufferColor.x || result.y > bufferColor.y || result.z > bufferColor.z)
+		//result = bufferColor;
 
 	fragment_color = vec4(result.rgb, bufferColor.a);
 
