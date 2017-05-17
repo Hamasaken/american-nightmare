@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include "../ProjectileHandler.h"
 #include "../Enemy.h"
+#include "../vacuum.h"
 
 #define PLAYER_SIZE_X 2.f
 #define PLAYER_SIZE_Y 2.f
@@ -42,7 +43,7 @@ private:
 	SDL_Cursor* cursor;
 	void initiateCursor();
 private:
-	//Vacuum* vac;
+	Vacuum* vac;
 
 
 	bool checkValue;
@@ -52,9 +53,9 @@ public:
 	Player(const Player& other);
 	~Player();
 
-	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world);
+	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
 	//void Update(GLint deltaT);
-	bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
+	//bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
 	//void Update(GLint deltaT);
 	void Update(GLint deltaT, b2World* world, glm::vec2 pos);
 	//bool Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
@@ -74,7 +75,5 @@ private:
 	/*bool addPlayerProjectiles();
 	void setCheckForProjectilePickUp(bool checkValue);
 	bool getCheckValue()const;*/
-private:
-	bool hasJumped;
 };
 #endif // !PLAYER_H

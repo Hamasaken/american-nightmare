@@ -10,9 +10,9 @@ Vacuum::~Vacuum()
 	
 }
 
-void Vacuum::startVac(std::string modelName, const MaterialManager::Material * material, b2World* world, b2Body* player)
+void Vacuum::startVac(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World* world, b2Body* player)
 {
-	Entity:Start(modelName, material, world, player);
+	Entity:Start(mesh, material, world, player);
 
 	// Setting starting variables
 	position = glm::vec3(0, 0, 0);
@@ -22,7 +22,7 @@ void Vacuum::startVac(std::string modelName, const MaterialManager::Material * m
 	// Creating model
 	model = new Model();
 	if (model == nullptr);
-	if (!model->Start(modelName));
+	//if (!model->Start(modelName));
 
 	this->material = material;
 	model->BuildQuadTexture();
@@ -43,7 +43,7 @@ void Vacuum::startVac(std::string modelName, const MaterialManager::Material * m
 	//joint = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 }
 
-b2Body* Vacuum::getBody()
+b2Body* Vacuum::getBody()const
 {
 	return hitbox->getBody();
 }
@@ -61,3 +61,5 @@ void Vacuum::Update(b2Vec2 Pos, GLint deltaT)
 
 	Entity::Update(deltaT);
 }
+
+

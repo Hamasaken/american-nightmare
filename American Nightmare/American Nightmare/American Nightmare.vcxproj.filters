@@ -195,6 +195,12 @@
     <ClCompile Include="Game\Particle\DustParticle.cpp">
       <Filter>Source Files\Game\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="Trash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vacuum.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h">
@@ -275,9 +281,6 @@
     <ClInclude Include="MyContactListener.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="vacuum.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Trash.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
@@ -328,6 +331,9 @@
     </ClInclude>
     <ClInclude Include="Game\Particle\DustParticle.h">
       <Filter>Header Files\Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="vacuum.h">
+      <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

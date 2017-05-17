@@ -14,8 +14,8 @@ public:
 	Vacuum();
 	~Vacuum();
 
-	void startVac(std::string modelName, const MaterialManager::Material * material, b2World* world, b2Body* player);
-	b2Body* getBody();
+	void startVac(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World* world, b2Body* player);
+	b2Body* getBody()const; 
 
 	void Update(b2Vec2 Pos, GLint deltaT);
 };

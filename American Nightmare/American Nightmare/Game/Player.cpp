@@ -25,7 +25,7 @@ void Player::initiateCursor()
 }
 
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
-bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world)
+bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world)
 {
 	this->checkValue = false;
 
@@ -49,8 +49,8 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	this->material = material;
 	model->BuildQuadTexture();
 
-	/*vac = new Vacuum();
-	vac->startVac(modelName, material2, world, getBody());*/
+	vac = new Vacuum();
+	vac->startVac(nullptr, material2, world, getBody());
 
 	// Setting a self-pointer for collision detection
 	getBody()->SetUserData(this);

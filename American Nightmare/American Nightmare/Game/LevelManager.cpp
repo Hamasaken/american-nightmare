@@ -40,7 +40,7 @@ bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, 
 	GLint tempNomralMapIndex = materialManager->AddTexture("playernormalmap", TEXTURE_PATH "Walk01_nor.png");
 	player = new Player();
 	if (player == nullptr) return false;
-	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), world))
+	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial"), world))
 		return false;
 	player->setShader(playerShader);
 	player->AddAnimation(materialManager->getMaterial("playermaterial"), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
