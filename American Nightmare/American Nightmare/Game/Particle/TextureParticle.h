@@ -36,9 +36,14 @@ public:
 	////////////////////////////////////////////////////////////
 	virtual void Update(GLfloat deltaT);
 
-private:
+protected:
 	float rotation;
 	float rotationSpeed;
+};
+
+class SmokeParticle : public TextureParticle
+{
+	virtual void Update(GLfloat deltaT);
 };
 
 #endif // !TEXTUREPARTICLE_H

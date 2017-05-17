@@ -51,18 +51,18 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (materialManager == nullptr) return false;
 
 	// Loading materials
+	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.4f, 0.4f, 0.6f), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	materialManager->AddMaterial("playermaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.5f), 0.01f, "playertexture", TEXTURE_PATH "Walk01.png");
 	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "lighttexture", TEXTURE_PATH "gammal-dammsugare.jpg");
 	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "groundtexture", TEXTURE_PATH "temp_ground.jpg");
 	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "backgroundtexture", TEXTURE_PATH "temp_background.jpg");
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
-	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.4f, 0.4f, 0.6f), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 	if (materialManager->getMaterial("playermaterial") == nullptr) printf("Player Material not found\n");
 	if (materialManager->getMaterial("lightmaterial") == nullptr) printf("Light Material not found\n");
 	if (materialManager->getMaterial("groundmaterial") == nullptr) printf("Ground Material not found\n");
 	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Background Material not found\n");
 	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
-	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 
 
 
@@ -128,10 +128,10 @@ void ScreenGame::SetStartVariables()
 	gameState = PLAYING;
 
 	// Backing the camera a little bit backwards
-	camera->setPosition(glm::vec3(0, 0, 35));
+	camera->setPosition(glm::vec3(0, 0, 22.5f));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "Level1.anl", ARCHIVE_PATH "Level1.ana");
+	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "Level2.anl", ARCHIVE_PATH "Assets2.ana");
 
 	// Adding shadow
 	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);

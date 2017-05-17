@@ -21,7 +21,7 @@ void Camera::buildViewMatrix()
 	glm::vec3 lookUp(0, 1, 0);
 	glm::vec3 lookAt(0, 0, -1);
 	glm::vec3 finalPos = position;
-	finalPos.y += 5.f;
+	finalPos.y += 4.f;
 	viewMatrix = glm::lookAt(finalPos, finalPos + lookAt, lookUp);
 	//viewMatrix = glm::orthoLH(-20.f + position.x, 20.f + position.x, -20.f + position.y, 20.f + position.y, -8.f, 50.f);
 }
