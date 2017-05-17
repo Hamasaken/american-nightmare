@@ -138,7 +138,7 @@ void ScreenGame::SetStartVariables()
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, glm::vec2(60, 30), -30.f, 50);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, glm::vec2(60, 30), -30.f, 50);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, glm::vec2(60, 30), -30.f, 50);
-	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[1], glm::vec2(1024, 1024), 45, 0.1f);
+	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[1], glm::vec2(256, 256), 45, 0.1f);
 	//shadowManager.setUseShadows(true);
 }
 
