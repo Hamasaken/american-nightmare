@@ -278,15 +278,14 @@ void ScreenGame::DrawShadowMaps()
 	{
 		// Set Viewport to resolution of shadow map
 		glViewport(0, 0, shadowManager.getPointShadowMapList()[i]->resolution.x, shadowManager.getPointShadowMapList()[i]->resolution.y);
+		glDisable(GL_CULL_FACE);
 		// Bind depth FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, shadowManager.getPointShadowMapList()[i]->shadowFBO);
 
 		// Set shader
 		shaderManager->setShader(shadowManager.getPointShadowShader());
 
-		//glClearDepth(0);
 		glClear(GL_DEPTH_BUFFER_BIT);
-		glClearDepth(1);
 
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
@@ -303,6 +302,7 @@ void ScreenGame::DrawShadowMaps()
 
 		// Reset Viewport to screen size
 		glViewport(0, 0, screenSize.x, screenSize.y);
+		glEnable(GL_CULL_FACE);
 	}
 	
 }

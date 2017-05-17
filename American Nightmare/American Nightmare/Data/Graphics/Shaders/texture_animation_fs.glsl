@@ -176,7 +176,7 @@ void main(void)
 
 	float shadow = 0;
 
-	if(useShadow)
+	if(useShadow && (nrOfDirectionalShadowMaps > 0 || nrOfPointShadowMaps > 0))
 	{
 		for(int i = 0; i < nrOfDirectionalShadowMaps; i++)
 		{

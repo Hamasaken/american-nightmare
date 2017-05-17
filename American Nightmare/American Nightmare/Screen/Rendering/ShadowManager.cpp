@@ -80,6 +80,7 @@ void ShadowManager::AddPoint(LightManager::PointLight* light, glm::vec2 resoluti
 	PointShadowMap* tempShadowMap = new PointShadowMap();
 
 	tempShadowMap->lightPosition = light->position;
+	tempShadowMap->lightFarPlane = light->radius;
 
 	glm::mat4 lightProjection = glm::perspective(glm::radians(fov), resolution.x / resolution.y, nearPlane, light->radius);
 
