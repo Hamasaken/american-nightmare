@@ -39,6 +39,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	position = glm::vec3(0, 20, 0);
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_SIZE_Z);
+	hasJumped = false;
 
 	// Creating model
 	model = new Model();
@@ -113,30 +114,37 @@ void Player::InputTesting()
 
 void Player::InputKeyboard()
 {
+	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
 		directionIsRight = false;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 	{
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
 		directionIsRight = true;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+	else
 	{
-		hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
+		hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+
+	// Did we hit a surface?
+	if (vel.y == 0.f) hasJumped = false;
+	// Jumping
+	if (!hasJumped && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
 	{
-		hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, PLAYER_VEL_Y), true);
+		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
+		vel.y = hitbox->getBody()->GetLinearVelocity().y;
+		hasJumped = true;
 	}
 
 	// Thresholds in velocity
-	if (hitbox->getBody()->GetLinearVelocity().x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(PLAYER_MAX_VEL_X, hitbox->getBody()->GetLinearVelocity().y));
-	if (hitbox->getBody()->GetLinearVelocity().x < -PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(-PLAYER_MAX_VEL_X, hitbox->getBody()->GetLinearVelocity().y));
-	if (hitbox->getBody()->GetLinearVelocity().y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, PLAYER_MAX_VEL_Y));
-	if (hitbox->getBody()->GetLinearVelocity().y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, -PLAYER_MAX_VEL_Y));
+	if (vel.x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(PLAYER_MAX_VEL_X, vel.y));
+	if (vel.x < -PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(-PLAYER_MAX_VEL_X, vel.y));
+	if (vel.y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, PLAYER_MAX_VEL_Y));
+	if (vel.y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, -PLAYER_MAX_VEL_Y));
 }
 
 void Player::InputController()
@@ -144,10 +152,20 @@ void Player::InputController()
 	sf::Joystick::update();
 	if (sf::Joystick::isConnected(0))
 	{
-		if (sf::Joystick::isButtonPressed(0, BTN_A))
-			hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
+		b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
+
+		if (!hasJumped && sf::Joystick::isButtonPressed(0, BTN_A))
+		{
+			if (vel.y >= 0.f) 
+			{
+				hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
+				hasJumped = true;
+			}
+		}
+		else if (vel.y == 0.f) hasJumped = false;
+
 		if (sf::Joystick::isButtonPressed(0, BTN_X))
-			hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, PLAYER_VEL_Y), true);
+			printf("X.\n");
 		if (sf::Joystick::isButtonPressed(0, BTN_Y))
 			printf("Y.\n");
 		if (sf::Joystick::isButtonPressed(0, BTN_B))
@@ -172,13 +190,14 @@ void Player::InputController()
 			if (leftAxis > 0) directionIsRight = false;
 			else if (leftAxis < 0) directionIsRight = true;
 		}
-	}
+		else hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
 
-	// Thresholds in velocity
-	if (hitbox->getBody()->GetLinearVelocity().x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(PLAYER_MAX_VEL_X, hitbox->getBody()->GetLinearVelocity().y));
-	if (hitbox->getBody()->GetLinearVelocity().x < -PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(-PLAYER_MAX_VEL_X, hitbox->getBody()->GetLinearVelocity().y));
-	if (hitbox->getBody()->GetLinearVelocity().y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, PLAYER_MAX_VEL_Y));
-	if (hitbox->getBody()->GetLinearVelocity().y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, -PLAYER_MAX_VEL_Y));
+		// Thresholds in velocity
+		if (vel.x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(PLAYER_MAX_VEL_X, vel.y));
+		if (vel.x < -PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(-PLAYER_MAX_VEL_X, vel.y));
+		if (vel.y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, PLAYER_MAX_VEL_Y));
+		if (vel.y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, -PLAYER_MAX_VEL_Y));
+	}
 }
 
 b2Body* Player::getBody()
