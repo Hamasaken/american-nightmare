@@ -362,7 +362,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Dammsugare in the middle of the screen
 	Entity* box = new Entity();
 	box->setShader(shader);
-	box->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"), world, glm::vec2(-10, 0), glm::vec2(8.f, 5.f), b2_staticBody);
+	box->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"), world, glm::vec2(-10, 0), glm::vec3(8.f, 5.f, 0.5f), b2_staticBody);
 	box->setScale(glm::vec3(8, 5, 3));
 	map.push_back(box);
 
@@ -483,7 +483,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	{
 		Projectile* moveble = new Projectile();
 		moveble->setShader(shader);
-		moveble->Start(modelPath + "model.m", materialManager->getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
+		moveble->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec3(0.5f, 0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
 		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
 		projectiles.push_back(moveble);
 	}

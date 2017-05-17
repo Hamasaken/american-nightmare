@@ -53,7 +53,7 @@ public:
 	~Player();
 
 	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world);
-	void Update(GLint deltaT);
+	//void Update(GLint deltaT);
 	bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
 	//void Update(GLint deltaT);
 	void Update(GLint deltaT, b2World* world, glm::vec2 pos);

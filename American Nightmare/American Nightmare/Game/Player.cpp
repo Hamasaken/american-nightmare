@@ -17,7 +17,6 @@ Player::Player(const Player & other) { }
 
 Player::~Player() { }
 
-bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world)
 void Player::initiateCursor()
 {
 	SDL_ShowCursor(SDL_ENABLE);
@@ -25,7 +24,8 @@ void Player::initiateCursor()
 	SDL_SetCursor(cursor);
 }
 
-bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
+//bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
+bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world)
 {
 	this->checkValue = false;
 
@@ -43,7 +43,7 @@ bool Player::Start(std::string modelName, const MaterialManager::Material* mater
 	// Creating model
 	model = new Model();
 	if (model == nullptr) return false;
-	if (!model->Start(modelName)) return false;
+	/*if (!model->Start(modelName)) return false;*/
 
 	this->material = material;
 	model->BuildQuadTexture();

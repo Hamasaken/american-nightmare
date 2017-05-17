@@ -31,7 +31,7 @@ public:
 	////////////////////////////////////////////////////////////
 	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, bool fixedRotate = true, float mass = 25.0f, float friction = 0.75f, bool isBullet = false, bool isSensor = false);
 
-	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, float density = 1000.f, float friction = 1.f, bool isBullet = false);
+	//bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, float density = 1000.f, float friction = 1.f, bool isBullet = false);
 	
 	bool InitializeHitboxVacuum(b2World* world, b2Body* player);
 
