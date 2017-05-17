@@ -311,7 +311,7 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		
 		// Adding trigger to vector
 		this->triggers.push_back(outTrigger);
-		particleManager->EffectConstantSmoke(glm::vec3(outTrigger->getPosition(), 0.f), materialManager->getTextureID("smoketexture"), 30);
+		particleManager->EffectConstantSmoke(glm::vec3(outTrigger->getPosition(), 0.f), materialManager->getTextureID("smoketexture"), 60);
 	}
 
 }

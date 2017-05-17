@@ -6,7 +6,7 @@
 // TEXTURE PARTICLES DEFAULTS
 #define TEXTURE_DEFAULT_COLOR		glm::vec4(1.f, 1.f, 1.f, 1.f)
 #define TEXTURE_DEFAULT_AMOUNT		10
-#define TEXTURE_SIZE				randBetweenF(0.5f, 1.5f)
+#define TEXTURE_SIZE				randBetweenF(0.40f, 1.0f)
 #define TEXTURE_VELOCITY			randBetweenF(-0.001f, 0.001f)
 #define TEXTURE_VELOCITY_FALL_OFF	randBetweenF(0.005f, 0.01f)
 #define TEXTURE_LIFETIME			randBetweenF(1500.f, 3000.f)
