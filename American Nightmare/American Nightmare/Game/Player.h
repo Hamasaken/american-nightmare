@@ -10,11 +10,11 @@
 #define PLAYER_SIZE_Y 2.f
 #define PLAYER_SIZE_Z 1.f
 #define PLAYER_MASS 70.f
-#define PLAYER_FRICTION 0.5f
-#define PLAYER_VEL_X 5000.f
-#define PLAYER_VEL_Y 10000.f
+#define PLAYER_FRICTION 0.01f
+#define PLAYER_VEL_X 8000.f
+#define PLAYER_VEL_Y 3250.f
 
-#define PLAYER_MAX_VEL_X 20.f
+#define PLAYER_MAX_VEL_X 4.5f
 #define PLAYER_MAX_VEL_Y 20.f
 
 // XBOX CONTROLLER
@@ -69,6 +69,8 @@ public:
 
 	//glm::vec2 getPlayerPosAsGLM();
 	glm::vec2 getPlayerPosAsGLM();
+private:
+	bool hasJumped;
 	/*bool addPlayerProjectiles();
 	void setCheckForProjectilePickUp(bool checkValue);
 	bool getCheckValue()const;*/
