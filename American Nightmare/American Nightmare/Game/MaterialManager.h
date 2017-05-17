@@ -17,13 +17,15 @@ public:
 		std::string name; //temp identifier
 
 		glm::vec3 ambient;
-		GLfloat specular;
+		glm::vec3 diffuse;
+		glm::vec3 specular;
+		GLfloat specularExponent;
 
 		Texture* texture;
 
-		Material() : name(""), ambient(glm::vec3(0)), specular(0.f), texture(nullptr) { };
-		Material(std::string name, glm::vec3 ambient, GLfloat specular, Texture* texture) : name(name), ambient(ambient), specular(specular), texture(texture) { };
-		Material(const Material& inMaterial) : name(inMaterial.name), ambient(inMaterial.ambient), specular(inMaterial.specular), texture(inMaterial.texture) { };
+		Material() : name(""), ambient(glm::vec3(0)), diffuse(glm::vec3(0)), specular(glm::vec3(0)), specularExponent(0.f), texture(nullptr) { };
+		Material(std::string name, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, GLfloat specularExponent, Texture* texture) : name(name), ambient(ambient), diffuse(diffuse), specular(specular), specularExponent(specularExponent), texture(texture) { };
+		Material(const Material& inMaterial) : name(inMaterial.name), ambient(inMaterial.ambient), diffuse(inMaterial.diffuse), specular(inMaterial.specular), specularExponent(inMaterial.specularExponent), texture(inMaterial.texture) { };
 		GLuint getTextureID() const { return texture->textureID; }
 	};
 
@@ -44,7 +46,7 @@ public:
 
 	void Clear();
 
-	bool AddMaterial(std::string matName, glm::vec3 ambient, GLfloat specular, std::string textureName, std::string texturePath);
+	bool AddMaterial(std::string matName, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, GLfloat specularExponent, std::string textureName, std::string texturePath);
 	GLint AddTexture(std::string name, std::string texturePath);	// Returns index for the added texture in textureList
 	const Material* getMaterial(std::string name) const;
 	GLuint getTextureID(GLint index) const;

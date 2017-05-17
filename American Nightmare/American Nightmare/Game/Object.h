@@ -4,6 +4,7 @@
 // Classes
 #include "SFML\Graphics.hpp"
 #include "MaterialManager.h"
+#include "MeshManager.h"
 #include "Model.h"
 #include "Box2D.h"
 
@@ -16,14 +17,11 @@ public:
 
 	////////////////////////////////////////////////////////////
 	// \brief Loads both a model & texture
+	// \param mesh The specific mesh to be created (if nullptr, a quad is created)
+	// \param material The specific material on this mesh
 	// \return Returns false if one or both fails
 	////////////////////////////////////////////////////////////
-	virtual bool Start(std::string modelName, const MaterialManager::Material* material);
-
-	////////////////////////////////////////////////////////////
-	// \brief Unloads both model & texture
-	////////////////////////////////////////////////////////////
-	virtual void Stop();
+	virtual bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material);
 
 	////////////////////////////////////////////////////////////
 	// \brief Virtual Update function
@@ -38,7 +36,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// Sets & Gets
 	////////////////////////////////////////////////////////////
-	void setPosition(glm::vec3 position);
+	virtual void setPosition(glm::vec3 position);
 	glm::vec3 getPosition() const;
 	glm::vec3 getCenter() const;
 	void setRotation(glm::vec3 rotation);
@@ -48,6 +46,7 @@ public:
 	virtual void setShader(GLuint shader);
 	GLuint getShader() const;
 	GLuint getTextureID() const;
+	const MaterialManager::Material* getMaterial() const;
 
 protected:
 	glm::vec3 position;	//< Object position

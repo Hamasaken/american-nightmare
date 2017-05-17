@@ -4,6 +4,10 @@
 #include "../Object.h"
 #include "Text.h"
 
+#define BTN_ALPHA_HOVER 0.8f
+#define BTN_ALPHA_PRESSED 0.25f
+#define BTN_ALPHA_NORMAL 1.f
+
 struct Button : Object
 {
 public:
@@ -19,19 +23,20 @@ public:
 	// \param position Position of the center position of the button
 	// \param size Size of the button & quad
 	// \param material The material of this button (no path needed)
-	// \param color Color of the full quad, default as white
+	// \param mesh The mesh of this button (leave as nullptr for normal quad)
 	// \return Returns false if model or font could not be created
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f));
-
+	bool Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh);
 	void Stop();
 
 	////////////////////////////////////////////////////////////
 	// \brief Starts text on the button
-	// \param fontName Full path to the font file
-	// \param characterSize The size of each character
+	// \param str The string of the button text
+	// \param fontName Path to the .ttf file
+	// \optional characterSize The size of each character (defaults as 20.f)
+	// \optional textColor The color of the full text (defaults as WHITE) 
 	////////////////////////////////////////////////////////////
-	bool StartText(std::string fontName, float characterSize);
+	bool StartText(std::string str, std::string fontName, float characterSize = 20.f, glm::vec4 color = glm::vec4(1, 1, 1, 1));
 
 	////////////////////////////////////////////////////////////
 	// \brief Checking if mouse pointer is inside button
@@ -55,19 +60,20 @@ public:
 	// Set & Get functions
 	void setState(State state);
 	void setSize(glm::vec2 size);
-	void setColor(glm::vec4 color);
+	void setAlpha(float alpha);
+	void setPressed(bool pressed);
+	Text* getText();
 	State getState();
 	glm::vec2 getSize();
-	glm::vec4 getColor();
+	float getAlpha();
 	bool getPressed();
-	void setPressed(bool pressed);
 
 private:
 	bool pressed;			//< If the button have been pressed or not
 	Text* text;				//< Optional text object
 	glm::vec2 screenSize;	//< The screensize of the screen
 	glm::vec2 size;			//< Size of the button in (width, height)
-	glm::vec4 color;		//< Color of the button
+	float alpha;			//< The alpha of the button
 	State state;			//< Current state of the button
 	State prevState;		//< The previous state of the button (for optimazition)
 };

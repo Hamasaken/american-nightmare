@@ -32,6 +32,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
 		if (myProjectile)
 		{
+			particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f)); // temp blood effect
 			printf("Player touched a projectile AAAAA\n");
 			player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
 			myProjectile->setmarked(true);

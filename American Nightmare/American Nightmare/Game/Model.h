@@ -11,24 +11,20 @@ public:
 	~Model();
 
 	////////////////////////////////////////////////////////////
-	// \brief Loads the modelfile and makes vertices & indices
-	////////////////////////////////////////////////////////////
-	bool Start(std::string modelPath);
-
-	////////////////////////////////////////////////////////////
 	// TEMPORARY FUNCTION, REPLACE THIS WITH LOADMODEL WHEN DONE
 	////////////////////////////////////////////////////////////
 	void BuildTriangle();
 	void BuildQuad();
 	void BuildQuadTexture();
+	void BuildQuadTextureBig();
 	void BuildQuad(glm::vec2 size); // Temporary for button
 	
 	////////////////////////////////////////////////////////////
 	// \brief Loads a model with vertices and normals and inserts into buffers
-	// \param path The file in question
+	// \param vertices A vector with the vertices to be inputted
 	// \return Returns false if the file could not be found or not read
 	////////////////////////////////////////////////////////////
-	bool LoadModel(std::string modelPath);
+	bool LoadModel(std::vector<VertexUV> vertices);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads everything

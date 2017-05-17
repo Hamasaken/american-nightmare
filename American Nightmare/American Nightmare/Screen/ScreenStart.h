@@ -4,6 +4,7 @@
 #include "Screen.h"
 #include "../Game/GUI/GUIManager.h"
 #include "../Game/MaterialManager.h"
+#include "../Game/Particle/ParticleManager.h"
 
 #define CLEAR_COLOR glm::vec4(1, 1, 1, 1)
 
@@ -40,9 +41,11 @@ public:
 	void Draw();
 
 private:
-	MaterialManager* materialManager;
-	GUIManager* guiManager;
-	ShaderManager* shaderManager;
+	MeshManager* meshManager;			//< Mesh Manager
+	MaterialManager* materialManager;	//< Materials & Textures
+	GUIManager* guiManager;				//< Buttons & Text
+	ShaderManager* shaderManager;		//< Shader Manager
+	ParticleManager* particleManager;	//< Manager for particle effects
 };
 
 #endif // !SCREENSTART_H

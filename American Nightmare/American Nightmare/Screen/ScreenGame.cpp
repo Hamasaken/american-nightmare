@@ -21,62 +21,76 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	////////////////////////////////////////////////////////////
 	// Creating Shader Manager
 	////////////////////////////////////////////////////////////
-	std::string shaderPath = SHADER_PATH;
 	shaderManager = new ShaderManager();
 	if (shaderManager == nullptr) return false;
 
 	// Adding Shader Programs
-	shaderManager->AddShader("solid", shaderPath + "solid_vs.glsl", shaderPath + "solid_fs.glsl");
-	shaderManager->AddShader("texture", shaderPath + "texture_vs.glsl", shaderPath + "texture_fs.glsl");
-	shaderManager->AddShader("texture_animation", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_fs.glsl");
-	shaderManager->AddShader("texture_animation_normal", shaderPath + "texture_animation_vs.glsl", shaderPath + "texture_animation_fs.glsl");
-	shaderManager->AddShader("particle_light", shaderPath + "particle_light_vs.glsl", shaderPath + "particle_light_gs.glsl", shaderPath + "particle_light_fs.glsl");
-	shaderManager->AddShader("deferred", shaderPath + "dr_vs.glsl", shaderPath + "dr_fs.glsl");
-	shaderManager->AddShader("deferred_final", shaderPath + "drfinal_vs.glsl", shaderPath + "drfinal_fs.glsl");
-	shaderManager->AddShader("shadow", shaderPath + "shadowmap_vs.glsl", shaderPath + "shadowmap_fs.glsl");
-	shaderManager->AddShader("shadowtransparent", shaderPath + "shadowmap_transparent_vs.glsl", shaderPath + "shadowmap_transparent_fs.glsl");
-	shaderManager->AddShader("debug", shaderPath + "debug_shader_vs.glsl", shaderPath + "debug_shader_fs.glsl");
+	shaderManager->AddShader("solid", SHADER_PATH "solid_vs.glsl", SHADER_PATH "solid_fs.glsl");
+	shaderManager->AddShader("texture", SHADER_PATH "texture_vs.glsl", SHADER_PATH "texture_fs.glsl");
+	shaderManager->AddShader("texture_animation", SHADER_PATH "texture_animation_vs.glsl", SHADER_PATH "texture_fs.glsl");
+	shaderManager->AddShader("texture_animation_normal", SHADER_PATH "texture_animation_vs.glsl", SHADER_PATH "texture_animation_fs.glsl");
+	shaderManager->AddShader("particle_light", SHADER_PATH "particle_light_vs.glsl", SHADER_PATH "particle_light_gs.glsl", SHADER_PATH "particle_light_fs.glsl");
+	shaderManager->AddShader("particle_texture", SHADER_PATH "particle_texture_vs.glsl", SHADER_PATH "particle_texture_gs.glsl", SHADER_PATH "particle_texture_fs.glsl");
+	shaderManager->AddShader("deferred", SHADER_PATH "dr_vs.glsl", SHADER_PATH "dr_fs.glsl");
+	shaderManager->AddShader("deferred_final", SHADER_PATH "drfinal_vs.glsl", SHADER_PATH "drfinal_fs.glsl");
+	shaderManager->AddShader("shadowdir", SHADER_PATH "shadowmap_dir_vs.glsl", SHADER_PATH "shadowmap_dir_fs.glsl");
+	shaderManager->AddShader("shadowdirtransparent", SHADER_PATH "shadowmap_dir_transparent_vs.glsl", SHADER_PATH "shadowmap_dir_transparent_fs.glsl");
+	shaderManager->AddShader("shadowpoint", SHADER_PATH "shadowmap_point_vs.glsl", SHADER_PATH "shadowmap_point_gs.glsl", SHADER_PATH "shadowmap_point_fs.glsl");
+	shaderManager->AddShader("debug", SHADER_PATH "debug_shader_vs.glsl", SHADER_PATH "debug_shader_fs.glsl");
 
 	// Initialize Deferred Rendering
 	drRendering.Start(screenSize, shaderManager->getShader("deferred_final"));
 
 	// Initialize Shadow Manager
-	shadowManager.Start(shaderManager->getShader("shadow"), shaderManager->getShader("shadowtransparent"));
+	shadowManager.Start(shaderManager->getShader("shadowdir"), shaderManager->getShader("shadowdirtransparent"), shaderManager->getShader("shadowpoint"), 0);
 
 	////////////////////////////////////////////////////////////
 	// Creating Material Manager and loading textures/materials
 	////////////////////////////////////////////////////////////
-	std::string texturePath = TEXTURE_PATH;
 	materialManager = new MaterialManager();
 	if (materialManager == nullptr) return false;
 
 	// Loading materials
-	materialManager->AddMaterial("playermaterial", glm::vec3(0.1), 1.f, "playertexture", texturePath + "Walk01.png");
-	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
-	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), 1.f, "groundtexture", texturePath + "temp_ground.jpg");
-	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), 1.f, "backgroundtexture", texturePath + "temp_background.jpg");
+	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.4f, 0.4f, 0.6f), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	materialManager->AddMaterial("playermaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.5f), 0.01f, "playertexture", TEXTURE_PATH "Walk01.png");
+	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "lighttexture", TEXTURE_PATH "gammal-dammsugare.jpg");
+	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "groundtexture", TEXTURE_PATH "temp_ground.jpg");
+	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "backgroundtexture", TEXTURE_PATH "temp_background.jpg");
+	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
+	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 	if (materialManager->getMaterial("playermaterial") == nullptr) printf("Player Material not found\n");
 	if (materialManager->getMaterial("lightmaterial") == nullptr) printf("Light Material not found\n");
 	if (materialManager->getMaterial("groundmaterial") == nullptr) printf("Ground Material not found\n");
 	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Background Material not found\n");
+	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
+
+
 
 	////////////////////////////////////////////////////////////
 	// Creating Particle Manager
 	////////////////////////////////////////////////////////////
 	particleManager = new ParticleManager();
 	if (particleManager == nullptr) return false;
-	if (!particleManager->Start())
-		return false;
-	particleManager->setShader(shaderManager->getShader("particle_light"));
+	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::LIGHT);
+	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::LIGHT_DUST);
+	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::BLOOD);
+	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::TEXTURE);
+	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::SMOKE);
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
 	////////////////////////////////////////////////////////////
+	meshManager = new MeshManager();
+	if (meshManager == nullptr) return false;
+	
+	// add quad mesh here later
 
-	// Creating a simple level
+	////////////////////////////////////////////////////////////
+	// Level Manager
+	////////////////////////////////////////////////////////////
 	levelManager = new LevelManager();
 	if (levelManager == nullptr) return false;
-	if (!levelManager->Start(shaderManager->getShader("texture_animation_normal"), materialManager, particleManager, soundManager))
+	if (!levelManager->Start(shaderManager->getShader("texture_animation_normal"), materialManager, meshManager, particleManager, soundManager))
 		return false;
 
 	////////////////////////////////////////////////////////////
@@ -85,12 +99,12 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
-	guiManager->setShader(shaderManager->getShader("texture"));
-	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, 0, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.50f, 0), glm::vec2(0.4f, 0.15f), materialManager->getMaterial("lightmaterial"));
-//	guiManager->AddText(glm::vec3(0, 0.5f, 0), 30.f, "WHAT", "framd.ttf");
+	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.15f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Start Meny", FONT_PATH INGAME_FONT, 35.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.15f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Back", FONT_PATH INGAME_FONT, 35.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.45f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), nullptr, "Exit to Desktop", FONT_PATH INGAME_FONT, 35.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddText(glm::vec3(0.f, 0.75f, 0.f), 70.f, "Paused", FONT_PATH INGAME_FONT);
 	guiManager->setAlpha(0.f);
+	guiManager->setShader(shaderManager->getShader("texture"));
 
 	////////////////////////////////////////////////////////////
 	// Creating a UI manager	
@@ -98,10 +112,10 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager = new GUIManager();
 	if (uiManager == nullptr) return false;
 	if (!uiManager->Start(screenSize, screenPosition)) return false;
-	uiManager->setShader(shaderManager->getShader("texture"));
-	uiManager->AddButton(GUIManager::OK, glm::vec3(0, -0.95, 0), glm::vec2(0.15f, 0.05f), materialManager->getMaterial("groundmaterial"));
-	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.95f, -0.95, 0), glm::vec2(0.05f, 0.05f), materialManager->getMaterial("backgroundmaterial"));
+	uiManager->AddButton(GUIManager::OK, glm::vec3(0, -0.95, 0), glm::vec2(0.15f, 0.05f), materialManager->getMaterial("groundmaterial"), nullptr);
+	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.95f, -0.95, 0), glm::vec2(0.05f, 0.05f), materialManager->getMaterial("backgroundmaterial"), nullptr);
 	uiManager->setAlpha(1.f);
+	uiManager->setShader(shaderManager->getShader("texture"));
 
 	// Setting startvariables
 	SetStartVariables();
@@ -115,14 +129,17 @@ void ScreenGame::SetStartVariables()
 	gameState = PLAYING;
 
 	// Backing the camera a little bit backwards
-	camera->setPosition(glm::vec3(0, 0, 15));
+	camera->setPosition(glm::vec3(0, 0, 22.5f));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(shaderManager->getShader("deferred"), "0.lvl");
+	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "Level2.anl", ARCHIVE_PATH "Assets2.ana");
 
 	// Adding shadow
 	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, 50, -30.f, 50);
-	shadowManager.setUseShadows(false);
+	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, 50, -30.f, 50);
+	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, 50, -30.f, 50);
+	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[0], glm::vec2(1024, 1024), 45, 0.1f);
+	shadowManager.setUseShadows(true);
 }
 
 void ScreenGame::Update(GLint deltaT)
@@ -140,7 +157,7 @@ void ScreenGame::Draw()
 {
 	// Draw shadow maps
 	if (shadowManager.getUseShadows())
-		DrawShadowMaps();		
+		DrawShadowMaps();
 
 	// Disable Blend for DR
 	glDisable(GL_BLEND);
@@ -183,22 +200,27 @@ void ScreenGame::Draw()
 	glEnable(GL_BLEND);
 
 	// DR: Light pass
-	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix, shadowManager.getDirectionalShadowMapList()[0]->lightDirection, shadowManager.getDirectionalShadowMapList()[0]->shadowMap, shadowManager.getUseShadows());
+	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
 	// Drawing player
-	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix, shadowManager.getDirectionalShadowMapList()[0]->lightDirection, shadowManager.getDirectionalShadowMapList()[0]->shadowMap, shadowManager.getUseShadows());
+	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
 	// Draw Enemy
-	DrawObjectAnimation(levelManager->getEnemy(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix, shadowManager.getDirectionalShadowMapList()[0]->lightDirection, shadowManager.getDirectionalShadowMapList()[0]->shadowMap, shadowManager.getUseShadows());
+	DrawObjectAnimation(levelManager->getEnemy(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
-	// Drawing vertices
-	DrawParticles(particleManager, shaderManager);
+	// Drawing particles
+	for (ParticleEmitter* emitter : *particleManager->getEmitters())
+		DrawParticles(emitter, shaderManager);
 
 	// Drawing gui Manager if we're paused
 	if (gameState != PLAYING)
 	{
 		for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
+		{
 			DrawObjectGUI(button.first, shaderManager);
+			if (button.first->getText() != nullptr)
+				DrawObjectGUI(button.first->getText(), shaderManager);
+		}
 		for (Text* object : *guiManager->getTextList())
 			DrawObjectGUI(object, shaderManager);
 	}
@@ -215,24 +237,26 @@ void ScreenGame::Draw()
 	{
 		shaderManager->setShader("debug");
 
-		glm::mat4 tempWorld = glm::translate(glm::mat4(1.f), glm::vec3(-0.60f, -0.60f, 0.f)) *
-			glm::scale(glm::mat4(1.f), glm::vec3(0.4f, 0.4f, 0.4f));
+		glm::mat4 tempWorld = glm::translate(glm::mat4(1.f), glm::vec3(-0.75f, -0.75f, 0.f)) *
+			glm::scale(glm::mat4(1.f), glm::vec3(0.25f, 0.25f, 0.25f));
 
 		shaderManager->SetParameters(tempWorld, glm::mat4(), glm::mat4());
 
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, shadowManager.getDirectionalShadowMapList()[0]->shadowMap);
+		glBindTexture(GL_TEXTURE_CUBE_MAP_POSITIVE_X, shadowManager.getPointShadowMapList()[0]->shadowCubeMap);
 		glUniform1i(glGetUniformLocation(shaderManager->getShader(), "texture"), 0);
 
 		glDisable(GL_DEPTH_TEST);
 		drRendering.getFinalRenderQuad()->Draw();
 		glEnable(GL_DEPTH_TEST);
 	}*/
+
 }
 
 void ScreenGame::DrawShadowMaps()
 {
+	// Directional
 	for (int i = 0; i < shadowManager.getDirectionalShadowMapList().size(); i++)
 	{
 		// Set Viewport to resolution of shadow map
@@ -247,19 +271,51 @@ void ScreenGame::DrawShadowMaps()
 
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
-			DrawObjectShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[0]->lightSpaceMatrix);
+			DrawObjectDirShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
 		// Set shader for transparent objects
 		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
 
-		DrawObjectShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
-		DrawObjectShadowMapTransparent(levelManager->getEnemy(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+		DrawObjectDirShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+		DrawObjectDirShadowMapTransparent(levelManager->getEnemy(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
 		// Unbind FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		// Reset Viewport to screen size
 		glViewport(0, 0, screenSize.x, screenSize.y);
+	}
+
+	// Point
+	for (int i = 0; i < shadowManager.getPointShadowMapList().size(); i++)
+	{
+		// Set Viewport to resolution of shadow map
+		glViewport(0, 0, shadowManager.getPointShadowMapList()[i]->resolution.x, shadowManager.getPointShadowMapList()[i]->resolution.y);
+		glDisable(GL_CULL_FACE);
+		// Bind depth FBO
+		glBindFramebuffer(GL_FRAMEBUFFER, shadowManager.getPointShadowMapList()[i]->shadowFBO);
+
+		// Set shader
+		shaderManager->setShader(shadowManager.getPointShadowShader());
+
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		// Drawing shadowmap
+		for (Object* object : levelManager->getMap())
+			DrawObjectPointShadowMap(object, shaderManager, shadowManager.getPointShadowMapList()[i]);
+
+		// Set shader for transparent objects
+		//shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
+
+		//DrawObjectDirShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+		//DrawObjectDirShadowMapTransparent(levelManager->getEnemy(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+
+		// Unbind FBO
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// Reset Viewport to screen size
+		glViewport(0, 0, screenSize.x, screenSize.y);
+		glEnable(GL_CULL_FACE);
 	}
 	
 }
@@ -295,9 +351,11 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	// Particle Managare Testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
-		particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.80f, 1.f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
+		particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.60f, 0.80f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::I))
-		particleManager->EffectTextureExplosion(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("lightmaterial")->getTextureID(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.80f, 1.f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
+		particleManager->EffectSmokeCloud(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(randBetweenF(0.6f, 0.7f), randBetweenF(0.80f, 1.f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::O))
+		particleManager->EffectConstantSmoke(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 25);
 
 	// Updating particles effects
 	particleManager->Update(deltaT);

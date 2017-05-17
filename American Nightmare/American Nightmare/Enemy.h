@@ -6,8 +6,8 @@
 #define ENEMY_SIZE_X 2.f
 #define ENEMY_SIZE_Y 2.f
 #define ENEMY_SIZE_Z 1.f
-#define ENEMY_DENSITY 60.f
-#define ENEMY_FRICTION 0.0f
+#define ENEMY_MASS 20.f
+#define ENEMY_FRICTION 0.5f
 #define ENEMY_VEL_X 250.f  //20000.f
 #define ENEMY_VEL_Y 50000.f
 
@@ -21,7 +21,7 @@ public:
 	Enemy(const Enemy& other);
 	~Enemy();
 
-	bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
+	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world);
 	void Update(GLint deltaT, b2Vec2 playerPos);
 
 	Entity myEntity;

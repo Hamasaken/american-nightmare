@@ -27,32 +27,41 @@
 #define ANIMATION_PATH "Data/Graphics/Animations/"
 #define SFX_PATH "Data/Sound/SFX/"
 #define MUSIC_PATH "Data/Sound/Music/"
+#define LEVEL_PATH "Data/"
+#define ARCHIVE_PATH "Data/"
 
 // Global variables
 #define GRAVITY 9.82f
-#define PI 3.14159265359
+#define GRAVITY_SCALE 2.f
 
-// Returns the angle in radians
-float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2);
+// TEXT
+#define INGAME_FONT "404ERROR.ttf"
+#define OPTIONS_FONT "framd.ttf"
+// #define TITLE_FONT "404ERROR.ttf"
 
-int radianToDegree(float radian);
-
-//float test = 180 / PI;
-
-// Functions
 // Returns the angle in radians
 float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2);
 
 // Returns a random number between your two parameters
 float randBetweenF(float low, float high);
-glm::vec3 fromScreenToWorld(glm::vec2 position, glm::vec2 screenSize, glm::mat4 view, glm::mat4 projection);
-glm::vec3 fromScreenToWorld(glm::vec2 position);
-glm::vec2 fromScreenToNDC(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
-//glm::vec2 Angel(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
-// Vertex Struct for vertex buffers, etc
 
 // Returns the screen cordinates to NDC
-//glm::vec3 fromScreenToNDC(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
+glm::vec3 fromScreenToNDC(glm::vec2 position, glm::vec2 screenSize, glm::vec2 screenPos);
+
+// Laziness
+glm::vec4 arrayToVec4(float a[4]);
+glm::vec3 arrayToVec3(float a[3]);
+glm::vec2 arrayToVec2(float a[2]);
+
+// Particle Types
+enum ParticleType
+{
+	LIGHT,
+	BLOOD,
+	TEXTURE,
+	SMOKE,
+	LIGHT_DUST
+};
 
 // Game State
 enum State { Game, StartMeny, Options, Cutscene, Posters, Exit };
@@ -74,15 +83,22 @@ struct Vertex
 		b = color.b;
 		a = color.a;
 	}
+
 	void setSize(glm::vec2 size)
 	{
 		w = size.x;
 		h = size.y;
 	}
 
+	void setRotation(float rotation)
+	{
+		rot = rotation;
+	}
+
 	float x, y, z;
 	float r, g, b, a;
 	float w, h;
+	float rot;
 };
 
 // Vertex struct for textures/models

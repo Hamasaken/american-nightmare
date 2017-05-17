@@ -1,37 +1,8 @@
 #include "Entity.h"
 
-bool Entity::Start(std::string modelName, const MaterialManager::Material * material, b2World* world, b2Body* player)
+bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World* world)
 {
-	Object::Start(modelName, material);
-	hitbox = new Hitbox();
-	//if (hitbox == nullptr) return false;
-	//if (!hitbox->InitializeHitbox(world))
-	//	return false;
-
-	if (!hitbox->InitializeHitboxVacuum(world, player))
-
-	hitbox->getBody()->SetUserData(this);
-
-	return true;
-}
-
-//bool Entity::StartVacuum(std::string modelName, const MaterialManager::Material * material, b2World* world)
-//{
-//	Object::Start(modelName, material);
-//
-//	hitbox = new Hitbox();
-//	//if (hitbox == nullptr) return false;
-//	//if (!hitbox->InitializeHitbox(world))
-//	//	return false;
-//
-//	//hitbox->getBody()->SetUserData(this);
-//
-//	return false;
-//}
-
-bool Entity::Start(std::string modelName, const MaterialManager::Material * material, b2World* world)
-{
-	Object::Start(modelName, material);
+	Object::Start(mesh, material);
 
 	hitbox = new Hitbox();
 	if (hitbox == nullptr) return false;
@@ -43,9 +14,9 @@ bool Entity::Start(std::string modelName, const MaterialManager::Material * mate
 	return true;
 }
 
-bool Entity::Start(std::string modelName, const MaterialManager::Material * material, b2World * world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType, bool fixedRotate, float density, float friction)
+bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World * world, glm::vec2 position, glm::vec3 size, b2BodyType type, b2Shape::Type shapeType, bool fixedRotate, float density, float friction)
 {
-	Object::Start(modelName, material);
+	Object::Start(mesh, material);
 
 	hitbox = new Hitbox();
 	if (hitbox == nullptr) return false;
@@ -53,7 +24,7 @@ bool Entity::Start(std::string modelName, const MaterialManager::Material * mate
 		return false;
 
 	// Updating size
-	this->scale = glm::vec3(size, 1);
+	this->scale = size;
 
 	hitbox->getBody()->SetUserData(this);
 
@@ -70,8 +41,6 @@ void Entity::Stop()
 		delete hitbox;
 		hitbox = nullptr;
 	}
-	
-	Object::Stop();
 }
 
 void Entity::Update(GLint deltaT)
@@ -84,9 +53,6 @@ void Entity::Update(GLint deltaT)
 	Object::Update(deltaT);
 }
 
-void Entity::setScale(glm::vec3 scale)
-{
-	this->scale = scale;
-}
-
+void Entity::setPosition(glm::vec3 position) { this->position = position; }
+void Entity::setScale(glm::vec3 scale) { this->scale = scale; }
 Hitbox * Entity::getHitbox() { return hitbox; }

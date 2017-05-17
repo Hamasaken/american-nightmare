@@ -57,7 +57,6 @@ private:
 	//sfe::Movie movie;
 	sf::Image frame;
 	GLuint texture;
-	Model* model;
 };
 
 #endif //!SCREENCUTSCENE

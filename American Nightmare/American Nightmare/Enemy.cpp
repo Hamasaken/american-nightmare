@@ -6,24 +6,17 @@ Enemy::Enemy(const Enemy & other) { }
 
 Enemy::~Enemy() { }
 
-bool Enemy::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
+bool Enemy::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world)
 {
 	// Starting entity variables (including hitbox)
-	Entity::Start(modelName, material, world, glm::vec2(0, 20), glm::vec2(ENEMY_SIZE_X, ENEMY_SIZE_Y), b2_dynamicBody, b2Shape::e_polygon, ENEMY_DENSITY, ENEMY_FRICTION);
+	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, ENEMY_MASS, ENEMY_FRICTION);
 
 	// Setting starting variables
 	position = glm::vec3(0, 0, 0);
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(ENEMY_SIZE_X, ENEMY_SIZE_Y, ENEMY_SIZE_Z);
 
-	// Creating model
-	model = new Model();
-	if (model == nullptr) return false;
-	if (!model->Start(modelName)) return false;
-
-	this->material = material;
-	model->BuildQuadTexture();
-
+	// Setting a self-pointer for collision detection
 	hitbox->getBody()->SetUserData(this);
 
 	return true;

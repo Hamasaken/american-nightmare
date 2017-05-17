@@ -3,11 +3,16 @@
 
 #include "Particle.h"
 
+// BLOOD PARTICLES DEFAULTS
+#define BLOOD_DEFAULT_COLOR		glm::vec4(1.f, 0.1f, 0.05f, 1.f)
+#define BLOOD_DEFAULT_AMOUNT	25
+#define BLOOD_DEFAULT_STRENGTH	0.08f
+#define BLOOD_SIZE				randBetweenF(0.9f, 1.1f)
 #define BLOOD_VELOCITY			randBetweenF(-0.05f, 0.05f)
 #define BLOOD_VELOCITY_FALL_OFF	randBetweenF(0.15f, 0.225f)
 #define BLOOD_LIFETIME			randBetweenF(100.f, 700.f)
 
-struct BloodParticle : public Particle
+class BloodParticle : public Particle
 {
 public:
 

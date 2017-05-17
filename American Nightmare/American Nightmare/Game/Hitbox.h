@@ -25,11 +25,11 @@ public:
 	// \param type Dynamic/Static/Other bodytype
 	// \optional fixedRotate If the hitbox can rotate or not
 	// \optional isBullet I don't what it does yet, sorry, glhf
-	// \optional density Density of shape, defaults as 0.f
+	// \optional mass The mass of shape, defaults as 10kg
 	// \optional friction Friction of the shape, defaults as 10.f
 	// \optional isSensor If the hitbox have collision or not
 	////////////////////////////////////////////////////////////
-	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, bool fixedRotate = true, float density = 1000.f, float friction = 1.f, bool isBullet = false, bool isSensor = false);
+	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, bool fixedRotate = true, float mass = 25.0f, float friction = 0.75f, bool isBullet = false, bool isSensor = false);
 
 	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, float density = 1000.f, float friction = 1.f, bool isBullet = false);
 	
@@ -58,14 +58,15 @@ protected:
 	// \brief Creates a shape object and sends it into body
 	// \param size The size in width and height in meters 
 	// \param shapeType The type of shape to be created (polygon, circle, rope, mm)
-	// \param density The density in kg/m2
+	// \param mass The mass in kg
 	// \param friction The friction coffeinent [0:1]
 	// \param isSensor If the shape have colission or not
 	////////////////////////////////////////////////////////////
-	virtual void ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float density, float friction, bool isSensor);
+	virtual void ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float mass, float friction, bool isSensor);
 
 	b2Body* body;			//< The body object inside world
 	b2Fixture* fixture;
+	b2MassData m;
 };
 
 #endif // !HITBOX_H

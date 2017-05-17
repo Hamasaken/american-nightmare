@@ -1,24 +1,9 @@
 #ifndef PARTICLEMANAGER_H
 #define PARTICLEMANAGER_H
 
+#include "../../Accessories.h"
 #include "ParticleEmitter.h"
-
-// LIGHT PARTICLES DEFAULTS
-#define LIGHT_DEFAULT_COLOR		glm::vec4(1.f, 0.1f, 0.05f, 1.f)
-#define LIGHT_DEFAULT_AMOUNT	25
-#define LIGHT_SIZE				glm::vec2(2.f, 2.f)
-
-// BLOOD PARTICLES DEFAULTS
-#define BLOOD_DEFAULT_COLOR		glm::vec4(1.f, 0.1f, 0.05f, 1.f)
-#define BLOOD_DEFAULT_AMOUNT	25
-#define BLOOD_DEFAULT_STRENGTH	0.08f
-#define BLOOD_SIZE				glm::vec2(2.f, 2.f)
-
-// TEXTURE PARTICLES DEFAULTS
-#define TEXTURE_DEFAULT_COLOR	glm::vec4(1.f, 1.f, 1.f, 1.f)
-#define TEXTURE_DEFAULT_AMOUNT	10
-#define TEXTURE_SIZE			glm::vec2(2.f, 2.f)
-
+#include "../Shader/ShaderManager.h"
 
 class ParticleManager
 {
@@ -27,10 +12,7 @@ public:
 	ParticleManager(const ParticleManager& other);
 	~ParticleManager();
 
-	bool Start();
 	void Stop();
-
-	void MakeVertices();
 
 	////////////////////////////////////////////////////////////
 	// \brief Creates an explosion with light particles
@@ -62,25 +44,44 @@ public:
 	// \optional amount The amount of spawned blood particles
 	// \optional color The color of the most blood
 	////////////////////////////////////////////////////////////
-	void EffectTextureExplosion(glm::vec3 position, GLuint texture,
+	void EffectSmokeCloud(glm::vec3 position, GLuint texture,
 		int amount = TEXTURE_DEFAULT_AMOUNT,
 		glm::vec4 color = TEXTURE_DEFAULT_COLOR);
 
+	////////////////////////////////////////////////////////////
+	// \brief Creates an explosion with given texture
+	// \param position The position of explosion
+	// \param texture The texture of each pixels (smoke/blood/whatevs)
+	// \optional amount The amount of spawned blood particles
+	// \optional color The color of the most blood
+	////////////////////////////////////////////////////////////
+	void EffectConstantSmoke(glm::vec3 position, GLuint texture,
+		int amount = TEXTURE_DEFAULT_AMOUNT,
+		glm::vec4 color = TEXTURE_DEFAULT_COLOR);
 
+	////////////////////////////////////////////////////////////
+	// \brief Creates an explosion with given texture
+	// \optional center The Center position of the dust effect
+	// \optional dimensions The spawn area of light dust particles
+	// \optional amount The amount of spawned blood particles
+	// \optional color The color of the most blood
+	////////////////////////////////////////////////////////////
+	void EffectLightDust(glm::vec3 center = LIGHT_DUST_DEFAULT_CENTER, 
+		glm::vec3 dimensions = LIGHT_DUST_DEFAULT_DIMENSIONS,
+		int amount = LIGHT_DUST_DEFAULT_AMOUNT,
+		glm::vec4 color = LIGHT_DUST_DEFAULT_COLOR);
+
+	void ShaderPair(GLuint shader, ParticleType type);
+	GLuint getShaderFromPair(ParticleType type);
 	void Update(GLfloat deltaT);
-	void Draw();
 
-	GLuint getShader();
-	void setShader(GLuint shader);
+	std::vector<ParticleEmitter*>* getEmitters();
 
 private:
-
 	GLuint shader;
+	std::vector<std::pair<ParticleType, GLuint>> shaderPairs;
 	std::vector<Vertex> vertices;
 	std::vector<ParticleEmitter*> emitters;
-	unsigned int vertexArray;
-	unsigned int vertexBuffer;
-	int vertexCount;
 };
 
 #endif // !PARTICLEMANAGER_H

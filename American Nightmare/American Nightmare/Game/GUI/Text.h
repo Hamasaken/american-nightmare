@@ -15,13 +15,12 @@ public:
 	// \brief Starts a new instance of a text
 	// \param screenSize The screen size
 	// \param fontName The name of the font file (path needed)
-	// \param text The actual string of the text object
 	// \param characterSize The size of each character of font
 	// \optional position Position of this text, (0, 0, 0) is upper left corner
 	// \optional rotation The rotation of the final texture of the text in degrees
 	// \optional scale The scale of the final texture of the text
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, std::string fontName, std::string text, float characterSize, 
+	bool Start(glm::vec2 screenSize, std::string fontName, float characterSize, 
 		glm::vec3 position = glm::vec3(0.f, 0.f, 0.f), glm::vec3 rotation = glm::vec3(0.f,0.f,0.f), glm::vec3 scale = glm::vec3(1.f, 1.f, 1.f));
 	
 	////////////////////////////////////////////////////////////
@@ -32,7 +31,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Initializes a version of the text
 	// \param text The string of text to be displayed
-	// \param color The text color (white if left empty)
+	// \optional color The text color (white if left empty)
 	////////////////////////////////////////////////////////////
 	void CreateText(std::string text, glm::vec4 color = glm::vec4(1, 1, 1, 1));
 

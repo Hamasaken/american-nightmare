@@ -11,7 +11,7 @@ bool DeferredRendering::Start(glm::vec2 screenSize, GLuint lightShader)
 	this->lightShader = lightShader;
 	this->shadowShader = shadowShader;
 	createDRBuffer(screenSize);
-	finalRenderQuad.BuildQuadTexture();
+	finalRenderQuad.BuildQuadTextureBig();
 	return true;
 }
 
