@@ -135,11 +135,11 @@ void ScreenGame::SetStartVariables()
 	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "Level2.anl", ARCHIVE_PATH "Assets2.ana");
 
 	// Adding shadow
-	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, glm::vec2(60, 30), -30.f, 50);
+	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, glm::vec2(60, 30), -30.f, 50);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, glm::vec2(60, 30), -30.f, 50);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, glm::vec2(60, 30), -30.f, 50);
-	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[0], glm::vec2(1024, 1024), 45, 0.1f);
-	shadowManager.setUseShadows(true);
+	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[1], glm::vec2(1024, 1024), 45, 0.1f);
+	//shadowManager.setUseShadows(true);
 }
 
 void ScreenGame::Update(GLint deltaT)
@@ -448,7 +448,10 @@ void ScreenGame::Stop()
 		uiManager = nullptr;
 	}
 
+	// Stoping Deferred rendering
 	drRendering.Stop();
+	// Stoping Shadowmaps
+	shadowManager.Stop();
 
 	// Removes Camera & openGL ptr
 	Screen::Stop();
