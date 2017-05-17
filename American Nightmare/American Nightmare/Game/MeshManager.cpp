@@ -80,7 +80,7 @@ bool MeshManager::AddMesh(std::string name, int nrOfVertices, std::vector<AVerte
 MeshManager::Mesh* MeshManager::getMesh(std::string name) const
 {
 	// Returning a quad if failed
-	Mesh* outMesh = meshList[0];
+	Mesh* outMesh = nullptr;
 
 	// Finding the correct mesh, returns nullptr if not found
 	for (Mesh* mesh : meshList)
