@@ -73,7 +73,7 @@ void Hitbox::ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float mass, fl
 	// Creating shape for body
 	b2PolygonShape shape;
 	shape.m_type = shapeType;
-	shape.SetAsBox(size.x, size.y); // half the total size here
+	shape.SetAsBox(size.x / 2, size.y / 2); // half the total size here
 
 	// Creating the fixture
 	b2FixtureDef fixtureDef;

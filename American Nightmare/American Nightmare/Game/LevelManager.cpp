@@ -198,7 +198,10 @@ void LevelManager::LoadArchiveMaterials(std::vector<AMaterial> materials)
 	for (int i = 0; i < materials.size(); i++)
 	{
 		AMaterial material = materials[i];
-		materialManager->AddMaterial(material.identifier.name, arrayToVec3(material.ambient), arrayToVec3(material.diffuse), arrayToVec3(material.specular), material.shininess, material.diffuseMap.name, archive.getTexture(material.diffuseMap.uid)->texturePath /*"temp_background.jpg"*/);
+		if (archive.getTexture(material.diffuseMap.uid))
+			materialManager->AddMaterial(material.identifier.name, arrayToVec3(material.ambient), arrayToVec3(material.diffuse), arrayToVec3(material.specular), material.shininess, material.diffuseMap.name, archive.getTexture(material.diffuseMap.uid)->texturePath /*"temp_background.jpg"*/);
+		else
+			materialManager->AddMaterial(material.identifier.name, arrayToVec3(material.ambient), arrayToVec3(material.diffuse), arrayToVec3(material.specular), material.shininess, material.diffuseMap.name, TEXTURE_PATH "MissingTexture.png");
 	}
 }
 
@@ -210,7 +213,7 @@ void LevelManager::LoadArchiveTextures(std::vector<ATexture> textures)
 	for (int i = 0; i < textures.size(); i++)
 	{
 		ATexture texture = textures[i];	
-		materialManager->AddTexture(texture.identifier.name, "Data/Graphics/" + texture.texturePath);
+		materialManager->AddTexture(texture.identifier.name, texture.texturePath);
 	}
 }
 

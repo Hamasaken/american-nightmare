@@ -32,7 +32,7 @@
 
 // Global variables
 #define GRAVITY 9.82f
-#define GRAVITY_SCALE 4.f
+#define GRAVITY_SCALE 2.f
 
 // TEXT
 #define INGAME_FONT "404ERROR.ttf"

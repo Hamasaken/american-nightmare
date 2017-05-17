@@ -35,6 +35,13 @@ bool MaterialManager::AddMaterial(std::string matName, glm::vec3 ambient, glm::v
 	tempMaterial->specular = specular;
 	tempMaterial->specularExponent = specularExponent;
 
+	if (texturePath.size() < 10)
+	{
+		tempMaterial->texture = textureList[0];
+		materialList.push_back(tempMaterial);
+		return true;
+	}
+
 	// Check if texture exists
 	GLint textureIndex = findTexture(textureName);
 	if (textureIndex != -1)

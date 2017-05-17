@@ -16,6 +16,7 @@ public:
 	void BuildTriangle();
 	void BuildQuad();
 	void BuildQuadTexture();
+	void BuildQuadTextureBig();
 	void BuildQuad(glm::vec2 size); // Temporary for button
 	
 	////////////////////////////////////////////////////////////
