@@ -17,6 +17,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	scale = glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_SIZE_Z);
 	hasJumped = false;
 	hasDashed = false;
+	isHovering = false;
 	isDashing = false;
 
 	// Setting a self-pointer for collision detection
@@ -111,6 +112,14 @@ void Player::InputKeyboard()
 		hasJumped = true;
 	}
 
+	// Hovering
+	isHovering = false;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
+	{
+		isHovering = true;
+		hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, -PLAYER_HOVER_POWER), true);
+	}
+
 	// Dashing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
 		(directionIsRight) ? Dash(-glm::pi<float>() * 0.5f): Dash(glm::pi<float>() * 0.5f);
@@ -181,6 +190,11 @@ b2Body* Player::getBody()
 bool Player::getIsDashing()
 {
 	return isDashing;
+}
+
+bool Player::getIsHovering()
+{
+	return isHovering;
 }
 
 glm::vec2 Player::getPlayerPosAsGLM()

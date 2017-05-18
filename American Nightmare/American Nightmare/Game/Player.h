@@ -15,6 +15,7 @@
 #define PLAYER_MAX_VEL_Y 20.f
 #define PLAYER_DASH_VEL 9250.f
 #define PLAYER_DASH_CD 500.f
+#define PLAYER_HOVER_POWER 3250.f
 
 // XBOX CONTROLLER
 #define CONTROLLER_ON true
@@ -49,6 +50,7 @@ public:
 	void InputController();
 	
 	b2Body* getBody();
+	bool getIsHovering();
 	bool getIsDashing();
 
 	glm::vec2 getPlayerPosAsGLM();
@@ -57,6 +59,7 @@ private:
 	bool hasJumped;
 	bool hasDashed;
 	bool isDashing;
+	bool isHovering;
 };
 
 #endif // !PLAYER_H
