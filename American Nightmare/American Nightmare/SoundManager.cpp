@@ -39,6 +39,9 @@ void SoundManager::loadSFXs()
 	sfx[SFX_BIP] = loadSFX(pathToFolder + "sfx_bip.wav");
 	sfx[SFX_HIT] = loadSFX(pathToFolder + "sfx_hit.wav");
 	sfx[SFX_POWERUP] = loadSFX(pathToFolder + "sfx_powerup.wav");
+	sfx[SFX_BTN] = loadSFX(pathToFolder + "sfx_btn.wav");
+	sfx[SFX_LtoR] = loadSFX(pathToFolder + "sfx_leftToRight.wav");
+	sfx[SFX_RtoL] = loadSFX(pathToFolder + "sfx_rightToLeft.wav");
 
 	// Setting every sfx at deicided volume
 	for (sf::Sound& s : sfx)
@@ -134,6 +137,23 @@ void SoundManager::changeVolume(int volumeMusic, int volumeEffect)
 {
 	this->volumeMusic = volumeMusic;
 	this->volumeEffect = volumeEffect;
+}
+
+void SoundManager::mute()
+{
+	if (volumeEffect != 0 && volumeEffect != 0)
+	{
+		stopSFX(SFX(nrOfMusicPlayingCurrently));
+		pauseMusic();
+		this->volumeMusic = 0;
+		this->volumeEffect = 0;
+	}
+	else
+	{
+		this->volumeMusic = VOLUME_MUSIC;
+		this->volumeEffect = VOLUME_SFX;
+		continueMusic();
+	}
 }
 
 int SoundManager::getVolumeMusic() const { return volumeMusic; }

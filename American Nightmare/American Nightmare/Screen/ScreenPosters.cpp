@@ -47,7 +47,7 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	if (materialManager == nullptr) return false;
 
 	// Loading button texture
-	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
@@ -126,14 +126,21 @@ void ScreenPosters::Update(GLint deltaT)
 		{
 			switch (action)
 			{
-				case GUIManager::Action::OK: 
+				case GUIManager::Action::OK:
+					soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
+					soundManager->playModifiedSFX(SoundManager::SFX::SFX_RtoL, 70, 0.05f);
 					timerOnExplosion = EXPLOSION_TIMER;
 					shouldExplode = true;
 					posterListGUI->setCenter(glm::vec2(2.0f, 0)); 
 					posterListGUI->getButton(0)->setMaterial(btn->getMaterial());
 					break;
-				case GUIManager::Action::CANCEL: posterListGUI->setCenter(glm::vec2(0, 0)); break;
-				case GUIManager::Action::STARTMENY: *state = State::StartMeny; break; 
+				case GUIManager::Action::CANCEL:
+					soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); 
+					posterListGUI->setCenter(glm::vec2(0, 0)); break;
+				case GUIManager::Action::STARTMENY: 
+					soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
+					*state = State::StartMeny; 
+					break; 
 			}
 			btn->setPressed(false);
 		}

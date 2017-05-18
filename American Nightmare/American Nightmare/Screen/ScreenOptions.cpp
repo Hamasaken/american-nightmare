@@ -44,7 +44,7 @@ bool ScreenOptions::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	if (materialManager == nullptr) return false;
 
 	// Loading materials
-	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.4f, 0.4f, 0.6f), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 
 	////////////////////////////////////////////////////////////
@@ -59,8 +59,11 @@ bool ScreenOptions::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
-	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.45f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddText(glm::vec3(0.f, 0.5f, 0.f), 40.f, "Options", FONT_PATH INGAME_FONT);
+	guiManager->AddButton(GUIManager::OPTION_MUTE, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Sound", FONT_PATH INGAME_FONT, 40.f, glm::vec4(0.f, 1, 0.f, 1));
+	guiManager->AddButton(GUIManager::OPTION_SHADOWS, glm::vec3(0, 0.30f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Shadows", FONT_PATH INGAME_FONT, 40.f, glm::vec4(0.f, 1, 0.f, 1));
+	
+	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.60f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddText(glm::vec3(0.f, 0.60f, 0.f), 40.f, "Options", FONT_PATH INGAME_FONT);
 	guiManager->setAlpha(1.f);
 	guiManager->setShader(shaderManager->getShader("texture"));
 
@@ -81,10 +84,6 @@ void ScreenOptions::Update(GLint deltaT)
 	// Updating Buttons
 	guiManager->Update(deltaT);
 
-//	particleManager->EffectExplosionLights(glm::vec3(13, 3, 0), 1, glm::vec4(1.f, 0.5f, 1.f, 0.1f));
-//	particleManager->EffectExplosionLights(glm::vec3(-13, 3, 0), 1, glm::vec4(0.5f, 1.f, 1.f, 0.1f));
-//	particleManager->Update(deltaT);
-
 	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = guiManager->getButtonList();
 	for (int i = 0; i < buttons->size(); i++)
 	{
@@ -93,7 +92,25 @@ void ScreenOptions::Update(GLint deltaT)
 		if (btn->getPressed())
 		{
 			switch (action)
-			{ case GUIManager::Action::STARTMENY: *state = State::StartMeny;	break; }
+			{ 
+			case GUIManager::Action::STARTMENY:			
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); 
+				*state = State::StartMeny;	
+				break;
+			case GUIManager::Action::OPTION_MUTE:		
+			{
+				soundManager->mute();
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
+				glm::vec4 clr = btn->getText()->getColor();
+				if (clr.r == 0.f) clr = glm::vec4(1, 0, 0, 1); else clr = glm::vec4(0, 1, 0, 1);
+				btn->getText()->setColor(clr);
+			}
+				break;
+			case GUIManager::Action::OPTION_SHADOWS:
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); 
+				printf("Can't be turned off at this moment\n");
+				break;
+			}
 			btn->setPressed(false);
 		}
 	}

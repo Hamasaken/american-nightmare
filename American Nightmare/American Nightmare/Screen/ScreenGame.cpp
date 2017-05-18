@@ -333,12 +333,13 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 			switch (action)
 			{
 			case GUIManager::Action::OK: // Unpause
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 				gameState = UNPAUSING;
 				guiManager->setCenter(glm::vec2(0, 2));
 				uiManager->setCenter(glm::vec2(0, 0));
 				break;
-			case GUIManager::Action::STARTMENY: *state = State::StartMeny; break;
-			case GUIManager::Action::EXIT:		*state = State::Exit; break;
+			case GUIManager::Action::STARTMENY: soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::StartMeny; break;
+			case GUIManager::Action::EXIT:		soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::Exit; break;
 			}
 			btn->setPressed(false);
 		}
@@ -389,6 +390,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 			switch (action)
 			{
 			case GUIManager::Action::PAUSE:   // Pause
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 				gameState = PAUSING; 
 				guiManager->setCenter(glm::vec2(0, 0));
 				uiManager->setCenter(glm::vec2(0, 2));

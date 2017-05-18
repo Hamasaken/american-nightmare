@@ -9,7 +9,11 @@
 class GUIManager
 {
 public:
-	enum Action { OK, CANCEL, PLAY, PAUSE, STARTMENY, OPTIONS, POSTERS, EXIT };
+	enum Action {	OK, CANCEL,							// Simple stuff
+					PLAY, PAUSE,						// For In-game
+					STARTMENY, OPTIONS, POSTERS, EXIT,	// Switching states
+					OPTION_SHADOWS, OPTION_MUTE			// Option meny
+	};
 
 public:
 	GUIManager();

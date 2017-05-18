@@ -45,7 +45,7 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	if (materialManager == nullptr) return false;
 
 	// Loading materials
-	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
@@ -106,10 +106,10 @@ void ScreenStart::Update(GLint deltaT)
 		{
 			switch (button.second)
 			{
-			case GUIManager::Action::PLAY:		*state = State::Game;		break;
-			case GUIManager::Action::OPTIONS:	*state = State::Options;	break;
-			case GUIManager::Action::POSTERS:	*state = State::Posters;	break;
-			case GUIManager::Action::EXIT:		*state = State::Exit;		break;
+			case GUIManager::Action::PLAY:		soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::Game;		break;
+			case GUIManager::Action::OPTIONS:	soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::Options;	break;
+			case GUIManager::Action::POSTERS:	soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::Posters;	break;
+			case GUIManager::Action::EXIT:		soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::Exit;		break;
 			}
 			button.first->setPressed(false);
 		}
