@@ -226,3 +226,12 @@ void ScreenPosters::Stop()
 	// Deletes Camera & OpenGL ptr
 	Screen::Stop();
 }
+
+void ScreenPosters::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos)
+{
+	Screen::UpdateScreenProperties(screenSize, screenPos);
+
+	// Updating guimanager
+	posterListGUI->setScreenPosition(screenPos);
+	posterListGUI->setScreenSize(screenSize);
+}

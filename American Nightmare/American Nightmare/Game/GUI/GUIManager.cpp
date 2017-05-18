@@ -80,6 +80,10 @@ void GUIManager::setAlpha(float alpha)
 		text->setColor(glm::vec4(glm::vec3(text->getColor()), alpha));
 }
 
+void GUIManager::setScreenPosition(glm::vec2 screenPosition) { this->screenPosition = screenPosition; }
+
+void GUIManager::setScreenSize(glm::vec2 screenSize) { this->screenSize = screenSize; }
+
 Button * GUIManager::getButton(int id)
 {
 	return buttons[id].first;

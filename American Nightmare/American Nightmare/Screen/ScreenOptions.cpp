@@ -203,3 +203,12 @@ void ScreenOptions::Stop()
 	// Deletes Camera & OpenGL ptr
 	Screen::Stop();
 }
+
+void ScreenOptions::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos)
+{
+	Screen::UpdateScreenProperties(screenSize, screenPos);
+
+	// Updating guimanager
+	guiManager->setScreenPosition(screenPos);
+	guiManager->setScreenSize(screenSize);
+}

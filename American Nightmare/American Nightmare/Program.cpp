@@ -135,6 +135,18 @@ bool Program::Run()
 		{
 			if (event.type == SDL_QUIT)
 				done = true;
+			if (event.type == SDL_WINDOWEVENT) {
+				switch (event.window.event)
+				{
+					case SDL_WINDOWEVENT_FOCUS_LOST:
+						screenManager->FocusLost();
+					break;
+					case SDL_WINDOWEVENT_MOVED:
+						SDL_GetWindowPosition(window, &posX, &posY);
+						screenManager->UpdateScreenProperties(screenSize, glm::vec2(posX, posY));
+						break;
+				}
+			}
 		}
 
 		// Updating everything

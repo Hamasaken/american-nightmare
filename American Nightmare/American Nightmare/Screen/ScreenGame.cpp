@@ -146,10 +146,10 @@ void ScreenGame::Update(GLint deltaT)
 {
 	switch (gameState)
 	{
-	case GameState::PAUSING: UpdatePausing(deltaT); break;
-	case GameState::PAUSED: UpdatePaused(deltaT); break;
-	case GameState::PLAYING: UpdatePlaying(deltaT); break;
-	case GameState::UNPAUSING: UpdateUnpausing(deltaT); break;
+	case GameState::PAUSING:	UpdatePausing(deltaT);		break;
+	case GameState::PAUSED:		UpdatePaused(deltaT);		break;
+	case GameState::PLAYING:	UpdatePlaying(deltaT);		break;
+	case GameState::UNPAUSING:	UpdateUnpausing(deltaT);	break;
 	}
 }
 
@@ -316,6 +316,25 @@ void ScreenGame::DrawShadowMaps()
 	
 }
 
+void ScreenGame::Pause()
+{
+	// Play button press
+	soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
+	
+	if (gameState == PAUSED)
+	{
+		gameState = UNPAUSING;
+		guiManager->setCenter(glm::vec2(0, 2));
+		uiManager->setCenter(glm::vec2(0, 0));
+	}
+	if (gameState == PLAYING)
+	{
+		gameState = PAUSING;
+		guiManager->setCenter(glm::vec2(0, 0));
+		uiManager->setCenter(glm::vec2(0, 2));
+	}
+}
+
 void ScreenGame::UpdatePaused(GLint deltaT)
 {
 	// Updating Buttons
@@ -332,12 +351,7 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 		{
 			switch (action)
 			{
-			case GUIManager::Action::OK: // Unpause
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
-				gameState = UNPAUSING;
-				guiManager->setCenter(glm::vec2(0, 2));
-				uiManager->setCenter(glm::vec2(0, 0));
-				break;
+			case GUIManager::Action::OK:		Pause(); break;
 			case GUIManager::Action::STARTMENY: soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::StartMeny; break;
 			case GUIManager::Action::EXIT:		soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::Exit; break;
 			}
@@ -346,13 +360,7 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 	}
 
 	// Unpause
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
-	{
-		soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
-		guiManager->setCenter(glm::vec2(0, 2));
-		uiManager->setCenter(glm::vec2(0, 0));
-		gameState = UNPAUSING;
-	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P)) Pause();
 }
 
 void ScreenGame::UpdatePlaying(GLint deltaT)
@@ -390,11 +398,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 		{
 			switch (action)
 			{
-			case GUIManager::Action::PAUSE:   // Pause
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
-				gameState = PAUSING; 
-				guiManager->setCenter(glm::vec2(0, 0));
-				uiManager->setCenter(glm::vec2(0, 2));
+			case GUIManager::Action::PAUSE: Pause();
 				break; 
 			}
 			btn->setPressed(false);
@@ -402,13 +406,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 	}
 
 	// Check if user is pausing
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
-	{
-		soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
-		guiManager->setCenter(glm::vec2(0, 0));
-		uiManager->setCenter(glm::vec2(0, 2));
-		gameState = PAUSING;
-	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P)) Pause();
 }
 
 void ScreenGame::UpdatePausing(GLint deltaT)
@@ -438,6 +436,18 @@ void ScreenGame::UpdateUnpausing(GLint deltaT)
 	guiManager->Update(deltaT);
 	uiManager->Update(deltaT);
 }
+
+void ScreenGame::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos)
+{
+	Screen::UpdateScreenProperties(screenSize, screenPos);
+
+	// Updating guimanager
+	guiManager->setScreenPosition(screenPos);
+	guiManager->setScreenSize(screenSize);
+	uiManager->setScreenPosition(screenPos);
+	uiManager->setScreenSize(screenSize);
+}
+
 
 void ScreenGame::Stop()
 {

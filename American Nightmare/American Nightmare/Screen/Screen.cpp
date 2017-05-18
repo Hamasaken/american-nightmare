@@ -44,6 +44,12 @@ bool Screen::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state,
 	return true;
 }
 
+void Screen::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos)
+{
+	this->screenPosition = screenPosition;
+	this->screenSize = screenSize;
+}
+
 void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 {
 	// Getting matrices

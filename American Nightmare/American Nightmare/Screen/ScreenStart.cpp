@@ -120,6 +120,15 @@ void ScreenStart::Update(GLint deltaT)
 	}
 }
 
+void ScreenStart::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos)
+{
+	Screen::UpdateScreenProperties(screenSize, screenPos);
+
+	// Updating guimanager
+	guiManager->setScreenPosition(screenPos);
+	guiManager->setScreenSize(screenSize);
+}
+
 void ScreenStart::Draw()
 {
 	// Getting view matrix from camera

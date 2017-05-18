@@ -32,6 +32,8 @@ public:
 	void setCenter(glm::vec2 center);
 	void setShader(GLuint shader);
 	void setAlpha(float alpha);
+	void setScreenPosition(glm::vec2 screenPosition);
+	void setScreenSize(glm::vec2 screenSize);
 
 	Button* getButton(int id);
 
