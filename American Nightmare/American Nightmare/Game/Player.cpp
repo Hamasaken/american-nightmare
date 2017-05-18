@@ -16,6 +16,8 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_SIZE_Z);
 	hasJumped = false;
+	hasDashed = false;
+	isDashing = false;
 
 	// Setting a self-pointer for collision detection
 	getBody()->SetUserData(this);
@@ -25,8 +27,17 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 
 void Player::Update(GLint deltaT)
 {
+	// Dash cooldown
+	if (hasDashed) {
+		isDashing = false;
+		dashCooldown -= deltaT;
+	}
+	if (dashCooldown < NULL)
+		hasDashed = false;
+
 	// Getting user input
 	InputKeyboard();
+	InputMouse();
 	InputTesting();
 	if (CONTROLLER_ON) InputController();
 	
@@ -35,6 +46,17 @@ void Player::Update(GLint deltaT)
 
 	// Correcting texture to hitbox
 	Entity::Update(deltaT);
+}
+
+void Player::Dash(float angle)
+{
+	if (!hasDashed)
+	{
+		isDashing = true;
+		hasDashed = true;
+		dashCooldown = PLAYER_DASH_CD;
+		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(sin(angle) * PLAYER_DASH_VEL, cos(angle) * PLAYER_DASH_VEL), true);
+	}
 }
 
 void Player::InputTesting()
@@ -56,15 +78,20 @@ void Player::InputTesting()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) rotation.x -= 0.1f;
 }
 
+void Player::InputMouse()
+{
+
+}
+
 void Player::InputKeyboard()
 {
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+	if (vel.x < PLAYER_MAX_VEL_X && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
 		directionIsRight = false;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+	else if (vel.x > -PLAYER_MAX_VEL_X && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 	{
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
 		directionIsRight = true;
@@ -84,9 +111,11 @@ void Player::InputKeyboard()
 		hasJumped = true;
 	}
 
+	// Dashing
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
+		(directionIsRight) ? Dash(-glm::pi<float>() * 0.5f): Dash(glm::pi<float>() * 0.5f);
+
 	// Thresholds in velocity
-	if (vel.x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(PLAYER_MAX_VEL_X, vel.y));
-	if (vel.x < -PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(-PLAYER_MAX_VEL_X, vel.y));
 	if (vel.y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, PLAYER_MAX_VEL_Y));
 	if (vel.y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, -PLAYER_MAX_VEL_Y));
 }
@@ -147,6 +176,11 @@ void Player::InputController()
 b2Body* Player::getBody()
 {
 	return hitbox->getBody();
+}
+
+bool Player::getIsDashing()
+{
+	return isDashing;
 }
 
 glm::vec2 Player::getPlayerPosAsGLM()

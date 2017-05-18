@@ -3,6 +3,7 @@
 
 #include "Animation.h"
 
+// DEFAULT VALUES
 #define PLAYER_SIZE_X 2.f
 #define PLAYER_SIZE_Y 2.f
 #define PLAYER_SIZE_Z 1.f
@@ -10,9 +11,10 @@
 #define PLAYER_FRICTION 0.01f
 #define PLAYER_VEL_X 8000.f
 #define PLAYER_VEL_Y 3250.f
-
 #define PLAYER_MAX_VEL_X 4.5f
 #define PLAYER_MAX_VEL_Y 20.f
+#define PLAYER_DASH_VEL 9250.f
+#define PLAYER_DASH_CD 500.f
 
 // XBOX CONTROLLER
 #define CONTROLLER_ON true
@@ -39,15 +41,22 @@ public:
 	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world);
 	void Update(GLint deltaT);
 
+	void Dash(float angle);
+
 	void InputTesting();
+	void InputMouse();
 	void InputKeyboard();
 	void InputController();
 	
 	b2Body* getBody();
+	bool getIsDashing();
 
 	glm::vec2 getPlayerPosAsGLM();
 private:
+	GLfloat dashCooldown;
 	bool hasJumped;
+	bool hasDashed;
+	bool isDashing;
 };
 
 #endif // !PLAYER_H

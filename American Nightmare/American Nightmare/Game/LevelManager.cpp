@@ -523,6 +523,8 @@ void LevelManager::Update(GLint deltaT)
 {
 	// Updating player
 	player->Update(deltaT);
+	if (player->getIsDashing()) 
+		particleManager->EffectSmokeCloud(player->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 20);
 
 	//Update Projectile
 	//myPH->Update(deltaT, world);
