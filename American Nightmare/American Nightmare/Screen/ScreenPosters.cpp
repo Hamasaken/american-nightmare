@@ -36,6 +36,7 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::LIGHT);
 	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::BLOOD);
 	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::TEXTURE);
+	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::SMOKE);
 	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::LIGHT_DUST);
 	particleManager->EffectLightDust();
 
@@ -45,11 +46,19 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	materialManager = new MaterialManager();
 	if (materialManager == nullptr) return false;
 
-	// Loading materials
-	materialManager->AddMaterial("titlematerial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(1.f), 0.f, "titletexture", TEXTURE_PATH "title.jpg");
+	// Loading button texture
 	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
-	if (materialManager->getMaterial("titlematerial") == nullptr) printf("Title Material not found\n");
-	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Light Material not found\n");
+	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
+	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
+	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
+
+	// Loading posters
+	std::vector<const MaterialManager::Material*> posters;
+	for (int i = 1; i < 11; i++)
+	{
+		materialManager->AddMaterial("postermaterial_" + std::to_string(i), glm::vec3(1.f), glm::vec3(1.f), glm::vec3(1.f), 0.f, "poster_" + std::to_string(i), (POSTER_PATH "poster_" + std::to_string(i) + ".jpg"));
+		posters.push_back(materialManager->getMaterial("postermaterial_" + std::to_string(i)));
+	}
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
@@ -63,20 +72,19 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	posterListGUI = new GUIManager();
 	if (posterListGUI == nullptr) return false;
 	if (!posterListGUI->Start(screenSize, screenPosition)) return false;
+
+	// Right side hidden
+	posterListGUI->AddButton(GUIManager::CANCEL, glm::vec3(2.f, 0, 0), glm::vec2(0.400f, 0.800f), posters[0], meshManager->getMesh("quad"));
 	posterListGUI->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.85f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
 	posterListGUI->AddText(glm::vec3(0.f, 0.85f, 0.f), 40.f, "Posters", FONT_PATH INGAME_FONT);
-	
-	// Posters
+
 	float y = 0.25f, x = -0.6f;
 	for (int i = 0; i < 10; i++)
 	{
 		if (i == 5) { y -= 0.5f; x = -0.6f; }
-		posterListGUI->AddButton(GUIManager::OK, glm::vec3(x, y, 0), glm::vec2(0.100f, 0.200f), materialManager->getMaterial("titlematerial"), meshManager->getMesh("quad"));
+		posterListGUI->AddButton(GUIManager::OK, glm::vec3(x, y, 0), glm::vec2(0.100f, 0.200f), posters[i], meshManager->getMesh("quad"));
 		x += 0.30f;
 	}
-
-	// Right side hidden
-	posterListGUI->AddButton(GUIManager::CANCEL, glm::vec3(2.f, 0, 0), glm::vec2(0.400f, 0.800f), materialManager->getMaterial("titlematerial"), meshManager->getMesh("quad"));
 	
 	posterListGUI->setAlpha(1.f);
 	posterListGUI->setShader(shaderManager->getShader("texture"));
@@ -98,6 +106,15 @@ void ScreenPosters::Update(GLint deltaT)
 	// Updating particles
 	particleManager->Update(deltaT);
 
+	// Explosion behind poster
+	static GLfloat timerOnExplosion = -1;
+	static bool shouldExplode = false;
+	if (shouldExplode)
+	{
+		if (timerOnExplosion < NULL) { particleManager->EffectSmokeCloud(glm::vec3(0.f, 3, 12.5f), materialManager->getTextureID("smoketexture"), 20, glm::vec4(1.f)); shouldExplode = false; }
+		else if (shouldExplode) timerOnExplosion -= deltaT;
+	}
+
 	// Updating GUI / Button presses
 	posterListGUI->Update(deltaT);
 	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = posterListGUI->getButtonList();
@@ -109,7 +126,12 @@ void ScreenPosters::Update(GLint deltaT)
 		{
 			switch (action)
 			{
-				case GUIManager::Action::OK: posterListGUI->setCenter(glm::vec2(2.0f, 0)); break;
+				case GUIManager::Action::OK: 
+					timerOnExplosion = EXPLOSION_TIMER;
+					shouldExplode = true;
+					posterListGUI->setCenter(glm::vec2(2.0f, 0)); 
+					posterListGUI->getButton(0)->setMaterial(btn->getMaterial());
+					break;
 				case GUIManager::Action::CANCEL: posterListGUI->setCenter(glm::vec2(0, 0)); break;
 				case GUIManager::Action::STARTMENY: *state = State::StartMeny; break; 
 			}
@@ -123,6 +145,10 @@ void ScreenPosters::Draw()
 	// Getting view matrix from camera
 	camera->buildViewMatrix();
 	
+	// Drawing particles
+	for (ParticleEmitter* emitter : *particleManager->getEmitters())
+		DrawParticles(emitter, shaderManager);
+
 	// Drawing GUI
 	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = posterListGUI->getButtonList();
 	for (int i = 0; i < buttons->size(); i++)
@@ -133,10 +159,6 @@ void ScreenPosters::Draw()
 	std::vector<Text*>* txts = posterListGUI->getTextList();
 	for (int i = 0; i < txts->size(); i++)
 		DrawObjectGUI(txts[0][i], shaderManager);
-
-	// Drawing particles
-	for (ParticleEmitter* emitter : *particleManager->getEmitters())
-		DrawParticles(emitter, shaderManager);
 }
 
 void ScreenPosters::Stop()

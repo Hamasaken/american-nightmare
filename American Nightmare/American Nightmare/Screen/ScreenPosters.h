@@ -6,7 +6,7 @@
 #include "../Game/MaterialManager.h"
 #include "../Game/Particle/ParticleManager.h"
 
-#define CLEAR_COLOR glm::vec4(1, 1, 1, 1)
+#define EXPLOSION_TIMER 200.f
 
 class ScreenPosters : public Screen
 {
