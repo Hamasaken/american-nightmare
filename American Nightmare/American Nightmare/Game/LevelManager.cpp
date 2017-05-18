@@ -523,8 +523,8 @@ void LevelManager::Update(GLint deltaT)
 {
 	// Updating player
 	player->Update(deltaT);
-	if (player->getIsDashing()) particleManager->EffectSmokeCloud(player->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 20);
-	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1);
+	if (player->getIsDashing()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(0.25f));
+	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
 
 	//Update Projectile
 	//myPH->Update(deltaT, world);

@@ -12,7 +12,8 @@ public:
 	enum Action {	OK, CANCEL,							// Simple stuff
 					PLAY, PAUSE,						// For In-game
 					STARTMENY, OPTIONS, POSTERS, EXIT,	// Switching states
-					OPTION_SHADOWS, OPTION_MUTE			// Option meny
+					OPTION_SHADOWS, OPTION_MUTE,		// Option meny
+					OPTION_REBIND, OPTION_QUALITY
 	};
 
 public:

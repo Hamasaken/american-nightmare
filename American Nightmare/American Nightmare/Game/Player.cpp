@@ -33,6 +33,7 @@ void Player::Update(GLint deltaT)
 {
 	// Are we currently hovering?
 	isHovering = false;
+	isDashing = false;
 
 	// Dash cooldown
 	if (hasDashed) {
@@ -42,6 +43,9 @@ void Player::Update(GLint deltaT)
 	if (dashCooldown < NULL)
 		hasDashed = false;
 
+	// Did we hit a surface?
+	if (hitbox->getBody()->GetLinearVelocity().y == 0.f && hasJumped) { hasJumped = false; isDashing = true; }
+
 	// Getting user input
 	InputKeyboard();
 	InputMouse();
@@ -50,8 +54,8 @@ void Player::Update(GLint deltaT)
 
 	// Thresholds in velocity
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
-	if (vel.x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.75f, vel.y));
-	if (vel.x < -PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.75f, vel.y));
+	if (vel.x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+	if (vel.x < -PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
 	if (vel.y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, PLAYER_MAX_VEL_Y));
 	if (vel.y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, -PLAYER_MAX_VEL_Y));
 	
@@ -100,14 +104,12 @@ void Player::Jump()
 {
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
 
-	// Did we hit a surface?
-	if (vel.y == 0.f) hasJumped = false;
-
 	if (!hasJumped)
 	{
 		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
 		vel.y = hitbox->getBody()->GetLinearVelocity().y;
 		hasJumped = true;
+		isDashing = true;
 	}
 }
 
