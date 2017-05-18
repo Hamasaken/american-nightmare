@@ -85,13 +85,16 @@ void ScreenOptions::Update(GLint deltaT)
 //	particleManager->EffectExplosionLights(glm::vec3(-13, 3, 0), 1, glm::vec4(0.5f, 1.f, 1.f, 0.1f));
 //	particleManager->Update(deltaT);
 
-	for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
+	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = guiManager->getButtonList();
+	for (int i = 0; i < buttons->size(); i++)
 	{
-		if (button.first->getPressed())
+		Button* btn = buttons[0][i].first;
+		GUIManager::Action action = buttons[0][i].second;
+		if (btn->getPressed())
 		{
-			switch (button.second)
+			switch (action)
 			{ case GUIManager::Action::STARTMENY: *state = State::StartMeny;	break; }
-			button.first->setPressed(false);
+			btn->setPressed(false);
 		}
 	}
 }
@@ -102,14 +105,15 @@ void ScreenOptions::Draw()
 	camera->buildViewMatrix();
 	
 	// Drawing GUI
-	for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
+	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = guiManager->getButtonList();
+	for (int i = 0; i < buttons->size(); i++)
 	{
-		DrawObjectGUI(button.first, shaderManager);
-		if (button.first->getText() != nullptr)
-			DrawObjectGUI(button.first->getText(), shaderManager);
+		DrawObjectGUI(buttons[0][i].first, shaderManager);
+		if (buttons[0][i].first->getText()) DrawObjectGUI(buttons[0][i].first->getText(), shaderManager);
 	}
-	for (Text* object : *guiManager->getTextList())
-		DrawObjectGUI(object, shaderManager);
+	std::vector<Text*>* txts = guiManager->getTextList();
+	for (int i = 0; i < txts->size(); i++)
+		DrawObjectGUI(txts[0][i], shaderManager);
 }
 
 void ScreenOptions::Stop()

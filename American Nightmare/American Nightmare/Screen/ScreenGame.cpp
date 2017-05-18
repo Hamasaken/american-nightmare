@@ -203,25 +203,29 @@ void ScreenGame::Draw()
 	// Drawing gui Manager if we're paused
 	if (gameState != PLAYING)
 	{
-		for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
+		// Drawing the paus meny
+		std::vector<std::pair<Button*, GUIManager::Action>>* buttons = guiManager->getButtonList();
+		for (int i = 0; i < buttons->size(); i++)
 		{
-			DrawObjectGUI(button.first, shaderManager);
-			if (button.first->getText() != nullptr)
-				DrawObjectGUI(button.first->getText(), shaderManager);
+			DrawObjectGUI(buttons[0][i].first, shaderManager);
+			if (buttons[0][i].first->getText()) DrawObjectGUI(buttons[0][i].first->getText(), shaderManager);
 		}
-		for (Text* object : *guiManager->getTextList())
-			DrawObjectGUI(object, shaderManager);
+		std::vector<Text*>* txts = guiManager->getTextList();
+		for (int i = 0; i < txts->size(); i++)
+			DrawObjectGUI(txts[0][i], shaderManager);
 	}
 	else
 	{
-		for (std::pair<Button*, GUIManager::Action> button : *uiManager->getButtonList())
+		// Drawing the ingame-ui bars & buttons
+		std::vector<std::pair<Button*, GUIManager::Action>>* buttons = uiManager->getButtonList();
+		for (int i = 0; i < buttons->size(); i++)
 		{
-			DrawObjectGUI(button.first, shaderManager);
-			if (button.first->getText() != nullptr)
-				DrawObjectGUI(button.first->getText(), shaderManager);
+			DrawObjectGUI(buttons[0][i].first, shaderManager);
+			if (buttons[0][i].first->getText()) DrawObjectGUI(buttons[0][i].first->getText(), shaderManager);
 		}
-		for (Text* object : *uiManager->getTextList())
-			DrawObjectGUI(object, shaderManager);
+		std::vector<Text*>* txts = uiManager->getTextList();
+		for (int i = 0; i < txts->size(); i++)
+			DrawObjectGUI(txts[0][i], shaderManager);
 	}
 
 	// Temp shadow map debug
@@ -318,24 +322,29 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 	guiManager->Update(deltaT);
 	uiManager->Update(deltaT);
 
-	for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
+	// Update button presses
+	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = guiManager->getButtonList();
+	for (int i = 0; i < buttons->size(); i++)
 	{
-		if (button.first->getPressed())
+		Button* btn					= buttons[0][i].first;
+		GUIManager::Action action	= buttons[0][i].second;
+		if (btn->getPressed())
 		{
-			switch (button.second)
+			switch (action)
 			{
-			case GUIManager::Action::OK:		
-				gameState = UNPAUSING; 
+			case GUIManager::Action::OK: // Unpause
+				gameState = UNPAUSING;
 				guiManager->setCenter(glm::vec2(0, 2));
 				uiManager->setCenter(glm::vec2(0, 0));
 				break;
 			case GUIManager::Action::STARTMENY: *state = State::StartMeny; break;
 			case GUIManager::Action::EXIT:		*state = State::Exit; break;
 			}
-			button.first->setPressed(false);
+			btn->setPressed(false);
 		}
 	}
 
+	// Unpause
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
 	{
 		guiManager->setCenter(glm::vec2(0, 2));
@@ -346,14 +355,6 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 
 void ScreenGame::UpdatePlaying(GLint deltaT)
 {
-	// Check if user is pausing
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
-	{
-		guiManager->setCenter(glm::vec2(0, 0));
-		uiManager->setCenter(glm::vec2(0, 2));
-		gameState = PAUSING;
-	}
-
 	// Particle Managare Testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
 		particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.60f, 0.80f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
@@ -376,20 +377,31 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	// Updating UI presses
 	uiManager->Update(deltaT);
-	for (std::pair<Button*, GUIManager::Action> button : *uiManager->getButtonList())
+	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = uiManager->getButtonList();
+	for (int i = 0; i < buttons->size(); i++)
 	{
-		if (button.first->getPressed())
+		Button* btn = buttons[0][i].first;
+		GUIManager::Action action = buttons[0][i].second;
+		if (btn->getPressed())
 		{
-			switch (button.second)
-			{ 
-			case GUIManager::Action::PAUSE:  
+			switch (action)
+			{
+			case GUIManager::Action::PAUSE:   // Pause
 				gameState = PAUSING; 
 				guiManager->setCenter(glm::vec2(0, 0));
 				uiManager->setCenter(glm::vec2(0, 2));
 				break; 
 			}
-			button.first->setPressed(false);
+			btn->setPressed(false);
 		}
+	}
+
+	// Check if user is pausing
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
+	{
+		guiManager->setCenter(glm::vec2(0, 0));
+		uiManager->setCenter(glm::vec2(0, 2));
+		gameState = PAUSING;
 	}
 }
 

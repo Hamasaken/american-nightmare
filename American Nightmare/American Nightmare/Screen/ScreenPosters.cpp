@@ -95,21 +95,25 @@ void ScreenPosters::SetStartVariables()
 
 void ScreenPosters::Update(GLint deltaT)
 {
-	// Updating Buttons
-	posterListGUI->Update(deltaT);
+	// Updating particles
 	particleManager->Update(deltaT);
 
-	for (std::pair<Button*, GUIManager::Action> button : *posterListGUI->getButtonList())
+	// Updating GUI / Button presses
+	posterListGUI->Update(deltaT);
+	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = posterListGUI->getButtonList();
+	for (int i = 0; i < buttons->size(); i++)
 	{
-		if (button.first->getPressed())
+		Button* btn = buttons[0][i].first;
+		GUIManager::Action action = buttons[0][i].second;
+		if (btn->getPressed())
 		{
-			switch (button.second) 
+			switch (action)
 			{
 				case GUIManager::Action::OK: posterListGUI->setCenter(glm::vec2(2.0f, 0)); break;
 				case GUIManager::Action::CANCEL: posterListGUI->setCenter(glm::vec2(0, 0)); break;
 				case GUIManager::Action::STARTMENY: *state = State::StartMeny; break; 
 			}
-			button.first->setPressed(false);
+			btn->setPressed(false);
 		}
 	}
 }
@@ -120,14 +124,15 @@ void ScreenPosters::Draw()
 	camera->buildViewMatrix();
 	
 	// Drawing GUI
-	for (std::pair<Button*, GUIManager::Action> button : *posterListGUI->getButtonList())
+	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = posterListGUI->getButtonList();
+	for (int i = 0; i < buttons->size(); i++)
 	{
-		DrawObjectGUI(button.first, shaderManager);
-		if (button.first->getText() != nullptr)
-			DrawObjectGUI(button.first->getText(), shaderManager);
+		DrawObjectGUI(buttons[0][i].first, shaderManager);
+		if (buttons[0][i].first->getText()) DrawObjectGUI(buttons[0][i].first->getText(), shaderManager);
 	}
-	for (Text* object : *posterListGUI->getTextList())
-		DrawObjectGUI(object, shaderManager);
+	std::vector<Text*>* txts = posterListGUI->getTextList();
+	for (int i = 0; i < txts->size(); i++)
+		DrawObjectGUI(txts[0][i], shaderManager);
 
 	// Drawing particles
 	for (ParticleEmitter* emitter : *particleManager->getEmitters())
