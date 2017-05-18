@@ -12,6 +12,7 @@ ParticleEmitter::~ParticleEmitter() { }
 
 void ParticleEmitter::LightExplosion(glm::vec3 position, glm::vec4 color, glm::vec2 size, int amount)
 {
+	this->position = position;
 	for (int i = 0; i < amount; i++)
 	{
 		Particle* particle = new Particle;
@@ -22,6 +23,7 @@ void ParticleEmitter::LightExplosion(glm::vec3 position, glm::vec4 color, glm::v
 
 void ParticleEmitter::BloodSplatter(glm::vec3 position, float angle, float strength, glm::vec4 color, glm::vec2 size, int amount)
 {
+	this->position = position;
 	for (int i = 0; i < amount; i++)
 	{
 		BloodParticle* particle = new BloodParticle;
@@ -32,6 +34,7 @@ void ParticleEmitter::BloodSplatter(glm::vec3 position, float angle, float stren
 
 void ParticleEmitter::SmokeCloud(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount)
 {
+	this->position = position;
 	this->texture = texture;
 	for (int i = 0; i < amount; i++)
 	{
@@ -43,6 +46,7 @@ void ParticleEmitter::SmokeCloud(glm::vec3 position, GLuint texture, glm::vec4 c
 
 void ParticleEmitter::ConstantSmoke(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount)
 {
+	this->position = position;
 	this->texture = texture;
 	for (int i = 0; i < amount; i++)
 	{
@@ -54,6 +58,7 @@ void ParticleEmitter::ConstantSmoke(glm::vec3 position, GLuint texture, glm::vec
 
 void ParticleEmitter::LightDust(glm::vec3 center, glm::vec3 dimensions, glm::vec4 color, glm::vec2 size, int amount)
 {
+	this->position = position;
 	for (int i = 0; i < amount; i++)
 	{
 		DustParticle* particle = new DustParticle;
@@ -180,3 +185,39 @@ int ParticleEmitter::getNumberOfParticles() { return particles.size(); }
 void ParticleEmitter::setShader(GLuint shader) { this->shader = shader; }
 GLuint ParticleEmitter::getTexture() const { return texture; }
 GLuint ParticleEmitter::getShader() const { return shader; }
+
+////////////////////////////////////////////////////////////
+// Increasing Particle Emitter
+////////////////////////////////////////////////////////////
+void IncreasingParticleEmitter::SignalSmoke(glm::vec3 position, GLuint texture, float angle, glm::vec4 color, glm::vec2 size, int amount)
+{
+	this->position = position;
+	this->texture = texture;
+	for (int i = 0; i < amount; i++)
+	{
+		SmokeSignal* particle = new SmokeSignal();
+		particle->Start(position, color, size, angle);
+		particles.push_back(particle);
+	}
+}
+
+void IncreasingParticleEmitter::SignalFire(glm::vec3 position, GLuint texture, float angle, glm::vec4 color, glm::vec2 size, int amount)
+{
+	this->position = position;
+	this->texture = texture;
+	for (int i = 0; i < amount; i++)
+	{
+	//	FireParticle* particle = new FireParticle;
+	//	particle->Start(position, color, size, angle);
+	//	particles.push_back(particle);
+	}
+}
+
+void IncreasingParticleEmitter::Update(GLfloat deltaT)
+{
+	// Updating particles and checking if they are dead or not
+	for (int i = 0; i < particles.size(); i++)
+		particles[i]->Update(deltaT);
+
+	MakeVertices();
+}

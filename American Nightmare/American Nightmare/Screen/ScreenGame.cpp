@@ -362,6 +362,8 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 		particleManager->EffectSmokeCloud(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 8);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::O))
 		particleManager->EffectConstantSmoke(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 5);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K))
+		particleManager->EffectSmokeSignal(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 0);
 
 	// Updating particles effects
 	particleManager->Update(deltaT);

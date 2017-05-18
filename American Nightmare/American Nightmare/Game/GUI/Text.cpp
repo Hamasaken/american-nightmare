@@ -125,7 +125,4 @@ std::string Text::getString() { return text; }
 GLuint Text::getTexture() const { return texture; }
 glm::vec4 Text::getColor() { return color; }
 void Text::setString(std::string text) { this->text = text; CreateText(text, color); }
-void Text::setColor(glm::vec4 color) { 
-	this->color = color; 
-	CreateText(text, color); 
-}
+void Text::setColor(glm::vec4 color) { this->color = color; CreateText(text, color); }
