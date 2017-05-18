@@ -85,12 +85,6 @@ void ScreenOptions::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 15));
 
 	// Adding some ambient smoke on options
-	particleManager->EffectConstantSmoke(glm::vec3(2, 4.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.7));
-	particleManager->EffectConstantSmoke(glm::vec3(1, 4.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.5));
-	particleManager->EffectConstantSmoke(glm::vec3(0, 4.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.4));
-	particleManager->EffectConstantSmoke(glm::vec3(-1, 4.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.6));
-	particleManager->EffectConstantSmoke(glm::vec3(-2, 4.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.8));
-
 	particleManager->EffectConstantSmoke(glm::vec3(2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.7));
 	particleManager->EffectConstantSmoke(glm::vec3(1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.5));
 	particleManager->EffectConstantSmoke(glm::vec3(0, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.4));
