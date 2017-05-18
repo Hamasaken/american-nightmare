@@ -62,20 +62,20 @@ private:
 	// Interactions with player
 	void Walk(Direction dir);	//< Walking in a direction
 	void Jump();				//< Jumping
-	void Dash();			//< Dash ability
+	void Dash();				//< Dash ability
 	void Hover();				//< Hover ability
 
 	// Input from user
-	void InputTesting();	//< Rotation & Scale on Player model
-	void InputMouse();		//< Mouse input
-	void InputKeyboard();	//< Key input
-	void InputController();	//< Xbox One controller input
+	void InputTesting();		//< Rotation & Scale on Player model
+	void InputMouse();			//< Mouse input
+	void InputKeyboard();		//< Key input
+	void InputController();		//< Xbox One controller input
 
-	GLfloat dashCooldown;	//< Dash ability cooldown
-	bool hasJumped;			//< If the player have jumped or not
-	bool hasDashed;			//< If the player have dashed or not
-	bool isDashing;			//< If the player is currently dashing
-	bool isHovering;		//< If the player is currently hovering
+	GLfloat dashCooldown;		//< Dash ability cooldown
+	bool hasJumped;				//< If the player have jumped or not
+	bool hasDashed;				//< If the player have dashed or not
+	bool isDashing;				//< If the player is currently dashing
+	bool isHovering;			//< If the player is currently hovering
 
 	// Rebindable keys
 	sf::Keyboard::Key key_left;
