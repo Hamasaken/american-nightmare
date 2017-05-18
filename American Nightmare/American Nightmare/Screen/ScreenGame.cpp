@@ -97,10 +97,10 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
-	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.15f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "start Meny", FONT_PATH INGAME_FONT, 35.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.15f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 35.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.45f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Exit to Desktop", FONT_PATH INGAME_FONT, 35.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddText(glm::vec3(0.f, 0.75f, 0.f), 70.f, "Paused", FONT_PATH INGAME_FONT);
+	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Meny", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Exit to Desktop", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	guiManager->AddText(glm::vec3(0.f, 0.70f, 0.f), 80.f, "Paused", FONT_PATH INGAME_FONT);
 	guiManager->setAlpha(0.f);
 	guiManager->setShader(shaderManager->getShader("texture"));
 	guiManager->setInstantCenter(glm::vec2(0, 2));
@@ -111,8 +111,8 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager = new GUIManager();
 	if (uiManager == nullptr) return false;
 	if (!uiManager->Start(screenSize, screenPosition)) return false;
-	uiManager->AddButton(GUIManager::OK, glm::vec3(0, -0.95, 0), glm::vec2(0.15f, 0.05f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "hp: 3/3", FONT_PATH INGAME_FONT, 20.f);
-	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.95f, -0.95, 0), glm::vec2(0.05f, 0.05f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Pause", FONT_PATH INGAME_FONT, 17.5f);
+	uiManager->AddButton(GUIManager::OK, glm::vec3(0, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "hp: 3/3", FONT_PATH INGAME_FONT, 20.f, glm::vec4(0.875f));
+	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.89f, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Pause", FONT_PATH INGAME_FONT, 17.5f, glm::vec4(0.875f));
 	uiManager->setAlpha(1.f);
 	uiManager->setShader(shaderManager->getShader("texture"));
 	uiManager->setInstantCenter(glm::vec2(0, 0));
@@ -348,6 +348,7 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 	// Unpause
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
 	{
+		soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 		guiManager->setCenter(glm::vec2(0, 2));
 		uiManager->setCenter(glm::vec2(0, 0));
 		gameState = UNPAUSING;
@@ -403,6 +404,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 	// Check if user is pausing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
 	{
+		soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 		guiManager->setCenter(glm::vec2(0, 0));
 		uiManager->setCenter(glm::vec2(0, 2));
 		gameState = PAUSING;

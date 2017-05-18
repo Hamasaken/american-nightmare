@@ -63,11 +63,11 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
-	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0.30f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Play", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddButton(GUIManager::OPTIONS, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "options", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddButton(GUIManager::POSTERS, glm::vec3(0, -0.30f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "posters", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.60f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "quit", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddText(glm::vec3(0.f, 0.6f, 0.f), 100.f, "American Nightmare", FONT_PATH INGAME_FONT);
+	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Play", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	guiManager->AddButton(GUIManager::OPTIONS, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "options", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	guiManager->AddButton(GUIManager::POSTERS, glm::vec3(0, -0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "posters", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.40f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "quit", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	guiManager->AddText(glm::vec3(0.f, 0.6f, 0.f), 120.f, "American Nightmare", FONT_PATH INGAME_FONT);
 	guiManager->setAlpha(0.9f);
 	guiManager->setShader(shaderManager->getShader("texture"));
 

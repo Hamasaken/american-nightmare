@@ -74,8 +74,8 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 
 	// Right side hidden
 	posterListGUI->AddButton(GUIManager::CANCEL, glm::vec3(2.f, 0, 0), glm::vec2(0.400f, 0.800f), posters[0], meshManager->getMesh("quad"));
-	posterListGUI->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.85f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
-	posterListGUI->AddText(glm::vec3(0.f, 0.85f, 0.f), 40.f, "Posters", FONT_PATH INGAME_FONT);
+	posterListGUI->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.85f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	posterListGUI->AddText(glm::vec3(0.f, 0.75f, 0.f), 80.f, "Posters", FONT_PATH INGAME_FONT);
 
 	float y = 0.25f, x = -0.6f;
 	for (int i = 0; i < 10; i++)
