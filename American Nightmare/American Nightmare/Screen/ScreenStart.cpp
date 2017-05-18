@@ -37,6 +37,7 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::BLOOD);
 	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::TEXTURE);
 	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::SMOKE);
+	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::LIGHT_DUST);
 
 	////////////////////////////////////////////////////////////
 	// Creating Material Manager and loading textures/materials
@@ -63,11 +64,11 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
 	guiManager->AddButton(GUIManager::PLAY, glm::vec3(0, 0.30f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Play", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddButton(GUIManager::OPTIONS, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Options", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddButton(GUIManager::POSTERS, glm::vec3(0, -0.30f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Posters", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.60f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Quit", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddText(glm::vec3(0.f, 0.6f, 0.f), 40.f, "American Nightmare", FONT_PATH INGAME_FONT);
-	guiManager->setAlpha(1.f);
+	guiManager->AddButton(GUIManager::OPTIONS, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "options", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddButton(GUIManager::POSTERS, glm::vec3(0, -0.30f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "posters", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.60f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "quit", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
+	guiManager->AddText(glm::vec3(0.f, 0.6f, 0.f), 100.f, "American Nightmare", FONT_PATH INGAME_FONT);
+	guiManager->setAlpha(0.9f);
 	guiManager->setShader(shaderManager->getShader("texture"));
 
 	// Setting starting variables
@@ -79,11 +80,14 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 void ScreenStart::SetStartVariables()
 {
 	// Adding some ambient smoke on startmenu
-	particleManager->EffectConstantSmoke(glm::vec3(2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(1.f, 0.5f, 1.f, 0.1f));
-	particleManager->EffectConstantSmoke(glm::vec3(1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.5f, 1.f, 1.f, 0.1f));
-	particleManager->EffectConstantSmoke(glm::vec3(0, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(1.0f, 1.f, 0.5f, 0.1f));
-	particleManager->EffectConstantSmoke(glm::vec3(-1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(1.f, 0.25f, 0.25f, 0.1f));
-	particleManager->EffectConstantSmoke(glm::vec3(-2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.25f, 0.25f, 1.f, 0.1f));
+	particleManager->EffectConstantSmoke(glm::vec3(2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.7));
+	particleManager->EffectConstantSmoke(glm::vec3(1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.5));
+	particleManager->EffectConstantSmoke(glm::vec3(0, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.4));
+	particleManager->EffectConstantSmoke(glm::vec3(-1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.6));
+	particleManager->EffectConstantSmoke(glm::vec3(-2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.8));
+
+	// Dust effect
+	particleManager->EffectLightDust(glm::vec3(0.f, 3, 0.f), glm::vec3(8, 8, 2), 50, glm::vec4(0.33f));
 
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 15));

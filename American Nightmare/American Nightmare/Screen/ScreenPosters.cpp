@@ -38,7 +38,6 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::TEXTURE);
 	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::SMOKE);
 	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::LIGHT_DUST);
-	particleManager->EffectLightDust();
 
 	////////////////////////////////////////////////////////////
 	// Creating Material Manager and loading textures/materials
@@ -99,6 +98,9 @@ void ScreenPosters::SetStartVariables()
 {
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 15));
+
+	// Dust effect
+	particleManager->EffectLightDust(glm::vec3(0.f, 3, 0.f), glm::vec3(8, 8, 2), 50, glm::vec4(0.33f));
 }
 
 void ScreenPosters::Update(GLint deltaT)
