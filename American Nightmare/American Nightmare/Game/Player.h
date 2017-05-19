@@ -21,8 +21,12 @@
 #define PLAYER_MAX_VEL_X 7.0f
 #define PLAYER_MAX_VEL_Y 20.f
 #define PLAYER_DASH_VEL 5000.f
-#define PLAYER_DASH_CD 1000.f
+#define PLAYER_DASH_CD 800.f
 #define PLAYER_HOVER_POWER 3500.f
+#define PLAYER_POWER_MAX 100.f
+#define PLAYER_POWER_RECHARGE 25.f
+#define PLAYER_POWER_COST_HOVER 60.f
+#define PLAYER_POWER_COST_DASH 50.f
 
 // XBOX CONTROLLER
 #define CONTROLLER_ON true
@@ -63,14 +67,15 @@ private:
 	void Walk(Direction dir);	//< Walking in a direction
 	void Jump();				//< Jumping
 	void Dash();				//< Dash ability
-	void Hover();				//< Hover ability
+	void Hover(GLint deltaT);				//< Hover ability
 
 	// Input from user
 	void InputTesting();		//< Rotation & Scale on Player model
 	void InputMouse();			//< Mouse input
-	void InputKeyboard();		//< Key input
-	void InputController();		//< Xbox One controller input
+	void InputKeyboard(GLint deltaT);		//< Key input
+	void InputController(GLint deltaT);		//< Xbox One controller input
 
+	GLfloat powerMeter;			//< Players resource for dashing and hovering etc
 	GLfloat dashCooldown;		//< Dash ability cooldown
 	bool hasJumped;				//< If the player have jumped or not
 	bool hasDashed;				//< If the player have dashed or not
