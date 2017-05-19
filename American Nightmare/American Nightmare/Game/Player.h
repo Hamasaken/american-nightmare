@@ -57,17 +57,6 @@ private:
 	int nrOfProjectiles;
 	int CAP;
 
-	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash);
-	void TakeDamage(float dmg);
-
-	float& getHP();
-	float& getPower();
-
-	bool getIsHovering();
-	bool getIsDashing();
-	b2Body* getBody();
-	glm::vec2 getPlayerPosAsGLM();
-private:
 	//variable & function for cursor
 	SDL_Cursor* cursor;
 	void initiateCursor();
@@ -113,17 +102,18 @@ public:
 	void Update(GLint deltaT, b2World* world, glm::vec2 pos);
 	//bool Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
 
-	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash);
+	bool addPlayerProjectiles();
 
+	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash);
+	void TakeDamage(float dmg);
+
+	float& getHP();
+	float& getPower();
 	bool getIsHovering();
 	bool getIsDashing();
 	b2Body* getBody();
-	//Vacuum* getVac();
-
 	glm::vec2 getPlayerPosAsGLM();
-
-	bool addPlayerProjectiles();
-
+	//Vacuum* getVac();
 	
 };
 #endif // !PLAYER_H

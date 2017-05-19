@@ -96,7 +96,6 @@ float Enemy::getDamage()
 {
 	return damage;
 }
-}
 
 b2Body* Enemy::getBody()
 {
