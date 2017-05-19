@@ -120,7 +120,7 @@ private:
 	//Projectile* myProjectile;
 	Projectile* moveble;
 
-	void deleteProjects();
+	void deleteProjects(b2World* world);
 
 };
 

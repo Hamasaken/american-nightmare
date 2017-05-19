@@ -52,7 +52,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	// Creating model
 	model = new Model();
 	if (model == nullptr) return false;
-	/*if (!model->Start(modelName)) return false;*/
+	//if (!model->Start(modelName)) return false;
 
 	this->material = material;
 	model->BuildQuadTexture();
