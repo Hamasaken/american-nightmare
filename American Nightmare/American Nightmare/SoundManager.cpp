@@ -153,6 +153,11 @@ void SoundManager::mute()
 		listener.setGlobalVolume(100);
 		continueMusic();
 	}
+
+	for (sf::Music& m : song)
+		m.setVolume(volumeMusic);
+	for (sf::Sound& s : sfx)
+		s.setVolume(volumeEffect);
 }
 
 int SoundManager::getVolumeMusic() const { return volumeMusic; }

@@ -50,3 +50,5 @@ void Bar::Draw()
 
 glm::vec3 Bar::getStartPosition() { return startPosition; }
 int Bar::getProcent() { return procent; }
+float Bar::getAlpha() { return alpha; }
+void Bar::setAlpha(float alpha) { this->alpha = alpha; }
