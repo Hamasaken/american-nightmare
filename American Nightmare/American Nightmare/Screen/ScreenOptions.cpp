@@ -36,6 +36,8 @@ bool ScreenOptions::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::LIGHT);
 	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::BLOOD);
 	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::TEXTURE);
+	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::SMOKE);
+	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::LIGHT_DUST);
 
 	////////////////////////////////////////////////////////////
 	// Creating Material Manager and loading textures/materials
@@ -44,8 +46,10 @@ bool ScreenOptions::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	if (materialManager == nullptr) return false;
 
 	// Loading materials
-	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.4f, 0.4f, 0.6f), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
+	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
@@ -59,8 +63,13 @@ bool ScreenOptions::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
-	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.45f, 0), glm::vec2(0.225f, 0.075f), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 40.f, glm::vec4(1, 1, 1, 1));
-	guiManager->AddText(glm::vec3(0.f, 0.5f, 0.f), 40.f, "Options", FONT_PATH INGAME_FONT);
+	guiManager->AddButton(GUIManager::OPTION_MUTE, glm::vec3(0, 0.40f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "sound - On", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.f, 1, 0.f, 1));
+	guiManager->AddButton(GUIManager::OPTION_SHADOWS, glm::vec3(0, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "shadows - High", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.f, 1, 0.f, 1));
+	guiManager->AddButton(GUIManager::OPTION_QUALITY, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Quality - High", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.f, 1, 0.f, 1));
+	guiManager->AddButton(GUIManager::OPTION_REBIND, glm::vec3(0, -0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Rebind keys", FONT_PATH INGAME_FONT, 28.f, glm::vec4(1.f, 1, 1.f, 1));
+
+	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.60f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	guiManager->AddText(glm::vec3(0.f, 0.60f, 0.f), 80.f, "Options", FONT_PATH INGAME_FONT);
 	guiManager->setAlpha(1.f);
 	guiManager->setShader(shaderManager->getShader("texture"));
 
@@ -74,6 +83,16 @@ void ScreenOptions::SetStartVariables()
 {
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 15));
+
+	// Adding some ambient smoke on options
+	particleManager->EffectConstantSmoke(glm::vec3(2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.7));
+	particleManager->EffectConstantSmoke(glm::vec3(1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.5));
+	particleManager->EffectConstantSmoke(glm::vec3(0, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.4));
+	particleManager->EffectConstantSmoke(glm::vec3(-1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.6));
+	particleManager->EffectConstantSmoke(glm::vec3(-2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.8));
+
+	// Dust effect
+	particleManager->EffectLightDust(glm::vec3(0.f, 3, 0.f), glm::vec3(8, 8, 2), 50, glm::vec4(0.33f));
 }
 
 void ScreenOptions::Update(GLint deltaT)
@@ -81,17 +100,84 @@ void ScreenOptions::Update(GLint deltaT)
 	// Updating Buttons
 	guiManager->Update(deltaT);
 
-//	particleManager->EffectExplosionLights(glm::vec3(13, 3, 0), 1, glm::vec4(1.f, 0.5f, 1.f, 0.1f));
-//	particleManager->EffectExplosionLights(glm::vec3(-13, 3, 0), 1, glm::vec4(0.5f, 1.f, 1.f, 0.1f));
-//	particleManager->Update(deltaT);
+	// Updating particles
+	particleManager->Update(deltaT);
 
-	for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
+	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = guiManager->getButtonList();
+	for (int i = 0; i < buttons->size(); i++)
 	{
-		if (button.first->getPressed())
+		Button* btn = buttons[0][i].first;
+		GUIManager::Action action = buttons[0][i].second;
+		if (btn->getPressed())
 		{
-			switch (button.second)
-			{ case GUIManager::Action::STARTMENY: *state = State::StartMeny;	break; }
-			button.first->setPressed(false);
+			switch (action)
+			{ 
+			case GUIManager::Action::STARTMENY:			
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); 
+				*state = State::StartMeny;	
+				break;
+			case GUIManager::Action::OPTION_MUTE:		
+			{
+				soundManager->mute();
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
+				{
+					glm::vec4 clr = btn->getText()->getColor();
+					if (clr.r == 0.f)
+					{
+						clr = glm::vec4(1, 0, 0, 1);
+						btn->getText()->setString("sound - Off");
+					}
+					else
+					{
+						clr = glm::vec4(0, 1, 0, 1);
+						btn->getText()->setString("sound - On");
+					}
+					btn->getText()->setColor(clr);
+				}
+			}
+				break;
+			case GUIManager::Action::OPTION_SHADOWS:
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
+				{
+					glm::vec4 clr = btn->getText()->getColor();
+					if (clr.r == 0.f)
+					{
+						clr = glm::vec4(1, 0, 0, 1);
+						btn->getText()->setString("shadows - Low");
+					}
+					else
+					{
+						clr = glm::vec4(0, 1, 0, 1);
+						btn->getText()->setString("shadows - High");
+					}
+					btn->getText()->setColor(clr);
+				}
+				printf("Not fully done yet.. :D\n");
+				break;
+			case GUIManager::Action::OPTION_REBIND:
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
+				printf("Not fully done yet.. :D\n");
+				break;
+			case GUIManager::Action::OPTION_QUALITY:
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
+				{
+					glm::vec4 clr = btn->getText()->getColor();
+					if (clr.r == 0.f)
+					{
+						clr = glm::vec4(1, 0, 0, 1);
+						btn->getText()->setString("Quality - Low");
+					}
+					else
+					{
+						clr = glm::vec4(0, 1, 0, 1);
+						btn->getText()->setString("Quality - High");
+					}
+					btn->getText()->setColor(clr);
+				}
+				printf("Not fully done yet.. :D\n");
+				break;
+			}
+			btn->setPressed(false);
 		}
 	}
 }
@@ -102,14 +188,19 @@ void ScreenOptions::Draw()
 	camera->buildViewMatrix();
 	
 	// Drawing GUI
-	for (std::pair<Button*, GUIManager::Action> button : *guiManager->getButtonList())
+	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = guiManager->getButtonList();
+	for (int i = 0; i < buttons->size(); i++)
 	{
-		DrawObjectGUI(button.first, shaderManager);
-		if (button.first->getText() != nullptr)
-			DrawObjectGUI(button.first->getText(), shaderManager);
+		DrawObjectGUI(buttons[0][i].first, shaderManager);
+		if (buttons[0][i].first->getText()) DrawObjectGUI(buttons[0][i].first->getText(), shaderManager);
 	}
-	for (Text* object : *guiManager->getTextList())
-		DrawObjectGUI(object, shaderManager);
+	std::vector<Text*>* txts = guiManager->getTextList();
+	for (int i = 0; i < txts->size(); i++)
+		DrawObjectGUI(txts[0][i], shaderManager);
+
+	// Drawing particles
+	for (ParticleEmitter* emitter : *particleManager->getEmitters())
+		DrawParticles(emitter, shaderManager);
 }
 
 void ScreenOptions::Stop()
@@ -154,4 +245,13 @@ void ScreenOptions::Stop()
 
 	// Deletes Camera & OpenGL ptr
 	Screen::Stop();
+}
+
+void ScreenOptions::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos)
+{
+	Screen::UpdateScreenProperties(screenSize, screenPos);
+
+	// Updating guimanager
+	guiManager->setScreenPosition(screenPos);
+	guiManager->setScreenSize(screenSize);
 }

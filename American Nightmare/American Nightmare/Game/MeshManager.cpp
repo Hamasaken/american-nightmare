@@ -20,7 +20,6 @@ void MeshManager::Clear()
 {
 	for (int i = 0; i < meshList.size(); i++)
 	{
-		meshList[i]->model->Stop();
 		delete meshList[i];
 	}
 	meshList.clear();

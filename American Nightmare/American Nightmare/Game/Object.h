@@ -37,16 +37,17 @@ public:
 	// Sets & Gets
 	////////////////////////////////////////////////////////////
 	virtual void setPosition(glm::vec3 position);
+	virtual void setRotation(glm::vec3 rotation);
+	virtual void setScale(glm::vec3 scale);
+	virtual void setShader(GLuint shader);
 	glm::vec3 getPosition() const;
 	glm::vec3 getCenter() const;
-	void setRotation(glm::vec3 rotation);
 	glm::vec3 getRotation() const;
-	virtual void setScale(glm::vec3 scale);
 	glm::vec3 getScale() const;
-	virtual void setShader(GLuint shader);
 	GLuint getShader() const;
 	GLuint getTextureID() const;
 	const MaterialManager::Material* getMaterial() const;
+	void setMaterial(const MaterialManager::Material* material);
 
 protected:
 	glm::vec3 position;	//< Object position

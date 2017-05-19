@@ -12,8 +12,8 @@
 #define VOLUME_SFX		70
 
 // Turn Music & SFX on/off
-#define MUSIC_ON		false	
-#define SFX_ON			false
+#define MUSIC_ON		true	
+#define SFX_ON			true
 
 class SoundManager
 {
@@ -23,7 +23,10 @@ public:
 	{
 		SFX_BIP, 
 		SFX_HIT,
-		SFX_POWERUP
+		SFX_POWERUP,
+		SFX_BTN,
+		SFX_LtoR,
+		SFX_RtoL
 	};
 
 	// Put song names here, and then load them in the loadSongs functions
@@ -100,6 +103,11 @@ public:
 	// \brief Changes the listeners volume
 	////////////////////////////////////////////////////////////
 	void changeVolume(int volumeMusic, int volumeEffect);
+	
+	////////////////////////////////////////////////////////////
+	// \brief Mutes/Unmutes
+	////////////////////////////////////////////////////////////
+	void mute();
 
 	int getVolumeMusic() const;
 	int getVolumeEffect() const;

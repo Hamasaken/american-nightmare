@@ -44,6 +44,12 @@ bool Screen::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state,
 	return true;
 }
 
+void Screen::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos)
+{
+	this->screenPosition = screenPosition;
+	this->screenSize = screenSize;
+}
+
 void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 {
 	// Getting matrices
@@ -137,7 +143,7 @@ void Screen::DrawObjectDirShadowMapTransparent(Animation* animatedObj, ShaderMan
 
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, animatedObj->getTextureID());
+	glBindTexture(GL_TEXTURE_2D, animatedObj->getAnimationTexture());
 
 	glUniform1i(glGetUniformLocation(shaderManager->getShader(), "texture"), 0);
 
@@ -276,7 +282,7 @@ void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderMa
 
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tmpMaterial->getTextureID());
+	glBindTexture(GL_TEXTURE_2D, animatedObj->getAnimationTexture());
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, animatedObj->getAnimationNormal());
 

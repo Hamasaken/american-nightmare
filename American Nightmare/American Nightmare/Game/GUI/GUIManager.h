@@ -9,7 +9,12 @@
 class GUIManager
 {
 public:
-	enum Action { OK, CANCEL, PLAY, PAUSE, STARTMENY, OPTIONS, POSTERS, EXIT };
+	enum Action {	OK, CANCEL,							// Simple stuff
+					PLAY, PAUSE,						// For In-game
+					STARTMENY, OPTIONS, POSTERS, EXIT,	// Switching states
+					OPTION_SHADOWS, OPTION_MUTE,		// Option meny
+					OPTION_REBIND, OPTION_QUALITY
+	};
 
 public:
 	GUIManager();
@@ -28,6 +33,8 @@ public:
 	void setCenter(glm::vec2 center);
 	void setShader(GLuint shader);
 	void setAlpha(float alpha);
+	void setScreenPosition(glm::vec2 screenPosition);
+	void setScreenSize(glm::vec2 screenSize);
 
 	Button* getButton(int id);
 

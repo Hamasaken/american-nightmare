@@ -71,6 +71,19 @@ public:
 		int amount = LIGHT_DUST_DEFAULT_AMOUNT,
 		glm::vec4 color = LIGHT_DUST_DEFAULT_COLOR);
 
+
+	////////////////////////////////////////////////////////////
+	// \brief Creates an smoke signal which always is active until level switch
+	// \param position The starting position of every smoke particle
+	// \param texture The smoke texture
+	// \param angle The angle of which the signal is
+	// \optional amount The maximum amount of smoke particle to be active at once
+	// \optional color The blending color on the texture
+	////////////////////////////////////////////////////////////
+	void EffectSmokeSignal(glm::vec3 position, GLuint texture, float angle,
+		int amount = SIGNAL_DEFAULT_AMOUNT,
+		glm::vec4 color = TEXTURE_DEFAULT_COLOR);
+
 	void ShaderPair(GLuint shader, ParticleType type);
 	GLuint getShaderFromPair(ParticleType type);
 	void Update(GLfloat deltaT);

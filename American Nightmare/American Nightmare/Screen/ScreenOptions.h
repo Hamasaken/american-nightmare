@@ -40,6 +40,11 @@ public:
 	////////////////////////////////////////////////////////////
 	void Draw();
 
+	////////////////////////////////////////////////////////////
+	// \brief Update Screen Properties 
+	////////////////////////////////////////////////////////////
+	void UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos);
+
 private:
 	MeshManager* meshManager;			//< Mesh Manager
 	MaterialManager* materialManager;	//< Materials & Textures
