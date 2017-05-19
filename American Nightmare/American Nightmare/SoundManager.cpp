@@ -39,6 +39,7 @@ void SoundManager::loadSFXs()
 	sfx[SFX_BTN] = loadSFX(pathToFolder + "sfx_btn.wav");
 	sfx[SFX_LtoR] = loadSFX(pathToFolder + "sfx_leftToRight.wav");
 	sfx[SFX_RtoL] = loadSFX(pathToFolder + "sfx_rightToLeft.wav");
+	sfx[SFX_SUCTION] = loadSFX(pathToFolder + "sfx_suction.wav");
 
 	// Setting every sfx at deicided volume
 	for (sf::Sound& s : sfx)
@@ -66,6 +67,16 @@ void SoundManager::stopSFX(SFX effect)
 	if (SFX_ON && sfx[effect].getStatus() == sf::Sound::Playing)
 	{
 		sfx[effect].stop();
+	}
+}
+
+void SoundManager::playSFXOverDrive(SFX effect, float offset)
+{
+	if (SFX_ON)
+	{
+		sfx[effect].setPitch(1);
+		sfx[effect].setPitch(getRandomFloat(1 - offset, 1 + offset));
+		sfx[effect].play();
 	}
 }
 

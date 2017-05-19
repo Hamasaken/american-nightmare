@@ -40,6 +40,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
 		if (myProjectile)
 		{
+			soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 0.15f);
 			myProjectile->setmarked(true);
 			
 			
