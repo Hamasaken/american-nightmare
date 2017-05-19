@@ -60,6 +60,8 @@ public:
 	void TakeDamage(float dmg);
 
 	float& getHP();
+	float& getPower();
+
 	bool getIsHovering();
 	bool getIsDashing();
 	b2Body* getBody();
@@ -80,7 +82,7 @@ private:
 
 	bool isDead;				//< If the player is dead or not
 	float hp;					//< The amount of hp the player have
-	GLfloat powerMeter;			//< Players resource for dashing and hovering etc
+	GLfloat power;			//< Players resource for dashing and hovering etc
 	GLfloat dashCooldown;		//< Dash ability cooldown
 	bool hasJumped;				//< If the player have jumped or not
 	bool hasDashed;				//< If the player have dashed or not

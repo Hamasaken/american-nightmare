@@ -20,7 +20,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	position = glm::vec3(0, 20, 0);
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_SIZE_Z);
-	powerMeter = PLAYER_POWER_MAX;
+	power = PLAYER_POWER_MAX;
 	hasJumped = false;
 	hasDashed = false;
 	isHovering = false;
@@ -57,10 +57,10 @@ void Player::Update(GLint deltaT)
 
 	if (!isHovering)
 	{
-		powerMeter += deltaT * 0.001 * PLAYER_POWER_RECHARGE;
+		power += deltaT * 0.001 * PLAYER_POWER_RECHARGE;
 
-		if (powerMeter > PLAYER_POWER_MAX)
-			powerMeter = PLAYER_POWER_MAX;
+		if (power > PLAYER_POWER_MAX)
+			power = PLAYER_POWER_MAX;
 	}
 	//printf("%f\n", powerMeter);
 
@@ -165,7 +165,7 @@ void Player::Dash()
 {
 	if (!hasDashed)
 	{
-		powerMeter -= PLAYER_POWER_COST_DASH;
+		power -= PLAYER_POWER_COST_DASH;
 		isDashing = true;
 		hasDashed = true;
 		dashCooldown = PLAYER_DASH_CD;
@@ -182,14 +182,14 @@ void Player::Hover(GLint deltaT)
 	{
 		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
 		hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, 0.f));
-		powerMeter -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
+		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
 	}
 	else if (hasJumped)
 	{
 		isHovering = true;
 		yPos = hitbox->getBody()->GetPosition().y;
 		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
-		powerMeter -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
+		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
 	}
 }
 
@@ -221,9 +221,9 @@ void Player::InputKeyboard(GLint deltaT)
 	else	Walk(STOPPED);
 
 	if (sf::Keyboard::isKeyPressed(key_jump)) Jump();
-	if (sf::Keyboard::isKeyPressed(key_hover) && powerMeter >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
+	if (sf::Keyboard::isKeyPressed(key_hover) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
 	else isHovering = false;
-	if (sf::Keyboard::isKeyPressed(key_dash) && powerMeter >= PLAYER_POWER_COST_DASH) Dash();
+	if (sf::Keyboard::isKeyPressed(key_dash) && power >= PLAYER_POWER_COST_DASH) Dash();
 }
 
 void Player::InputController(GLint deltaT)
@@ -233,11 +233,11 @@ void Player::InputController(GLint deltaT)
 	{
 		if (sf::Joystick::isButtonPressed(0, BTN_A)) Jump();
 
-		if (sf::Joystick::isButtonPressed(0, BTN_X) && powerMeter >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
+		if (sf::Joystick::isButtonPressed(0, BTN_X) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
 
 		if (sf::Joystick::isButtonPressed(0, BTN_Y))
 			printf("Y.\n");
-		if (sf::Joystick::isButtonPressed(0, BTN_B) && powerMeter >= PLAYER_POWER_COST_DASH) Dash();
+		if (sf::Joystick::isButtonPressed(0, BTN_B) && power >= PLAYER_POWER_COST_DASH) Dash();
 
 		if (sf::Joystick::isButtonPressed(0, BTN_LB))
 			printf("LB.\n");
@@ -275,6 +275,11 @@ bool Player::getIsDashing()
 float& Player::getHP()
 {
 	return hp;
+}
+
+float& Player::getPower()
+{
+	return power;
 }
 
 bool Player::getIsHovering()

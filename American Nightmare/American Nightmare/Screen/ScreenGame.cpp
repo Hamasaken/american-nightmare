@@ -113,6 +113,8 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (!uiManager->Start(screenSize, screenPosition)) return false;
 	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.89f, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Pause", FONT_PATH INGAME_FONT, 17.5f, glm::vec4(0.875f));
 	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(0, -0.97, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"));
+	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(-0.7, -0.97, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"));
+
 	uiManager->AddText(glm::vec3(0, -0.97, 0), 30.f, "Health", FONT_PATH INGAME_FONT);
 	uiManager->setAlpha(1.f);
 	uiManager->setShader(shaderManager->getShader("texture"));
