@@ -12,7 +12,8 @@ public:
 
 	////////////////////////////////////////////////////////////
 	// \brief Starts a bar
-	// \param The value that this bar is looking at
+	// \param The value that this bar is looking at and updating from
+	// \param The maximum value of the value that the bar is looking at
 	// \param position Position of the center position of the button
 	// \param size Size of the bar & quad
 	// \param material The material of this bar (no path needed)
