@@ -5,9 +5,6 @@ SoundManager::SoundManager()
 	nrOfMusicPlayingCurrently = -1;
 	nrOfSound = NULL;
 
-	// Setting listener volume
-	listener.setGlobalVolume(100);
-
 	// Setting volumes
 	volumeEffect = VOLUME_SFX;
 	volumeMusic = VOLUME_MUSIC;
