@@ -691,10 +691,8 @@ Enemy* LevelManager::getEnemy() { return enemy; }
 
 void LevelManager::deleteProjects()
 {
-	
 	for (int i = 0; i < this->projectiles.size(); i++)
 	{
-		
 		if (this->projectiles[i]->getmarked() == true)
 		{
 			Projectile* temp;

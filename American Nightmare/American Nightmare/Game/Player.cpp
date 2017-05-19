@@ -11,7 +11,7 @@
 //	
 //}
 
-Player::Player() { }
+Player::Player(): Animation() { }
 
 Player::Player(const Player & other) { }
 
