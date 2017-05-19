@@ -9,7 +9,7 @@ public:
 	Bar();
 	Bar(const Bar& other);
 	~Bar();
-
+	//
 	////////////////////////////////////////////////////////////
 	// \brief Starts a bar
 	// \param The value that this bar is looking at and updating from
