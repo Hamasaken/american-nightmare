@@ -92,6 +92,7 @@ void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 	InputTesting();
 	if (CONTROLLER_ON) InputController(deltaT);
 
+	// Recharging power meter
 	if (!isHovering)
 	{
 		power += deltaT * 0.001 * PLAYER_POWER_RECHARGE;

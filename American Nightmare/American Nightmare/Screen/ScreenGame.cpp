@@ -141,7 +141,7 @@ void ScreenGame::SetStartVariables()
 	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "Level2.anl", ARCHIVE_PATH "Assets2.ana");
 
 	// Adding shadow
-	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, glm::vec2(60, 30), 5.f, 40);
+	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], glm::vec3(5.f, 5.f, -10.f), glm::vec2(screenSize.x * 0.5, screenSize.y * 0.5), glm::vec2(60, 30), 5.f, 40);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, glm::vec2(60, 30), -30.f, 50);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, glm::vec2(60, 30), -30.f, 50);
 	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[1], glm::vec2(256, 256), 45, 0.1f);
@@ -264,9 +264,9 @@ void ScreenGame::Draw()
 
 		shaderManager->SetParameters(tempWorld, glm::mat4(), glm::mat4());
 
-		glEnable(GL_TEXTURE_CUBE_MAP);
+		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP_POSITIVE_X, shadowManager.getPointShadowMapList()[0]->shadowCubeMap);
+		glBindTexture(GL_TEXTURE_2D, shadowManager.getDirectionalShadowMapList()[0]->shadowMap);
 		glUniform1i(glGetUniformLocation(shaderManager->getShader(), "texture"), 0);
 
 		glDisable(GL_DEPTH_TEST);
@@ -283,6 +283,8 @@ void ScreenGame::DrawShadowMaps()
 	{
 		// Set Viewport to resolution of shadow map
 		glViewport(0, 0, shadowManager.getDirectionalShadowMapList()[i]->resolution.x, shadowManager.getDirectionalShadowMapList()[i]->resolution.y);
+
+		shadowManager.getDirectionalShadowMapList()[i]->UpdateLightSpace(camera->getPosition(), glm::vec2(20, 10), 1.f, 20.f);
 		// Bind depth FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, shadowManager.getDirectionalShadowMapList()[i]->shadowFBO);
 
