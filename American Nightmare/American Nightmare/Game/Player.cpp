@@ -29,7 +29,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 {
 	this->checkValue = false;
 
-	this->myProjectileHandler = ProjectileHandler(mesh, material, world, this->getPlayerPosAsGLM());
+	//this->myProjectileHandler = ProjectileHandler(mesh, material, world, this->getPlayerPosAsGLM());
 
 	//Sets the cursor for the player
 	initiateCursor();
@@ -51,8 +51,8 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	this->material = material;
 	model->BuildQuadTexture();
 
-	vac = new Vacuum();
-	vac->startVac(nullptr, material2, world, getBody());
+	//vac = new Vacuum();
+	//vac->startVac(nullptr, material2, world, getBody());
 
 	// Setting a self-pointer for collision detection
 	getBody()->SetUserData(this);

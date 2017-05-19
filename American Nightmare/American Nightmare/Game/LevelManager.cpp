@@ -92,12 +92,14 @@ void LevelManager::Stop()
 		quadTree = nullptr;
 	}
 
-	// Delete projectile
-	if (myProjectile != nullptr)
+	// Unloads every object in map
+	for (Projectile* projs : projectiles)
 	{
-//		myProjectile->Stop();
-//		delete myProjectile;
-//		myProjectile = nullptr;
+		if (projs != nullptr)
+		{
+			delete projs;
+			projs = nullptr;
+		}
 	}
 
 	// Unloads the map objects

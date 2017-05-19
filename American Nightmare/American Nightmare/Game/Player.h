@@ -43,7 +43,7 @@ private:
 	SDL_Cursor* cursor;
 	void initiateCursor();
 private:
-	Vacuum* vac;
+	//Vacuum* vac;
 
 
 	bool checkValue;
@@ -68,7 +68,6 @@ public:
 	b2Body* getBody();
 	//Vacuum* getVac();
 
-	//glm::vec2 getPlayerPosAsGLM();
 	glm::vec2 getPlayerPosAsGLM();
 private:
 	bool hasJumped;
