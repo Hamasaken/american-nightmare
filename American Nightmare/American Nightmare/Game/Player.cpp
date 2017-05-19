@@ -32,7 +32,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 void Player::Update(GLint deltaT)
 {
 	// Are we currently hovering?
-	isHovering = false;
+	//isHovering = false;
 	isDashing = false;
 
 	// Dash cooldown
@@ -78,26 +78,53 @@ void Player::RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right,
 void Player::Walk(Direction dir)
 {
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
-	switch (dir)
+	if (!hasJumped)
 	{
-	case LEFT:
-		if (vel.x > -PLAYER_MAX_VEL_X)
+		switch (dir)
 		{
-			hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
-			directionIsRight = true;
+		case LEFT:
+			if (vel.x > -PLAYER_MAX_VEL_X)
+			{
+				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
+				directionIsRight = true;
+			}
+			break;
+		case RIGHT:
+			if (vel.x < PLAYER_MAX_VEL_X)
+			{
+				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
+				directionIsRight = false;
+			}
+			break;
+		case STOPPED:
+			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+			break;
 		}
-		break;
-	case RIGHT:
-		if (vel.x < PLAYER_MAX_VEL_X)
-		{
-			hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
-			directionIsRight = false;
-		}
-		break;
-	case STOPPED:
-		hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
-		break;
 	}
+	else
+	{
+		switch (dir)
+		{
+		case LEFT:
+			if (vel.x > -PLAYER_MAX_VEL_X)
+			{
+				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X * 0.35f, 0), true);
+				directionIsRight = true;
+			}
+			break;
+		case RIGHT:
+			if (vel.x < PLAYER_MAX_VEL_X)
+			{
+				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X * 0.35f, 0), true);
+				directionIsRight = false;
+			}
+			break;
+		case STOPPED:
+			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+			break;
+		}
+	}
+	
 }
 
 void Player::Jump()
@@ -127,8 +154,19 @@ void Player::Dash()
 
 void Player::Hover()
 {
-	isHovering = true;
-	hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, -PLAYER_HOVER_POWER), true);
+	static float yPos;
+
+	if (isHovering)
+	{
+		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
+		hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, 0.f));
+	}
+	else if (hasJumped)
+	{
+		isHovering = true;
+		yPos = hitbox->getBody()->GetPosition().y;
+		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
+	}
 }
 
 void Player::InputTesting()
@@ -160,6 +198,7 @@ void Player::InputKeyboard()
 
 	if (sf::Keyboard::isKeyPressed(key_jump)) Jump();
 	if (sf::Keyboard::isKeyPressed(key_hover)) Hover();
+	else isHovering = false;
 	if (sf::Keyboard::isKeyPressed(key_dash)) Dash();
 }
 

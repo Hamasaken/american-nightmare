@@ -28,7 +28,8 @@ public:
 	bool isDirectionRight();
 
 protected:
-	void changeActiveAnimation(std::string name);
+	bool changeActiveAnimation(std::string name);
+	bool changeActiveAnimation(GLuint index);
 	void updateAnimation(GLfloat deltaT);
 	bool directionIsRight;
 private:
