@@ -52,12 +52,15 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 
 	// Loading materials
 	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	materialManager->AddMaterial("GUI_bar_blue", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.7), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.jpg");
+	materialManager->AddMaterial("GUI_bar_red", glm::vec3(0.1f), glm::vec3(0.7, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
 	materialManager->AddMaterial("playermaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.5f), 0.01f, "playertexture", TEXTURE_PATH "Walk01.png");
 	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "lighttexture", TEXTURE_PATH "gammal-dammsugare.jpg");
 	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "groundtexture", TEXTURE_PATH "temp_ground.jpg");
 	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "backgroundtexture", TEXTURE_PATH "temp_background.jpg");
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
+	if (materialManager->getMaterial("GUI_2_mat") == nullptr) printf("Button Material not found\n");
 	if (materialManager->getMaterial("playermaterial") == nullptr) printf("Player Material not found\n");
 	if (materialManager->getMaterial("lightmaterial") == nullptr) printf("Light Material not found\n");
 	if (materialManager->getMaterial("groundmaterial") == nullptr) printf("Ground Material not found\n");
@@ -112,10 +115,10 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (uiManager == nullptr) return false;
 	if (!uiManager->Start(screenSize, screenPosition)) return false;
 	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.89f, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Pause", FONT_PATH INGAME_FONT, 17.5f, glm::vec4(0.875f));
-	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(0, -0.97, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"));
-	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(-0.7, -0.97, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"));
-
-	uiManager->AddText(glm::vec3(0, -0.97, 0), 30.f, "Health", FONT_PATH INGAME_FONT);
+	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(-0.3, -0.96, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_bar_red"), meshManager->getMesh("quad"));
+	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(0.3, -0.96, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quad"));
+	uiManager->AddText(glm::vec3(-0.3, -0.96, 0), 30.f, "Health", FONT_PATH INGAME_FONT);
+	uiManager->AddText(glm::vec3(0.3, -0.96, 0), 30.f, "Power", FONT_PATH INGAME_FONT);
 	uiManager->setAlpha(1.f);
 	uiManager->setShader(shaderManager->getShader("texture"));
 	uiManager->setInstantCenter(glm::vec2(0, 0));
