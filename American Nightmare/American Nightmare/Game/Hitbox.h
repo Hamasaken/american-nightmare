@@ -40,7 +40,6 @@ public:
 	////////////////////////////////////////////////////////////
 	void Stop();
 
-	// Gets & Sets
 	b2Body* getBody();
 	glm::vec2 getPosition();
 

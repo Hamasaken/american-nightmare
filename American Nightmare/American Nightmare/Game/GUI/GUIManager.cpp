@@ -18,6 +18,7 @@ bool GUIManager::Start(glm::vec2 screenSize, glm::vec2 screenPosition)
 
 void GUIManager::Stop()
 {
+	clearBars();
 	clearButtons();
 	clearTexts();
 }
@@ -35,12 +36,16 @@ void GUIManager::Update(GLuint deltaT)
 			button.first->setPosition(button.first->getStartPosition() - glm::vec3(currentCenter, 0));
 		for (Text* text : texts)
 			text->setPosition(text->getStartPosition() - glm::vec3(currentCenter, 0));
+		for (Bar* bar : bars)
+			bar->setPosition(bar->getStartPosition() - glm::vec3(currentCenter, 0));
 	}
 
 	glm::vec2 mousePosition = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), screenSize, screenPosition);
 
 	for (std::pair<Button*, Action> button : buttons)
 		button.first->Update(deltaT, mousePosition);
+	for (Bar* bar : bars)
+		bar->Update(deltaT);
 }
 
 bool GUIManager::AddButton(Action action, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh, std::string text, std::string fontName, float characterSize, glm::vec4 textColor)
@@ -58,6 +63,16 @@ bool GUIManager::AddButton(Action action, glm::vec3 position, glm::vec2 size, co
 
 	btn->setShader(shader);
 	buttons.push_back(std::make_pair(btn, action));
+}
+
+bool GUIManager::AddBar(float &value, float maxValue, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh)
+{
+	Bar* bar = new Bar();
+	if (bar == nullptr) return false;
+	if (!bar->Start(value, maxValue, position, size, material, mesh)) return false;
+
+	bar->setShader(shader);
+	bars.push_back(bar);
 }
 
 bool GUIManager::AddText(glm::vec3 position, float characterSize, std::string text, std::string fontName)
@@ -78,6 +93,8 @@ void GUIManager::setAlpha(float alpha)
 		button.first->setAlpha(alpha);
 	for (Text* text : texts)
 		text->setColor(glm::vec4(glm::vec3(text->getColor()), alpha));
+	for (Bar* bar : bars)
+		bar->setAlpha(alpha);
 }
 
 void GUIManager::setScreenPosition(glm::vec2 screenPosition) { this->screenPosition = screenPosition; }
@@ -87,6 +104,11 @@ void GUIManager::setScreenSize(glm::vec2 screenSize) { this->screenSize = screen
 Button * GUIManager::getButton(int id)
 {
 	return buttons[id].first;
+}
+
+Bar * GUIManager::getBar(int id)
+{
+	return bars[id];
 }
 
 void GUIManager::setCenter(glm::vec2 center)
@@ -103,6 +125,8 @@ void GUIManager::setInstantCenter(glm::vec2 center)
 		button.first->setPosition(button.first->getStartPosition() - glm::vec3(currentCenter, 0));
 	for (Text* text : texts)
 		text->setPosition(text->getStartPosition() - glm::vec3(currentCenter, 0));
+	for (Bar* bar : bars)
+		bar->setPosition(bar->getStartPosition() - glm::vec3(currentCenter, 0));
 }
 
 void GUIManager::setShader(GLuint shader)
@@ -113,6 +137,8 @@ void GUIManager::setShader(GLuint shader)
 		button.first->setShader(shader);
 	for (Text* text : texts)
 		text->setShader(shader);
+	for (Bar* bar : bars)
+		bar->setShader(shader);
 }
 
 std::vector<std::pair<Button*, GUIManager::Action>>* GUIManager::getButtonList()
@@ -123,6 +149,22 @@ std::vector<std::pair<Button*, GUIManager::Action>>* GUIManager::getButtonList()
 std::vector<Text*>* GUIManager::getTextList()
 {
 	return &texts;
+}
+
+std::vector<Bar*>* GUIManager::getBarList()
+{
+	return &bars;
+}
+
+void GUIManager::clearBars()
+{
+	for (Bar* bar : bars)
+	{
+		bar->Stop();
+		delete bar;
+		bar = nullptr;
+	}
+	bars.clear();
 }
 
 void GUIManager::clearButtons()

@@ -40,9 +40,12 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	RebindKeys(KEY_LEFT, KEY_RIGHT, KEY_JUMP, KEY_HOVER, KEY_DASH);
 
 	// Setting starting variables
+	hp = PLAYER_HP;
+	isDead = false;
 	position = glm::vec3(0, 20, 0);
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_SIZE_Z);
+	power = PLAYER_POWER_MAX;
 	hasJumped = false;
 	hasDashed = false;
 	isHovering = false;
@@ -68,7 +71,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 {
 	// Are we currently hovering?
-	isHovering = false;
+	//isHovering = false;
 	isDashing = false;
 
 	// Dash cooldown
@@ -83,10 +86,20 @@ void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 	if (hitbox->getBody()->GetLinearVelocity().y == 0.f && hasJumped) { hasJumped = false; isDashing = true; }
 
 	// Getting user input
-	InputKeyboard();
+	InputKeyboard(deltaT);
 	InputMouse();
 	InputTesting();
-	if (CONTROLLER_ON) InputController();
+	if (CONTROLLER_ON) InputController(deltaT);
+
+	// Recharging power meter
+	if (!isHovering)
+	{
+		power += deltaT * 0.001 * PLAYER_POWER_RECHARGE;
+
+		if (power > PLAYER_POWER_MAX)
+			power = PLAYER_POWER_MAX;
+	}
+	//printf("%f\n", powerMeter);
 
 	// Thresholds in velocity
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
@@ -112,29 +125,65 @@ void Player::RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right,
 	this->key_dash = key_dash;
 }
 
+void Player::TakeDamage(float dmg)
+{
+	hp -= dmg;
+	if (hp <= NULL)
+	{
+		isDead = true;
+	}
+}
+
 void Player::Walk(Direction dir)
 {
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
-	switch (dir)
+	if (!hasJumped)
 	{
-	case LEFT:
-		if (vel.x > -PLAYER_MAX_VEL_X)
+		switch (dir)
 		{
-			hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
-			directionIsRight = true;
+		case LEFT:
+			if (vel.x > -PLAYER_MAX_VEL_X)
+			{
+				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
+				directionIsRight = true;
+			}
+			break;
+		case RIGHT:
+			if (vel.x < PLAYER_MAX_VEL_X)
+			{
+				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
+				directionIsRight = false;
+			}
+			break;
+		case STOPPED:
+			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+			break;
 		}
-		break;
-	case RIGHT:
-		if (vel.x < PLAYER_MAX_VEL_X)
-		{
-			hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
-			directionIsRight = false;
-		}
-		break;
-	case STOPPED:
-		hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
-		break;
 	}
+	else
+	{
+		switch (dir)
+		{
+		case LEFT:
+			if (vel.x > -PLAYER_MAX_VEL_X)
+			{
+				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X * 0.35f, 0), true);
+				directionIsRight = true;
+			}
+			break;
+		case RIGHT:
+			if (vel.x < PLAYER_MAX_VEL_X)
+			{
+				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X * 0.35f, 0), true);
+				directionIsRight = false;
+			}
+			break;
+		case STOPPED:
+			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+			break;
+		}
+	}
+	
 }
 
 void Player::Jump()
@@ -154,6 +203,7 @@ void Player::Dash()
 {
 	if (!hasDashed)
 	{
+		power -= PLAYER_POWER_COST_DASH;
 		isDashing = true;
 		hasDashed = true;
 		dashCooldown = PLAYER_DASH_CD;
@@ -162,10 +212,23 @@ void Player::Dash()
 	}
 }
 
-void Player::Hover()
+void Player::Hover(GLint deltaT)
 {
-	isHovering = true;
-	hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, -PLAYER_HOVER_POWER), true);
+	static float yPos;
+
+	if (isHovering)
+	{
+		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
+		hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, 0.f));
+		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
+	}
+	else if (hasJumped)
+	{
+		isHovering = true;
+		yPos = hitbox->getBody()->GetPosition().y;
+		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
+		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
+	}
 }
 
 void Player::InputTesting()
@@ -189,29 +252,30 @@ void Player::InputTesting()
 
 void Player::InputMouse() { }
 
-void Player::InputKeyboard()
+void Player::InputKeyboard(GLint deltaT)
 {
 	if		(sf::Keyboard::isKeyPressed(key_left)) Walk(LEFT);
 	else if (sf::Keyboard::isKeyPressed(key_right)) Walk(RIGHT); 
 	else	Walk(STOPPED);
 
 	if (sf::Keyboard::isKeyPressed(key_jump)) Jump();
-	if (sf::Keyboard::isKeyPressed(key_hover)) Hover();
-	if (sf::Keyboard::isKeyPressed(key_dash)) Dash();
+	if (sf::Keyboard::isKeyPressed(key_hover) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
+	else isHovering = false;
+	if (sf::Keyboard::isKeyPressed(key_dash) && power >= PLAYER_POWER_COST_DASH) Dash();
 }
 
-void Player::InputController()
+void Player::InputController(GLint deltaT)
 {
 	sf::Joystick::update();
 	if (sf::Joystick::isConnected(0))
 	{
 		if (sf::Joystick::isButtonPressed(0, BTN_A)) Jump();
 
-		if (sf::Joystick::isButtonPressed(0, BTN_X)) Hover();
+		if (sf::Joystick::isButtonPressed(0, BTN_X) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
 
 		if (sf::Joystick::isButtonPressed(0, BTN_Y))
 			printf("Y.\n");
-		if (sf::Joystick::isButtonPressed(0, BTN_B)) Dash();
+		if (sf::Joystick::isButtonPressed(0, BTN_B) && power >= PLAYER_POWER_COST_DASH) Dash();
 
 		if (sf::Joystick::isButtonPressed(0, BTN_LB))
 			printf("LB.\n");
@@ -244,6 +308,16 @@ b2Body* Player::getBody()
 bool Player::getIsDashing()
 {
 	return isDashing;
+}
+
+float& Player::getHP()
+{
+	return hp;
+}
+
+float& Player::getPower()
+{
+	return power;
 }
 
 bool Player::getIsHovering()

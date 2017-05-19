@@ -109,7 +109,7 @@ GLint Animation::findAnimation(std::string name) const
 	return index;
 }
 
-void Animation::changeActiveAnimation(std::string name)
+bool Animation::changeActiveAnimation(std::string name)
 {
 	GLint index = -1;
 
@@ -120,7 +120,21 @@ void Animation::changeActiveAnimation(std::string name)
 		currentAnimation->currentFrame = 0;
 		currentAnimation = &(animationList[index]);
 		currentAnimation->currentFrame = 0;
+		return true;
 	}
+	return false;
+}
+
+bool Animation::changeActiveAnimation(GLuint index)
+{
+	if (index < animationList.size())
+	{
+		currentAnimation->currentFrame = 0;
+		currentAnimation = &(animationList[index]);
+		currentAnimation->currentFrame = 0;
+		return true;
+	}
+	return false;
 }
 
 void Animation::updateAnimation(GLfloat deltaT)
