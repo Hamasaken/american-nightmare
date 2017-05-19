@@ -53,6 +53,7 @@ public:
 	void Update(GLint deltaT);
 
 	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash);
+	void TakeDamage(float dmg);
 
 	float& getHP();
 	bool getIsHovering();
@@ -73,7 +74,8 @@ private:
 	void InputKeyboard();		//< Key input
 	void InputController();		//< Xbox One controller input
 
-	float hp;
+	bool isDead;				//< If the player is dead or not
+	float hp;					//< The amount of hp the player have
 	GLfloat dashCooldown;		//< Dash ability cooldown
 	bool hasJumped;				//< If the player have jumped or not
 	bool hasDashed;				//< If the player have dashed or not

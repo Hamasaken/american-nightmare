@@ -29,6 +29,11 @@ public:
 	// \brief Gets input from user and moves accordingly
 	////////////////////////////////////////////////////////////
 	void Movement(b2Vec2 playerPos);
+
+	float getDamage();
+
+private:
+	float damage;
 };
 
 #endif // !ENEMY_H
