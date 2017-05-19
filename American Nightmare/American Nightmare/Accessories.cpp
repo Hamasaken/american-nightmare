@@ -1,10 +1,17 @@
 #include "Accessories.h"
+#include <iostream>
 
 float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2)
 {
 	float dY = p1.y - p2.y;
 	float dX = p1.x - p2.x;
 	return atan2(dY, dX);
+}
+
+int radianToDegree(float radian)
+{
+	int degree;
+	return degree = (radian * 180) / PI;
 }
 
 float randBetweenF(float low, float high)

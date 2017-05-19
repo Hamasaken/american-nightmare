@@ -173,6 +173,18 @@ void ScreenGame::Draw()
 	for (Object* object : levelManager->getMap())
 		DrawObjectGeometryPass(object, shaderManager);
 
+	////TEST
+	//for(Projectile* proj : levelManager->getProj())
+	//	DrawObjectGeometryPass(proj, shaderManager);
+
+	for (Projectile* projectiles : levelManager->getProjectiles())
+		DrawObjectGeometryPass(projectiles, shaderManager);
+	//TEST
+	//for(Projectile* proj : levelManager->getProj())
+	//	DrawObjectGeometryPass(proj, shaderManager);
+
+	//DrawObjectGeometryPass(levelManager->getPlayer()->getVac(), shaderManager);
+
 	//Draw Projectile///////////////////////////////////////////////////////
 	////TESTING
 	//////////////////////////////////////////////////////////////////////
@@ -189,6 +201,9 @@ void ScreenGame::Draw()
 
 	// Reenable Blend
 	glEnable(GL_BLEND);
+
+
+	//DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
 	// DR: Light pass
 	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
@@ -273,9 +288,11 @@ void ScreenGame::DrawShadowMaps()
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 
+		glCullFace(GL_FRONT);
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
 			DrawObjectDirShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+		glCullFace(GL_BACK);
 
 		// Set shader for transparent objects
 		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());

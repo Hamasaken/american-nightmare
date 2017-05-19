@@ -63,18 +63,18 @@ public:
 	// \brief Get the vector of objects to draw or do something with
 	///////////////////////////////////////////////////////////
 	std::vector<Object*> getMap();
+	//std::vector<Projectile*> getProj();
+	std::vector<Projectile*> getProjectiles();
 
 	const LightManager* getLightManager() const;
 	Player* getPlayer();
 	Enemy* getEnemy();
-	Projectile* getProjectile();
+	//Projectile* getProjectile();
 	//ProjectileHandler* getProjectiles();
 
 	//////////////////////////////////////////////////////////////
 	// Shoot something
 	/////////////////////////////////////////////////////////////
-	void shoot(GLuint shader, std::string modelPath);
-
 
 private:
 	////////////////////////////////////////////////////////////
@@ -98,6 +98,7 @@ private:
 	std::vector<Object*> map;	//< Vector with level specific objects
 	std::vector<Hitbox*> hitboxes;
 	std::vector<Trigger*> triggers;
+	std::vector<Projectile*> projectiles;
 	Player* player;				//< The player object
 
 	Enemy* enemy;				//< A Enemy object
@@ -115,9 +116,11 @@ private:
 	QuadTree* quadTree;
 
 	//ProjectileHandler* myPH;
+	//ProjectileHandler* myPH;
+	//Projectile* myProjectile;
+	Projectile* moveble;
 
-	Projectile* myProjectile;
-	//Projectile* moveble;
+	void deleteProjects(b2World* world);
 
 };
 

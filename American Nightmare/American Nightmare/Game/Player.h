@@ -2,6 +2,10 @@
 #define PLAYER_H
 
 #include "Animation.h"
+#include <SDL.h>
+#include "../ProjectileHandler.h"
+#include "../Enemy.h"
+#include "../vacuum.h"
 
 // KEYS DEFAULTS
 #define KEY_LEFT sf::Keyboard::Key::A
@@ -48,13 +52,10 @@ class Player : public Animation
 {
 private:
 	enum Direction { LEFT, RIGHT, STOPPED };
-public:
-	Player();
-	Player(const Player& other);
-	~Player();
-
-	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world);
-	void Update(GLint deltaT);
+	
+	//Variables for handling projectile/Weapon
+	int nrOfProjectiles;
+	int CAP;
 
 	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash);
 	void TakeDamage(float dmg);
@@ -67,6 +68,11 @@ public:
 	b2Body* getBody();
 	glm::vec2 getPlayerPosAsGLM();
 private:
+	//variable & function for cursor
+	SDL_Cursor* cursor;
+	void initiateCursor();
+
+	//Vacuum* vac;
 
 	// Interactions with player
 	void Walk(Direction dir);	//< Walking in a direction
@@ -74,7 +80,7 @@ private:
 	void Dash();				//< Dash ability
 	void Hover(GLint deltaT);				//< Hover ability
 
-	// Input from user
+								// Input from user
 	void InputTesting();		//< Rotation & Scale on Player model
 	void InputMouse();			//< Mouse input
 	void InputKeyboard(GLint deltaT);		//< Key input
@@ -89,12 +95,35 @@ private:
 	bool isDashing;				//< If the player is currently dashing
 	bool isHovering;			//< If the player is currently hovering
 
-	// Rebindable keys
+								// Rebindable keys
 	sf::Keyboard::Key key_left;
 	sf::Keyboard::Key key_right;
 	sf::Keyboard::Key key_jump;
 	sf::Keyboard::Key key_hover;
 	sf::Keyboard::Key key_dash;
-};
+	
+public:
+	Player();
+	//Player(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world);
+	Player(const Player& other);
+	~Player();
 
+	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
+	//bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
+	void Update(GLint deltaT, b2World* world, glm::vec2 pos);
+	//bool Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
+
+	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash);
+
+	bool getIsHovering();
+	bool getIsDashing();
+	b2Body* getBody();
+	//Vacuum* getVac();
+
+	glm::vec2 getPlayerPosAsGLM();
+
+	bool addPlayerProjectiles();
+
+	
+};
 #endif // !PLAYER_H

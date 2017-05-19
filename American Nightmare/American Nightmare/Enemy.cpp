@@ -37,6 +37,43 @@ void Enemy::Update(GLint deltaT, b2Vec2 playerPos)
 
 void Enemy::Movement(b2Vec2 playerPos)
 {
+	//// Positioning
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+	//{
+	//	hitbox->getBody()->ApplyForceToCenter(b2Vec2(ENEMY_VEL_X, 0), true);
+	//	directionIsRight = false;
+	//}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+	//{
+	//	hitbox->getBody()->ApplyForceToCenter(b2Vec2(-ENEMY_VEL_X, 0), true);
+	//	directionIsRight = true;
+	//}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+	//{
+	//	hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, -ENEMY_VEL_Y), true);
+	//}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+	//{
+	//	hitbox->getBody()->ApplyForceToCenter(b2Vec2(0, ENEMY_VEL_Y), true);
+	//}
+	//
+	//
+	//// Move in Z axis
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) position.z += 0.15f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) position.z -= 0.15f;
+	//
+	//// Scaling
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::T)) scale += 0.025f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::G)) scale -= 0.025f;
+	//
+	//// Rotation in X
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) rotation.x += 2.f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E)) rotation.x -= 2.f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) rotation.y += 2.f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) rotation.y -= 2.f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y)) rotation.z += 2.f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) rotation.z -= 2.f;
+
 	if (playerPos.x < hitbox->getBody()->GetPosition().x - 0.3f)
 	{
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2( -ENEMY_VEL_X, hitbox->getBody()->GetLinearVelocity().y), true );
@@ -58,4 +95,10 @@ void Enemy::Movement(b2Vec2 playerPos)
 float Enemy::getDamage()
 {
 	return damage;
+}
+}
+
+b2Body* Enemy::getBody()
+{
+	return hitbox->getBody();
 }

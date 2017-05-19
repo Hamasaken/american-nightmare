@@ -1,13 +1,39 @@
 #include "Player.h"
 
-Player::Player() : Animation() { }
+//Player::Player() : Animation()
+//{
+//	this->myProjectileHandler = ProjectileHandler();
+//}
+//
+
+//Player::Player(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world) : Animation()
+//{
+//	
+//}
+
+Player::Player(): Animation() { }
 
 Player::Player(const Player & other) { }
 
 Player::~Player() { }
 
-bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world)
+void Player::initiateCursor()
 {
+	SDL_ShowCursor(SDL_ENABLE);
+	this->cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_CROSSHAIR);
+	SDL_SetCursor(cursor);
+}
+
+//bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
+bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world)
+{
+	
+
+	//this->myProjectileHandler = ProjectileHandler(mesh, material, world, this->getPlayerPosAsGLM());
+
+	//Sets the cursor for the player
+	initiateCursor();
+
 	// Starting entity variables (including hitbox)
 	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_MASS, PLAYER_FRICTION);
 
@@ -26,13 +52,24 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	isHovering = false;
 	isDashing = false;
 
+	// Creating model
+	model = new Model();
+	if (model == nullptr) return false;
+	//if (!model->Start(modelName)) return false;
+
+	this->material = material;
+	model->BuildQuadTexture();
+
+	//vac = new Vacuum();
+	//vac->startVac(nullptr, material2, world, getBody());
+
 	// Setting a self-pointer for collision detection
 	getBody()->SetUserData(this);
 
 	return true;
 }
 
-void Player::Update(GLint deltaT)
+void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 {
 	// Are we currently hovering?
 	//isHovering = false;
@@ -73,6 +110,7 @@ void Player::Update(GLint deltaT)
 	
 	// Updating animation texture
 	updateAnimation(deltaT);
+
 
 	// Correcting texture to hitbox
 	Entity::Update(deltaT);
@@ -293,6 +331,19 @@ glm::vec2 Player::getPlayerPosAsGLM()
 
 	myVec.x = hitbox->getPosition().x;
 	myVec.y = hitbox->getPosition().y;
-
+	//myVec.z = 0.5f;
 	return myVec;
+}
+
+bool Player::addPlayerProjectiles()
+{
+	if (this->nrOfProjectiles >= this->CAP)
+	{
+		return false;
+	}
+	else
+	{
+		this->nrOfProjectiles++;
+		return true;
+	}
 }

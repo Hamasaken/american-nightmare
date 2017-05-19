@@ -11,8 +11,24 @@ bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 
 	hitbox->getBody()->SetUserData(this);
 
-	return false;
+	return true;
 }
+
+//bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World* world, b2Body* player)
+//{
+//	Object::Start(mesh, material);
+//	hitbox = new Hitbox();
+//
+//	//if (hitbox == nullptr) return false;
+//	//if (!hitbox->InitializeHitbox(world))
+//	//	return false;
+//
+//	if (!hitbox->InitializeHitboxVacuum(world, player))
+//
+//		hitbox->getBody()->SetUserData(this);
+//
+//	return true;
+//}
 
 bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World * world, glm::vec2 position, glm::vec3 size, b2BodyType type, b2Shape::Type shapeType, bool fixedRotate, float density, float friction)
 {
@@ -29,6 +45,8 @@ bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	hitbox->getBody()->SetUserData(this);
 
 	return false;
+
+	return true;
 }
 
 void Entity::Stop()

@@ -1,83 +1,42 @@
 #include "Projectile.h"
 
-Projectile::Projectile(b2World *world, GLuint shader)
-{
-	std::string modelPath = MODEL_PATH;
-	std::string texturePath = TEXTURE_PATH;
-	materialManager.AddMaterial("lightmaterial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
-		
-	setShader(shader);
-	Start(nullptr, materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec3(0.5f, 0.5f, 1.f), b2_dynamicBody, b2Shape::e_circle, 1.f, 0.5f);
-	setScale(glm::vec3(0.5f, 0.5f, 1));
+//Projectile::Projectile(b2World *world, GLuint shader, glm::vec2 pos)
+//{
+//	std::string modelPath = MODEL_PATH;
+//	std::string texturePath = TEXTURE_PATH;
+//	materialManager.AddMaterial("lightmaterial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
+//		
+//	setShader(shader);
+//	Start(nullptr, materialManager.getMaterial("lightmaterial"), world, pos, glm::vec3(0.5f, 0.5f, 1.f), b2_dynamicBody, b2Shape::e_circle, false, 0.5f, 0.5f);
+//	setScale(glm::vec3(1.f, 1.f, 1));
+//
+//	//Test on hitbox->initilize
+//	hitbox->InitializeHitbox(world, glm::vec2(pos.x, pos.y), glm::vec2(1.f, 1.f), b2_dynamicBody, b2Shape::e_circle, false, 0.5f, 0.5f, true, false);
+//
+//	this->damage = 10;
+//	this->damageOn = false;
+//	this->marked = false;
+//}
 
-	isFired = false;
+Projectile::Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos)
+{
+	Entity::Start(mesh, material, world);
+
+	this->damage = 10;
+	this->damageOn = false;
+	this->marked = false;
 }
+
+Projectile::Projectile(){}
 
 Projectile::~Projectile()
 {
-
 	hitbox->Stop();
 }
 
-bool Projectile::getIsFired()
-{
-	return isFired;
-}
-
-void Projectile::fireBullet(b2World* world, glm::vec2 position)
-{
-	if (right)
-	{
-		hitbox->InitializeHitbox(world, glm::vec2(position.x + 2, position.y), glm::vec2(0.5f, 0.5f), b2_dynamicBody);
-		hitbox->getBody()->ApplyLinearImpulseToCenter({50000.f, 0 }, true);
-	}
-	if (left)
-	{
-		hitbox->InitializeHitbox(world, glm::vec2(position.x - 2, position.y), glm::vec2(0.5f, 0.5f), b2_dynamicBody);
-		hitbox->getBody()->ApplyLinearImpulseToCenter({ -50000.f, 0 }, true);
-	}
-	if (up)
-	{
-		hitbox->InitializeHitbox(world, glm::vec2(position.x, position.y - 2), glm::vec2(0.5f, 0.5f), b2_dynamicBody);
-		hitbox->getBody()->ApplyLinearImpulseToCenter({ 0, -50000.f }, true);
-	}
-	if (down)
-	{
-		hitbox->InitializeHitbox(world, glm::vec2(position.x, position.y + 2), glm::vec2(0.5f, 0.5f), b2_dynamicBody);
-		hitbox->getBody()->ApplyLinearImpulseToCenter({ 0, 50000.f }, true);
-	}
-
-
-}
-
-void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)
-{
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		right = true;
-		fireBullet(world, position);
-		right = false;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		left = true;
-		fireBullet(world, position);
-		left = false;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{ 
-		up = true;
-		fireBullet(world, position);
-		up = false;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		down = true;
-		fireBullet(world, position);
-		down = false;
-	}
-
-	Entity::Update(deltaT);
+void Projectile::fireBullet(b2World* world, glm::vec2 position, glm::vec2 direction)
+{	
+	hitbox->getBody()->ApplyLinearImpulseToCenter({direction.x * 50000.f, direction.y * 50000.f }, true);
 }
 
 b2Vec2 Projectile::normalize(const b2Vec2& source)
@@ -92,4 +51,44 @@ b2Vec2 Projectile::normalize(const b2Vec2& source)
 	{
 		return b2Vec2(source.x, source.y);
 	}
+}
+
+void Projectile::setDamageOn(bool damageOn)
+{
+	this->damageOn = damageOn;
+}
+
+bool Projectile::getDamageOn()const
+{
+	return this->damageOn;
+}
+
+void Projectile::setmarked(bool marked)
+{
+	this->marked = marked;
+}
+
+bool Projectile::getmarked()const
+{
+	return this->marked;
+}
+
+void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)
+{
+	Entity::Update(deltaT);
+}
+
+//void Projectile::Update(GLint deltaT)
+//{
+//	Entity::Update(deltaT);
+//}
+
+void Projectile::setIsFired(bool isProjectileFired)
+{
+	this->isProjectileFired = isProjectileFired;
+}
+
+bool Projectile::getIsFired()const
+{
+	return this->isProjectileFired;
 }

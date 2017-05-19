@@ -34,6 +34,7 @@ public:
 
 private:
 	float damage;
+	b2Body* getBody();
 };
 
 #endif // !ENEMY_H

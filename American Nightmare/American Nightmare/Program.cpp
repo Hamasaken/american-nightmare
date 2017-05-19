@@ -99,6 +99,14 @@ void Program::StartSDLWindow()
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//glEnable(GL_FRAMEBUFFER_SRGB);				// Gamma correction
+
+
+	////Test for the cursor
+	//SDL_ShowCursor(SDL_ENABLE);
+	//cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_CROSSHAIR);
+	//SDL_SetCursor(cursor);
+
+
 }
 
 void Program::Stop()

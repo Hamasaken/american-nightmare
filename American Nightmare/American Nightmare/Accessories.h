@@ -42,6 +42,7 @@
 // Global variables
 #define GRAVITY 9.82f
 #define GRAVITY_SCALE 2.f
+#define PI 3.14159265359
 
 // TEXT
 #define INGAME_FONT "Steelworks.ttf"

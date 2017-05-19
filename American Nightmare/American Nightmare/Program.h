@@ -62,6 +62,9 @@ private:
 	HWND hwnd;					//< Windowhandle from SDL window
 	glm::vec2 screenSize;		//< Screensize in (x,y)
 	int posX, posY;				//< Screen Position in (x,y)
+
+
+	/*SDL_Cursor* cursor;*/
 };
 
 #endif // !PROGRAM
