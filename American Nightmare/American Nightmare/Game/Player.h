@@ -102,8 +102,7 @@ public:
 	void Update(GLint deltaT, b2World* world, glm::vec2 pos);
 	//bool Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
 
-	bool addPlayerProjectiles();
-
+	
 	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash);
 	void TakeDamage(float dmg);
 
@@ -115,10 +114,8 @@ public:
 	glm::vec2 getPlayerPosAsGLM();
 	//Vacuum* getVac();
 
-	glm::vec2 getPlayerPosAsGLM();
-
+	
 	bool addPlayerProjectiles();
 	bool getCanShoot()const;
-	
 };
 #endif // !PLAYER_H
