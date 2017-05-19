@@ -14,7 +14,7 @@ Animation::Animation(const Animation& other) {}
 
 Animation::~Animation() {}
 
-void Animation::AddAnimation(const MaterialManager::Material* material, GLuint normalMap, std::string animationFile)
+void Animation::AddAnimation(GLuint textureID, GLuint normalMap, std::string animationFile)
 {
 	AnimationSegment tempAnimation;
 
@@ -28,7 +28,7 @@ void Animation::AddAnimation(const MaterialManager::Material* material, GLuint n
 		return;
 	}
 
-	tempAnimation.material = material;
+	tempAnimation.textureID = textureID;
 	tempAnimation.normalID = normalMap;
 
 	// Adding animation to list
@@ -160,7 +160,7 @@ void Animation::updateAnimation(GLfloat deltaT)
 
 Animation::FrameUV* Animation::getCurrentFrameUV() { return &currentFrameUV; }
 
-GLuint Animation::getAnimationTexture() const { return currentAnimation->material->getTextureID(); }
+GLuint Animation::getAnimationTexture() const { return currentAnimation->textureID; }
 GLuint Animation::getAnimationNormal() const { return currentAnimation->normalID; }
 
 bool Animation::isDirectionRight() { return directionIsRight; }
