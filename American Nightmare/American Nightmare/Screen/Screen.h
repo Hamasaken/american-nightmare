@@ -11,6 +11,7 @@
 #include "../SoundManager.h"
 #include "../Game/Particle/ParticleManager.h"
 #include "../Game/GUI/Button.h"
+#include "../Game/GUI/Bar.h"
 
 class Screen
 {

@@ -15,6 +15,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	RebindKeys(KEY_LEFT, KEY_RIGHT, KEY_JUMP, KEY_HOVER, KEY_DASH);
 
 	// Setting starting variables
+	hp = PLAYER_HP;
 	position = glm::vec3(0, 20, 0);
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_SIZE_Z);
@@ -207,6 +208,11 @@ b2Body* Player::getBody()
 bool Player::getIsDashing()
 {
 	return isDashing;
+}
+
+float& Player::getHP()
+{
+	return hp;
 }
 
 bool Player::getIsHovering()

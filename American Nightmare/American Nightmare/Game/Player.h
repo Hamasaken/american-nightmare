@@ -23,6 +23,7 @@
 #define PLAYER_DASH_VEL 22500.f
 #define PLAYER_DASH_CD 1000.f
 #define PLAYER_HOVER_POWER 3500.f
+#define PLAYER_HP 6
 
 // XBOX CONTROLLER
 #define CONTROLLER_ON true
@@ -53,6 +54,7 @@ public:
 
 	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash);
 
+	float& getHP();
 	bool getIsHovering();
 	bool getIsDashing();
 	b2Body* getBody();
@@ -71,6 +73,7 @@ private:
 	void InputKeyboard();		//< Key input
 	void InputController();		//< Xbox One controller input
 
+	float hp;
 	GLfloat dashCooldown;		//< Dash ability cooldown
 	bool hasJumped;				//< If the player have jumped or not
 	bool hasDashed;				//< If the player have dashed or not

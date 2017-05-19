@@ -165,6 +165,7 @@
     <ClCompile Include="Game\Animation.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\Entity.cpp" />
+    <ClCompile Include="Game\GUI\Bar.cpp" />
     <ClCompile Include="Game\GUI\Button.cpp" />
     <ClCompile Include="Game\GUI\GUIManager.cpp" />
     <ClCompile Include="Game\GUI\Text.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="Game\Animation.h" />
     <ClInclude Include="Game\Camera.h" />
     <ClInclude Include="Game\Entity.h" />
+    <ClInclude Include="Game\GUI\Bar.h" />
     <ClInclude Include="Game\GUI\Button.h" />
     <ClInclude Include="Game\GUI\GUIManager.h" />
     <ClInclude Include="Game\GUI\Text.h" />
