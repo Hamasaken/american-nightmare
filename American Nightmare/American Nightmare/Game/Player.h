@@ -23,6 +23,7 @@
 #define PLAYER_DASH_VEL 5000.f
 #define PLAYER_DASH_CD 800.f
 #define PLAYER_HOVER_POWER 3500.f
+#define PLAYER_HP 6
 #define PLAYER_POWER_MAX 100.f
 #define PLAYER_POWER_RECHARGE 25.f
 #define PLAYER_POWER_COST_HOVER 60.f
@@ -56,7 +57,9 @@ public:
 	void Update(GLint deltaT);
 
 	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash);
+	void TakeDamage(float dmg);
 
+	float& getHP();
 	bool getIsHovering();
 	bool getIsDashing();
 	b2Body* getBody();
@@ -75,6 +78,8 @@ private:
 	void InputKeyboard(GLint deltaT);		//< Key input
 	void InputController(GLint deltaT);		//< Xbox One controller input
 
+	bool isDead;				//< If the player is dead or not
+	float hp;					//< The amount of hp the player have
 	GLfloat powerMeter;			//< Players resource for dashing and hovering etc
 	GLfloat dashCooldown;		//< Dash ability cooldown
 	bool hasJumped;				//< If the player have jumped or not

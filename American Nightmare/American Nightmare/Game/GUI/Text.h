@@ -4,7 +4,7 @@
 #include "../Object.h"
 #include "SDL_ttf.h"
 
-struct Text : Object
+struct Text : public Object
 {
 public:
 	Text();

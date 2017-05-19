@@ -111,8 +111,9 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager = new GUIManager();
 	if (uiManager == nullptr) return false;
 	if (!uiManager->Start(screenSize, screenPosition)) return false;
-	uiManager->AddButton(GUIManager::OK, glm::vec3(0, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "hp: 3/3", FONT_PATH INGAME_FONT, 20.f, glm::vec4(0.875f));
 	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.89f, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Pause", FONT_PATH INGAME_FONT, 17.5f, glm::vec4(0.875f));
+	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(0, -0.97, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"));
+	uiManager->AddText(glm::vec3(0, -0.97, 0), 30.f, "Health", FONT_PATH INGAME_FONT);
 	uiManager->setAlpha(1.f);
 	uiManager->setShader(shaderManager->getShader("texture"));
 	uiManager->setInstantCenter(glm::vec2(0, 0));
@@ -135,7 +136,7 @@ void ScreenGame::SetStartVariables()
 	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "Level2.anl", ARCHIVE_PATH "Assets2.ana");
 
 	// Adding shadow
-	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, glm::vec2(60, 30), -30.f, 60);
+	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], screenSize, glm::vec2(60, 30), 5.f, 40);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, glm::vec2(60, 30), -30.f, 50);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, glm::vec2(60, 30), -30.f, 50);
 	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[1], glm::vec2(256, 256), 45, 0.1f);
@@ -223,6 +224,11 @@ void ScreenGame::Draw()
 			DrawObjectGUI(buttons[0][i].first, shaderManager);
 			if (buttons[0][i].first->getText()) DrawObjectGUI(buttons[0][i].first->getText(), shaderManager);
 		}
+
+		std::vector<Bar*>* bars = uiManager->getBarList();
+		for (int i = 0; i < bars->size(); i++)
+			DrawObjectGUI(bars[0][i], shaderManager);
+
 		std::vector<Text*>* txts = uiManager->getTextList();
 		for (int i = 0; i < txts->size(); i++)
 			DrawObjectGUI(txts[0][i], shaderManager);
@@ -404,6 +410,9 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 			btn->setPressed(false);
 		}
 	}
+	std::vector<Bar*>* bars = uiManager->getBarList();
+	for (int i = 0; i < bars->size(); i++)
+		bars[0][i]->Update(deltaT);
 
 	// Check if user is pausing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P)) Pause();

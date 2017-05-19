@@ -8,7 +8,7 @@
 #define BTN_ALPHA_PRESSED 0.25f
 #define BTN_ALPHA_NORMAL 1.f
 
-struct Button : Object
+struct Button : public Object
 {
 public:
 	// Different states of the button
