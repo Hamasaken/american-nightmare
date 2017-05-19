@@ -147,11 +147,13 @@ void SoundManager::mute()
 		pauseMusic();
 		this->volumeMusic = 0;
 		this->volumeEffect = 0;
+		listener.setGlobalVolume(0);
 	}
 	else
 	{
 		this->volumeMusic = VOLUME_MUSIC;
 		this->volumeEffect = VOLUME_SFX;
+		listener.setGlobalVolume(100);
 		continueMusic();
 	}
 }
