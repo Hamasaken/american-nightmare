@@ -93,6 +93,8 @@ void GUIManager::setAlpha(float alpha)
 		button.first->setAlpha(alpha);
 	for (Text* text : texts)
 		text->setColor(glm::vec4(glm::vec3(text->getColor()), alpha));
+	for (Bar* bar : bars)
+		bar->setAlpha(alpha);
 }
 
 void GUIManager::setScreenPosition(glm::vec2 screenPosition) { this->screenPosition = screenPosition; }

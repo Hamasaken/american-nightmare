@@ -37,8 +37,11 @@ public:
 	// Set & Get functions
 	glm::vec3 getStartPosition();
 	int getProcent();
+	float getAlpha();
+	void setAlpha(float alpha);
 
 private:
+	float alpha;			//< The alpha value of this bar
 	float* value;			//< The value this bar is looking at with the actual value
 	float maxValue;			//< The value this bar is looking at but the 100% value
 	float procent;			//< From 0% --> 100%
