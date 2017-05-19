@@ -27,9 +27,8 @@ void Player::initiateCursor()
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world)
 {
-	
-
-	//this->myProjectileHandler = ProjectileHandler(mesh, material, world, this->getPlayerPosAsGLM());
+	//Variables for handeling the "gun"
+	this->nrOfProjectiles = 0;
 
 	//Sets the cursor for the player
 	initiateCursor();
@@ -271,6 +270,18 @@ bool Player::addPlayerProjectiles()
 	else
 	{
 		this->nrOfProjectiles++;
+		return true;
+	}
+}
+
+bool Player::getCanShoot()const
+{
+	if (this->nrOfProjectiles >= this->CAP)
+	{
+		return false;
+	}
+	else
+	{
 		return true;
 	}
 }

@@ -93,14 +93,14 @@ void LevelManager::Stop()
 	}
 
 	// Unloads every object in map
-	for (Projectile* projs : projectiles)
+	/*for (ProjectileHandler* projs : myPH)
 	{
 		if (projs != nullptr)
 		{
 			delete projs;
 			projs = nullptr;
 		}
-	}
+	}*/
 
 	// Unloads the map objects
 	StopMap();
@@ -198,15 +198,15 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 
 	 //Making some boxes to reload with
-	for (int i = 0; i < 10; i++)
+	/*for (int i = 0; i < 10; i++)
 	{
 		Projectile* moveble = new Projectile(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
 		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
 		moveble->setShader(shader);
 		projectiles.push_back(moveble);
-	}
+	}*/
 
-
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
 	// Loading temp level
 	//LoadTempLevel(shader);
 
@@ -566,9 +566,7 @@ void LevelManager::Update(GLint deltaT)
 	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
 
 	//Update Projectile
-	//myPH->Update(deltaT, world);
-
-	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
+	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
 	
 	// Updating enemies
 	enemy->Update(deltaT, player->getBody()->GetPosition());
@@ -577,10 +575,13 @@ void LevelManager::Update(GLint deltaT)
 	world->Step(1 / 60.f, 10, 20);
 
 	// Updating every object on map
-	deleteProjects(world);
+	//deleteProjects(world);
 
-	 for (Projectile* proj : projectiles)
-		 proj->Update(deltaT, world, player->getPlayerPosAsGLM());
+	 //for (Projectile* proj : projectiles)
+		 //proj->Update(deltaT, world, player->getPlayerPosAsGLM());
+
+	/* for (Projectile* proj : projectiles)
+		 proj->Update(deltaT, world, player->getPlayerPosAsGLM());*/
 
 	for (Object* object : map)
 		object->Update(deltaT);
@@ -685,32 +686,32 @@ std::vector<Object*> LevelManager::getMap()
 
 std::vector<Projectile*> LevelManager::getProjectiles()
 {
-	return this->projectiles;
+	return this->myPH->getBullets();
 }
 
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
 Player* LevelManager::getPlayer() { return player; }
 Enemy* LevelManager::getEnemy() { return enemy; }
 
-void LevelManager::deleteProjects(b2World* world)
-{
-	cout << this->projectiles.size() << endl;
-	for (int i = 0; i < this->projectiles.size(); i++)
-	{
-		if (this->projectiles[i]->getmarked() == true)
-		{
-			Projectile* temp = this->projectiles[i];
-			//temp = this->projectiles[i];
-			this->projectiles[i] = this->projectiles.back();
-			this->projectiles.back() = temp;
-			//this->projectiles.back()->~Projectile();
-			world->DestroyBody(this->projectiles.back()->getHitbox()->getBody());
-			this->projectiles.pop_back();
-
-			//this->projectiles.back()
-		}
-	}
-}
+//void LevelManager::deleteProjects(b2World* world)
+//{
+//	cout << this->projectiles.size() << endl;
+//	for (int i = 0; i < this->projectiles.size(); i++)
+//	{
+//		if (this->projectiles[i]->getmarked() == true)
+//		{
+//			Projectile* temp = this->projectiles[i];
+//			//temp = this->projectiles[i];
+//			this->projectiles[i] = this->projectiles.back();
+//			this->projectiles.back() = temp;
+//			//this->projectiles.back()->~Projectile();
+//			world->DestroyBody(this->projectiles.back()->getHitbox()->getBody());
+//			this->projectiles.pop_back();
+//
+//			//this->projectiles.back()
+//		}
+//	}
+//}
 
 //ProjectileHandler* LevelManager::getProjectiles() { return myPH; }
 //Projectile* LevelManager::getProjectile() { return moveble; }

@@ -50,7 +50,7 @@ private:
 	
 	//Variables for handling projectile/Weapon
 	int nrOfProjectiles;
-	int CAP;
+	const int CAP = 10;
 
 
 	//variable & function for cursor
@@ -105,7 +105,7 @@ public:
 	glm::vec2 getPlayerPosAsGLM();
 
 	bool addPlayerProjectiles();
-
+	bool getCanShoot()const;
 	
 };
 #endif // !PLAYER_H

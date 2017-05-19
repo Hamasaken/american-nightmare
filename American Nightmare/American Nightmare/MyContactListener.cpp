@@ -37,18 +37,11 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			//player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
 
 			soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
-			myProjectile->setmarked(true);
 			
-			
-			/*if (player->addPlayerProjectiles() == true)
+			if (player->addPlayerProjectiles() == true)
 			{
-
-			player->setCheckForProjectilePickUp(true);
+				myProjectile->setmarked(true);
 			}
-			else
-			{
-			player->setCheckForProjectilePickUp(false);
-			}*/
 		}
 	}
 
