@@ -13,12 +13,20 @@ public:
 		GLuint shadowMap;
 		GLuint shadowFBO;
 		glm::mat4 lightSpaceMatrix;
+		glm::vec3 offset;
 		glm::vec4 lightDirection;
 		glm::vec2 resolution;
 
-		DirectionalShadowMap() : shadowMap(-1), shadowFBO(-1), lightSpaceMatrix(glm::mat4()), lightDirection(glm::vec4()), resolution(glm::vec2()) {}
-		DirectionalShadowMap(GLuint shadowMap, GLuint shadowFBO, glm::mat4 lightSpaceMatrix, glm::vec4 lightDirection, glm::vec2 resolution) : shadowMap(shadowMap), shadowFBO(shadowFBO), lightSpaceMatrix(lightSpaceMatrix), lightDirection(lightDirection), resolution(resolution) {}
-		DirectionalShadowMap(const DirectionalShadowMap& shadowMap) : shadowMap(shadowMap.shadowMap), shadowFBO(shadowMap.shadowFBO), lightSpaceMatrix(shadowMap.lightSpaceMatrix), lightDirection(shadowMap.lightDirection), resolution(shadowMap.resolution) {}
+		DirectionalShadowMap() : shadowMap(-1), shadowFBO(-1), lightSpaceMatrix(glm::mat4()), offset(glm::vec3(0)), lightDirection(glm::vec4()), resolution(glm::vec2()) {}
+		DirectionalShadowMap(GLuint shadowMap, GLuint shadowFBO, glm::mat4 lightSpaceMatrix, glm::vec3 offset, glm::vec4 lightDirection, glm::vec2 resolution) : shadowMap(shadowMap), shadowFBO(shadowFBO), lightSpaceMatrix(lightSpaceMatrix), offset(offset), lightDirection(lightDirection), resolution(resolution) {}
+		DirectionalShadowMap(const DirectionalShadowMap& shadowMap) : shadowMap(shadowMap.shadowMap), shadowFBO(shadowMap.shadowFBO), lightSpaceMatrix(shadowMap.lightSpaceMatrix), offset(shadowMap.offset), lightDirection(shadowMap.lightDirection), resolution(shadowMap.resolution) {}
+
+		void UpdateLightSpace(glm::vec3 position, glm::vec2 size, GLfloat nearPlane, GLfloat farPlane)
+		{
+			glm::mat4 lightProjection = glm::ortho(-size.x, size.x, -size.y, size.y, nearPlane, farPlane);
+			glm::mat4 lightView = glm::lookAt(position + offset, position + offset + glm::vec3(lightDirection), glm::vec3(0.f, 1.f, 0.f));
+			lightSpaceMatrix = lightProjection * lightView;
+		}
 	};
 
 	struct PointShadowMap
@@ -42,7 +50,7 @@ public:
 	void Start(GLuint directionalShadowShader, GLuint directionalShadowShaderTr, GLuint pointShadowShader, GLuint pointShadowShaderTr);
 	void Stop();
 
-	void AddDirectional(LightManager::DirectionalLight* light, glm::vec2 resolution, glm::vec2 size, GLfloat nearPlane, GLfloat farPlane);
+	void AddDirectional(LightManager::DirectionalLight* light, glm::vec3 offset, glm::vec2 resolution, glm::vec2 size, GLfloat nearPlane, GLfloat farPlane);
 	void AddPoint(LightManager::PointLight* light, glm::vec2 resolution, GLfloat fov, GLfloat nearPlane);
 
 	std::vector<ShadowManager::DirectionalShadowMap*> getDirectionalShadowMapList() const;
