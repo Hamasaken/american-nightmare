@@ -7,13 +7,14 @@ LevelManager::LevelManager()
 	this->particleManager = nullptr;
 	this->soundManager = nullptr;
 	this->quadTree = nullptr;
+	this->entityManager = nullptr;
 }
 
 LevelManager::LevelManager(const LevelManager & other) { }
 
 LevelManager::~LevelManager() { }
 
-bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager)
+bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager)
 {
 	// Getting parameters
 	this->materialManager = materialManager;
@@ -48,21 +49,23 @@ bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, 
 	player->AddAnimation(materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
 
 	////////////////////////////////////////////////////////////
-	// Creating the Enemy object
+	// Creating the Entity Manager (Enemies/Trash/etc)
 	////////////////////////////////////////////////////////////
-	enemy = new Enemy();
-	if (enemy == nullptr) return false;
-	if (!enemy->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), world))
-		return false;
-	enemy->setShader(playerShader);
-	enemy->AddAnimation(materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
+	entityManager = new EntityManager();
+	if (entityManager == nullptr) return false;
+	if (!entityManager->Start(world, screenSize)) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::zombie1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::zombie2, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::skater1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::flying1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::trash, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"))) return false;
 
 	////////////////////////////////////////////////////////////
 	// Creating the Quad Tree Object
 	////////////////////////////////////////////////////////////
 	quadTree = new QuadTree();
 	if (quadTree == nullptr) return false;
-	if (!quadTree->Start(glm::vec2(1280, 720))) return false;
+	if (!quadTree->Start(screenSize)) return false;
 
 	return true;
 }
@@ -75,13 +78,6 @@ void LevelManager::Stop()
 		player->Stop();
 		delete player;
 		player = nullptr;
-	}
-
-	if (enemy != nullptr)
-	{
-		enemy->Stop();
-		delete enemy;
-		enemy = nullptr;
 	}
 
 	// Deleting quadtree
@@ -100,6 +96,14 @@ void LevelManager::Stop()
 			delete projs;
 			projs = nullptr;
 		}
+	}
+
+	// Unloads every entity on map
+	if (entityManager != nullptr)
+	{
+		entityManager->Stop();
+		delete entityManager;
+		entityManager = nullptr;
 	}
 
 	// Unloads the map objects
@@ -170,8 +174,8 @@ void LevelManager::Update(GLint deltaT)
 
 	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
 
-	// Updating enemies
-	enemy->Update(deltaT, player->getBody()->GetPosition());
+	// Updating every entity
+	entityManager->Update(deltaT, player->getPosition());
 
 	// Updating physics
 	world->Step(1 / 60.f, 10, 20);
@@ -214,7 +218,7 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	LoadLevelMeshes(levelFile.meshes, shader);
 	LoadLevelLights(levelFile.lights);
 	LoadLevelHitboxes(levelFile.hitboxes);
-	LoadLevelSpawners(levelFile.spawners, shader);
+	LoadLevelSpawners(levelFile.spawners);
 	LoadLevelTriggers(levelFile.triggers);
 	LoadLevelEffects(levelFile.effects);
 	
@@ -353,23 +357,15 @@ void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 	}
 }
 
-void LevelManager::LoadLevelSpawners(std::vector<LSpawner> spawner, GLuint shader)
+void LevelManager::LoadLevelSpawners(std::vector<LSpawner> spawner)
 {
 	////////////////////////////////////////////////////////////
-	// Loading Spawner
+	// Loading Enemies / Trash / etc
 	////////////////////////////////////////////////////////////
 	for (int i = 0; i < spawner.size(); i++)
 	{
 		LSpawner spawn = spawner[i];
-
-		switch (spawn.spawnerType)
-		{
-		case ESpawnerType::flying1:		break;
-		case ESpawnerType::skater1:		break;
-		case ESpawnerType::trash:		break;
-		case ESpawnerType::zombie1:		break;
-		case ESpawnerType::zombie2:		break;
-		}
+		entityManager->SpawnEntity(spawn.spawnerType, arrayToVec2(spawn.position));
 	}
 }
 
@@ -688,8 +684,8 @@ std::vector<Projectile*> LevelManager::getProjectiles()
 }
 
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
+EntityManager* LevelManager::getEntityManager() { return entityManager; }
 Player* LevelManager::getPlayer() { return player; }
-Enemy* LevelManager::getEnemy() { return enemy; }
 
 void LevelManager::deleteProjects(b2World* world)
 {

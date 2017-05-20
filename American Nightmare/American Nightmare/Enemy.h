@@ -7,11 +7,11 @@
 #define ENEMY_SIZE_Y 2.f
 #define ENEMY_SIZE_Z 1.f
 #define ENEMY_MASS 20.f
-#define ENEMY_FRICTION 0.5f
-#define ENEMY_VEL_X 250.f  //20000.f
+#define ENEMY_FRICTION 0.25f
+#define ENEMY_VEL_X 2500.f  //20000.f
 #define ENEMY_VEL_Y 50000.f
 
-#define ENEMY_MAX_VEL_X 2.5f
+#define ENEMY_MAX_VEL_X 4.25f
 #define ENEMY_MAX_VEL_Y 20.f
 
 class Enemy: public Animation

@@ -15,6 +15,7 @@
 #include "../ANNIE/LevelFile.h"
 #include "MeshManager.h"
 #include "QuadTree.h"
+#include "EntityManager.h"
 
 class LevelManager
 {
@@ -25,13 +26,15 @@ public:
 
 	////////////////////////////////////////////////////////////
 	// \brief Starts class, gets the openGL ptr
+	// \param screenSize For optimazition
 	// \param playerShader The specific shader for the player
+	// \param mapShader The specific shader for the whole map
 	// \param materialManager ptr to all the materials
 	// \param meshManager ptr to all the meshes
 	// \param particleManager ptr to the particle manager
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(GLuint playerShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager);
+	bool Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -67,8 +70,8 @@ public:
 	std::vector<Projectile*> getProjectiles();
 
 	const LightManager* getLightManager() const;
+	EntityManager* getEntityManager();
 	Player* getPlayer();
-	Enemy* getEnemy();
 	//Projectile* getProjectile();
 	//ProjectileHandler* getProjectiles();
 
@@ -91,7 +94,7 @@ private:
 	void LoadLevelMeshes(std::vector<LMesh> meshes, GLuint shader);
 	void LoadLevelHitboxes(std::vector<LHitbox> hitboxes);
 	void LoadLevelLights(std::vector<LLight> lights);
-	void LoadLevelSpawners(std::vector<LSpawner> spawner, GLuint shader);
+	void LoadLevelSpawners(std::vector<LSpawner> spawner);
 	void LoadLevelTriggers(std::vector<LTrigger> triggers);
 	void LoadLevelEffects(std::vector<LEffect> effects);
 
@@ -101,11 +104,9 @@ private:
 	std::vector<Projectile*> projectiles;
 	Player* player;				//< The player object
 
-	Enemy* enemy;				//< A Enemy object
-
 	AArchiveHandler archive;
 	LLevelHandler levelFile;
-
+	EntityManager* entityManager;
 	MeshManager* meshManager;
 	ParticleManager* particleManager;
 	SoundManager* soundManager;

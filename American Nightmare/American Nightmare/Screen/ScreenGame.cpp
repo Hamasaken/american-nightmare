@@ -91,7 +91,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	////////////////////////////////////////////////////////////
 	levelManager = new LevelManager();
 	if (levelManager == nullptr) return false;
-	if (!levelManager->Start(shaderManager->getShader("texture_animation_normal"), materialManager, meshManager, particleManager, soundManager))
+	if (!levelManager->Start(screenSize, shaderManager->getShader("texture_animation_normal"), shaderManager->getShader("deferred"), materialManager, meshManager, particleManager, soundManager))
 		return false;
 
 	////////////////////////////////////////////////////////////
@@ -214,8 +214,9 @@ void ScreenGame::Draw()
 	// Drawing player
 	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
-	// Draw Enemy
-	DrawObjectAnimation(levelManager->getEnemy(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
+	// Draw Enemies
+	for (Enemy* enemy : *levelManager->getEntityManager()->getEnemyList())
+		DrawObjectAnimation(enemy, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
 	// Drawing particles
 	for (ParticleEmitter* emitter : *particleManager->getEmitters())
@@ -303,7 +304,11 @@ void ScreenGame::DrawShadowMaps()
 		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
 
 		DrawObjectDirShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
-		DrawObjectDirShadowMapTransparent(levelManager->getEnemy(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+
+		// DRawing enemies
+		for (Enemy* enemy : *levelManager->getEntityManager()->getEnemyList())
+			DrawObjectDirShadowMapTransparent(enemy, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+
 
 		// Unbind FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -334,7 +339,9 @@ void ScreenGame::DrawShadowMaps()
 		//shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
 
 		//DrawObjectDirShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
-		//DrawObjectDirShadowMapTransparent(levelManager->getEnemy(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+//		for (Enemy* enemy : *levelManager->getEntityManager()->getEnemyList())
+//			DrawObjectDirShadowMapTransparent(enemy, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+
 
 		// Unbind FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
