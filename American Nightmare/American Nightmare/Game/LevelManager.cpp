@@ -8,22 +8,24 @@ LevelManager::LevelManager()
 	this->soundManager = nullptr;
 	this->quadTree = nullptr;
 	this->entityManager = nullptr;
+	this->camera = nullptr;
 }
 
 LevelManager::LevelManager(const LevelManager & other) { }
 
 LevelManager::~LevelManager() { }
 
-bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager)
+bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
 	// Getting parameters
 	this->materialManager = materialManager;
 	this->meshManager = meshManager;
 	this->particleManager = particleManager;
 	this->soundManager = soundManager;
+	this->camera = camera;
 
 	// Starting contact manager
-	contactManager.Start(particleManager, soundManager);
+	contactManager.Start(particleManager, soundManager, camera);
 
 	// Starting world 
 	world = new b2World(b2Vec2(NULL, GRAVITY * GRAVITY_SCALE));
@@ -125,6 +127,7 @@ void LevelManager::Stop()
 	meshManager = nullptr;
 	particleManager = nullptr;
 	soundManager = nullptr;
+	camera = nullptr;
 }
 
 void LevelManager::StopMap()

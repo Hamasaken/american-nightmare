@@ -91,7 +91,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	////////////////////////////////////////////////////////////
 	levelManager = new LevelManager();
 	if (levelManager == nullptr) return false;
-	if (!levelManager->Start(screenSize, shaderManager->getShader("texture_animation_normal"), shaderManager->getShader("deferred"), materialManager, meshManager, particleManager, soundManager))
+	if (!levelManager->Start(screenSize, shaderManager->getShader("texture_animation_normal"), shaderManager->getShader("deferred"), materialManager, meshManager, particleManager, soundManager, camera))
 		return false;
 
 	////////////////////////////////////////////////////////////

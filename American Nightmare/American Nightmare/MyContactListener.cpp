@@ -1,10 +1,4 @@
 #include "MyContactListener.h"
-#include "Game\Object.h"
-#include "Game\Entity.h"
-#include "Game\Player.h"
-#include "Enemy.h"
-#include "vacuum.h"
-#include "Projectile.h"
 
 MyContactListener::MyContactListener() { }
 
@@ -14,11 +8,12 @@ MyContactListener::~MyContactListener()
 	soundManager = nullptr;
 }
 
-void MyContactListener::Start(ParticleManager* particleManager, SoundManager* soundManager)
+void MyContactListener::Start(ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
 	// Getting different managers parameters
 	this->particleManager = particleManager;
 	this->soundManager = soundManager;
+	this->camera = camera;
 }
 
 void MyContactListener::BeginContact(b2Contact* contact)
@@ -32,6 +27,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		Enemy* enemy = dynamic_cast<Enemy*>(bodyB);
 		if (enemy)
 		{
+			camera->screenShake(500.f, 0.5f);
 			particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f)); // temp blood effect
 			soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
 			player->TakeDamage(enemy->getDamage());

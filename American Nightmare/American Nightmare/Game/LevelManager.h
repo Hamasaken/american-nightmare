@@ -34,7 +34,7 @@ public:
 	// \param particleManager ptr to the particle manager
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager);
+	bool Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -115,6 +115,7 @@ private:
 	b2World *world;
 	MyContactListener contactManager;
 	QuadTree* quadTree;
+	Camera* camera;
 
 	//ProjectileHandler* myPH;
 	//ProjectileHandler* myPH;
