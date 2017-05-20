@@ -1,6 +1,9 @@
 #include "Camera.h"
 
-Camera::Camera() { }
+Camera::Camera() 
+{
+	screenShakeActive = false;
+}
 
 Camera::Camera(const Camera& other) { }
 
@@ -11,6 +14,29 @@ void Camera::setPosition(glm::vec3 position) { this->position = position; }
 void Camera::smoothToPosition(glm::vec3 position)
 {
 	this->position += (position - this->position) * CAMERA_SPEED;
+}
+
+void Camera::Update(float deltaT)
+{
+	// Screenshake
+	if (screenShakeActive)
+	{
+		screenShakeTime -= deltaT;
+		if (screenShakeTime < NULL) 
+			screenShakeActive = false;
+
+		position += randBetweenF(-0.1f * screenShakePower, 0.1f * screenShakePower);
+	}
+
+	// Updating viewMatrix
+	buildViewMatrix();
+}
+
+void Camera::screenShake(float time, float power)
+{
+	screenShakeActive = true;
+	screenShakeTime = time;
+	screenShakePower = power;
 }
 
 glm::mat4 Camera::getViewMatrix() { return viewMatrix; }

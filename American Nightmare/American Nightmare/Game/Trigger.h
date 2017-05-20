@@ -15,6 +15,7 @@ public:
 		SFX,			// sound effect
 		SPAWN,			// spawns an entity
 		SAVE,			// save station
+		POSTER,			// unlocks a poster
 		CUTSCENE		// plays an cutscene
 	};
 	TriggerType triggerType;	//< The type of trigger this is

@@ -420,9 +420,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	// Moving the camera to follow player object
 	camera->smoothToPosition(glm::vec3(levelManager->getPlayer()->getPosition().x, levelManager->getPlayer()->getPosition().y, camera->getPosition().z));
-
-	// Building a new camera view matrix
-	camera->buildViewMatrix();
+	camera->Update(deltaT);
 
 	// Updating UI presses
 	uiManager->Update(deltaT);

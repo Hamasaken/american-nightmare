@@ -186,9 +186,6 @@ void LevelManager::Update(GLint deltaT)
 	for (Projectile* proj : projectiles)
 		proj->Update(deltaT, world, player->getPlayerPosAsGLM());
 
-	for (Object* object : map)
-		object->Update(deltaT);
-
 	// Updating triggers and checking for collisions
 	for (Trigger* trigger : triggers)
 		if (!trigger->getIsTriggered())
@@ -382,10 +379,10 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		Trigger::TriggerType outTriggerType;
 		switch (trigger.triggerType)
 		{
-		case ETriggerType::door:		outTriggerType = Trigger::EFFECT; break;
+		case ETriggerType::door:		outTriggerType = Trigger::DOOR; break;
 		case ETriggerType::deathZone:	outTriggerType = Trigger::EFFECT; break;
 		case ETriggerType::garbageBin:	outTriggerType = Trigger::EFFECT; break;
-		case ETriggerType::poster:		outTriggerType = Trigger::EFFECT; break; 
+		case ETriggerType::poster:		outTriggerType = Trigger::POSTER; break; 
 		}
 
 		LHitbox hitbox = triggers[i].hitbox;
@@ -393,6 +390,8 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		
 		// Adding trigger to vector
 		this->triggers.push_back(outTrigger);
+
+		// Adding a constant smoke on trigger for testing
 		particleManager->EffectConstantSmoke(glm::vec3(outTrigger->getPosition(), 0.f), materialManager->getTextureID("smoketexture"), 60);
 	}
 
@@ -409,13 +408,13 @@ void LevelManager::LoadLevelEffects(std::vector<LEffect> effects)
 		switch (effect.effectType)
 		{
 		case EEffectType::smoke: 
-		//	particleManager->EffectSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]));
+			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]), materialManager->getTextureID("smoketexture"));
 			break;
 		case EEffectType::dust:
-		//	particleManager->EffectDust(glm::vec3(effect.position[0], effect.position[1], effect.position[2])); 
+			particleManager->EffectLightDust(glm::vec3(effect.position[0], effect.position[1], effect.position[2]));
 			break;
 		case EEffectType::steam:
-		//	particleManager->EffectSteam(glm::vec3(effect.position[0], effect.position[1], effect.position[2]));
+			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]), materialManager->getTextureID("smoketexture"));
 			break;
 		}
 	}
