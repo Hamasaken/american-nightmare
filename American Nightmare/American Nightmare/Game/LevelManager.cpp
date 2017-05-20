@@ -60,7 +60,7 @@ bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapSh
 	if (!entityManager->AddEntityBoard(ESpawnerType::zombie2, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::skater1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::flying1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt")) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::trash, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"))) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::trash, mapShader, meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"))) return false;
 
 	////////////////////////////////////////////////////////////
 	// Creating the Quad Tree Object

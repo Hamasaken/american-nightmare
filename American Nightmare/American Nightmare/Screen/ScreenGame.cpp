@@ -176,12 +176,17 @@ void ScreenGame::Draw()
 	for (Object* object : levelManager->getMap())
 		DrawObjectGeometryPass(object, shaderManager);
 
+	// Drawing movable entities
+	for (Entity* entity : *levelManager->getEntityManager()->getEntityList())
+		DrawObjectGeometryPass(entity, shaderManager);
+
 	////TEST
 	//for(Projectile* proj : levelManager->getProj())
 	//	DrawObjectGeometryPass(proj, shaderManager);
 
 	for (Projectile* projectiles : levelManager->getProjectiles())
 		DrawObjectGeometryPass(projectiles, shaderManager);
+
 	//TEST
 	//for(Projectile* proj : levelManager->getProj())
 	//	DrawObjectGeometryPass(proj, shaderManager);
@@ -295,10 +300,19 @@ void ScreenGame::DrawShadowMaps()
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		glCullFace(GL_FRONT);
+		
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
 			DrawObjectDirShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+	
 		glCullFace(GL_BACK);
+
+		// Drawing movable entities
+		for (Entity* entity : *levelManager->getEntityManager()->getEntityList())
+			DrawObjectDirShadowMap(entity, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+
+		for (Projectile* projectiles : levelManager->getProjectiles())
+			DrawObjectDirShadowMap(projectiles, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
 		// Set shader for transparent objects
 		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
@@ -334,6 +348,14 @@ void ScreenGame::DrawShadowMaps()
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
 			DrawObjectPointShadowMap(object, shaderManager, shadowManager.getPointShadowMapList()[i]);
+
+		// Drawing movable entities
+		for (Entity* entity : *levelManager->getEntityManager()->getEntityList())
+			DrawObjectPointShadowMap(entity, shaderManager, shadowManager.getPointShadowMapList()[i]);
+
+		for (Projectile* projectiles : levelManager->getProjectiles())
+			DrawObjectPointShadowMap(projectiles, shaderManager, shadowManager.getPointShadowMapList()[i]);
+
 
 		// Set shader for transparent objects
 		//shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());

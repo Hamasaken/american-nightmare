@@ -78,6 +78,7 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 		{
 			Entity* e = new Entity();
 			e->Start(board.mesh, board.material, world);
+			e->setShader(board.shader);
 			entityList.push_back(e);
 		} break;
 
@@ -94,6 +95,11 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition)
 	for (Enemy* e : enemyList)
 	{
 		e->Update(deltaT, b2Vec2(playerPosition.x, playerPosition.y));
+	}
+
+	for (Entity* e : entityList)
+	{
+		e->Update(deltaT);
 	}
 }
 
