@@ -158,6 +158,41 @@ void LevelManager::StopMap()
 	}
 }
 
+void LevelManager::Update(GLint deltaT)
+{
+	// Updating player
+	player->Update(deltaT, world, player->getPlayerPosAsGLM());
+	if (player->getIsDashing()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(0.25f));
+	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
+
+	//Update Projectile
+	//myPH->Update(deltaT, world);
+
+	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
+
+	// Updating enemies
+	enemy->Update(deltaT, player->getBody()->GetPosition());
+
+	// Updating physics
+	world->Step(1 / 60.f, 10, 20);
+
+	// Updating every object on map
+	deleteProjects(world);
+
+	for (Projectile* proj : projectiles)
+		proj->Update(deltaT, world, player->getPlayerPosAsGLM());
+
+	for (Object* object : map)
+		object->Update(deltaT);
+
+	// Updating triggers and checking for collisions
+	for (Trigger* trigger : triggers)
+		if (!trigger->getIsTriggered())
+			trigger->CheckCollision(player->getBody());
+
+	// Checking triggers
+	CheckTriggers();
+}
 
 bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string archivePath)
 {
@@ -558,42 +593,6 @@ void LevelManager::LoadTempLevel(GLuint shader)
 
 }
 
-void LevelManager::Update(GLint deltaT)
-{
-	// Updating player
-	player->Update(deltaT, world, player->getPlayerPosAsGLM());
-	if (player->getIsDashing()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(0.25f));
-	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
-
-	//Update Projectile
-	//myPH->Update(deltaT, world);
-
-	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
-	
-	// Updating enemies
-	enemy->Update(deltaT, player->getBody()->GetPosition());
-
-	// Updating physics
-	world->Step(1 / 60.f, 10, 20);
-
-	// Updating every object on map
-	deleteProjects(world);
-
-	 for (Projectile* proj : projectiles)
-		 proj->Update(deltaT, world, player->getPlayerPosAsGLM());
-
-	for (Object* object : map)
-		object->Update(deltaT);
-
-	// Updating triggers and checking for collisions
-	for (Trigger* trigger : triggers)
-		if (!trigger->getIsTriggered())	
-			trigger->CheckCollision(player->getBody());
-	
-	// Checking triggers
-	CheckTriggers();
-}
-
 void LevelManager::CheckTriggers()
 {
 	for (Trigger* trigger : triggers)
@@ -694,7 +693,6 @@ Enemy* LevelManager::getEnemy() { return enemy; }
 
 void LevelManager::deleteProjects(b2World* world)
 {
-	cout << this->projectiles.size() << endl;
 	for (int i = 0; i < this->projectiles.size(); i++)
 	{
 		if (this->projectiles[i]->getmarked() == true)

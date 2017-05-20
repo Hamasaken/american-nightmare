@@ -100,7 +100,6 @@ void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 		if (power > PLAYER_POWER_MAX)
 			power = PLAYER_POWER_MAX;
 	}
-	//printf("%f\n", powerMeter);
 
 	// Thresholds in velocity
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
