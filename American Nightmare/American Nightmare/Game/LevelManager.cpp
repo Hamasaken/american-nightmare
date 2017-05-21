@@ -23,6 +23,8 @@ bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapSh
 	this->particleManager = particleManager;
 	this->soundManager = soundManager;
 	this->camera = camera;
+	this->playerShader = playerShader;
+	this->mapShader = mapShader;
 
 	// Starting contact manager
 	contactManager.Start(particleManager, soundManager, camera);
@@ -119,6 +121,7 @@ void LevelManager::Stop()
 		world = nullptr;
 	}
 
+	// Unloads light manager
 	lightManager->Clear();
 	delete lightManager;
 
@@ -141,6 +144,7 @@ void LevelManager::StopMap()
 			object = nullptr;
 		}
 	}
+	map.clear();
 
 	// Unloads every hitbox in the map
 	for (Hitbox* hitbox : hitboxes)
@@ -152,7 +156,8 @@ void LevelManager::StopMap()
 			hitbox = nullptr;
 		}
 	}
-
+	hitboxes.clear();
+	
 	// Unloads every trigger in the map
 	for (Trigger* trigger : triggers)
 	{
@@ -163,6 +168,19 @@ void LevelManager::StopMap()
 			trigger = nullptr;
 		}
 	}
+	triggers.clear();
+
+	// Unloads every projectile on the map
+	for (Projectile* projectile : projectiles)
+	{
+		if (projectile != nullptr)
+		{
+			projectile->Stop();
+			delete projectile;
+			projectile = nullptr;
+		}
+	}
+	projectiles.clear();
 }
 
 void LevelManager::Update(GLint deltaT)
@@ -198,7 +216,7 @@ void LevelManager::Update(GLint deltaT)
 	CheckTriggers();
 }
 
-bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string archivePath)
+bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 {
 	// Unload current level
 	StopMap();
@@ -215,7 +233,7 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	// Loading Level
 	////////////////////////////////////////////////////////////
 	levelFile.readFromFile(levelPath.c_str());
-	LoadLevelMeshes(levelFile.meshes, shader);
+	LoadLevelMeshes(levelFile.meshes);
 	LoadLevelLights(levelFile.lights);
 	LoadLevelHitboxes(levelFile.hitboxes);
 	LoadLevelSpawners(levelFile.spawners);
@@ -241,12 +259,12 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	{
 		Projectile* moveble = new Projectile(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
 		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
-		moveble->setShader(shader);
+		moveble->setShader(mapShader);
 		projectiles.push_back(moveble);
 	}
 
 	// Starting quadtree
-	quadTree->StartTree(&this->map);
+//	quadTree->StartTree(&this->map);
 
 	// Loading temp level
 	//LoadTempLevel(shader);
@@ -306,7 +324,7 @@ void LevelManager::LoadArchiveTextures(std::vector<ATexture> textures)
 	}
 }
 
-void LevelManager::LoadLevelMeshes(std::vector<LMesh> meshes, GLuint shader)
+void LevelManager::LoadLevelMeshes(std::vector<LMesh> meshes)
 {
 	////////////////////////////////////////////////////////////
 	// Loading Meshes
@@ -314,7 +332,7 @@ void LevelManager::LoadLevelMeshes(std::vector<LMesh> meshes, GLuint shader)
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		Object* object = new Object();
-		object->setShader(shader);
+		object->setShader(mapShader);
 
 		LMesh* mesh = &meshes[i];
 
@@ -384,7 +402,7 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		Trigger::TriggerType outTriggerType;
 		switch (trigger.triggerType)
 		{
-		case ETriggerType::door:		outTriggerType = Trigger::DOOR; break;
+		case ETriggerType::door:		outTriggerType = Trigger::EFFECT; break;
 		case ETriggerType::deathZone:	outTriggerType = Trigger::EFFECT; break;
 		case ETriggerType::garbageBin:	outTriggerType = Trigger::EFFECT; break;
 		case ETriggerType::poster:		outTriggerType = Trigger::POSTER; break; 
@@ -425,7 +443,7 @@ void LevelManager::LoadLevelEffects(std::vector<LEffect> effects)
 	}
 }
 
-void LevelManager::LoadTempLevel(GLuint shader)
+void LevelManager::LoadTempLevel()
 {
 	////////////////////////////////////////////////////////////
 	// Level Music
@@ -437,14 +455,14 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	////////////////////////////////////////////////////////////
 	// Dammsugare in the middle of the screen
 	Entity* box = new Entity();
-	box->setShader(shader);
+	box->setShader(mapShader);
 	box->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"), world, glm::vec2(-10, 0), glm::vec3(8.f, 5.f, 0.5f), b2_staticBody);
 	box->setScale(glm::vec3(8, 5, 3));
 	map.push_back(box);
 
 	// Background
 	Object* background = new Object();
-	background->setShader(shader);
+	background->setShader(mapShader);
 	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
 	background->setScale(glm::vec3(40, 20, 1));
 	background->setPosition(glm::vec3(0, 10, -5));
@@ -452,7 +470,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 
 	// Ground
 	background = new Object();
-	background->setShader(shader);
+	background->setShader(mapShader);
 	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"));
 	background->setScale(glm::vec3(40, 20, 1));
 	background->setPosition(glm::vec3(0, 0.5f, 0));
@@ -461,7 +479,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 
 	// Right wall
 	background = new Object();
-	background->setShader(shader);
+	background->setShader(mapShader);
 	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
 	background->setScale(glm::vec3(40, 20, 1));
 	background->setPosition(glm::vec3(19, 10, 0));
@@ -470,7 +488,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 
 	// Left wall
 	background = new Object();
-	background->setShader(shader);
+	background->setShader(mapShader);
 	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
 	background->setScale(glm::vec3(40, 20, 1));
 	background->setPosition(glm::vec3(-19, 10, 0));
@@ -479,7 +497,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 
 	// Left platform
 	background = new Object();
-	background->setShader(shader);
+	background->setShader(mapShader);
 	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"));
 	background->setScale(glm::vec3(8, 5, 3));
 	background->setPosition(glm::vec3(-5, 0, 0));
@@ -487,7 +505,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 
 	// Right platform cave
 	background = new Object();
-	background->setShader(shader);
+	background->setShader(mapShader);
 	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"));
 	background->setScale(glm::vec3(10.f, 15.f, 1));
 	background->setPosition(glm::vec3(10, 4.25, 0));
@@ -500,7 +518,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	for (int i = 0; i < 25; i++)
 	{
 		Entity* moveble = new Entity();
-		moveble->setShader(shader);
+		moveble->setShader(mapShader);
 		moveble->Start(meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"), world, glm::vec2((rand() % 20) - 10, (rand() % 20)), glm::vec3(0.5f, 0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.5f, 0.4f);
 		map.push_back(moveble);
 	}
@@ -537,7 +555,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 
 	// Triggers visual
 	background = new Object();
-	background->setShader(shader);
+	background->setShader(mapShader);
 	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
 	background->setScale(glm::vec3(1, 1, 1));
 	background->setPosition(glm::vec3(5, 10, 0));
@@ -546,7 +564,7 @@ void LevelManager::LoadTempLevel(GLuint shader)
 
 	// Trigger visual
 	background = new Object();
-	background->setShader(shader);
+	background->setShader(mapShader);
 	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
 	background->setScale(glm::vec3(1, 1, 1));
 	background->setPosition(glm::vec3(-5, 7.5, 0));
@@ -576,13 +594,13 @@ void LevelManager::LoadTempLevel(GLuint shader)
 	// Lights
 	////////////////////////////////////////////////////////////
 	Object* light = new Object();
-	light->setShader(shader);
+	light->setShader(mapShader);
 	light->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
 	light->setPosition(glm::vec3(-15, 1.5, -2.5));
 	map.push_back(light);
 
 	light = new Object();
-	light->setShader(shader);
+	light->setShader(mapShader);
 	light->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
 	light->setPosition(glm::vec3(5, 7, 0));
 	map.push_back(light);
@@ -611,7 +629,7 @@ void LevelManager::CheckTriggers()
 				if (!trigger->getData().empty())
 				{
 					// Loads new level with the current player's shader
-					LoadLevel(player->getShader(), trigger->getData(), trigger->getData());
+					LoadLevel(trigger->getData(), trigger->getData());
 				} 
 				break;
 

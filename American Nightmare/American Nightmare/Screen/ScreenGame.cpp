@@ -138,7 +138,7 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 18.5f));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "Level2.anl", ARCHIVE_PATH "Assets2.ana");
+	levelManager->LoadLevel(LEVEL_PATH "Level2.anl", ARCHIVE_PATH "Assets2.ana");
 
 	// Adding shadow
 	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], glm::vec3(5.f, 5.f, -10.f), glm::vec2(screenSize.x * 0.5, screenSize.y * 0.5), glm::vec2(60, 30), 5.f, 40);

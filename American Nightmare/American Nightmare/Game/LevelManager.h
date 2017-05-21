@@ -47,15 +47,13 @@ public:
 	void StopMap();
 
 	////////////////////////////////////////////////////////////
-	// \brief Loads new map objects from a file and setting 
-	//	which specific shader to use for all those objects
-	// \param shader ID for the shader to be used
+	// \brief Loads new map objects from a file 
 	// \param levelFile Only the name of the file (.anl)
 	// \param archiveFile Only the name of the archive file (.ana)
 	// \return Returns false if the map could not be loaded, otherwise true
 	////////////////////////////////////////////////////////////
-	bool LoadLevel(GLuint shader, std::string levelPath, std::string archivePath);
-	void LoadTempLevel(GLuint shader);
+	bool LoadLevel(std::string levelPath, std::string archivePath);
+	void LoadTempLevel();
 
 	////////////////////////////////////////////////////////////
 	// \brief Updates every object on map
@@ -91,7 +89,7 @@ private:
 	void LoadArchiveTextures(std::vector<ATexture> textures);
 
 	// Level
-	void LoadLevelMeshes(std::vector<LMesh> meshes, GLuint shader);
+	void LoadLevelMeshes(std::vector<LMesh> meshes);
 	void LoadLevelHitboxes(std::vector<LHitbox> hitboxes);
 	void LoadLevelLights(std::vector<LLight> lights);
 	void LoadLevelSpawners(std::vector<LSpawner> spawner);
@@ -116,6 +114,9 @@ private:
 	MyContactListener contactManager;
 	QuadTree* quadTree;
 	Camera* camera;
+
+	GLuint mapShader;
+	GLuint playerShader;
 
 	//ProjectileHandler* myPH;
 	//ProjectileHandler* myPH;

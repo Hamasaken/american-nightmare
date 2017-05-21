@@ -31,7 +31,7 @@ Projectile::Projectile(){}
 
 Projectile::~Projectile()
 {
-	hitbox->Stop();
+	Entity::Stop();
 }
 
 void Projectile::fireBullet(b2World* world, glm::vec2 position, glm::vec2 direction)
