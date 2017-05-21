@@ -67,24 +67,24 @@ private:
 	void Walk(Direction dir);	//< Walking in a direction
 	void Jump();				//< Jumping
 	void Dash();				//< Dash ability
-	void Hover(GLint deltaT);				//< Hover ability
+	void Hover(GLint deltaT);	//< Hover ability
 
-								// Input from user
-	void InputTesting();		//< Rotation & Scale on Player model
-	void InputMouse();			//< Mouse input
+	//< Input from user
+	void InputTesting();					//< Rotation & Scale on Player model
+	void InputMouse();						//< Mouse input
 	void InputKeyboard(GLint deltaT);		//< Key input
 	void InputController(GLint deltaT);		//< Xbox One controller input
 
 	bool isDead;				//< If the player is dead or not
 	float hp;					//< The amount of hp the player have
-	GLfloat power;			//< Players resource for dashing and hovering etc
+	GLfloat power;				//< Players resource for dashing and hovering etc
 	GLfloat dashCooldown;		//< Dash ability cooldown
 	bool hasJumped;				//< If the player have jumped or not
 	bool hasDashed;				//< If the player have dashed or not
 	bool isDashing;				//< If the player is currently dashing
 	bool isHovering;			//< If the player is currently hovering
 
-								// Rebindable keys
+	//< Rebindable keys
 	sf::Keyboard::Key key_left;
 	sf::Keyboard::Key key_right;
 	sf::Keyboard::Key key_jump;
@@ -96,7 +96,7 @@ public:
 	//Player(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world);
 	Player(const Player& other);
 	~Player();
-
+	 
 	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
 	//bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
 	void Update(GLint deltaT, b2World* world, glm::vec2 pos);
