@@ -16,6 +16,10 @@
 #include "MeshManager.h"
 #include "QuadTree.h"
 #include "EntityManager.h"
+#include <istream>
+#include <iostream>
+#include <fstream>
+#include <string>
 
 class LevelManager
 {
@@ -95,6 +99,9 @@ private:
 	void LoadLevelSpawners(std::vector<LSpawner> spawner);
 	void LoadLevelTriggers(std::vector<LTrigger> triggers);
 	void LoadLevelEffects(std::vector<LEffect> effects);
+	
+	// Unlock a poster
+	void UnlockPoster(int index);
 
 	std::vector<Object*> map;	//< Vector with level specific objects
 	std::vector<Hitbox*> hitboxes;

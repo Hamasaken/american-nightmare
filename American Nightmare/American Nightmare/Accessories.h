@@ -13,6 +13,8 @@
 #include <Windows.h>
 #include <GL/glew.h>
 #include <string>
+#include <fstream>
+#include <istream>
 
 // Including various opengl math classes & functions
 #include <glm/glm.hpp>	

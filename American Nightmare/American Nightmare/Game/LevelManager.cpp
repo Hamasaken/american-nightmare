@@ -92,16 +92,6 @@ void LevelManager::Stop()
 		quadTree = nullptr;
 	}
 
-	// Unloads every object in map
-	for (Projectile* projs : projectiles)
-	{
-		if (projs != nullptr)
-		{
-			delete projs;
-			projs = nullptr;
-		}
-	}
-
 	// Unloads every entity on map
 	if (entityManager != nullptr)
 	{
@@ -206,6 +196,9 @@ void LevelManager::Update(GLint deltaT)
 
 	for (Projectile* proj : projectiles)
 		proj->Update(deltaT, world, player->getPlayerPosAsGLM());
+
+	for (Object* object : map)
+		object->Update(deltaT);
 
 	// Updating triggers and checking for collisions
 	for (Trigger* trigger : triggers)
@@ -402,10 +395,20 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		Trigger::TriggerType outTriggerType;
 		switch (trigger.triggerType)
 		{
-		case ETriggerType::door:		outTriggerType = Trigger::EFFECT; break;
+		case ETriggerType::poster:		outTriggerType = Trigger::POSTER; break;
 		case ETriggerType::deathZone:	outTriggerType = Trigger::EFFECT; break;
 		case ETriggerType::garbageBin:	outTriggerType = Trigger::EFFECT; break;
-		case ETriggerType::poster:		outTriggerType = Trigger::POSTER; break; 
+		case ETriggerType::door:		
+			outTriggerType = Trigger::POSTER; 
+			Poster* poster = new Poster();
+			poster->setShader(mapShader);
+			poster->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
+			LHitbox hitbox = triggers[i].hitbox;
+			poster->setScale(glm::vec3(hitbox.scale[0], hitbox.scale[1], 1));
+			poster->setPosition(glm::vec3(hitbox.position[0], hitbox.position[1], 0));
+			map.push_back(poster);
+			outTrigger->setMapPart(poster);
+			break; 
 		}
 
 		LHitbox hitbox = triggers[i].hitbox;
@@ -613,8 +616,10 @@ void LevelManager::LoadTempLevel()
 
 void LevelManager::CheckTriggers()
 {
-	for (Trigger* trigger : triggers)
+	for (int i = 0; i < triggers.size(); i++)
 	{
+		bool remove = false;
+		Trigger* trigger = triggers[i];
 		if (trigger->getIsTriggered())
 		{
 			switch (trigger->triggerType)
@@ -637,6 +642,15 @@ void LevelManager::CheckTriggers()
 			// Popup - For popups with text/pictures, anything
 			////////////////////////////////////////////////////////////
 			case Trigger::POPUP:				
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Poster - Unlockables
+			////////////////////////////////////////////////////////////
+			case Trigger::POSTER:
+				remove = true;
+				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 25, glm::vec4(0.30, 1, 0.25, 1));
+				UnlockPoster(2);
 				break;
 
 			////////////////////////////////////////////////////////////
@@ -692,7 +706,45 @@ void LevelManager::CheckTriggers()
 			// Trigger is now reactivated
 			trigger->setIsTriggered(false);
 		}
+
+		if (remove)
+		{
+			Poster* poster = static_cast<Poster*>(trigger->getMapPart());
+			if (poster)
+			{
+				for (int i = 0; i < map.size(); i++)
+					if (map[i] == poster)
+					{
+						delete map[i];
+						map.erase(map.begin() + i);
+					}
+			}
+			trigger->Stop();
+			delete trigger;
+			triggers.erase(triggers.begin() + i);
+		}
 	}
+}
+
+void LevelManager::UnlockPoster(int index)
+{
+/*	std::ifstream file(ARCHIVE_PATH "game.ini");
+
+	if (file.is_open())
+	{
+		std::string str;
+		std::vector <std::string> vec;
+
+		while (std::getline(file, str))
+		{
+			vec.push_back(str);
+		}
+
+		for (std::string& s : vec)
+			printf("%s\n", s);
+	}
+
+	file.close(); */
 }
 
 std::vector<Object*> LevelManager::getMap()

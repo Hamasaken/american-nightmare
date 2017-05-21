@@ -42,10 +42,13 @@ public:
 	bool getIsTriggered() const;
 	void setData(std::string data);
 	std::string getData() const;
+	void setMapPart(void* ptr);
+	void* getMapPart();
 
 private:
 	bool isTriggered;		//< If the box is triggered by a body or not
 	std::string data;		//< Extra Data for various things
+	void* mapPart;			//< Extra Data for removable object parts 
 };
 
 #endif // !TRIGGER_H

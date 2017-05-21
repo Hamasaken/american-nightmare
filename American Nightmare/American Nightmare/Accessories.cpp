@@ -1,5 +1,4 @@
 #include "Accessories.h"
-#include <iostream>
 
 float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2)
 {
