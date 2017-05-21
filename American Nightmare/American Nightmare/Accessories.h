@@ -72,7 +72,8 @@ enum ParticleType
 	BLOOD,
 	TEXTURE,
 	SMOKE,
-	LIGHT_DUST
+	LIGHT_DUST, 
+	NUTSBOLTS
 };
 
 // Game State

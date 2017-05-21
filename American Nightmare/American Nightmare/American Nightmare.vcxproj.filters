@@ -424,5 +424,14 @@
     <None Include="Data\Graphics\Shaders\shadowmap_point_fs.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Data\Graphics\Shaders\particle_cube_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_cube_gs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_cube_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

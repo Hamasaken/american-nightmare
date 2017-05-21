@@ -44,6 +44,19 @@ void ParticleEmitter::SmokeCloud(glm::vec3 position, GLuint texture, glm::vec4 c
 	}
 }
 
+void ParticleEmitter::NutsAndBolts(glm::vec3 position, GLuint texture, glm::vec2 size, int amount)
+{
+	this->position = position;
+	this->texture = texture;
+	for (int i = 0; i < amount; i++)
+	{
+		glm::vec4 color(0.8, 0.8, 0.8, 1);
+		NutsAndBolt* particle = new NutsAndBolt;
+		particle->Start(position, color, size);
+		particles.push_back(particle);
+	}
+}
+
 void ParticleEmitter::ConstantSmoke(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount)
 {
 	this->position = position;
