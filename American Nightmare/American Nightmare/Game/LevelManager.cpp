@@ -245,6 +245,8 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 		projectiles.push_back(moveble);
 	}
 
+	// Starting quadtree
+	quadTree->StartTree(&this->map);
 
 	// Loading temp level
 	//LoadTempLevel(shader);
