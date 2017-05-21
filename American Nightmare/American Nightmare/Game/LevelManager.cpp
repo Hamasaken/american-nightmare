@@ -64,6 +64,9 @@ bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, 
 	if (quadTree == nullptr) return false;
 	if (!quadTree->Start(glm::vec2(1280, 720))) return false;
 
+
+	
+
 	return true;
 }
 
@@ -93,12 +96,12 @@ void LevelManager::Stop()
 	}
 
 	// Delete projectile
-	if (myProjectile != nullptr)
-	{
-//		myProjectile->Stop();
-//		delete myProjectile;
-//		myProjectile = nullptr;
-	}
+//	if (myProjectile != nullptr)
+//	{
+////		myProjectile->Stop();
+////		delete myProjectile;
+////		myProjectile = nullptr;
+//	}
 
 	// Unloads the map objects
 	StopMap();
@@ -195,15 +198,15 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 
+	
 	//// Making some boxes to reload with
 	for (int i = 0; i < 50; i++)
 	{
-		Projectile* moveble = new Projectile(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
+		Projectile* moveble = new Projectile(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
 		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
 		moveble->setShader(shader);
 		projectiles.push_back(moveble);
 	}
-
 
 	// Loading temp level
 	//LoadTempLevel(shader);

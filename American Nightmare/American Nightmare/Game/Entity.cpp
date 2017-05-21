@@ -14,9 +14,9 @@ bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	return true;
 }
 
-bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World* world, b2Body* player)
+bool Entity::Start(b2World* world, b2Body* player)
 {
-	Object::Start(mesh, material);
+	//Object::Start(mesh, material);
 	hitbox = new Hitbox();
 
 	//if (hitbox == nullptr) return false;
@@ -25,7 +25,7 @@ bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 
 	if (!hitbox->InitializeHitboxVacuum(world, player))
 
-		hitbox->getBody()->SetUserData(this);
+	//hitbox->getBody()->SetUserData(this);
 
 	return true;
 }

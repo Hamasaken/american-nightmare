@@ -23,54 +23,57 @@ void MyContactListener::Start(ParticleManager* particleManager, SoundManager* so
 
 void MyContactListener::BeginContact(b2Contact* contact)
 {
-	Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
-	Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
-
-	Player* player = dynamic_cast<Player*>(bodyA);
-	if (player)
+	if (true)
 	{
-		Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
-		if (myProjectile)
-		{
-			particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f)); // temp blood effect
-			printf("Player touched a projectile AAAAA\n");
-			player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
-			myProjectile->setmarked(true);
-			//particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter())); // temp blood effect
-			soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
-			
-			/*if (player->addPlayerProjectiles() == true)
-			{
+		Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
+		Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
 
-			player->setCheckForProjectilePickUp(true);
-			}
-			else
+		Player* player = dynamic_cast<Player*>(bodyA);
+		if (player)
+		{
+			Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
+			if (myProjectile)
 			{
-			player->setCheckForProjectilePickUp(false);
-			}*/
+				particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f)); // temp blood effect
+				printf("Player touched a projectile AAAAA\n");
+				player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
+				myProjectile->setmarked(true);
+				//particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter())); // temp blood effect
+				soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
+
+				/*if (player->addPlayerProjectiles() == true)
+				{
+
+				player->setCheckForProjectilePickUp(true);
+				}
+				else
+				{
+				player->setCheckForProjectilePickUp(false);
+				}*/
+			}
 		}
 	}
 
 	//Fixa Senare
 
-	Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
-	Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
-	if (vacuumA || vacuumB)
-	{
-		printf("vacuum\n");
-		//printf("vacuum IS ALIVE First\n");
-		Projectile* enemyA = dynamic_cast<Projectile*>(bodyA);
-		Projectile* enemyB = dynamic_cast<Projectile*>(bodyB);
-		if (enemyA || enemyB)
-		{
-			printf("vacuum IS ALIVE Second\n");
-			//printf("Enemy is hurting you!!!\n");
-			//enemy->getBody()->ApplyForce(b2Vec2(0, -1000), b2Vec2(), true);
-			
-			printf("Enemy is hurting you!!!\n");
-			player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
-		}
-	}
+	//Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
+	//Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
+	//if (vacuumA || vacuumB)
+	//{
+	//	printf("vacuum\n");
+	//	//printf("vacuum IS ALIVE First\n");
+	//	Projectile* enemyA = dynamic_cast<Projectile*>(bodyA);
+	//	Projectile* enemyB = dynamic_cast<Projectile*>(bodyB);
+	//	if (enemyA || enemyB)
+	//	{
+	//		printf("vacuum IS ALIVE Second\n");
+	//		//printf("Enemy is hurting you!!!\n");
+	//		//enemy->getBody()->ApplyForce(b2Vec2(0, -1000), b2Vec2(), true);
+	//		
+	//		printf("Enemy is hurting you!!!\n");
+	//		player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
+	//	}
+	//}
 }
 
 void MyContactListener::EndContact(b2Contact* contact)
