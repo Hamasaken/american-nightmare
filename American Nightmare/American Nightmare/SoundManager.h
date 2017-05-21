@@ -23,7 +23,11 @@ public:
 	{
 		SFX_BIP, 
 		SFX_HIT,
-		SFX_POWERUP
+		SFX_POWERUP,
+		SFX_BTN,
+		SFX_LtoR,
+		SFX_RtoL,
+		SFX_SUCTION
 	};
 
 	// Put song names here, and then load them in the loadSongs functions
@@ -59,6 +63,13 @@ public:
 	// \param effect The enum name of the SFX
 	////////////////////////////////////////////////////////////
 	void stopSFX(SFX effect);
+
+	////////////////////////////////////////////////////////////
+	// \brief Plays another SFX even though one is already playing
+	// \param effect The enum name of the SFX
+	// \param offset The offset max/min of the pitchchange (0:1)
+	////////////////////////////////////////////////////////////
+	void playSFXOverDrive(SFX effect, float offset = 0.1f);
 
 	////////////////////////////////////////////////////////////
 	// \brief Plays a specific SFX
@@ -100,6 +111,11 @@ public:
 	// \brief Changes the listeners volume
 	////////////////////////////////////////////////////////////
 	void changeVolume(int volumeMusic, int volumeEffect);
+	
+	////////////////////////////////////////////////////////////
+	// \brief Mutes/Unmutes
+	////////////////////////////////////////////////////////////
+	void mute();
 
 	int getVolumeMusic() const;
 	int getVolumeEffect() const;

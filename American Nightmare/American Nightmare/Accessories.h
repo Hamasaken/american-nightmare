@@ -31,6 +31,7 @@
 #define MODEL_PATH "Data/Graphics/Models/"
 #define CUTSCENE_PATH "Data/Graphics/Cutscenes/"
 #define TEXTURE_PATH "Data/Graphics/Textures/"
+#define POSTER_PATH "Data/Graphics/Textures/Posters/"
 #define FONT_PATH "Data/Graphics/Fonts/"
 #define ANIMATION_PATH "Data/Graphics/Animations/"
 #define SFX_PATH "Data/Sound/SFX/"
@@ -44,9 +45,9 @@
 #define PI 3.14159265359
 
 // TEXT
-#define INGAME_FONT "404ERROR.ttf"
+#define INGAME_FONT "Steelworks.ttf"
 #define OPTIONS_FONT "framd.ttf"
-// #define TITLE_FONT "404ERROR.ttf"
+#define TITLE_FONT "Steelworks.ttf"
 
 // Returns the angle in radians
 float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2);

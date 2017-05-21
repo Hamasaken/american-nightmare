@@ -14,10 +14,21 @@ bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	return true;
 }
 
-bool Entity::Start(b2World* world, b2Body* player)
-{
-	//Object::Start(mesh, material);
-	hitbox = new Hitbox();
+//bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World* world, b2Body* player)
+//{
+//	Object::Start(mesh, material);
+//	hitbox = new Hitbox();
+//
+//	//if (hitbox == nullptr) return false;
+//	//if (!hitbox->InitializeHitbox(world))
+//	//	return false;
+//
+//	if (!hitbox->InitializeHitboxVacuum(world, player))
+//
+//		hitbox->getBody()->SetUserData(this);
+//
+//	return true;
+//}
 
 	//if (hitbox == nullptr) return false;
 	//if (!hitbox->InitializeHitbox(world))
@@ -69,6 +80,11 @@ void Entity::Update(GLint deltaT)
 	Object::Update(deltaT);
 }
 
-void Entity::setPosition(glm::vec3 position) { this->position = position; }
-void Entity::setScale(glm::vec3 scale) { this->scale = scale; }
+void Entity::setPosition(glm::vec3 position) { this->position = position; hitbox->getBody()->SetTransform(b2Vec2(position.x, position.y), hitbox->getBody()->GetAngle()); }
+void Entity::setScale(glm::vec3 scale) { 
+	this->scale = scale; 
+//	hitbox->getBody()->DestroyFixture(hitbox->getBody()->GetFixtureList());
+	// remove fixture and then make a new one by calling ONLY the modifyShape function in hitbox, 
+	// complete this function later as we're not really needing this right now
+}
 Hitbox * Entity::getHitbox() { return hitbox; }

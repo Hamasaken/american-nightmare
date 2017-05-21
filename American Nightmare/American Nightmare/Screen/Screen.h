@@ -11,6 +11,7 @@
 #include "../SoundManager.h"
 #include "../Game/Particle/ParticleManager.h"
 #include "../Game/GUI/Button.h"
+#include "../Game/GUI/Bar.h"
 
 class Screen
 {
@@ -55,6 +56,11 @@ public:
 	// \brief Drawing everything on screen
 	////////////////////////////////////////////////////////////
 	virtual void Draw() = 0;
+
+	////////////////////////////////////////////////////////////
+	// \brief Updating screne properties
+	////////////////////////////////////////////////////////////
+	virtual void UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos);
 
 	////////////////////////////////////////////////////////////
 	// \brief Drawing a specific object on screen

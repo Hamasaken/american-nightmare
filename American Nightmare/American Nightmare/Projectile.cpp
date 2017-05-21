@@ -36,7 +36,9 @@ Projectile::~Projectile()
 
 void Projectile::fireBullet(b2World* world, glm::vec2 position, glm::vec2 direction)
 {	
+	//cout << "this will happend" << endl;
 	hitbox->getBody()->ApplyLinearImpulseToCenter({direction.x * 50000.f, direction.y * 50000.f }, true);
+	//this->setIsFired(true);
 }
 
 b2Vec2 Projectile::normalize(const b2Vec2& source)

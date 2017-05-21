@@ -38,7 +38,7 @@ void ShadowManager::Stop()
 	pointShadowMapList.clear();
 }
 
-void ShadowManager::AddDirectional(LightManager::DirectionalLight* light, glm::vec2 resolution, glm::vec2 size, GLfloat nearPlane, GLfloat farPlane)
+void ShadowManager::AddDirectional(LightManager::DirectionalLight* light, glm::vec3 offset, glm::vec2 resolution, glm::vec2 size, GLfloat nearPlane, GLfloat farPlane)
 {
 	glm::mat4 lightProjection = glm::ortho(-size.x, size.x, -size.y, size.y, nearPlane, farPlane);
 	glm::mat4 lightView = glm::lookAt(glm::vec3(light->position), glm::vec3(light->position + light->direction), glm::vec3(0.f, 1.f, 0.f));
@@ -48,7 +48,7 @@ void ShadowManager::AddDirectional(LightManager::DirectionalLight* light, glm::v
 
 	createDirectionalShadowBuffer(tempShadowFBO, tempShadowMap, resolution);
 
-	directionalShadowMapList.push_back(new DirectionalShadowMap(tempShadowMap, tempShadowFBO, tempLightSpaceMatrix, light->direction, resolution));
+	directionalShadowMapList.push_back(new DirectionalShadowMap(tempShadowMap, tempShadowFBO, tempLightSpaceMatrix, offset, light->direction, resolution));
 }
 
 void ShadowManager::createDirectionalShadowBuffer(GLuint &shadowFBO, GLuint &shadowMap, glm::vec2 resolution)

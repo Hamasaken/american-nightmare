@@ -105,6 +105,19 @@ void ParticleManager::EffectLightDust(glm::vec3 center, glm::vec3 dimensions, in
 	emitters.push_back(emitter);
 }
 
+void ParticleManager::EffectSmokeSignal(glm::vec3 position, GLuint texture, float angle, int amount, glm::vec4 color)
+{
+	// Creating a emmiter with a specific type
+	IncreasingParticleEmitter* emitter = new IncreasingParticleEmitter();
+	emitter->setType(ParticleType::SMOKE);
+	emitter->setShader(getShaderFromPair(emitter->getType()));
+
+	// Creating particles with inputted variables into emitter
+	glm::vec2 size(SIGNAL_DEFAULT_SIZE, SIGNAL_DEFAULT_SIZE);
+	emitter->SignalSmoke(position, texture, angle, color, size, amount);
+	emitters.push_back(emitter);
+}
+
 void ParticleManager::Update(GLfloat deltaT)
 {
 	for (int i = 0; i < int(emitters.size()); i++)

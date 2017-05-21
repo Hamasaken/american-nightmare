@@ -15,6 +15,7 @@
 #include "../ANNIE/LevelFile.h"
 #include "MeshManager.h"
 #include "QuadTree.h"
+//#include "../ProjectileHandler.h"
 
 class LevelManager
 {
@@ -98,7 +99,7 @@ private:
 	std::vector<Object*> map;	//< Vector with level specific objects
 	std::vector<Hitbox*> hitboxes;
 	std::vector<Trigger*> triggers;
-	std::vector<Projectile*> projectiles;
+	//std::vector<Projectile*> projectiles;
 	Player* player;				//< The player object
 
 	Enemy* enemy;				//< A Enemy object
@@ -115,12 +116,10 @@ private:
 	MyContactListener contactManager;
 	QuadTree* quadTree;
 
-	//ProjectileHandler* myPH;
-	//ProjectileHandler* myPH;
-	//Projectile* myProjectile;
-	Projectile* moveble;
+	ProjectileHandler* myPH;
+	//Projectile* moveble;
 
-	void deleteProjects();
+	//void deleteProjects(b2World* world);
 
 };
 

@@ -6,7 +6,7 @@
 #include "../Game/MaterialManager.h"
 #include "../Game/Particle/ParticleManager.h"
 
-#define CLEAR_COLOR glm::vec4(1, 1, 1, 1)
+#define EXPLOSION_TIMER 200.f
 
 class ScreenPosters : public Screen
 {
@@ -39,6 +39,11 @@ public:
 	// \brief Draw full start meny
 	////////////////////////////////////////////////////////////
 	void Draw();
+
+	////////////////////////////////////////////////////////////
+	// \brief Update Screen Properties 
+	////////////////////////////////////////////////////////////
+	void UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos);
 
 private:
 	MeshManager* meshManager;			//< Mesh Manager

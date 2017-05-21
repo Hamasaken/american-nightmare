@@ -74,3 +74,53 @@ void SmokeParticle::Update(GLfloat deltaT)
 	vertex.setPosition(currentPosition + velocity * deltaT);
 	vertex.setRotation(rotation);
 }
+
+void SmokeSignal::Reset()
+{
+	lifeTime = lifeTimeStart;
+	vertex.setPosition(startPosition);
+	vertex.setSize(startSize);
+}
+
+void SmokeSignal::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size, float angle)
+{
+	// Setting parameters
+	isDead = false;
+	rotation = angle;
+
+	// Making vertex
+	vertex.setPosition(position);
+	vertex.setColor(color);
+	vertex.setSize(size);
+	vertex.setRotation(rotation);
+
+	// Setting some random variables
+	lifeTime = SIGNAL_LIFETIME;
+	rotationSpeed = TEXTURE_ROTATION;
+	lifeTimeStart = lifeTime;
+	velocity = glm::vec3(SIGNAL_DEFAULT_VELOCITY * sin(rotation), SIGNAL_DEFAULT_VELOCITY * cos(rotation), randBetweenF(-0.00075f, 0.00075f));
+
+	this->startSize = size;
+	this->startPosition = position;
+}
+
+void SmokeSignal::Update(GLfloat deltaT)
+{
+	// Makes color alpha with the rest of lifetime
+	float alpha = (lifeTime - lifeTimeStart / 1.5f) / lifeTimeStart;
+	vertex.a = (alpha)* TEXTURE_BLENDING;
+
+	// Removes from lifetime and checks if particle is dead
+	lifeTime -= deltaT;
+	if (lifeTime < NULL)
+		Reset();
+
+	// Makes the particles bigger and bigger
+	vertex.w *= SIGNAL_SIZE_MULTIPLIER;
+	vertex.h *= SIGNAL_SIZE_MULTIPLIER;
+
+	velocity += (glm::vec3(0, 0, 0) - velocity) * TEXTURE_VELOCITY_FALL_OFF;
+
+	// Moves the particle with velocity
+	vertex.setPosition(glm::vec3(vertex.x, vertex.y, vertex.z) + velocity * deltaT);
+}

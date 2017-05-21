@@ -44,6 +44,12 @@ bool Screen::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state,
 	return true;
 }
 
+void Screen::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos)
+{
+	this->screenPosition = screenPosition;
+	this->screenSize = screenSize;
+}
+
 void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 {
 	// Getting matrices
@@ -137,7 +143,7 @@ void Screen::DrawObjectDirShadowMapTransparent(Animation* animatedObj, ShaderMan
 
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, animatedObj->getTextureID());
+	glBindTexture(GL_TEXTURE_2D, animatedObj->getAnimationTexture());
 
 	glUniform1i(glGetUniformLocation(shaderManager->getShader(), "texture"), 0);
 
@@ -236,6 +242,16 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), -1.f);
 		glUniform3f(glGetUniformLocation(object->getShader(), "diffuse"), dynamic_cast<Text*>(object)->getColor().r, dynamic_cast<Text*>(object)->getColor().g, dynamic_cast<Text*>(object)->getColor().b);
 	}
+	else if (dynamic_cast<Bar*>(object) != nullptr)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, object->getTextureID());
+
+		glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
+		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), dynamic_cast<Bar*>(object)->getAlpha());
+		glUniform3f(glGetUniformLocation(object->getShader(), "diffuse"), object->getMaterial()->diffuse.x, object->getMaterial()->diffuse.y, object->getMaterial()->diffuse.z);
+	}
 
 
 	// Drawing object
@@ -276,7 +292,7 @@ void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderMa
 
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tmpMaterial->getTextureID());
+	glBindTexture(GL_TEXTURE_2D, animatedObj->getAnimationTexture());
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, animatedObj->getAnimationNormal());
 

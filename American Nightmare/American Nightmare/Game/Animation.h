@@ -21,14 +21,15 @@ public:
 		glm::vec2 uvBotRight;
 	};
 
-	void AddAnimation(const MaterialManager::Material* Material, GLuint normalMap, std::string animationFile);
+	void AddAnimation(GLuint textureID, GLuint normalMap, std::string animationFile);
 	FrameUV* getCurrentFrameUV();
 	GLuint getAnimationTexture() const;
 	GLuint getAnimationNormal() const;
 	bool isDirectionRight();
 
 protected:
-	void changeActiveAnimation(std::string name);
+	bool changeActiveAnimation(std::string name);
+	bool changeActiveAnimation(GLuint index);
 	void updateAnimation(GLfloat deltaT);
 	bool directionIsRight;
 private:
@@ -37,18 +38,18 @@ private:
 	struct AnimationSegment
 	{
 		std::string name;
-		const MaterialManager::Material* material;
+		GLuint textureID;
 		GLuint normalID;
 		GLint totalFrames;
 		glm::vec2 dimensions;
 		GLint fps;
 		GLfloat currentFrame;
 
-		AnimationSegment() : name("undefined"), material(nullptr), normalID(-1), totalFrames(0), dimensions(glm::vec2()), fps(0), currentFrame(0.f) {}
-		AnimationSegment(std::string inName, const MaterialManager::Material* inMaterial, GLuint inNormalID, GLint inTotalFrames, glm::vec2 inDimensions, GLint infps, GLfloat inCurrentFrame)
-			: name(inName), material(inMaterial), normalID(inNormalID), totalFrames(inTotalFrames), dimensions(inDimensions), fps(infps), currentFrame(inCurrentFrame) {}
+		AnimationSegment() : name("undefined"), textureID(-1), normalID(-1), totalFrames(0), dimensions(glm::vec2()), fps(0), currentFrame(0.f) {}
+		AnimationSegment(std::string inName, GLuint textureID, GLuint inNormalID, GLint inTotalFrames, glm::vec2 inDimensions, GLint infps, GLfloat inCurrentFrame)
+			: name(inName), textureID(textureID), normalID(inNormalID), totalFrames(inTotalFrames), dimensions(inDimensions), fps(infps), currentFrame(inCurrentFrame) {}
 		AnimationSegment(const AnimationSegment& aniSeg) 
-			: name(aniSeg.name), material(aniSeg.material), normalID(aniSeg.normalID), totalFrames(aniSeg.totalFrames), dimensions(aniSeg.dimensions), fps(aniSeg.fps), currentFrame(aniSeg.currentFrame) {}
+			: name(aniSeg.name), textureID(aniSeg.textureID), normalID(aniSeg.normalID), totalFrames(aniSeg.totalFrames), dimensions(aniSeg.dimensions), fps(aniSeg.fps), currentFrame(aniSeg.currentFrame) {}
 	};
 
 	GLint findAnimation(std::string name) const;

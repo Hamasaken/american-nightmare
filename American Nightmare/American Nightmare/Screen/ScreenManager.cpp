@@ -142,6 +142,7 @@ void ScreenManager::StopScreen(State state)
 		if (screenGame != nullptr) 
 		{
 			screenGame->Stop();
+			delete screenGame;
 			screenGame = nullptr;
 		}
 		break;
@@ -149,6 +150,7 @@ void ScreenManager::StopScreen(State state)
 		if (screenStart != nullptr)
 		{
 			screenStart->Stop();
+			delete screenStart;
 			screenStart = nullptr;
 		}
 		break;
@@ -156,6 +158,7 @@ void ScreenManager::StopScreen(State state)
 		if (screenCutscene != nullptr)
 		{
 			screenCutscene->Stop();
+			delete screenCutscene;
 			screenCutscene = nullptr;
 		}
 		break;
@@ -163,6 +166,7 @@ void ScreenManager::StopScreen(State state)
 		if (screenOptions != nullptr)
 		{
 			screenOptions->Stop();
+			delete screenOptions;
 			screenOptions = nullptr;
 		}
 		break;
@@ -170,6 +174,7 @@ void ScreenManager::StopScreen(State state)
 		if (screenPosters != nullptr)
 		{
 			screenPosters->Stop();
+			delete screenPosters;
 			screenPosters = nullptr;
 		}
 		break;
@@ -189,6 +194,12 @@ bool ScreenManager::goToState(State state)
 		return false;
 
 	return true;
+}
+
+void ScreenManager::FocusLost()
+{
+	if (currentState == Game)
+		screenGame->Pause();
 }
 
 void ScreenManager::Update(GLint deltaT)
@@ -232,6 +243,21 @@ void ScreenManager::Draw(SDL_Window* window, glm::vec4 color)
 	}
 
 	SDL_GL_SwapWindow(window);
+}
+
+void ScreenManager::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos)
+{
+	this->screenSize = screenSize;
+	this->screenPosition = screenPos;
+
+	switch (currentState)
+	{
+	case State::Game: screenGame->UpdateScreenProperties(screenSize, screenPos); break;
+	case State::StartMeny: screenStart->UpdateScreenProperties(screenSize, screenPos); break;
+	case State::Cutscene: screenCutscene->UpdateScreenProperties(screenSize, screenPos); break;
+	case State::Options: screenOptions->UpdateScreenProperties(screenSize, screenPos); break;
+	case State::Posters: screenPosters->UpdateScreenProperties(screenSize, screenPos); break;
+	}
 }
 
 State ScreenManager::getState()

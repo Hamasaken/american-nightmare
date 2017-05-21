@@ -45,7 +45,7 @@ bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, 
 	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial"), world))
 		return false;
 	player->setShader(playerShader);
-	player->AddAnimation(materialManager->getMaterial("playermaterial"), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
+	player->AddAnimation(materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
 
 	////////////////////////////////////////////////////////////
 	// Creating the Enemy object
@@ -55,7 +55,7 @@ bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, 
 	if (!enemy->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), world))
 		return false;
 	enemy->setShader(playerShader);
-	enemy->AddAnimation(materialManager->getMaterial("playermaterial"), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
+	enemy->AddAnimation(materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
 
 	////////////////////////////////////////////////////////////
 	// Creating the Quad Tree Object
@@ -102,6 +102,15 @@ void LevelManager::Stop()
 ////		delete myProjectile;
 ////		myProjectile = nullptr;
 //	}
+	// Unloads every object in map
+	/*for (ProjectileHandler* projs : myPH)
+	{
+		if (projs != nullptr)
+		{
+			delete projs;
+			projs = nullptr;
+		}
+	}*/
 
 	// Unloads the map objects
 	StopMap();
@@ -194,20 +203,20 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	particleManager->EffectLightDust(glm::vec3(0, 10, 0));
 
 	// Temp directional light for shadows
-	lightManager->AddDirectionalLight(glm::vec4(5, 20, 20, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.8f);
+	lightManager->AddDirectionalLight(glm::vec4(5, 20, 10, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
 	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 
-	
-	//// Making some boxes to reload with
-	for (int i = 0; i < 50; i++)
+	 //Making some boxes to reload with
+	/*for (int i = 0; i < 10; i++)
 	{
 		Projectile* moveble = new Projectile(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
 		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
 		moveble->setShader(shader);
 		projectiles.push_back(moveble);
-	}
+	}*/
 
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
 	// Loading temp level
 	//LoadTempLevel(shader);
 
@@ -312,7 +321,10 @@ void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 	for (int i = 0; i < lights.size(); i++)
 	{
 		ALight* light = archive.getLight(lights[i].name.data);
-		lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.01, 1, 0.5f, 0.5f);
+		if(light->decayType == EDecayType::eLinear)
+			lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.1f, 1, 10.f, 1.f);
+		else if(light->decayType == EDecayType::eQuadratic)
+			lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.1f, 1, 1.f, 10.f);
 	}
 }
 
@@ -559,15 +571,13 @@ void LevelManager::LoadTempLevel(GLuint shader)
 void LevelManager::Update(GLint deltaT)
 {
 	// Updating player
-	//player->Update(deltaT);
-	player->Update(deltaT, world, glm::vec3(player->getPlayerPosAsGLM().x, player->getPlayerPosAsGLM().y, 0.5f));
+	player->Update(deltaT, world, player->getPlayerPosAsGLM());
+	if (player->getIsDashing()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(0.25f));
+	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
 
 	//Update Projectile
-	//myPH->Update(deltaT, world);
-
-	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
+	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
 	
-
 	// Updating enemies
 	enemy->Update(deltaT, player->getBody()->GetPosition());
 
@@ -575,10 +585,13 @@ void LevelManager::Update(GLint deltaT)
 	world->Step(1 / 60.f, 10, 20);
 
 	// Updating every object on map
-	deleteProjects();
+	//deleteProjects(world);
 
-	 for (Projectile* proj : projectiles)
-		 proj->Update(deltaT, world, player->getPlayerPosAsGLM());
+	 //for (Projectile* proj : projectiles)
+		 //proj->Update(deltaT, world, player->getPlayerPosAsGLM());
+
+	/* for (Projectile* proj : projectiles)
+		 proj->Update(deltaT, world, player->getPlayerPosAsGLM());*/
 
 	for (Object* object : map)
 		object->Update(deltaT);
@@ -683,30 +696,32 @@ std::vector<Object*> LevelManager::getMap()
 
 std::vector<Projectile*> LevelManager::getProjectiles()
 {
-	return this->projectiles;
+	return this->myPH->getBullets();
 }
 
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
 Player* LevelManager::getPlayer() { return player; }
 Enemy* LevelManager::getEnemy() { return enemy; }
 
-void LevelManager::deleteProjects()
-{
-	
-	for (int i = 0; i < this->projectiles.size(); i++)
-	{
-		
-		if (this->projectiles[i]->getmarked() == true)
-		{
-			Projectile* temp;
-			temp = this->projectiles[i];
-			this->projectiles[i] = this->projectiles.back();
-			this->projectiles.back() = temp;
-			this->projectiles.back()->~Projectile();
-			projectiles.pop_back();
-		}
-	}
-}
+//void LevelManager::deleteProjects(b2World* world)
+//{
+//	cout << this->projectiles.size() << endl;
+//	for (int i = 0; i < this->projectiles.size(); i++)
+//	{
+//		if (this->projectiles[i]->getmarked() == true)
+//		{
+//			Projectile* temp = this->projectiles[i];
+//			//temp = this->projectiles[i];
+//			this->projectiles[i] = this->projectiles.back();
+//			this->projectiles.back() = temp;
+//			//this->projectiles.back()->~Projectile();
+//			world->DestroyBody(this->projectiles.back()->getHitbox()->getBody());
+//			this->projectiles.pop_back();
+//
+//			//this->projectiles.back()
+//		}
+//	}
+//}
 
 //ProjectileHandler* LevelManager::getProjectiles() { return myPH; }
 //Projectile* LevelManager::getProjectile() { return moveble; }

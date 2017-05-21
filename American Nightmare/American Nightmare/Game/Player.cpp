@@ -11,7 +11,7 @@
 //	
 //}
 
-Player::Player() { }
+Player::Player(): Animation() { }
 
 Player::Player(const Player & other) { }
 
@@ -27,7 +27,8 @@ void Player::initiateCursor()
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world)
 {
-	this->checkValue = false;
+	//Variables for handeling the "gun"
+	this->nrOfProjectiles = 0;
 
 	//this->myProjectileHandler = ProjectileHandler(mesh, material, world, this->getPlayerPosAsGLM());
 
@@ -37,22 +38,31 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	// Starting entity variables (including hitbox)
 	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_MASS, PLAYER_FRICTION);
 
+	// Set default keys
+	RebindKeys(KEY_LEFT, KEY_RIGHT, KEY_JUMP, KEY_HOVER, KEY_DASH);
+
 	// Setting starting variables
+	hp = PLAYER_HP;
+	isDead = false;
 	position = glm::vec3(0, 20, 0);
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_SIZE_Z);
+	power = PLAYER_POWER_MAX;
 	hasJumped = false;
+	hasDashed = false;
+	isHovering = false;
+	isDashing = false;
 
 	// Creating model
 	model = new Model();
 	if (model == nullptr) return false;
-	/*if (!model->Start(modelName)) return false;*/
+	//if (!model->Start(modelName)) return false;
 
 	this->material = material;
 	model->BuildQuadTexture();
 
-	vac = new Vacuum();
-	vac->startVac(world, getBody());
+	//vac = new Vacuum();
+	//vac->startVac(nullptr, material2, world, getBody());
 
 	// Setting a self-pointer for collision detection
 	getBody()->SetUserData(this);
@@ -62,26 +72,165 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 
 void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 {
-	/*if (getCheckValue() == true)
-		myProjectileHandler.addProjectile(world);*/
+	// Are we currently hovering?
+	//isHovering = false;
+	isDashing = false;
 
-	//	//Update ProjectileHandler
-	//	myProjectileHandler->Update(deltaT, world, this->getPlayerPosAsGLM());
+	// Dash cooldown
+	if (hasDashed) {
+		isDashing = false;
+		dashCooldown -= deltaT;
+	}
+	if (dashCooldown < NULL)
+		hasDashed = false;
 
+	// Did we hit a surface?
+	if (hitbox->getBody()->GetLinearVelocity().y == 0.f && hasJumped) { hasJumped = false; isDashing = true; }
 
 	// Getting user input
-	InputKeyboard();
+	InputKeyboard(deltaT);
+	InputMouse();
 	InputTesting();
-	if (CONTROLLER_ON) InputController();
+	if (CONTROLLER_ON) InputController(deltaT);
+
+	// Recharging power meter
+	if (!isHovering)
+	{
+		power += deltaT * 0.001 * PLAYER_POWER_RECHARGE;
+
+		if (power > PLAYER_POWER_MAX)
+			power = PLAYER_POWER_MAX;
+	}
+	//printf("%f\n", powerMeter);
+
+	// Thresholds in velocity
+	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
+	if (vel.x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+	if (vel.x < -PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+	if (vel.y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, PLAYER_MAX_VEL_Y));
+	if (vel.y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, -PLAYER_MAX_VEL_Y));
 	
 	// Updating animation texture
 	updateAnimation(deltaT);
 
-	//Update ProjectileHandler
-	myProjectileHandler.Update(deltaT, world, glm::vec3(pos.x,pos.y, 0.5f));
 
 	// Correcting texture to hitbox
 	Entity::Update(deltaT);
+}
+
+void Player::RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash)
+{
+	this->key_left = key_left;
+	this->key_right = key_right;
+	this->key_jump = key_jump;
+	this->key_hover = key_hover;
+	this->key_dash = key_dash;
+}
+
+void Player::TakeDamage(float dmg)
+{
+	hp -= dmg;
+	if (hp <= NULL)
+	{
+		isDead = true;
+	}
+}
+
+void Player::Walk(Direction dir)
+{
+	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
+	if (!hasJumped)
+	{
+		switch (dir)
+		{
+		case LEFT:
+			if (vel.x > -PLAYER_MAX_VEL_X)
+			{
+				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
+				directionIsRight = true;
+			}
+			break;
+		case RIGHT:
+			if (vel.x < PLAYER_MAX_VEL_X)
+			{
+				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
+				directionIsRight = false;
+			}
+			break;
+		case STOPPED:
+			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+			break;
+		}
+	}
+	else
+	{
+		switch (dir)
+		{
+		case LEFT:
+			if (vel.x > -PLAYER_MAX_VEL_X)
+			{
+				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X * 0.35f, 0), true);
+				directionIsRight = true;
+			}
+			break;
+		case RIGHT:
+			if (vel.x < PLAYER_MAX_VEL_X)
+			{
+				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X * 0.35f, 0), true);
+				directionIsRight = false;
+			}
+			break;
+		case STOPPED:
+			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+			break;
+		}
+	}
+	
+}
+
+void Player::Jump()
+{
+	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
+
+	if (!hasJumped)
+	{
+		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
+		vel.y = hitbox->getBody()->GetLinearVelocity().y;
+		hasJumped = true;
+		isDashing = true;
+	}
+}
+
+void Player::Dash()
+{
+	if (!hasDashed)
+	{
+		power -= PLAYER_POWER_COST_DASH;
+		isDashing = true;
+		hasDashed = true;
+		dashCooldown = PLAYER_DASH_CD;
+		float angle = (directionIsRight) ? -glm::pi<float>() * 0.5f : glm::pi<float>() * 0.5f;
+		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(sin(angle) * PLAYER_DASH_VEL, cos(angle) * PLAYER_DASH_VEL), true);
+	}
+}
+
+void Player::Hover(GLint deltaT)
+{
+	static float yPos;
+
+	if (isHovering)
+	{
+		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
+		hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, 0.f));
+		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
+	}
+	else if (hasJumped)
+	{
+		isHovering = true;
+		yPos = hitbox->getBody()->GetPosition().y;
+		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
+		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
+	}
 }
 
 void Player::InputTesting()
@@ -103,64 +252,33 @@ void Player::InputTesting()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) rotation.x -= 0.1f;
 }
 
-void Player::InputKeyboard()
+void Player::InputMouse() { }
+
+void Player::InputKeyboard(GLint deltaT)
 {
-	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-	{
-		hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
-		directionIsRight = false;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-	{
-		hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
-		directionIsRight = true;
-	}
-	else
-	{
-		hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
-	}
+	if		(sf::Keyboard::isKeyPressed(key_left)) Walk(LEFT);
+	else if (sf::Keyboard::isKeyPressed(key_right)) Walk(RIGHT); 
+	else	Walk(STOPPED);
 
-	// Did we hit a surface?
-	if (vel.y == 0.f) hasJumped = false;
-	// Jumping
-	if (!hasJumped && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
-	{
-		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
-		vel.y = hitbox->getBody()->GetLinearVelocity().y;
-		hasJumped = true;
-	}
-
-	// Thresholds in velocity
-	if (vel.x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(PLAYER_MAX_VEL_X, vel.y));
-	if (vel.x < -PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(-PLAYER_MAX_VEL_X, vel.y));
-	if (vel.y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, PLAYER_MAX_VEL_Y));
-	if (vel.y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, -PLAYER_MAX_VEL_Y));
+	if (sf::Keyboard::isKeyPressed(key_jump)) Jump();
+	if (sf::Keyboard::isKeyPressed(key_hover) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
+	else isHovering = false;
+	if (sf::Keyboard::isKeyPressed(key_dash) && power >= PLAYER_POWER_COST_DASH) Dash();
 }
 
-void Player::InputController()
+void Player::InputController(GLint deltaT)
 {
 	sf::Joystick::update();
 	if (sf::Joystick::isConnected(0))
 	{
-		b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
+		if (sf::Joystick::isButtonPressed(0, BTN_A)) Jump();
 
-		if (!hasJumped && sf::Joystick::isButtonPressed(0, BTN_A))
-		{
-			if (vel.y >= 0.f) 
-			{
-				hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
-				hasJumped = true;
-			}
-		}
-		else if (vel.y == 0.f) hasJumped = false;
+		if (sf::Joystick::isButtonPressed(0, BTN_X) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
 
-		if (sf::Joystick::isButtonPressed(0, BTN_X))
-			printf("X.\n");
 		if (sf::Joystick::isButtonPressed(0, BTN_Y))
 			printf("Y.\n");
-		if (sf::Joystick::isButtonPressed(0, BTN_B))
-			printf("B.\n");
+		if (sf::Joystick::isButtonPressed(0, BTN_B) && power >= PLAYER_POWER_COST_DASH) Dash();
+
 		if (sf::Joystick::isButtonPressed(0, BTN_LB))
 			printf("LB.\n");
 		if (sf::Joystick::isButtonPressed(0, BTN_RB))
@@ -177,17 +295,10 @@ void Player::InputController()
 		float leftAxis = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X) / 100.f;
 		if (leftAxis < -0.1f || leftAxis > 0.1f) // Controller offset
 		{
-			hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X * leftAxis, 0), true);
-			if (leftAxis > 0) directionIsRight = false;
-			else if (leftAxis < 0) directionIsRight = true;
+			if (leftAxis > 0)	Walk(RIGHT);
+			else				Walk(LEFT);
 		}
-		else hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
-
-		// Thresholds in velocity
-		if (vel.x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(PLAYER_MAX_VEL_X, vel.y));
-		if (vel.x < -PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(-PLAYER_MAX_VEL_X, vel.y));
-		if (vel.y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, PLAYER_MAX_VEL_Y));
-		if (vel.y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, -PLAYER_MAX_VEL_Y));
+		else Walk(STOPPED);
 	}
 }
 
@@ -196,10 +307,25 @@ b2Body* Player::getBody()
 	return hitbox->getBody();
 }
 
-//Vacuum * Player::getVac()
-//{
-//	return vac;
-//}
+bool Player::getIsDashing()
+{
+	return isDashing;
+}
+
+float& Player::getHP()
+{
+	return hp;
+}
+
+float& Player::getPower()
+{
+	return power;
+}
+
+bool Player::getIsHovering()
+{
+	return isHovering;
+}
 
 glm::vec2 Player::getPlayerPosAsGLM()
 {
@@ -211,20 +337,27 @@ glm::vec2 Player::getPlayerPosAsGLM()
 	return myVec;
 }
 
-/*bool Player::addPlayerProjectiles()
+bool Player::addPlayerProjectiles()
 {
-	if (myProjectileHandler.getNrOffProjectiles() >= myProjectileHandler.getCAP())
+	if (this->nrOfProjectiles >= this->CAP)
+	{
 		return false;
+	}
 	else
+	{
+		this->nrOfProjectiles++;
 		return true;
+	}
 }
 
-void Player::setCheckForProjectilePickUp(bool checkValue)
-{ 
-		this->checkValue = checkValue;
-}
-
-bool Player::getCheckValue()const
+bool Player::getCanShoot()const
 {
-	return this->checkValue;
-}*/
+	if (this->nrOfProjectiles >= this->CAP)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}

@@ -28,10 +28,9 @@ public:
 	// \brief Updates every particle in this emitter
 	// \param deltaT Time between each frame in milliseconds
 	////////////////////////////////////////////////////////////
-	void Update(GLfloat deltaT);
+	virtual void Update(GLfloat deltaT);
 
 	void MakeVertices();
-
 	void Draw();
 
 	// Get & Set functions
@@ -45,7 +44,7 @@ public:
 	GLuint getTexture() const;
 	GLuint getShader() const;
 
-private:
+protected:
 	unsigned int vertexArray;
 	unsigned int vertexBuffer;
 	int vertexCount;
@@ -57,6 +56,14 @@ private:
 	std::vector<Particle*> particles;	//< The particles in this emitter in a vector
 	GLuint texture;						//< Holds the potential texture for the particles
 	GLuint shader;						//< Holds the shader for this portion of particles
+};
+
+class IncreasingParticleEmitter : public ParticleEmitter
+{
+public:
+	void SignalSmoke(glm::vec3 position, GLuint texture, float angle, glm::vec4 color, glm::vec2 size, int amount);
+	void SignalFire(glm::vec3 position, GLuint texture, float angle, glm::vec4 color, glm::vec2 size, int amount);
+	void Update(GLfloat deltaT);
 };
 
 #endif // !PARTICLEEMITTER_H

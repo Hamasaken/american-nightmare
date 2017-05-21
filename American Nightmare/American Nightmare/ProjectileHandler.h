@@ -12,23 +12,21 @@ private:
 	GLuint myShader;
 	bool wasPressed;
 	bool isPressed;
-	int currentBullet;
-	int nrOfProjectiles;
-	int CAP;
 	
-	void initiateProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos);
+	MeshManager::Mesh* myMesh;
+	MaterialManager::Material* myMaterial;
+
+	void initiateProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos);
 
 public:
 	//ProjectileHandler(b2World* world, GLuint shader, int CAP = 10);
-	ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos);
+	ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos);
 	ProjectileHandler();
 	~ProjectileHandler();
 
 	void Update(GLint deltaT, b2World* world, glm::vec2 position);
-	void addProjectile(b2World* world);
-	int getNrOffProjectiles()const;
-	int getCAP()const;
-	//std::vector<Projectile*> getBullets();
+	void deleteProjects(b2World* world);
+	std::vector<Projectile*> getBullets();
 };
 
 #endif
