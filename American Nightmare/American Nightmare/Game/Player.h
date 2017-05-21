@@ -84,7 +84,7 @@ private:
 	bool isDashing;				//< If the player is currently dashing
 	bool isHovering;			//< If the player is currently hovering
 
-	//< Rebindable keys
+	//< Rebindable keys 
 	sf::Keyboard::Key key_left;
 	sf::Keyboard::Key key_right;
 	sf::Keyboard::Key key_jump;
