@@ -1,10 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <glm/glm.hpp>	
-#include <glm/mat4x4.hpp>		// 4x4 matrices
-#include <glm/gtc/matrix_transform.hpp>	// matrix stuff
-#include <glm/gtx/rotate_vector.hpp>	// rotating vectors and matrices
+#include "../Accessories.h"
 
 #define CAMERA_SPEED 0.09f
 
@@ -33,6 +30,16 @@ public:
 	void smoothToPosition(glm::vec3 position);
 
 	////////////////////////////////////////////////////////////
+	// \brief Screenshake
+	////////////////////////////////////////////////////////////
+	void screenShake(float time, float power = 1.f);
+
+	////////////////////////////////////////////////////////////
+	// \brief Updates screenshake and moves to center
+	////////////////////////////////////////////////////////////
+	void Update(float deltaT);
+
+	////////////////////////////////////////////////////////////
 	// \brief Gets the current view matrix
 	// \note Only call this after you've called builtViewMatrix
 	// \return The view matrix in 4x4
@@ -47,7 +54,10 @@ public:
 
 private:
 	glm::mat4 viewMatrix;	//< The camera's view matrix
-	glm::vec3 position;	//< Position of the camera
+	glm::vec3 position;		//< Position of the camera
+	bool screenShakeActive;
+	float screenShakeTime;
+	float screenShakePower;
 };
 
 #endif // !CAMERA_H

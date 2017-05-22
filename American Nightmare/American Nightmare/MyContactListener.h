@@ -2,11 +2,12 @@
 #define MYCONTACTLISTENER_H
 
 #include <Box2D.h>
-#include "Game\Particle\ParticleManager.h"
-#include "Game\Object.h"
-#include "Game\Entity.h"
-#include "Game\Player.h"
+#include "Game\Camera.h"
 #include "SoundManager.h"
+#include "vacuum.h"
+#include "Projectile.h"
+#include "Game\Particle\ParticleManager.h"
+#include "Game\Player.h"
 #include "Enemy.h"
 
 class MyContactListener : public b2ContactListener
@@ -14,12 +15,13 @@ class MyContactListener : public b2ContactListener
 private:
 	ParticleManager* particleManager;
 	SoundManager* soundManager;
+	Camera* camera;
 
 public:
 	MyContactListener();
 	~MyContactListener();
 
-	void Start(ParticleManager* particleManager, SoundManager* soundManager);
+	void Start(ParticleManager* particleManager, SoundManager* soundManager, Camera* camera);
 
 	void BeginContact(b2Contact* contact);
 	void EndContact(b2Contact* contact);

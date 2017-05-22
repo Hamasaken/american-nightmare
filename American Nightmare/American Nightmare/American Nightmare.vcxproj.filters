@@ -204,6 +204,9 @@
     <ClCompile Include="Game\GUI\Bar.cpp">
       <Filter>Source Files\Game\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Game\EntityManager.cpp">
+      <Filter>Source Files\Game\Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h">
@@ -341,6 +344,9 @@
     <ClInclude Include="Game\GUI\Bar.h">
       <Filter>Header Files\Game\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Game\EntityManager.h">
+      <Filter>Header Files\Game\Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Graphics\Shaders\solid_fs.glsl">
@@ -416,6 +422,15 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Data\Graphics\Shaders\shadowmap_point_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_cube_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_cube_gs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_cube_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

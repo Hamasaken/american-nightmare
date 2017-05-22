@@ -16,7 +16,8 @@ bool Enemy::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(ENEMY_SIZE_X, ENEMY_SIZE_Y, ENEMY_SIZE_Z);
 	damage = 1.f;
-
+	hp = 3;
+	isDead = false;
 	// Setting a self-pointer for collision detection
 	hitbox->getBody()->SetUserData(this);
 
@@ -25,14 +26,18 @@ bool Enemy::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material
 
 void Enemy::Update(GLint deltaT, b2Vec2 playerPos)
 {
-	// Getting user input
-	Movement(playerPos);
+	// Check if enemy is on screen
+	if (std::abs(playerPos.x - this->position.x) < ENEMY_UPDATE_DISTANCE)
+	{
+		// Getting user input
+		Movement(playerPos);
 
-	// Updating animation texture
-	updateAnimation(deltaT);
+		// Updating animation texture
+		updateAnimation(deltaT);
 
-	// Correcting texture to hitbox
-	Entity::Update(deltaT);
+		// Correcting texture to hitbox
+		Entity::Update(deltaT);
+	}
 }
 
 void Enemy::Movement(b2Vec2 playerPos)
@@ -100,4 +105,18 @@ float Enemy::getDamage()
 b2Body* Enemy::getBody()
 {
 	return hitbox->getBody();
+}
+
+void Enemy::TakeDamage(float dmg)
+{
+	hp -= dmg;
+	if (hp <= NULL)
+	{
+		isDead = true;
+	}
+}
+
+bool Enemy::getIsDead()const
+{
+	return this->isDead;
 }

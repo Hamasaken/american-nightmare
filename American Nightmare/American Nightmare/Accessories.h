@@ -13,6 +13,8 @@
 #include <Windows.h>
 #include <GL/glew.h>
 #include <string>
+#include <fstream>
+#include <istream>
 
 // Including various opengl math classes & functions
 #include <glm/glm.hpp>	
@@ -70,7 +72,8 @@ enum ParticleType
 	BLOOD,
 	TEXTURE,
 	SMOKE,
-	LIGHT_DUST
+	LIGHT_DUST, 
+	NUTSBOLTS
 };
 
 // Game State

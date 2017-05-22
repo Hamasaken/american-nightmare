@@ -31,6 +31,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	shaderManager->AddShader("texture_animation_normal", SHADER_PATH "texture_animation_vs.glsl", SHADER_PATH "texture_animation_fs.glsl");
 	shaderManager->AddShader("particle_light", SHADER_PATH "particle_light_vs.glsl", SHADER_PATH "particle_light_gs.glsl", SHADER_PATH "particle_light_fs.glsl");
 	shaderManager->AddShader("particle_texture", SHADER_PATH "particle_texture_vs.glsl", SHADER_PATH "particle_texture_gs.glsl", SHADER_PATH "particle_texture_fs.glsl");
+	shaderManager->AddShader("particle_cube", SHADER_PATH "particle_cube_vs.glsl", SHADER_PATH "particle_cube_gs.glsl", SHADER_PATH "particle_cube_fs.glsl");
 	shaderManager->AddShader("deferred", SHADER_PATH "dr_vs.glsl", SHADER_PATH "dr_fs.glsl");
 	shaderManager->AddShader("deferred_final", SHADER_PATH "drfinal_vs.glsl", SHADER_PATH "drfinal_fs.glsl");
 	shaderManager->AddShader("shadowdir", SHADER_PATH "shadowmap_dir_vs.glsl", SHADER_PATH "shadowmap_dir_fs.glsl");
@@ -59,6 +60,8 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "groundtexture", TEXTURE_PATH "temp_ground.jpg");
 	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "backgroundtexture", TEXTURE_PATH "temp_background.jpg");
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
+	materialManager->AddMaterial("boltmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "bolttexture", TEXTURE_PATH "bolt.jpg");
+	for (int i = 1; i < 11; i++) materialManager->AddMaterial("postermaterial_" + std::to_string(i), glm::vec3(1.f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "poster_" + std::to_string(i), (POSTER_PATH "poster_" + std::to_string(i) + ".jpg"));
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 	if (materialManager->getMaterial("GUI_2_mat") == nullptr) printf("Button Material not found\n");
 	if (materialManager->getMaterial("playermaterial") == nullptr) printf("Player Material not found\n");
@@ -66,6 +69,8 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (materialManager->getMaterial("groundmaterial") == nullptr) printf("Ground Material not found\n");
 	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Background Material not found\n");
 	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
+	if (materialManager->getMaterial("boltmaterial") == nullptr) printf("Bolt Material not found\n");
+
 
 	////////////////////////////////////////////////////////////
 	// Creating Particle Manager
@@ -77,22 +82,13 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	particleManager->ShaderPair(shaderManager->getShader("particle_light"), ParticleType::BLOOD);
 	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::TEXTURE);
 	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::SMOKE);
+	particleManager->ShaderPair(shaderManager->getShader("particle_cube"), ParticleType::NUTSBOLTS);
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
 	////////////////////////////////////////////////////////////
 	meshManager = new MeshManager();
 	if (meshManager == nullptr) return false;
-	
-	// add quad mesh here later
-
-	////////////////////////////////////////////////////////////
-	// Level Manager
-	////////////////////////////////////////////////////////////
-	levelManager = new LevelManager();
-	if (levelManager == nullptr) return false;
-	if (!levelManager->Start(shaderManager->getShader("texture_animation_normal"), materialManager, meshManager, particleManager, soundManager))
-		return false;
 
 	////////////////////////////////////////////////////////////
 	// Creating a GUI manager	
@@ -109,6 +105,14 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	guiManager->setInstantCenter(glm::vec2(0, 2));
 
 	////////////////////////////////////////////////////////////
+	// Level Manager
+	////////////////////////////////////////////////////////////
+	levelManager = new LevelManager();
+	if (levelManager == nullptr) return false;
+	if (!levelManager->Start(screenSize, shaderManager->getShader("texture_animation_normal"), shaderManager->getShader("deferred"), shaderManager->getShader("texture"), materialManager, meshManager, particleManager, soundManager, camera))
+		return false;
+
+	////////////////////////////////////////////////////////////
 	// Creating a UI manager	
 	////////////////////////////////////////////////////////////
 	uiManager = new GUIManager();
@@ -117,8 +121,8 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.89f, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Pause", FONT_PATH INGAME_FONT, 17.5f, glm::vec4(0.875f));
 	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(-0.3, -0.96, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_bar_red"), meshManager->getMesh("quad"));
 	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(0.3, -0.96, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quad"));
-	uiManager->AddText(glm::vec3(-0.3, -0.96, 0), 30.f, "Health", FONT_PATH INGAME_FONT);
-	uiManager->AddText(glm::vec3(0.3, -0.96, 0), 30.f, "Power", FONT_PATH INGAME_FONT);
+	uiManager->AddText(glm::vec3(-0.3, -0.96, 0.f), 30.f, "Health", FONT_PATH INGAME_FONT);
+	uiManager->AddText(glm::vec3(0.3, -0.96, 0.f), 30.f, "Power", FONT_PATH INGAME_FONT);
 	uiManager->setAlpha(0.40f);
 	uiManager->setShader(shaderManager->getShader("texture"));
 	uiManager->setInstantCenter(glm::vec2(0, 0));
@@ -138,7 +142,7 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 18.5f));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(shaderManager->getShader("deferred"), LEVEL_PATH "Level2.anl", ARCHIVE_PATH "Assets2.ana");
+	levelManager->LoadLevel(LEVEL_PATH "Level2.anl", ARCHIVE_PATH "Assets2.ana");
 
 	// Adding shadow
 	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], glm::vec3(5.f, 5.f, -10.f), glm::vec2(screenSize.x * 0.5, screenSize.y * 0.5), glm::vec2(60, 30), 5.f, 40);
@@ -176,6 +180,10 @@ void ScreenGame::Draw()
 	for (Object* object : levelManager->getMap())
 		DrawObjectGeometryPass(object, shaderManager);
 
+	// Drawing movable entities
+	for (Entity* entity : *levelManager->getEntityManager()->getEntityList())
+		DrawObjectGeometryPass(entity, shaderManager);
+
 	////TEST
 	//for(Projectile* proj : levelManager->getProj())
 	//	DrawObjectGeometryPass(proj, shaderManager);
@@ -206,21 +214,27 @@ void ScreenGame::Draw()
 	// Reenable Blend
 	glEnable(GL_BLEND);
 
-
 	//DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
 	// DR: Light pass
 	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
-	// Drawing player
-	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
-
-	// Draw Enemy
-	DrawObjectAnimation(levelManager->getEnemy(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
-
 	// Drawing particles
 	for (ParticleEmitter* emitter : *particleManager->getEmitters())
 		DrawParticles(emitter, shaderManager);
+
+	// Drawing player
+	if (levelManager->getPlayer()->getInvulTime() > 0.f)
+	{
+		if((int)(levelManager->getPlayer()->getInvulTime() * 10.f) % 2 == 0)
+			DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
+	}
+	else
+		DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
+
+	// Draw Enemies
+	for (Enemy* enemy : *levelManager->getEntityManager()->getEnemyList())
+		DrawObjectAnimation(enemy, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
 	// Drawing gui Manager if we're paused
 	if (gameState != PLAYING)
@@ -254,6 +268,9 @@ void ScreenGame::Draw()
 		for (int i = 0; i < txts->size(); i++)
 			DrawObjectGUI(txts[0][i], shaderManager);
 	}
+
+	// Drawing popup
+	DrawObjectGUI(levelManager->getPopup(), shaderManager);
 
 	// Temp shadow map debug
 	/*if (shadowManager.getUseShadows())
@@ -295,16 +312,29 @@ void ScreenGame::DrawShadowMaps()
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		glCullFace(GL_FRONT);
+		
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
 			DrawObjectDirShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+	
 		glCullFace(GL_BACK);
+
+		// Drawing movable entities
+		for (Entity* entity : *levelManager->getEntityManager()->getEntityList())
+			DrawObjectDirShadowMap(entity, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+
+		for (Projectile* projectiles : levelManager->getProjectiles())
+			DrawObjectDirShadowMap(projectiles, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
 		// Set shader for transparent objects
 		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
 
 		DrawObjectDirShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
-		DrawObjectDirShadowMapTransparent(levelManager->getEnemy(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+
+		// DRawing enemies
+		for (Enemy* enemy : *levelManager->getEntityManager()->getEnemyList())
+			DrawObjectDirShadowMapTransparent(enemy, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+
 
 		// Unbind FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -331,11 +361,21 @@ void ScreenGame::DrawShadowMaps()
 		for (Object* object : levelManager->getMap())
 			DrawObjectPointShadowMap(object, shaderManager, shadowManager.getPointShadowMapList()[i]);
 
+		// Drawing movable entities
+		for (Entity* entity : *levelManager->getEntityManager()->getEntityList())
+			DrawObjectPointShadowMap(entity, shaderManager, shadowManager.getPointShadowMapList()[i]);
+
+		for (Projectile* projectiles : levelManager->getProjectiles())
+			DrawObjectPointShadowMap(projectiles, shaderManager, shadowManager.getPointShadowMapList()[i]);
+
+
 		// Set shader for transparent objects
 		//shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
 
 		//DrawObjectDirShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
-		//DrawObjectDirShadowMapTransparent(levelManager->getEnemy(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+//		for (Enemy* enemy : *levelManager->getEntityManager()->getEnemyList())
+//			DrawObjectDirShadowMapTransparent(enemy, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+
 
 		// Unbind FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -404,7 +444,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::O))
 		particleManager->EffectConstantSmoke(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 5);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K))
-		particleManager->EffectSmokeSignal(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 0);
+		particleManager->EffectNutsAndBolts(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("boltmaterial")->getTextureID(), 5);
 
 	// Updating particles effects
 	particleManager->Update(deltaT);
@@ -414,9 +454,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	// Moving the camera to follow player object
 	camera->smoothToPosition(glm::vec3(levelManager->getPlayer()->getPosition().x, levelManager->getPlayer()->getPosition().y, camera->getPosition().z));
-
-	// Building a new camera view matrix
-	camera->buildViewMatrix();
+	camera->Update(deltaT);
 
 	// Updating UI presses
 	uiManager->Update(deltaT);
@@ -481,7 +519,6 @@ void ScreenGame::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPo
 	uiManager->setScreenPosition(screenPos);
 	uiManager->setScreenSize(screenSize);
 }
-
 
 void ScreenGame::Stop()
 {

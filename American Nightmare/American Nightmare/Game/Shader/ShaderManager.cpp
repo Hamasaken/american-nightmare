@@ -251,6 +251,7 @@ GLuint ShaderManager::compileShader(std::string text, GLenum type)
 	if (!error)
 	{
 		glGetShaderInfoLog(compiled, 512, nullptr, msg);
+		printf("Shader could not complile because: \n%s", std::string(msg));
 		throw std::runtime_error("Could not compile shader because: " + std::string(msg));
 	}
 

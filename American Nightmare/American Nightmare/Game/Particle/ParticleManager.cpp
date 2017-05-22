@@ -79,6 +79,19 @@ void ParticleManager::EffectSmokeCloud(glm::vec3 position, GLuint texture, int a
 	emitters.push_back(emitter);
 }
 
+void ParticleManager::EffectNutsAndBolts(glm::vec3 position, GLuint texture, int amount)
+{
+	// Creating a emmiter with a specific type
+	ParticleEmitter* emitter = new ParticleEmitter();
+	emitter->setType(ParticleType::NUTSBOLTS);
+	emitter->setShader(getShaderFromPair(emitter->getType()));
+
+	// Creating particles with inputted variables into emitter
+	glm::vec2 size(NUTS_SIZE, NUTS_SIZE);
+	emitter->NutsAndBolts(position, texture, size, amount);
+	emitters.push_back(emitter);
+}
+
 void ParticleManager::EffectConstantSmoke(glm::vec3 position, GLuint texture, int amount, glm::vec4 color)
 {
 	// Creating a emmiter with a specific type

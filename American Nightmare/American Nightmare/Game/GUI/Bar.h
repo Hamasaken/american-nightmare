@@ -20,14 +20,14 @@ public:
 	// \param mesh The mesh of this bar (leave as nullptr for normal quad)
 	// \return Returns false if model or font could not be created
 	////////////////////////////////////////////////////////////
-	bool Start(float &value, float maxValue, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh);
+	virtual bool Start(float &value, float maxValue, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh);
 	void Stop();
 
 	////////////////////////////////////////////////////////////
 	// \brief Updates button by checking if increasing/decreasing and changing value
 	// \param deltaT The time between each frame in milliseconds
 	////////////////////////////////////////////////////////////
-	void Update(GLfloat deltaT);
+	virtual void Update(GLfloat deltaT);
 
 	////////////////////////////////////////////////////////////
 	// \brief Draws the model and the text on top
@@ -40,7 +40,7 @@ public:
 	float getAlpha();
 	void setAlpha(float alpha);
 
-private:
+protected:
 	float alpha;			//< The alpha value of this bar
 	float* value;			//< The value this bar is looking at with the actual value
 	float maxValue;			//< The value this bar is looking at but the 100% value

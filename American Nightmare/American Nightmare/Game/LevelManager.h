@@ -6,6 +6,7 @@
 #include "Particle\ParticleManager.h"
 #include <vector>
 #include <Box2D.h>
+#include "GUI\GUIManager.h"
 #include "../Enemy.h"
 #include "Trigger.h"
 #include "../Projectile.h"
@@ -15,7 +16,11 @@
 #include "../ANNIE/LevelFile.h"
 #include "MeshManager.h"
 #include "QuadTree.h"
-//#include "../ProjectileHandler.h"
+#include "EntityManager.h"
+#include <istream>
+#include <iostream>
+#include <fstream>
+#include <string>
 
 class LevelManager
 {
@@ -26,13 +31,15 @@ public:
 
 	////////////////////////////////////////////////////////////
 	// \brief Starts class, gets the openGL ptr
+	// \param screenSize For optimazition
 	// \param playerShader The specific shader for the player
+	// \param mapShader The specific shader for the whole map
 	// \param materialManager ptr to all the materials
 	// \param meshManager ptr to all the meshes
 	// \param particleManager ptr to the particle manager
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(GLuint playerShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager);
+	bool Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, GLuint guiShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -45,20 +52,23 @@ public:
 	void StopMap();
 
 	////////////////////////////////////////////////////////////
-	// \brief Loads new map objects from a file and setting 
-	//	which specific shader to use for all those objects
-	// \param shader ID for the shader to be used
+	// \brief Loads new map objects from a file 
 	// \param levelFile Only the name of the file (.anl)
 	// \param archiveFile Only the name of the archive file (.ana)
 	// \return Returns false if the map could not be loaded, otherwise true
 	////////////////////////////////////////////////////////////
-	bool LoadLevel(GLuint shader, std::string levelPath, std::string archivePath);
-	void LoadTempLevel(GLuint shader);
+	bool LoadLevel(std::string levelPath, std::string archivePath);
+	void LoadTempLevel();
 
 	////////////////////////////////////////////////////////////
 	// \brief Updates every object on map
 	///////////////////////////////////////////////////////////
 	void Update(GLint deltaT);
+
+	////////////////////////////////////////////////////////////
+	// \brief Activates a popup
+	///////////////////////////////////////////////////////////
+	void ActivatePopup(std::string text, GLfloat timer = 1000.f);
 
 	////////////////////////////////////////////////////////////
 	// \brief Get the vector of objects to draw or do something with
@@ -68,8 +78,9 @@ public:
 	std::vector<Projectile*> getProjectiles();
 
 	const LightManager* getLightManager() const;
+	EntityManager* getEntityManager();
 	Player* getPlayer();
-	Enemy* getEnemy();
+	Text* getPopup();
 	//Projectile* getProjectile();
 	//ProjectileHandler* getProjectiles();
 
@@ -89,12 +100,15 @@ private:
 	void LoadArchiveTextures(std::vector<ATexture> textures);
 
 	// Level
-	void LoadLevelMeshes(std::vector<LMesh> meshes, GLuint shader);
+	void LoadLevelMeshes(std::vector<LMesh> meshes);
 	void LoadLevelHitboxes(std::vector<LHitbox> hitboxes);
 	void LoadLevelLights(std::vector<LLight> lights);
-	void LoadLevelSpawners(std::vector<LSpawner> spawner, GLuint shader);
+	void LoadLevelSpawners(std::vector<LSpawner> spawner);
 	void LoadLevelTriggers(std::vector<LTrigger> triggers);
 	void LoadLevelEffects(std::vector<LEffect> effects);
+	
+	// Unlock a poster
+	void UnlockPoster(int index);
 
 	std::vector<Object*> map;	//< Vector with level specific objects
 	std::vector<Hitbox*> hitboxes;
@@ -102,11 +116,9 @@ private:
 	std::vector<Projectile*> projectiles;
 	Player* player;				//< The player object
 
-	Enemy* enemy;				//< A Enemy object
-
 	AArchiveHandler archive;
 	LLevelHandler levelFile;
-
+	EntityManager* entityManager;
 	MeshManager* meshManager;
 	ParticleManager* particleManager;
 	SoundManager* soundManager;
@@ -115,6 +127,18 @@ private:
 	b2World *world;
 	MyContactListener contactManager;
 	QuadTree* quadTree;
+	Camera* camera;
+	Text* popup;
+	
+	// Popup
+	GLfloat popupAlpha;
+	GLfloat popupTimer;
+	GLboolean popupActive;
+
+	// Shaders
+	GLuint mapShader;
+	GLuint playerShader;
+	GLuint guiShader;
 
 	//Variables for projectileHandler
 	ProjectileHandler* myPH;

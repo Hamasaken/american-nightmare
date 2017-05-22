@@ -40,6 +40,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	hasDashed = false;
 	isHovering = false;
 	isDashing = false;
+	invulTime = 0.f;
 
 	// Creating model
 	model = new Model();
@@ -84,12 +85,15 @@ void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 	// Recharging power meter
 	if (!isHovering)
 	{
-		power += deltaT * 0.001 * PLAYER_POWER_RECHARGE;
+		power += deltaT * 0.001f * PLAYER_POWER_RECHARGE;
 
 		if (power > PLAYER_POWER_MAX)
 			power = PLAYER_POWER_MAX;
 	}
-	//printf("%f\n", powerMeter);
+
+	// Update player invulnerability time
+	if (invulTime > 0.f)
+		invulTime -= deltaT * 0.001f;
 
 	// Thresholds in velocity
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
@@ -192,7 +196,7 @@ void Player::Jump()
 	}
 }
 
-void Player::Dash()
+void Player::Dash(sf::Keyboard::Key inKey)
 {
 	if (!hasDashed)
 	{
@@ -200,7 +204,14 @@ void Player::Dash()
 		isDashing = true;
 		hasDashed = true;
 		dashCooldown = PLAYER_DASH_CD;
-		float angle = (directionIsRight) ? -glm::pi<float>() * 0.5f : glm::pi<float>() * 0.5f;
+		//float angle = (directionIsRight) ? -glm::pi<float>() * 0.5f : glm::pi<float>() * 0.5f;
+
+		float angle;
+		if (inKey == key_left)
+			angle = -glm::pi<float>() * 0.5f;
+		else
+			angle = glm::pi<float>() * 0.5f;
+
 		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(sin(angle) * PLAYER_DASH_VEL, cos(angle) * PLAYER_DASH_VEL), true);
 	}
 }
@@ -247,14 +258,21 @@ void Player::InputMouse() { }
 
 void Player::InputKeyboard(GLint deltaT)
 {
-	if		(sf::Keyboard::isKeyPressed(key_left)) Walk(LEFT);
-	else if (sf::Keyboard::isKeyPressed(key_right)) Walk(RIGHT); 
+	if (sf::Keyboard::isKeyPressed(key_left))
+	{
+		Walk(LEFT);
+		if (sf::Keyboard::isKeyPressed(key_dash) && power >= PLAYER_POWER_COST_DASH) Dash(key_left);
+	}
+	else if (sf::Keyboard::isKeyPressed(key_right))
+	{
+		Walk(RIGHT);
+		if (sf::Keyboard::isKeyPressed(key_dash) && power >= PLAYER_POWER_COST_DASH) Dash(key_right);
+	}
 	else	Walk(STOPPED);
 
 	if (sf::Keyboard::isKeyPressed(key_jump)) Jump();
 	if (sf::Keyboard::isKeyPressed(key_hover) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
 	else isHovering = false;
-	if (sf::Keyboard::isKeyPressed(key_dash) && power >= PLAYER_POWER_COST_DASH) Dash();
 }
 
 void Player::InputController(GLint deltaT)
@@ -268,8 +286,6 @@ void Player::InputController(GLint deltaT)
 
 		if (sf::Joystick::isButtonPressed(0, BTN_Y))
 			printf("Y.\n");
-		if (sf::Joystick::isButtonPressed(0, BTN_B) && power >= PLAYER_POWER_COST_DASH) Dash();
-
 		if (sf::Joystick::isButtonPressed(0, BTN_LB))
 			printf("LB.\n");
 		if (sf::Joystick::isButtonPressed(0, BTN_RB))
@@ -286,8 +302,16 @@ void Player::InputController(GLint deltaT)
 		float leftAxis = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X) / 100.f;
 		if (leftAxis < -0.1f || leftAxis > 0.1f) // Controller offset
 		{
-			if (leftAxis > 0)	Walk(RIGHT);
-			else				Walk(LEFT);
+			if (leftAxis > 0)
+			{
+				Walk(RIGHT);
+				if (sf::Joystick::isButtonPressed(0, BTN_B) && power >= PLAYER_POWER_COST_DASH) Dash(key_right);
+			}
+			else
+			{
+				Walk(LEFT);
+				if (sf::Joystick::isButtonPressed(0, BTN_B) && power >= PLAYER_POWER_COST_DASH) Dash(key_left);
+			}
 		}
 		else Walk(STOPPED);
 	}
@@ -316,6 +340,16 @@ float& Player::getPower()
 bool Player::getIsHovering()
 {
 	return isHovering;
+}
+
+void Player::setInvulTime(GLfloat invulTime)
+{
+	this->invulTime = invulTime;
+}
+
+GLfloat Player::getInvulTime()
+{
+	return invulTime;
 }
 
 glm::vec2 Player::getPlayerPosAsGLM()

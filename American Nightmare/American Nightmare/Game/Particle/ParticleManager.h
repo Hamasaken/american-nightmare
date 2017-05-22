@@ -49,6 +49,15 @@ public:
 		glm::vec4 color = TEXTURE_DEFAULT_COLOR);
 
 	////////////////////////////////////////////////////////////
+	// \brief Creates an explosion of nuts and bolts with given texture (gravity is really high)
+	// \param position The position of explosion
+	// \param texture The texture of each bolt
+	// \optional amount The amount of spawned blood particles
+	////////////////////////////////////////////////////////////
+	void EffectNutsAndBolts(glm::vec3 position, GLuint texture,
+		int amount = TEXTURE_DEFAULT_AMOUNT);
+
+	////////////////////////////////////////////////////////////
 	// \brief Creates an explosion with given texture
 	// \param position The position of explosion
 	// \param texture The texture of each pixels (smoke/blood/whatevs)
@@ -70,7 +79,6 @@ public:
 		glm::vec3 dimensions = LIGHT_DUST_DEFAULT_DIMENSIONS,
 		int amount = LIGHT_DUST_DEFAULT_AMOUNT,
 		glm::vec4 color = LIGHT_DUST_DEFAULT_COLOR);
-
 
 	////////////////////////////////////////////////////////////
 	// \brief Creates an smoke signal which always is active until level switch
