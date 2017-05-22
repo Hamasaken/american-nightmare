@@ -23,13 +23,14 @@ bool Enemy::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material
 	return true;
 }
 
-void Enemy::Update(GLint deltaT, b2Vec2 playerPos)
+void Enemy::Update(GLint deltaT, b2Vec2 playerPos, bool playerDead)
 {
 	// Check if enemy is on screen
 	if (std::abs(playerPos.x - this->position.x) < ENEMY_UPDATE_DISTANCE)
 	{
 		// Getting user input
-		Movement(playerPos);
+		if(!playerDead)
+			Movement(playerPos);
 
 		// Updating animation texture
 		updateAnimation(deltaT);

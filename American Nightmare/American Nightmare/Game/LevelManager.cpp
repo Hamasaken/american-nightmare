@@ -200,7 +200,7 @@ void LevelManager::Update(GLint deltaT)
 	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
 
 	// Updating every entity
-	entityManager->Update(deltaT, player->getPosition());
+	entityManager->Update(deltaT, player->getPosition(), player->getIsDead());
 
 	// Updating physics
 	world->Step(1 / 60.f, 10, 20);

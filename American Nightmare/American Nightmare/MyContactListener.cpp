@@ -23,7 +23,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 	Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
 
 	Player* player = dynamic_cast<Player*>(bodyA);
-	if (player)
+	if (player && !player->getIsDead())
 	{
 		Enemy* enemy = dynamic_cast<Enemy*>(bodyB);
 		if (enemy)

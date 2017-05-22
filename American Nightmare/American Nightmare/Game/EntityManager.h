@@ -55,7 +55,7 @@ public:
 	bool AddEntityBoard(ESpawnerType type, GLuint shader, const MeshManager::Mesh* mesh, const MaterialManager::Material* material, GLuint textureID, GLuint normalMap, std::string animationFile);
 
 	bool SpawnEntity(ESpawnerType type, glm::vec2 position);
-	void Update(GLfloat deltaT, glm::vec3 playerPosition);
+	void Update(GLfloat deltaT, glm::vec3 playerPosition, bool playerDead);
 
 	std::vector<Enemy*>* getEnemyList();
 	std::vector<Entity*>* getEntityList();
