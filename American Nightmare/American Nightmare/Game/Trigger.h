@@ -16,7 +16,8 @@ public:
 		SPAWN,			// spawns an entity
 		SAVE,			// save station
 		POSTER,			// unlocks a poster
-		CUTSCENE		// plays an cutscene
+		CUTSCENE,		// plays an cutscene
+		DEATH			// death zone
 	};
 	TriggerType triggerType;	//< The type of trigger this is
 

@@ -396,16 +396,16 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		switch (trigger.triggerType)
 		{
 		case ETriggerType::poster:		outTriggerType = Trigger::POSTER; break;
-		case ETriggerType::deathZone:	outTriggerType = Trigger::EFFECT; break;
+		case ETriggerType::deathZone:	outTriggerType = Trigger::DEATH; break;
 		case ETriggerType::garbageBin:	outTriggerType = Trigger::EFFECT; break;
 		case ETriggerType::door:		
 			outTriggerType = Trigger::POSTER; 
 			Poster* poster = new Poster();
 			poster->setShader(mapShader);
-			poster->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
+			poster->Start(meshManager->getMesh("quad"), materialManager->getMaterial("postermaterial_2"));
 			LHitbox hitbox = triggers[i].hitbox;
 			poster->setScale(glm::vec3(hitbox.scale[0], hitbox.scale[1], 1));
-			poster->setPosition(glm::vec3(hitbox.position[0], hitbox.position[1], 0));
+			poster->setPosition(glm::vec3(hitbox.position[0], hitbox.position[1] + hitbox.scale[1] / 2, 0));
 			map.push_back(poster);
 			outTrigger->setMapPart(poster);
 			break; 
@@ -418,7 +418,7 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		this->triggers.push_back(outTrigger);
 
 		// Adding a constant smoke on trigger for testing
-		particleManager->EffectConstantSmoke(glm::vec3(outTrigger->getPosition(), 0.f), materialManager->getTextureID("smoketexture"), 60);
+		particleManager->EffectConstantSmoke(glm::vec3(outTrigger->getPosition(), 0.f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.3f));
 	}
 
 }
@@ -649,7 +649,7 @@ void LevelManager::CheckTriggers()
 			////////////////////////////////////////////////////////////
 			case Trigger::POSTER:
 				remove = true;
-				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 25, glm::vec4(0.30, 1, 0.25, 1));
+				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 50, glm::vec4(0.25, 1, 0.85, 1));
 				UnlockPoster(2);
 				break;
 
@@ -657,6 +657,13 @@ void LevelManager::CheckTriggers()
 			// Push - Move an entity with a force
 			////////////////////////////////////////////////////////////
 			case Trigger::PUSH:		
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Death - Zone in which the player instantly dies
+			////////////////////////////////////////////////////////////
+			case Trigger::DEATH:
+				player->TakeDamage(player->getHP());
 				break;
 
 			////////////////////////////////////////////////////////////
