@@ -223,10 +223,8 @@ void LevelManager::Update(GLint deltaT)
 		currentAlpha += (popupAlpha - currentAlpha) * 0.035f;
 		popup->setColor(glm::vec4(currentAlpha));
 		popupTimer -= deltaT;
-		if (popupTimer < NULL) 
-			popupAlpha = -0.05f;
-		else if (currentAlpha < 0.f) 
-			popupActive = false;
+		if (popupTimer < NULL)	popupAlpha = -0.05f;
+		else if (currentAlpha < 0.f) popupActive = false;
 	}
 
 	// Checking triggers
