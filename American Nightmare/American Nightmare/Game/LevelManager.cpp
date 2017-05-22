@@ -90,6 +90,14 @@ bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapSh
 
 void LevelManager::Stop()
 {
+	// Deleteing popup
+	if (popup != nullptr)
+	{
+		popup->Stop();
+		delete popup;
+		popup = nullptr;
+	}
+
 	// Deleting player
 	if (player != nullptr)
 	{

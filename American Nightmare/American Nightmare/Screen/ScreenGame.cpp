@@ -123,8 +123,8 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager->AddText(glm::vec3(-0.3, -0.96, 0.f), 30.f, "Health", FONT_PATH INGAME_FONT);
 	uiManager->AddText(glm::vec3(0.3, -0.96, 0.f), 30.f, "Power", FONT_PATH INGAME_FONT);	
 	uiManager->AddText(glm::vec3(0.f, 2.5, 0.f), 50.f, "You died", FONT_PATH INGAME_FONT);
-	uiManager->AddButton(GUIManager::PLAY, glm::vec3(0.3, 2.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Try again", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
-	uiManager->AddButton(GUIManager::STARTMENY, glm::vec3(-0.3, 2.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Meny", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	uiManager->AddButton(GUIManager::PLAY, glm::vec3(0.0, 1.8f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Try again", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	uiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0.0, 2.2f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Meny", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
 	uiManager->setAlpha(0.80f);
 
 	uiManager->setShader(shaderManager->getShader("texture"));

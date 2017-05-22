@@ -46,6 +46,7 @@ public:
 	void Draw();
 
 private:
+	Button* background;
 	MeshManager* meshManager;			//< Mesh Manager
 	MaterialManager* materialManager;	//< Materials & Textures
 	GUIManager* guiManager;				//< Buttons & Text

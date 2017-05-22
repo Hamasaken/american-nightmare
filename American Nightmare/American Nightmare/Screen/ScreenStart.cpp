@@ -47,9 +47,11 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 
 	// Loading materials
 	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), glm::vec3(1, 1, 1), glm::vec3(1.f), 1.f, "backgroundtexture", TEXTURE_PATH "background_2.jpg");
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
+	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Background material not found\n");
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
@@ -71,6 +73,11 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	guiManager->setAlpha(0.9f);
 	guiManager->setShader(shaderManager->getShader("texture"));
 
+	// Adding background
+	background = new Button();
+	background->Start(screenSize, glm::vec3(0.f, 0.f, 0.1f), glm::vec2(1), materialManager->getMaterial("backgroundmaterial"), meshManager->getMesh("quad"));
+	background->setShader(shaderManager->getShader("texture"));
+
 	// Setting starting variables
 	SetStartVariables();
 
@@ -87,7 +94,7 @@ void ScreenStart::SetStartVariables()
 	particleManager->EffectConstantSmoke(glm::vec3(-2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.8));
 
 	// Dust effect
-	particleManager->EffectLightDust(glm::vec3(0.f, 3, 0.f), glm::vec3(8, 8, 2), 50, glm::vec4(0.33f));
+	particleManager->EffectLightDust(glm::vec3(0.f, 3, 0.f), glm::vec3(10, 6, 2), 125, glm::vec4(0.35f));
 
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 15));
@@ -134,6 +141,9 @@ void ScreenStart::Draw()
 	// Getting view matrix from camera
 	camera->buildViewMatrix();
 	
+	// Drawing background
+	DrawObjectGUI(background, shaderManager);
+
 	// Drawing GUI
 	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = guiManager->getButtonList();
 	for (int i = 0; i < buttons->size(); i++)
@@ -152,6 +162,14 @@ void ScreenStart::Draw()
 
 void ScreenStart::Stop()
 {
+	// Deleteing background
+	if (background != nullptr)
+	{
+		background->Stop();
+		delete background;
+		background = nullptr;
+	}
+
 	// Deleting shaders
 	if (shaderManager != nullptr)
 	{
