@@ -402,10 +402,10 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 			outTriggerType = Trigger::POSTER; 
 			Poster* poster = new Poster();
 			poster->setShader(mapShader);
-			poster->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
+			poster->Start(meshManager->getMesh("quad"), materialManager->getMaterial("postermaterial_2"));
 			LHitbox hitbox = triggers[i].hitbox;
 			poster->setScale(glm::vec3(hitbox.scale[0], hitbox.scale[1], 1));
-			poster->setPosition(glm::vec3(hitbox.position[0], hitbox.position[1], 0));
+			poster->setPosition(glm::vec3(hitbox.position[0], hitbox.position[1] + hitbox.scale[1] / 2, 0));
 			map.push_back(poster);
 			outTrigger->setMapPart(poster);
 			break; 
@@ -649,7 +649,7 @@ void LevelManager::CheckTriggers()
 			////////////////////////////////////////////////////////////
 			case Trigger::POSTER:
 				remove = true;
-				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 25, glm::vec4(0.30, 1, 0.25, 1));
+				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 50, glm::vec4(0.25, 1, 0.85, 1));
 				UnlockPoster(2);
 				break;
 
