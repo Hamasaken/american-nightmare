@@ -6,6 +6,7 @@
 #include "Particle\ParticleManager.h"
 #include <vector>
 #include <Box2D.h>
+#include "GUI\GUIManager.h"
 #include "../Enemy.h"
 #include "Trigger.h"
 #include "../Projectile.h"
@@ -38,7 +39,7 @@ public:
 	// \param particleManager ptr to the particle manager
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera);
+	bool Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, GLuint guiShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -65,6 +66,11 @@ public:
 	void Update(GLint deltaT);
 
 	////////////////////////////////////////////////////////////
+	// \brief Activates a popup
+	///////////////////////////////////////////////////////////
+	void ActivatePopup(std::string text, GLfloat timer = 1000.f);
+
+	////////////////////////////////////////////////////////////
 	// \brief Get the vector of objects to draw or do something with
 	///////////////////////////////////////////////////////////
 	std::vector<Object*> getMap();
@@ -74,6 +80,7 @@ public:
 	const LightManager* getLightManager() const;
 	EntityManager* getEntityManager();
 	Player* getPlayer();
+	Text* getPopup();
 	//Projectile* getProjectile();
 	//ProjectileHandler* getProjectiles();
 
@@ -121,9 +128,17 @@ private:
 	MyContactListener contactManager;
 	QuadTree* quadTree;
 	Camera* camera;
+	Text* popup;
+	
+	// Popup
+	GLfloat popupAlpha;
+	GLfloat popupTimer;
+	GLboolean popupActive;
 
+	// Shaders
 	GLuint mapShader;
 	GLuint playerShader;
+	GLuint guiShader;
 
 	//ProjectileHandler* myPH;
 	//ProjectileHandler* myPH;
