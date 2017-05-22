@@ -27,11 +27,23 @@ ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const Materi
 
 ProjectileHandler::~ProjectileHandler()
 {
-	/*for (int i = 0; i < CAP; i++)
+	for (int i = 0; i < myProjtileVector.size(); i++)
 	{
-		delete this->myProjectiles[i];
+		myProjtileVector[i]->setmarked(true);
 	}
-	delete[]this->myProjectiles;*/
+	for (int i = 0; i < this->myProjtileVector.size(); i++)
+	{
+		if (this->myProjtileVector[i]->getmarked() == true)
+		{
+			Projectile* temp = this->myProjtileVector[i];
+			this->myProjtileVector[i] = this->myProjtileVector.back();
+			this->myProjtileVector.back() = temp;
+			//this->myProjtileVector.back()->~Projectile();
+			//world->DestroyBody(this->myProjtileVector.back()->getHitbox()->getBody());
+			this->myProjtileVector.pop_back();
+		}
+	}
+	myProjtileVector.clear();
 }
 
 void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)

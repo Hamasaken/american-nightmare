@@ -135,8 +135,15 @@ void LevelManager::Stop()
 	if (world != nullptr)
 	{
 		world->Dump();
-		delete world;
+//		delete world;
 		world = nullptr;
+	}
+
+	if (myPH != nullptr)
+	{
+
+
+		myPH = nullptr;
 	}
 
 	// Unloads light manager
