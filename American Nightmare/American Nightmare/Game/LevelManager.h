@@ -135,6 +135,9 @@ private:
 	GLfloat popupTimer;
 	GLboolean popupActive;
 
+	// Unlocked posters
+	std::vector<uint16_t> unlockedPosters;
+
 	// Shaders
 	GLuint mapShader;
 	GLuint playerShader;

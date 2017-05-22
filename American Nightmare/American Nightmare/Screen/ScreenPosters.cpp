@@ -48,8 +48,10 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	// Loading button texture
 	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
+	materialManager->AddMaterial("boltmaterial", glm::vec3(0.1f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(1.f), 1.f, "bolttexture", TEXTURE_PATH "bolt.jpg");
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
+	if (materialManager->getMaterial("boltmaterial") == nullptr) printf("Bolt Material not found\n");
 
 	// Loading posters
 	std::vector<const MaterialManager::Material*> posters;
@@ -65,6 +67,13 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	meshManager = new MeshManager();
 	if (meshManager == nullptr) return false;
 
+	// Checking to see how many unlocked posters we have
+	unlockedPosters.resize(10);
+	ifstream in("Data/savedata.fu", ios::binary);
+	if (in.is_open())
+		in.read(reinterpret_cast<char*>(unlockedPosters.data()), sizeof(uint16_t) * 10);
+	in.close();
+
 	////////////////////////////////////////////////////////////
 	// Creating a GUI manager	
 	////////////////////////////////////////////////////////////
@@ -72,34 +81,37 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	if (posterListGUI == nullptr) return false;
 	if (!posterListGUI->Start(screenSize, screenPosition)) return false;
 
-	// Right side hidden
 	posterListGUI->AddButton(GUIManager::CANCEL, glm::vec3(2.f, 0, 0), glm::vec2(0.400f, 0.800f), posters[0], meshManager->getMesh("quad"));
-
-	// Back Button
 	posterListGUI->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.85f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
-	
-	// Title
 	posterListGUI->AddText(glm::vec3(0.f, 0.75f, 0.f), 80.f, "Posters", FONT_PATH INGAME_FONT);
-	
-	// Unlocked text
-	posterListGUI->AddText(glm::vec3(-0.65f, 0.65f, 0.f), 50.f, "Unlocked\n10 / 10", FONT_PATH INGAME_FONT);
-	posterListGUI->getTextList()->at(1)->setRotation(glm::vec3(0, 0, glm::pi<float>() * 0.08f));
+
+	// Setting starting variables
+	SetStartVariables();
 
 	// Adding posters
+	int numberOfUnlocked = 0;
 	float y = 0.25f, x = -0.6f;
 	for (int i = 0; i < 10; i++)
 	{
 		if (i == 5) { y -= 0.5f; x = -0.6f; }
-		posterListGUI->AddButton(GUIManager::OK, glm::vec3(x, y, 0), glm::vec2(0.100f, 0.200f), posters[i], meshManager->getMesh("quad"));
+		if (unlockedPosters[i] == 1)
+		{
+			numberOfUnlocked += 1;
+			posterListGUI->AddButton(GUIManager::OK, glm::vec3(x, y, 0), glm::vec2(0.100f, 0.200f), posters[i], meshManager->getMesh("quad"));
+		}
+		else
+		{
+			posterListGUI->AddButton(GUIManager::OPTION_MUTE, glm::vec3(x, y, 0), glm::vec2(0.100f, 0.200f), materialManager->getMaterial("boltmaterial"), meshManager->getMesh("quad"));
+		}
 		x += 0.30f;
 	}
-	
+
+	posterListGUI->AddText(glm::vec3(-0.65f, 0.65f, 0.f), 50.f, "Unlocked\n" + std::to_string(numberOfUnlocked) + " / 10", FONT_PATH INGAME_FONT);
+	posterListGUI->getTextList()->at(1)->setRotation(glm::vec3(0, 0, glm::pi<float>() * 0.08f));
+
 	// Setting configurations on GuiManager
 	posterListGUI->setAlpha(1.f);
 	posterListGUI->setShader(shaderManager->getShader("texture"));
-
-	// Setting starting variables
-	SetStartVariables();
 
 	return true;
 }
@@ -180,7 +192,8 @@ void ScreenPosters::Draw()
 	for (int i = 0; i < buttons->size(); i++)
 	{
 		DrawObjectGUI(buttons[0][i].first, shaderManager);
-		if (buttons[0][i].first->getText()) DrawObjectGUI(buttons[0][i].first->getText(), shaderManager);
+		if (buttons[0][i].first->getText())
+			DrawObjectGUI(buttons[0][i].first->getText(), shaderManager);
 	}
 	std::vector<Text*>* txts = posterListGUI->getTextList();
 	for (int i = 0; i < txts->size(); i++)
