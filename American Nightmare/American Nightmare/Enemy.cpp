@@ -116,3 +116,8 @@ void Enemy::TakeDamage(float dmg)
 		isDead = true;
 	}
 }
+
+bool Enemy::getIsDead()const
+{
+	return this->isDead;
+}

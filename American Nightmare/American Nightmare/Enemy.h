@@ -35,6 +35,7 @@ public:
 	float getDamage();
 	void TakeDamage(float dmg);
 	bool isDead;
+	bool getIsDead()const;
 
 private:
 	float damage;
