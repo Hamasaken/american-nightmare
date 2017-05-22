@@ -82,7 +82,10 @@ bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapSh
 	if (!quadTree->Start(screenSize)) return false;
 
 
-	
+
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), mapShader);
+	this->wasPressed = false;
+	this->isPressed = false;
 
 	return true;
 }
@@ -193,8 +196,19 @@ void LevelManager::Update(GLint deltaT)
 	if (player->getIsDashing()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(0.25f));
 	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
 
+
+	//For projectiles
+	isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+
+	if (isPressed && !wasPressed && player->getCanShoot() == true)
+	{
+		wasPressed = true;
+		player->decreaseNrOfProjectiles();
+		myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
+	}
+
 	//Update Projectile
-	//myPH->Update(deltaT, world);
+	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
 
 	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
 
@@ -205,7 +219,7 @@ void LevelManager::Update(GLint deltaT)
 	world->Step(1 / 60.f, 10, 20);
 
 	// Updating every object on map
-	deleteProjects(world);
+	//deleteProjects(world);
 
 	for (Projectile* proj : projectiles)
 		proj->Update(deltaT, world, player->getPlayerPosAsGLM());
@@ -232,6 +246,9 @@ void LevelManager::Update(GLint deltaT)
 
 	// Checking triggers
 	CheckTriggers();
+
+	//Resets variables for projectileHandler
+		this->wasPressed = isPressed;
 }
 
 void LevelManager::ActivatePopup(std::string text, GLfloat timer)
@@ -280,18 +297,6 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 
-	 //Making some boxes to reload with
-	/*for (int i = 0; i < 10; i++)
-	{
-		Projectile* moveble = new Projectile(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
-		moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
-		moveble->setShader(mapShader);
-		projectiles.push_back(moveble);
-	}*/
-
-	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), shader);
-	this->wasPressed = false;
-	this->isPressed = false;
 	// Loading temp level
 	//LoadTempLevel(shader);
 
@@ -607,25 +612,6 @@ void LevelManager::LoadTempLevel()
 	background->setRotation(glm::vec3(0, 0, 0));
 	map.push_back(background);
 
-
-	
-
-	//// Making some boxes to move around
-	//for (int i = 0; i < 100; i++)
-	//{
-		//Entity* moveble = new Entity();
-		//moveble->setShader(shader);
-		//moveble->Start(modelPath + "model.m", materialManager.getMaterial("lightmaterial"), world, glm::vec2(0, 0), glm::vec2(0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, 1.f, 0.5f);
-		//moveble->setScale(glm::vec3(0.5f, 0.5f, 1));
-		//map.push_back(moveble);
-	//}
-	//
-	//A Projectile
-	//for (int i = 0; i < 100; i++)
-	//{
-	//	shoot(shader, modelPath);
-	//}
-
 	////////////////////////////////////////////////////////////
 	// Lights
 	////////////////////////////////////////////////////////////
@@ -647,57 +633,49 @@ void LevelManager::LoadTempLevel()
 
 }
 
-void LevelManager::Update(GLint deltaT)
-{
-	// Updating player
-	player->Update(deltaT, world, player->getPlayerPosAsGLM());
-	if (player->getIsDashing()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(0.25f));
-	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
-
-
-	//For projectiles
-	isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-
-	if (isPressed && !wasPressed && player->getCanShoot() == true)
-	{
-		wasPressed = true;
-		player->decreaseNrOfProjectiles();
-		myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
-	}
-
-	//Update Projectile
-	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
-	
-
-	//meshManager->getMesh("quad");
-
-	// Updating enemies
-	enemy->Update(deltaT, player->getBody()->GetPosition());
-
-	// Updating physics
-	world->Step(1 / 60.f, 10, 20);
-
-
-	 //for (Projectile* proj : projectiles)
-		 //proj->Update(deltaT, world, player->getPlayerPosAsGLM());
-
-	/* for (Projectile* proj : projectiles)
-		 proj->Update(deltaT, world, player->getPlayerPosAsGLM());*/
-
-	for (Object* object : map)
-		object->Update(deltaT);
-
-	// Updating triggers and checking for collisions
-	for (Trigger* trigger : triggers)
-		if (!trigger->getIsTriggered())	
-			trigger->CheckCollision(player->getBody());
-	
-	// Checking triggers
-	CheckTriggers();
-
-	//Resets variables for projectileHandler
-	this->wasPressed = isPressed;
-}
+//void LevelManager::Update(GLint deltaT)
+//{
+//	// Updating player
+//	player->Update(deltaT, world, player->getPlayerPosAsGLM());
+//	if (player->getIsDashing()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(0.25f));
+//	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
+//
+//
+//	
+//
+//	//Update Projectile
+//	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
+//	
+//
+//	//meshManager->getMesh("quad");
+//
+//	// Updating enemies
+////	enemy->Update(deltaT, player->getBody()->GetPosition());
+//
+//	// Updating physics
+//	world->Step(1 / 60.f, 10, 20);
+//
+//
+//	 //for (Projectile* proj : projectiles)
+//		 //proj->Update(deltaT, world, player->getPlayerPosAsGLM());
+//
+//	/* for (Projectile* proj : projectiles)
+//		 proj->Update(deltaT, world, player->getPlayerPosAsGLM());*/
+//
+//	for (Object* object : map)
+//		object->Update(deltaT);
+//
+//	// Updating triggers and checking for collisions
+//	for (Trigger* trigger : triggers)
+//		if (!trigger->getIsTriggered())	
+//			trigger->CheckCollision(player->getBody());
+//	
+//	// Checking triggers
+//	CheckTriggers();
+//
+//	//Resets variables for projectileHandler
+//	this->wasPressed = isPressed;
+//}
 
 void LevelManager::CheckTriggers()
 {
@@ -857,25 +835,6 @@ Player* LevelManager::getPlayer() { return player; }
 Text* LevelManager::getPopup()
 {
 	return popup;
-}
-
-void LevelManager::deleteProjects(b2World* world)
-{
-	for (int i = 0; i < this->projectiles.size(); i++)
-	{
-		if (this->projectiles[i]->getmarked() == true)
-		{
-			Projectile* temp = this->projectiles[i];
-			//temp = this->projectiles[i];
-			this->projectiles[i] = this->projectiles.back();
-			this->projectiles.back() = temp;
-			//this->projectiles.back()->~Projectile();
-			world->DestroyBody(this->projectiles.back()->getHitbox()->getBody());
-			this->projectiles.pop_back();
-
-			//this->projectiles.back()
-		}
-	}
 }
 
 //ProjectileHandler* LevelManager::getProjectiles() { return myPH; }

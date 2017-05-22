@@ -49,7 +49,6 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 
 void ProjectileHandler::deleteProjects(b2World* world)
 {
-	cout << this->myProjtileVector.size() << endl;
 	for (int i = 0; i < this->myProjtileVector.size(); i++)
 	{
 		if (this->myProjtileVector[i]->getmarked() == true)
