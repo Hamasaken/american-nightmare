@@ -30,6 +30,8 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	//Variables for handeling the "gun"
 	this->nrOfProjectiles = 0;
 
+	//this->myProjectileHandler = ProjectileHandler(mesh, material, world, this->getPlayerPosAsGLM());
+
 	//Sets the cursor for the player
 	initiateCursor();
 

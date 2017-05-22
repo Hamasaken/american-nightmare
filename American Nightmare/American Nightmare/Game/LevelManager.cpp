@@ -64,6 +64,9 @@ bool LevelManager::Start(GLuint playerShader, MaterialManager* materialManager, 
 	if (quadTree == nullptr) return false;
 	if (!quadTree->Start(glm::vec2(1280, 720))) return false;
 
+
+	
+
 	return true;
 }
 
@@ -92,6 +95,13 @@ void LevelManager::Stop()
 		quadTree = nullptr;
 	}
 
+	// Delete projectile
+//	if (myProjectile != nullptr)
+//	{
+////		myProjectile->Stop();
+////		delete myProjectile;
+////		myProjectile = nullptr;
+//	}
 	// Unloads every object in map
 	/*for (ProjectileHandler* projs : myPH)
 	{

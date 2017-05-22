@@ -10,9 +10,9 @@ Vacuum::~Vacuum()
 	
 }
 
-void Vacuum::startVac(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World* world, b2Body* player)
+void Vacuum::startVac(b2World* world, b2Body* player)
 {
-	Entity:Start(mesh, material, world, player);
+	Entity:Start(world, player);
 
 	// Setting starting variables
 	position = glm::vec3(0, 0, 0);
@@ -48,16 +48,16 @@ b2Body* Vacuum::getBody()const
 	return hitbox->getBody();
 }
 
-void Vacuum::Update(b2Vec2 Pos, GLint deltaT)
+void Vacuum::Update(b2Vec2 pos, GLint deltaT)
 {
-	glm::vec2 mouse = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1920, 1080 }, glm::vec2{ 0, 0 });
+	/*glm::vec2 mouse = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1920, 1080 }, glm::vec2{ 0, 0 });
 	float vector = getAngleFromTwoPoints(glm::vec3(mouse.x, mouse.y, 0), glm::vec3(Pos.x, Pos.y, 0));
-	int angel = radianToDegree(vector);
+	int angel = radianToDegree(vector);*/
 
-	b2Vec2 pos2 = Pos;
-	pos2 = b2Vec2(pos2.x + (mouse.x * 2), pos2.y + (mouse.y * 2));
+	//b2Vec2 pos2 = Pos;
+	//pos2 = b2Vec2(pos2.x + (mouse.x * 2), pos2.y + (mouse.y * 2));
 
-	getBody()->SetTransform(pos2, angel);
+	getBody()->SetTransform(pos, 0);
 
 	Entity::Update(deltaT);
 }

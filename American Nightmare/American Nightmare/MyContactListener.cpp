@@ -23,8 +23,10 @@ void MyContactListener::Start(ParticleManager* particleManager, SoundManager* so
 
 void MyContactListener::BeginContact(b2Contact* contact)
 {
-	Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
-	Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
+	if (true)
+	{
+		Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
+		Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
 
 	Player* player = dynamic_cast<Player*>(bodyA);
 	if (player)

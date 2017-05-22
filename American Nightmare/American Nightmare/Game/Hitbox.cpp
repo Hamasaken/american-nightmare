@@ -42,27 +42,56 @@ bool Hitbox::InitializeHitboxVacuum(b2World* world, b2Body* player)
 {
 	if (world == nullptr) return false;
 
-	if (body != nullptr) body->Dump();
+	//if (body != nullptr) body->Dump();
+	//b2BodyDef bodyDef;
+	//bodyDef.type = b2_dynamicBody;
+	//bodyDef.active = true;
+	//bodyDef.position = b2Vec2(player->GetPosition().x + 2, player->GetPosition().y);
+	//body = world->CreateBody(&bodyDef);
+	//
+	//b2Vec2 vertices[3];
+	//vertices[0].Set(0.0f, 0.0f);
+	//vertices[1].Set(2.0f, -0.25f);
+	//vertices[2].Set(2.0f, 0.25f);
+	//int32 count = 3;
+	//
+	//b2PolygonShape polygon;
+	//polygon.m_type = b2Shape::e_polygon;
+	//polygon.Set(vertices, count);
+	//
+	//b2FixtureDef fixture;
+	//fixture.shape = &polygon;
+	//fixture.isSensor = true;
+	//body->CreateFixture(&fixture);
+	//
+	//body->SetGravityScale(0);
+
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
-	bodyDef.active = true;
 	bodyDef.position = b2Vec2(player->GetPosition().x + 2, player->GetPosition().y);
+	bodyDef.fixedRotation = false;
+	bodyDef.active = true;
+
 	body = world->CreateBody(&bodyDef);
 
-	b2Vec2 vertices[3];
-	vertices[0].Set(0.0f, 0.0f);
-	vertices[1].Set(2.0f, -0.25f);
-	vertices[2].Set(2.0f, 0.25f);
-	int32 count = 3;
+	b2CircleShape circleShape;
+	circleShape.m_p.Set(0, 0);
+	circleShape.m_radius = 3;
 
-	b2PolygonShape polygon;
-	polygon.m_type = b2Shape::e_polygon;
-	polygon.Set(vertices, count);
+	//b2Vec2 vertices[3];
+	//vertices[0].Set(0.0f, 0.0f);
+	//vertices[1].Set(2.0f, -0.25f);
+	//vertices[2].Set(2.0f, 0.25f);
+	//int32 count = 3;
 
-	b2FixtureDef fixture;
-	fixture.shape = &polygon;
-	fixture.isSensor = true;
-	body->CreateFixture(&fixture);
+	//b2PolygonShape polygon;
+	//polygon.m_type = b2Shape::e_polygon;
+	//polygon.Set(vertices, count);
+
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &circleShape;
+	fixtureDef.isSensor = true;
+	fixture = body->CreateFixture(&fixtureDef);
 
 	body->SetGravityScale(0);
 }
