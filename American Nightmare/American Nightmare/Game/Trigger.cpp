@@ -29,3 +29,5 @@ void Trigger::setIsTriggered(bool isTriggered) { this->isTriggered = isTriggered
 bool Trigger::getIsTriggered() const { return isTriggered; }
 void Trigger::setData(std::string data) { this->data = data; }
 std::string Trigger::getData() const { return data; }
+void Trigger::setMapPart(void * ptr) { this->mapPart = ptr; }
+void * Trigger::getMapPart() { return mapPart; }

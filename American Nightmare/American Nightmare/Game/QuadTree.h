@@ -4,7 +4,7 @@
 #include "../Accessories.h"
 #include "../Game/Object.h"
 
-#define QUAD_TREE_MAX_OBJECTS 5
+#define QUAD_TREE_MAX_OBJECTS 2
 
 class QuadTree
 {
@@ -55,7 +55,7 @@ public:
 	~QuadTree();
 
 	bool Start(glm::vec2 screenSize);
-	bool StartTree(Node* node, std::vector<Object*>* objects);
+	bool StartTree(std::vector<Object*>* objects);
 	void Stop();
 
 	void Update();
@@ -65,7 +65,7 @@ private:
 	bool IsRectangleInside(glm::vec3 center, glm::vec3 dimensions);
 	void StopNode(Node* node);
 	void MakeTree(Node* node, std::vector<Object*>* objects, glm::vec2 parentDimensions, glm::vec2 parentOrigin);
-	int CountObjects(glm::vec2 origin, glm::vec2 dimensions);
+	int CountObjects(glm::vec2 origin, glm::vec2 dimensions, std::vector<Object*>* objects);
 	void FindQuadAt(glm::vec2 position, Node* node);
 
 	Node* parent;

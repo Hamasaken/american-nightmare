@@ -16,6 +16,7 @@ public:
 	void LightExplosion(glm::vec3 position, glm::vec4 color, glm::vec2 size, int amount);
 	void BloodSplatter(glm::vec3 position, float angle, float strength, glm::vec4 color, glm::vec2 size, int amount);
 	void SmokeCloud(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount);
+	void NutsAndBolts(glm::vec3 position, GLuint texture, glm::vec2 size, int amount);
 	void ConstantSmoke(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount);
 	void LightDust(glm::vec3 center, glm::vec3 dimensions, glm::vec4 color, glm::vec2 size, int amount);
 

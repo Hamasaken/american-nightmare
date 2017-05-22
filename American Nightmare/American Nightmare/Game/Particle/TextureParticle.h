@@ -27,6 +27,16 @@
 #define SIGNAL_DEFAULT_VELOCITY		randBetweenF(-0.00025f, 0.00025f)
 #define SIGNAL_SIZE_MULTIPLIER		1.075f
 
+// NUTS AND BOLTS DEFAULTS
+#define NUTS_DEFAULT_COLOR			glm::vec4(0.45f, 0.45f, 0.45f, 1.f)
+#define NUTS_DEFAULT_AMOUNT			8
+#define NUTS_SIZE					randBetweenF(0.20f, 0.30f)
+#define NUTS_VELOCITY				randBetweenF(-0.0070f, 0.0070f)
+#define NUTS_LIFETIME				randBetweenF(1000.f, 2000.f)
+#define NUTS_ROTATION				randBetweenF(-0.009f, 0.009f)
+#define NUTS_ROTATION_FALL_OFF		randBetweenF(0.0025f, 0.0025f)
+#define NUTS_VELOCITY_FALL_OFF		randBetweenF(0.0085f, 0.010f)
+
 class TextureParticle : public Particle
 {
 public:
@@ -72,5 +82,14 @@ private:
 	glm::vec2 startSize;
 	glm::vec3 startPosition;
 };
+
+
+class NutsAndBolt : public TextureParticle
+{
+public:
+	void Start(glm::vec3 position, glm::vec4 color, glm::vec2 size);
+	void Update(GLfloat deltaT);
+};
+
 
 #endif // !TEXTUREPARTICLE_H

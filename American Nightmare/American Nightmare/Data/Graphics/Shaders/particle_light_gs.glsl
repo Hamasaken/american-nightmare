@@ -21,6 +21,16 @@ out fData
 }frag;    
 
 
+void CreateVertex(vec4 color, vec3 position, vec2 offset, vec2 size)
+{
+	frag.color = color;
+	frag.position = position + vec3(offset.x, offset.y, 0.0);
+	frag.center = position;
+	frag.size = size.x;
+    gl_Position = gl_in[0].gl_Position + vec4(offset.x, offset.y, 0.0, 0.0);
+    EmitVertex();
+}
+
 void main()
 {
 	float left = -vertices[0].size.x;
@@ -28,55 +38,13 @@ void main()
 	float top = vertices[0].size.y;
 	float bottom = -vertices[0].size.y;
 
-	// Top left
-	frag.color = vertices[0].color;
-	frag.position = vertices[0].position + vec3(left, top, 0.0);
-	frag.center = gl_in[0].gl_Position.xyz;
-	frag.size = vertices[0].size.x;
-    gl_Position = gl_in[0].gl_Position + vec4(left, top, 0.0, 0.0);
-    EmitVertex();
-
-	// Top right
-	frag.color = vertices[0].color;
-	frag.position = vertices[0].position + vec3(left, bottom, 0.0);
-	frag.center = gl_in[0].gl_Position.xyz;
-	frag.size = vertices[0].size.x;
-	gl_Position = gl_in[0].gl_Position + vec4(left, bottom, 0.0, 0.0);
-    EmitVertex();
-
-	// Bottom left
-	frag.color = vertices[0].color;
-	frag.position = vertices[0].position + vec3(right, top, 0.0);
-	frag.center = gl_in[0].gl_Position.xyz;
-	frag.size = vertices[0].size.x;
-    gl_Position = gl_in[0].gl_Position + vec4(right, top, 0.0, 0.0);
-    EmitVertex();
-
+	CreateVertex(vertices[0].color, vertices[0].position, vec2(left, top), vertices[0].size);
+	CreateVertex(vertices[0].color, vertices[0].position, vec2(left, bottom), vertices[0].size);
+	CreateVertex(vertices[0].color, vertices[0].position, vec2(right, top), vertices[0].size);
     EndPrimitive();
 
-	// Bottom left
-	frag.color = vertices[0].color;
-	frag.position = vertices[0].position + vec3(left, bottom, 0.0);
-	frag.center = gl_in[0].gl_Position.xyz;
-	frag.size = vertices[0].size.x;
-	gl_Position = gl_in[0].gl_Position + vec4(left, bottom, 0.0, 0.0);
-    EmitVertex();
-
-	// Top right
-	frag.color = vertices[0].color;
-	frag.position = vertices[0].position + vec3(right, bottom, 0.0);
-	frag.center = gl_in[0].gl_Position.xyz;
-	frag.size = vertices[0].size.x;
-    gl_Position = gl_in[0].gl_Position + vec4(right, bottom, 0.0, 0.0);
-    EmitVertex();
-
-	// Bottom right
-	frag.color = vertices[0].color;
-	frag.position = vertices[0].position + vec3(right, top, 0.0);
-	frag.center = gl_in[0].gl_Position.xyz;
-	frag.size = vertices[0].size.x;
-    gl_Position = gl_in[0].gl_Position + vec4(right, top, 0.0, 0.0);
-    EmitVertex();
-
+	CreateVertex(vertices[0].color, vertices[0].position, vec2(left, bottom), vertices[0].size);
+	CreateVertex(vertices[0].color, vertices[0].position, vec2(right, bottom), vertices[0].size);
+	CreateVertex(vertices[0].color, vertices[0].position, vec2(right, top), vertices[0].size);
     EndPrimitive();
 }

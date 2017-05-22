@@ -18,13 +18,13 @@ bool QuadTree::Start(glm::vec2 screenSize)
 	return true;
 }
 
-bool QuadTree::StartTree(Node * node, std::vector<Object*>* objects)
+bool QuadTree::StartTree(std::vector<Object*>* objects)
 {
 	// Calculate origin and dimensions of the full map
 	glm::vec2 origin = glm::vec2(0, 0);
-	glm::vec2 dimensions = glm::vec2(1000, 1000);
+	glm::vec2 dimensions = glm::vec2(100, 100);
 
-	MakeTree(node, objects, origin, dimensions);
+	MakeTree(parent, objects, dimensions, origin);
 
 	return true;
 }
@@ -69,7 +69,7 @@ void QuadTree::MakeTree(Node* node, std::vector<Object*>* objects, glm::vec2 par
 	for (int i = 0; i < 4; i++)
 		node->child[i] = nullptr;
 
-	int nrOfObjects = CountObjects(node->origin, node->dimensions);
+	int nrOfObjects = CountObjects(node->origin, node->dimensions, objects);
 	if (nrOfObjects == 0) return;
 	if (nrOfObjects > QUAD_TREE_MAX_OBJECTS)
 	{
@@ -84,20 +84,20 @@ void QuadTree::MakeTree(Node* node, std::vector<Object*>* objects, glm::vec2 par
 			newPos.y = parentOrigin.y + offset.y;
 			
 			// Counting objects in specific quad
-			nrOfObjects = CountObjects(newPos, (parentDimensions / 2.f));
+			nrOfObjects = CountObjects(newPos, (parentDimensions / 2.f), objects);
 			if (nrOfObjects > NULL)
 			{
 				node->child[i] = new Node();
-				MakeTree(node->child[i], node->objects, newPos, (parentDimensions / 2.f));
+				MakeTree(node->child[i], node->objects, (parentDimensions / 2.f), newPos);
 			}
 		}
-
 		// Remove objects ptr and returns here, because this quad is only holding children now
 		node->objects = nullptr;
 		return;
 	}
 	
 	// The fact that we've reached the end means this is the end of a quad splitting, fill this node up remaining objects 
+	printf("Creating a node with %d objects, node at pos: %f, %f\n", node->objects->size(), node->origin.x, node->origin.y);
 	std::vector<Object*>* finalObjects = new std::vector<Object*>;
 	for (Object* object : *node->objects)
 	{
@@ -106,10 +106,20 @@ void QuadTree::MakeTree(Node* node, std::vector<Object*>* objects, glm::vec2 par
 	}
 }
 
-int QuadTree::CountObjects(glm::vec2 origin, glm::vec2 dimensions)
+int QuadTree::CountObjects(glm::vec2 origin, glm::vec2 dimensions, std::vector<Object*>* objects)
 {
+	int count = 0;
+	for (Object* object : *objects)
+	{
+		glm::vec2 pos = object->getPosition();
+		if (pos.x > origin.x - dimensions.x / 2 &&
+			pos.x < origin.x + dimensions.x / 2 &&
+			pos.y > origin.y - dimensions.y / 2 &&
+			pos.y < origin.y + dimensions.y / 2)
+			count++;
+	}
 
-	return 0;
+	return count;
 }
 
 void QuadTree::FindQuadAt(glm::vec2 position, Node * node)

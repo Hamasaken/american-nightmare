@@ -60,5 +60,7 @@ protected:	// Note: Make this private when loadModel is implemented!
 	const MaterialManager::Material* material; //< This object's material
 };
 
+class Poster : public Object
+{ public: void Update(GLint deltaT) { rotation.z += 0.025f; } };
 
 #endif // !OBJECT_H

@@ -55,8 +55,6 @@ bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 
 	hitbox->getBody()->SetUserData(this);
 
-	return false;
-
 	return true;
 }
 

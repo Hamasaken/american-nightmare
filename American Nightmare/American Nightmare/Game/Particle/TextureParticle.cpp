@@ -124,3 +124,44 @@ void SmokeSignal::Update(GLfloat deltaT)
 	// Moves the particle with velocity
 	vertex.setPosition(glm::vec3(vertex.x, vertex.y, vertex.z) + velocity * deltaT);
 }
+
+void NutsAndBolt::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size)
+{
+	// Setting parameters
+	isDead = false;
+	rotation = randBetweenF(0.f, 360.f);
+
+	// Making vertex
+	vertex.setPosition(position);
+	vertex.setColor(color);
+	vertex.setSize(size);
+	vertex.setRotation(rotation);
+
+	// Setting some random variables
+	lifeTime = NUTS_LIFETIME;
+	rotationSpeed = NUTS_ROTATION;
+	lifeTimeStart = lifeTime;
+	velocity = glm::vec3(NUTS_VELOCITY, NUTS_VELOCITY, randBetweenF(-0.035f, 0.035f));
+}
+
+void NutsAndBolt::Update(GLfloat deltaT)
+{
+	// Makes color alpha with the rest of lifetime
+	float alpha = lifeTime / lifeTimeStart;
+	vertex.a = (alpha);
+
+	// Removes from lifetime and checks if particle is dead
+	lifeTime -= deltaT;
+	if (lifeTime < NULL)
+		isDead = true;
+
+	// Adds velocity fall-off for realistic effect
+	rotationSpeed += (0.f - rotationSpeed) * (NUTS_ROTATION_FALL_OFF);
+	velocity += (glm::vec3(0, -0.0450, 0) - velocity) * NUTS_VELOCITY_FALL_OFF;
+
+	rotation += rotationSpeed * deltaT;
+
+	// Moves the particle with velocity
+	vertex.setPosition(glm::vec3(vertex.x, vertex.y, vertex.z) + velocity * deltaT);
+	vertex.setRotation(rotation);
+}

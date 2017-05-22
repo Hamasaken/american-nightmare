@@ -9,12 +9,9 @@ Projectile::Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Mat
 	this->marked = false;
 }
 
-Projectile::Projectile(){}
+Projectile::Projectile() { }
 
-Projectile::~Projectile()
-{
-	hitbox->Stop();
-}
+Projectile::~Projectile() { }
 
 void Projectile::fireBullet(b2World* world, glm::vec2 position, glm::vec2 direction)
 {	
