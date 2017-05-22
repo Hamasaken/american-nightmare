@@ -11,6 +11,8 @@
 #define ENEMY_VEL_X 2500.f  //20000.f
 #define ENEMY_VEL_Y 50000.f
 
+#define ENEMY_UPDATE_DISTANCE 18
+
 #define ENEMY_MAX_VEL_X 4.25f
 #define ENEMY_MAX_VEL_Y 20.f
 
