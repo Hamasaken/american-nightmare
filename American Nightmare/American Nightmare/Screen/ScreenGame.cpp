@@ -226,6 +226,7 @@ void ScreenGame::Draw()
 		DrawParticles(emitter, shaderManager);
 
 	// Drawing player
+	// Check if player currently is invulnerable
 	if (levelManager->getPlayer()->getInvulTime() > 0.f)
 	{
 		if((int)(levelManager->getPlayer()->getInvulTime() * 10.f) % 2 == 0)
