@@ -89,16 +89,6 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	////////////////////////////////////////////////////////////
 	meshManager = new MeshManager();
 	if (meshManager == nullptr) return false;
-	
-	// add quad mesh here later
-
-	////////////////////////////////////////////////////////////
-	// Level Manager
-	////////////////////////////////////////////////////////////
-	levelManager = new LevelManager();
-	if (levelManager == nullptr) return false;
-	if (!levelManager->Start(screenSize, shaderManager->getShader("texture_animation_normal"), shaderManager->getShader("deferred"), materialManager, meshManager, particleManager, soundManager, camera))
-		return false;
 
 	////////////////////////////////////////////////////////////
 	// Creating a GUI manager	
@@ -115,6 +105,14 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	guiManager->setInstantCenter(glm::vec2(0, 2));
 
 	////////////////////////////////////////////////////////////
+	// Level Manager
+	////////////////////////////////////////////////////////////
+	levelManager = new LevelManager();
+	if (levelManager == nullptr) return false;
+	if (!levelManager->Start(screenSize, shaderManager->getShader("texture_animation_normal"), shaderManager->getShader("deferred"), shaderManager->getShader("texture"), materialManager, meshManager, particleManager, soundManager, camera))
+		return false;
+
+	////////////////////////////////////////////////////////////
 	// Creating a UI manager	
 	////////////////////////////////////////////////////////////
 	uiManager = new GUIManager();
@@ -123,8 +121,8 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.89f, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Pause", FONT_PATH INGAME_FONT, 17.5f, glm::vec4(0.875f));
 	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(-0.3, -0.96, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_bar_red"), meshManager->getMesh("quad"));
 	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(0.3, -0.96, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quad"));
-	uiManager->AddText(glm::vec3(-0.3, -0.96, 0), 30.f, "Health", FONT_PATH INGAME_FONT);
-	uiManager->AddText(glm::vec3(0.3, -0.96, 0), 30.f, "Power", FONT_PATH INGAME_FONT);
+	uiManager->AddText(glm::vec3(-0.3, -0.96, 0.f), 30.f, "Health", FONT_PATH INGAME_FONT);
+	uiManager->AddText(glm::vec3(0.3, -0.96, 0.f), 30.f, "Power", FONT_PATH INGAME_FONT);
 	uiManager->setAlpha(0.40f);
 	uiManager->setShader(shaderManager->getShader("texture"));
 	uiManager->setInstantCenter(glm::vec2(0, 0));
@@ -264,6 +262,9 @@ void ScreenGame::Draw()
 		for (int i = 0; i < txts->size(); i++)
 			DrawObjectGUI(txts[0][i], shaderManager);
 	}
+
+	// Drawing popup
+	DrawObjectGUI(levelManager->getPopup(), shaderManager);
 
 	// Temp shadow map debug
 	/*if (shadowManager.getUseShadows())
@@ -512,7 +513,6 @@ void ScreenGame::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPo
 	uiManager->setScreenPosition(screenPos);
 	uiManager->setScreenSize(screenSize);
 }
-
 
 void ScreenGame::Stop()
 {

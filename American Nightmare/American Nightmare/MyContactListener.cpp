@@ -29,7 +29,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		if (enemy)
 		{
 			camera->screenShake(500.f, 0.5f);
-			particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f)); // temp blood effect
+			particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyB->getCenter(), bodyA->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f)); // temp blood effect
 			soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
 			player->TakeDamage(enemy->getDamage());
 		}

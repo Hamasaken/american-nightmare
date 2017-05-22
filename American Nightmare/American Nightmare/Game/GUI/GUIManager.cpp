@@ -92,7 +92,7 @@ void GUIManager::setAlpha(float alpha)
 	for (std::pair<Button*, Action> button : buttons)
 		button.first->setAlpha(alpha);
 	for (Text* text : texts)
-		text->setColor(glm::vec4(glm::vec3(text->getColor()), alpha));
+		text->setColor(glm::vec4(glm::vec3(text->getColor().x * alpha, text->getColor().y * alpha, text->getColor().z * alpha), alpha));
 	for (Bar* bar : bars)
 		bar->setAlpha(alpha);
 }

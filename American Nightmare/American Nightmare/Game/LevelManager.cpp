@@ -15,7 +15,7 @@ LevelManager::LevelManager(const LevelManager & other) { }
 
 LevelManager::~LevelManager() { }
 
-bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
+bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, GLuint guiShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
 	// Getting parameters
 	this->materialManager = materialManager;
@@ -25,6 +25,16 @@ bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapSh
 	this->camera = camera;
 	this->playerShader = playerShader;
 	this->mapShader = mapShader;
+	this->guiShader = guiShader;
+
+	// Popup Settings
+	popup = new Text();
+	if (popup == nullptr) return false;
+	if (!popup->Start(screenSize, FONT_PATH INGAME_FONT, 60.f, glm::vec3(0, 0.5f, 0))) return false;
+	popup->setShader(guiShader);
+	popup->CreateText("Popup!", glm::vec4(0.f));
+	popupAlpha = 0.0f;
+	popupActive = false;
 
 	// Starting contact manager
 	contactManager.Start(particleManager, soundManager, camera);
@@ -205,8 +215,30 @@ void LevelManager::Update(GLint deltaT)
 		if (!trigger->getIsTriggered())
 			trigger->CheckCollision(player->getBody());
 
+	// Updating UI popup text
+	if (popupActive)
+	{
+		glm::vec4 color = popup->getColor();
+		float currentAlpha = color.a;
+		currentAlpha += (popupAlpha - currentAlpha) * 0.035f;
+		popup->setColor(glm::vec4(currentAlpha));
+		popupTimer -= deltaT;
+		if (popupTimer < NULL) 
+			popupAlpha = -0.05f;
+		else if (currentAlpha < 0.f) 
+			popupActive = false;
+	}
+
 	// Checking triggers
 	CheckTriggers();
+}
+
+void LevelManager::ActivatePopup(std::string text, GLfloat timer)
+{
+	popup->setString(text);
+	popupActive = true;
+	popupAlpha = 1.f;
+	popupTimer = timer;
 }
 
 bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
@@ -437,10 +469,10 @@ void LevelManager::LoadLevelEffects(std::vector<LEffect> effects)
 			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]), materialManager->getTextureID("smoketexture"));
 			break;
 		case EEffectType::dust:
-			particleManager->EffectLightDust(glm::vec3(effect.position[0], effect.position[1], effect.position[2]));
+			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.40f, 0.3f, 0.3f, 0.7f));
 			break;
 		case EEffectType::steam:
-			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]), materialManager->getTextureID("smoketexture"));
+			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.3f, 0.30f, 0.5f, 0.7f));
 			break;
 		}
 	}
@@ -651,6 +683,7 @@ void LevelManager::CheckTriggers()
 				remove = true;
 				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 50, glm::vec4(0.25, 1, 0.85, 1));
 				UnlockPoster(2);
+				ActivatePopup("You unlocked a poster!", 2000.f);
 				break;
 
 			////////////////////////////////////////////////////////////
@@ -767,6 +800,11 @@ std::vector<Projectile*> LevelManager::getProjectiles()
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
 EntityManager* LevelManager::getEntityManager() { return entityManager; }
 Player* LevelManager::getPlayer() { return player; }
+
+Text* LevelManager::getPopup()
+{
+	return popup;
+}
 
 void LevelManager::deleteProjects(b2World* world)
 {
