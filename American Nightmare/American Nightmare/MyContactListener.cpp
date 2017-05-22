@@ -52,7 +52,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 
 	//Fixa Senare
 
-	Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
+/*	Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
 	Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
 	if (vacuumA || vacuumB)
 	{
@@ -70,7 +70,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
 		}
 	}
-
+	*/
 
 }
 
@@ -96,4 +96,6 @@ void MyContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifo
 }
 
 void MyContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
-{	/* handle post-solve event */}
+{
+	/* handle post-solve event */
+}

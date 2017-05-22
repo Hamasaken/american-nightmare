@@ -27,6 +27,10 @@ bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapSh
 	this->mapShader = mapShader;
 	this->guiShader = guiShader;
 
+	// Creatin bool vector for posters
+	for (int i = 0; i < 10; i++)
+		unlockedPosters.push_back(0);
+
 	// Popup Settings
 	popup = new Text();
 	if (popup == nullptr) return false;
@@ -262,7 +266,7 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	LoadLevelSpawners(levelFile.spawners);
 	LoadLevelTriggers(levelFile.triggers);
 	LoadLevelEffects(levelFile.effects);
-	
+
 	// Setting start position
 	player->setPosition(glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 0));
 
@@ -671,7 +675,8 @@ void LevelManager::CheckTriggers()
 			////////////////////////////////////////////////////////////
 			// Popup - For popups with text/pictures, anything
 			////////////////////////////////////////////////////////////
-			case Trigger::POPUP:				
+			case Trigger::POPUP:
+				ActivatePopup(trigger->getData(), 3000.f);
 				break;
 
 			////////////////////////////////////////////////////////////
@@ -732,6 +737,7 @@ void LevelManager::CheckTriggers()
 			// Save - Save station for the player, saves the game
 			////////////////////////////////////////////////////////////
 			case Trigger::SAVE:
+				ActivatePopup("Saved.", 2000.f);
 				break;
 
 			////////////////////////////////////////////////////////////
@@ -766,23 +772,15 @@ void LevelManager::CheckTriggers()
 
 void LevelManager::UnlockPoster(int index)
 {
-/*	std::ifstream file(ARCHIVE_PATH "game.ini");
+	//Create file at path
+	ofstream out("Data/savedata.fu", ios::binary);
+	unlockedPosters[index] = 1;
 
-	if (file.is_open())
-	{
-		std::string str;
-		std::vector <std::string> vec;
+	//Write header
+	if (out.is_open())
+		out.write(reinterpret_cast<const char*>(unlockedPosters.data()), sizeof(uint16_t) * 10);
 
-		while (std::getline(file, str))
-		{
-			vec.push_back(str);
-		}
-
-		for (std::string& s : vec)
-			printf("%s\n", s);
-	}
-
-	file.close(); */
+	out.close();
 }
 
 std::vector<Object*> LevelManager::getMap()

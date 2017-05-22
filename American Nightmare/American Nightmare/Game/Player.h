@@ -116,6 +116,7 @@ public:
 
 	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash);
 	void TakeDamage(float dmg);
+	bool getIsDead();
 
 	float& getHP();
 	float& getPower();

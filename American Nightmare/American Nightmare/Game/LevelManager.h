@@ -135,6 +135,9 @@ private:
 	GLfloat popupTimer;
 	GLboolean popupActive;
 
+	// Unlocked posters
+	std::vector<uint16_t> unlockedPosters;
+
 	// Shaders
 	GLuint mapShader;
 	GLuint playerShader;
@@ -146,6 +149,9 @@ private:
 	Projectile* moveble;
 
 	void deleteProjects(b2World* world);
+
+
+	// Lägg till en bool i screengame som ska resettas EFTER collisionen för att undvika crash
 
 };
 

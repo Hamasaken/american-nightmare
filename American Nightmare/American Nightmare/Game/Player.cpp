@@ -27,8 +27,6 @@ void Player::initiateCursor()
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
-	
-
 	//this->myProjectileHandler = ProjectileHandler(mesh, material, world, this->getPlayerPosAsGLM());
 
 	//Sets the cursor for the player
@@ -108,10 +106,13 @@ void Player::Update(GLint deltaT, b2World* world)
 	if (hitbox->getBody()->GetLinearVelocity().y == 0.f && hasJumped) { hasJumped = false; isDashing = true; }
 
 	// Getting user input
-	InputKeyboard(deltaT);
-	InputMouse();
-	InputTesting();
-	if (CONTROLLER_ON) InputController(deltaT);
+	if (!isDead)
+	{
+		InputKeyboard(deltaT);
+		InputMouse();
+		InputTesting();
+		if (CONTROLLER_ON) InputController(deltaT);
+	}
 
 	// Recharging power meter
 	if (!isHovering)
@@ -153,6 +154,11 @@ void Player::TakeDamage(float dmg)
 	{
 		isDead = true;
 	}
+}
+
+bool Player::getIsDead()
+{
+	return isDead;
 }
 
 void Player::Walk(Direction dir)
