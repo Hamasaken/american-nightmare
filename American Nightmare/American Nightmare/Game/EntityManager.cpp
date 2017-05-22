@@ -96,14 +96,12 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 	{
 		Enemy* e = enemyList[i];
 		e->Update(deltaT, b2Vec2(playerPosition.x, playerPosition.y), playerDead);
-	/*	if (e->getIsDead())
+		if (e->get())
 		{
 			e->Stop();
 			delete e;
 			enemyList.erase(enemyList.begin() + i);
 		}
-
-		*/
 	}
 
 	for (Entity* e : entityList)
