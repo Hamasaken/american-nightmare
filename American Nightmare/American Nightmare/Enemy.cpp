@@ -16,7 +16,8 @@ bool Enemy::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(ENEMY_SIZE_X, ENEMY_SIZE_Y, ENEMY_SIZE_Z);
 	damage = 1.f;
-
+	hp = 3;
+	isDead = false;
 	// Setting a self-pointer for collision detection
 	hitbox->getBody()->SetUserData(this);
 
@@ -105,4 +106,13 @@ float Enemy::getDamage()
 b2Body* Enemy::getBody()
 {
 	return hitbox->getBody();
+}
+
+void Enemy::TakeDamage(float dmg)
+{
+	hp -= dmg;
+	if (hp <= NULL)
+	{
+		isDead = true;
+	}
 }

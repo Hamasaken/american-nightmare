@@ -31,8 +31,10 @@ public:
 	// \brief Gets input from user and moves accordingly
 	////////////////////////////////////////////////////////////
 	void Movement(b2Vec2 playerPos);
-
+	int hp;
 	float getDamage();
+	void TakeDamage(float dmg);
+	bool isDead;
 
 private:
 	float damage;

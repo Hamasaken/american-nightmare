@@ -19,8 +19,10 @@ void MyContactListener::Start(ParticleManager* particleManager, SoundManager* so
 
 void MyContactListener::BeginContact(b2Contact* contact)
 {
-	Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
-	Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
+	if (true)
+	{
+		Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
+		Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
 
 	Player* player = dynamic_cast<Player*>(bodyA);
 	if (player && !player->getIsDead())
@@ -31,26 +33,32 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			player->setContactWithEnemy(enemy);
 		}
 
+			Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
+			if (myProjectile)
+			{
+				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 0.15f);
+
+				if (player->addPlayerProjectiles() == true && sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)
+				{
+					player->addNrOfProjectiles();
+					myProjectile->setmarked(true);
+				}
+			}
+		}
+	Enemy* enemy = dynamic_cast<Enemy*>(bodyA);
+	if (enemy)
+	{
 		Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
 		if (myProjectile)
 		{
-			soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 0.15f);
-			myProjectile->setmarked(true);
-			
-			
-			/*if (player->addPlayerProjectiles() == true)
-			{
-
-			player->setCheckForProjectilePickUp(true);
-			}
-			else
-			{
-			player->setCheckForProjectilePickUp(false);
-			}*/
+			cout << "You hit an enemy" << endl;
+			particleManager->EffectBloodSplatter(enemy->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f)); // temp blood effect
+			soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
+			enemy->TakeDamage(enemy->getDamage());
 		}
 	}
 
-	//Fixa Senare
+		//Fixa Senare
 
 /*	Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
 	Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);

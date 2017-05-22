@@ -143,12 +143,10 @@ private:
 	GLuint playerShader;
 	GLuint guiShader;
 
-	//ProjectileHandler* myPH;
-	//ProjectileHandler* myPH;
-	//Projectile* myProjectile;
-	Projectile* moveble;
-
-	void deleteProjects(b2World* world);
+	//Variables for projectileHandler
+	ProjectileHandler* myPH;
+	bool wasPressed;
+	bool isPressed;
 
 
 	// Lägg till en bool i screengame som ska resettas EFTER collisionen för att undvika crash

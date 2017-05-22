@@ -59,7 +59,7 @@ private:
 	
 	//Variables for handling projectile/Weapon
 	int nrOfProjectiles;
-	int CAP;
+	const int CAP = 10;
 
 	//variable & function for cursor
 	SDL_Cursor* cursor;
@@ -112,8 +112,7 @@ public:
 	void Update(GLint deltaT, b2World* world);
 	//bool Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
 
-	bool addPlayerProjectiles();
-
+	
 	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash);
 	void TakeDamage(float dmg);
 	bool getIsDead();
@@ -129,6 +128,12 @@ public:
 	void setContactWithEnemy(Enemy* contact);
 	Enemy* getContactWithEnemy();
 	//Vacuum* getVac();
+
 	
+	bool addPlayerProjectiles();
+	bool getCanShoot();
+
+	void addNrOfProjectiles();
+	void decreaseNrOfProjectiles();
 };
 #endif // !PLAYER_H

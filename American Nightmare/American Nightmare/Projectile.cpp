@@ -1,27 +1,9 @@
 #include "Projectile.h"
 
-//Projectile::Projectile(b2World *world, GLuint shader, glm::vec2 pos)
-//{
-//	std::string modelPath = MODEL_PATH;
-//	std::string texturePath = TEXTURE_PATH;
-//	materialManager.AddMaterial("lightmaterial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(1.f), 0.f, "lighttexture", texturePath + "gammal-dammsugare.jpg");
-//		
-//	setShader(shader);
-//	Start(nullptr, materialManager.getMaterial("lightmaterial"), world, pos, glm::vec3(0.5f, 0.5f, 1.f), b2_dynamicBody, b2Shape::e_circle, false, 0.5f, 0.5f);
-//	setScale(glm::vec3(1.f, 1.f, 1));
-//
-//	//Test on hitbox->initilize
-//	hitbox->InitializeHitbox(world, glm::vec2(pos.x, pos.y), glm::vec2(1.f, 1.f), b2_dynamicBody, b2Shape::e_circle, false, 0.5f, 0.5f, true, false);
-//
-//	this->damage = 10;
-//	this->damageOn = false;
-//	this->marked = false;
-//}
-
 Projectile::Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos)
 {
-	Entity::Start(mesh, material, world);
-
+	Entity::Start(mesh, material, world, pos, glm::vec3(1.0, 1.0, 1.0), b2BodyType::b2_dynamicBody, b2Shape::e_circle, true, 1.0, 0.25);
+	
 	this->damage = 10;
 	this->damageOn = false;
 	this->marked = false;
@@ -33,7 +15,7 @@ Projectile::~Projectile() { }
 
 void Projectile::fireBullet(b2World* world, glm::vec2 position, glm::vec2 direction)
 {	
-	hitbox->getBody()->ApplyLinearImpulseToCenter({direction.x * 50000.f, direction.y * 50000.f }, true);
+	hitbox->getBody()->ApplyLinearImpulseToCenter({direction.x * 500.f, direction.y * 500.f }, true);
 }
 
 b2Vec2 Projectile::normalize(const b2Vec2& source)
@@ -74,11 +56,6 @@ void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)
 {
 	Entity::Update(deltaT);
 }
-
-//void Projectile::Update(GLint deltaT)
-//{
-//	Entity::Update(deltaT);
-//}
 
 void Projectile::setIsFired(bool isProjectileFired)
 {
