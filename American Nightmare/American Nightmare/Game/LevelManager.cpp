@@ -396,7 +396,7 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		switch (trigger.triggerType)
 		{
 		case ETriggerType::poster:		outTriggerType = Trigger::POSTER; break;
-		case ETriggerType::deathZone:	outTriggerType = Trigger::EFFECT; break;
+		case ETriggerType::deathZone:	outTriggerType = Trigger::DEATH; break;
 		case ETriggerType::garbageBin:	outTriggerType = Trigger::EFFECT; break;
 		case ETriggerType::door:		
 			outTriggerType = Trigger::POSTER; 
@@ -418,7 +418,7 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		this->triggers.push_back(outTrigger);
 
 		// Adding a constant smoke on trigger for testing
-		particleManager->EffectConstantSmoke(glm::vec3(outTrigger->getPosition(), 0.f), materialManager->getTextureID("smoketexture"), 60);
+		particleManager->EffectConstantSmoke(glm::vec3(outTrigger->getPosition(), 0.f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.3f));
 	}
 
 }
@@ -657,6 +657,13 @@ void LevelManager::CheckTriggers()
 			// Push - Move an entity with a force
 			////////////////////////////////////////////////////////////
 			case Trigger::PUSH:		
+				break;
+
+			////////////////////////////////////////////////////////////
+			// Death - Zone in which the player instantly dies
+			////////////////////////////////////////////////////////////
+			case Trigger::DEATH:
+				player->TakeDamage(player->getHP());
 				break;
 
 			////////////////////////////////////////////////////////////

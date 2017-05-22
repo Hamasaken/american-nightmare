@@ -6,6 +6,7 @@ MyContactListener::~MyContactListener()
 {
 	particleManager = nullptr;
 	soundManager = nullptr;
+	camera = nullptr;
 }
 
 void MyContactListener::Start(ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
