@@ -19,7 +19,7 @@ Projectile::~Projectile()
 void Projectile::fireBullet(b2World* world, glm::vec2 position, glm::vec2 direction)
 {	
 	//cout << "this will happend" << endl;
-	hitbox->getBody()->SetTransform(b2Vec2(position.x, position.y), 0);
+	//hitbox->getBody()->SetTransform(b2Vec2(position.x, position.y), 0);
 	hitbox->getBody()->ApplyLinearImpulseToCenter({direction.x * 50000.f, direction.y * 50000.f }, true);
 	//this->setIsFired(true);
 }
