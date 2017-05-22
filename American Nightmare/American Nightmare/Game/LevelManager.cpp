@@ -216,7 +216,7 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 		projectiles.push_back(moveble);
 	}*/
 
-	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), shader);
 	// Loading temp level
 	//LoadTempLevel(shader);
 
@@ -575,17 +575,25 @@ void LevelManager::Update(GLint deltaT)
 	if (player->getIsDashing()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(0.25f));
 	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
 
+
+	//For projectiles
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && player->getCanShoot() == true)
+	{
+		myPH->addProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
+	}
+
 	//Update Projectile
 	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
 	
+
+	//meshManager->getMesh("quad");
+
 	// Updating enemies
 	enemy->Update(deltaT, player->getBody()->GetPosition());
 
 	// Updating physics
 	world->Step(1 / 60.f, 10, 20);
 
-	// Updating every object on map
-	//deleteProjects(world);
 
 	 //for (Projectile* proj : projectiles)
 		 //proj->Update(deltaT, world, player->getPlayerPosAsGLM());
@@ -703,25 +711,6 @@ const LightManager* LevelManager::getLightManager() const {	return lightManager;
 Player* LevelManager::getPlayer() { return player; }
 Enemy* LevelManager::getEnemy() { return enemy; }
 
-//void LevelManager::deleteProjects(b2World* world)
-//{
-//	cout << this->projectiles.size() << endl;
-//	for (int i = 0; i < this->projectiles.size(); i++)
-//	{
-//		if (this->projectiles[i]->getmarked() == true)
-//		{
-//			Projectile* temp = this->projectiles[i];
-//			//temp = this->projectiles[i];
-//			this->projectiles[i] = this->projectiles.back();
-//			this->projectiles.back() = temp;
-//			//this->projectiles.back()->~Projectile();
-//			world->DestroyBody(this->projectiles.back()->getHitbox()->getBody());
-//			this->projectiles.pop_back();
-//
-//			//this->projectiles.back()
-//		}
-//	}
-//}
 
 //ProjectileHandler* LevelManager::getProjectiles() { return myPH; }
 //Projectile* LevelManager::getProjectile() { return moveble; }

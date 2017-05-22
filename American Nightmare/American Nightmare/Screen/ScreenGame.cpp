@@ -182,6 +182,7 @@ void ScreenGame::Draw()
 
 	for (Projectile* projectiles : levelManager->getProjectiles())
 		DrawObjectGeometryPass(projectiles, shaderManager);
+
 	//TEST
 	//for(Projectile* proj : levelManager->getProj())
 	//	DrawObjectGeometryPass(proj, shaderManager);

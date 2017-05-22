@@ -116,6 +116,6 @@ public:
 
 	
 	bool addPlayerProjectiles();
-	bool getCanShoot()const;
+	bool getCanShoot();
 };
 #endif // !PLAYER_H
