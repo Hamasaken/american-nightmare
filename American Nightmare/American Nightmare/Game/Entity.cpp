@@ -34,12 +34,13 @@ bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	//if (!hitbox->InitializeHitbox(world))
 	//	return false;
 
-	if (!hitbox->InitializeHitboxVacuum(world, player))
+	//if (!hitbox->InitializeHitboxVacuum(world, player))
+	//{
+	//	//hitbox->getBody()->SetUserData(this);
 
-	//hitbox->getBody()->SetUserData(this);
-
-	return true;
-}
+	//	return true;
+	//}
+//}
 
 bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World * world, glm::vec2 position, glm::vec3 size, b2BodyType type, b2Shape::Type shapeType, bool fixedRotate, float density, float friction)
 {
