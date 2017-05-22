@@ -47,8 +47,10 @@ bool ScreenOptions::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 
 	// Loading materials
 	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), glm::vec3(1, 1, 1), glm::vec3(1.f), 1.f, "backgroundtexture", TEXTURE_PATH "background_2.jpg");
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
+	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Smoke Material not found\n");
 	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
 
 	////////////////////////////////////////////////////////////
@@ -88,6 +90,10 @@ bool ScreenOptions::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	
 	guiManager->setAlpha(1.f);
 	guiManager->setShader(shaderManager->getShader("texture"));
+
+	background = new Button();
+	background->Start(screenSize, glm::vec3(0.f, 0.f, 0.1f), glm::vec2(1), materialManager->getMaterial("backgroundmaterial"), meshManager->getMesh("quad"));
+	background->setShader(shaderManager->getShader("texture"));
 
 	// Setting starting variables
 	SetStartVariables();
@@ -207,6 +213,8 @@ void ScreenOptions::Draw()
 	// Getting view matrix from camera
 	camera->buildViewMatrix();
 	
+	DrawObjectGUI(background, shaderManager);
+
 	// Drawing GUI
 	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = guiManager->getButtonList();
 	for (int i = 0; i < buttons->size(); i++)
