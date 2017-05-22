@@ -10,8 +10,6 @@ class ProjectileHandler : public Entity
 private:
 	std::vector <Projectile*> myProjtileVector;
 	GLuint myShader;
-	bool wasPressed;
-	bool isPressed;
 	
 	MeshManager::Mesh* myMesh;
 	MaterialManager::Material* myMaterial;
@@ -27,7 +25,7 @@ public:
 	void Update(GLint deltaT, b2World* world, glm::vec2 position);
 	void deleteProjects(b2World* world);
 	std::vector<Projectile*> getBullets();
-	void addProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos);
+	void fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos);
 };
 
 #endif

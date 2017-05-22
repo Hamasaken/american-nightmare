@@ -44,9 +44,10 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			{
 				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 0.15f);
 
-				if (/*player->addPlayerProjectiles() ==true &&*/ false)
+				if (player->addPlayerProjectiles() == true && sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)
 				{
-					//myProjectile->setmarked(true);
+					player->addNrOfProjectiles();
+					myProjectile->setmarked(true);
 				}
 			}
 		}

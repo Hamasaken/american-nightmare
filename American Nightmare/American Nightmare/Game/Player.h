@@ -117,5 +117,8 @@ public:
 	
 	bool addPlayerProjectiles();
 	bool getCanShoot();
+
+	void addNrOfProjectiles();
+	void decreaseNrOfProjectiles();
 };
 #endif // !PLAYER_H

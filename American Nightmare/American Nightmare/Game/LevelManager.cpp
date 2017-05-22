@@ -217,6 +217,8 @@ bool LevelManager::LoadLevel(GLuint shader, std::string levelPath, std::string a
 	}*/
 
 	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), shader);
+	this->wasPressed = false;
+	this->isPressed = false;
 	// Loading temp level
 	//LoadTempLevel(shader);
 
@@ -577,9 +579,13 @@ void LevelManager::Update(GLint deltaT)
 
 
 	//For projectiles
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && player->getCanShoot() == true)
+	isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+
+	if (isPressed && !wasPressed && player->getCanShoot() == true)
 	{
-		myPH->addProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
+		wasPressed = true;
+		player->decreaseNrOfProjectiles();
+		myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
 	}
 
 	//Update Projectile
@@ -611,6 +617,9 @@ void LevelManager::Update(GLint deltaT)
 	
 	// Checking triggers
 	CheckTriggers();
+
+	//Resets variables for projectileHandler
+	this->wasPressed = isPressed;
 }
 
 void LevelManager::CheckTriggers()

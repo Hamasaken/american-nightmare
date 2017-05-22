@@ -1,17 +1,8 @@
 #include "Player.h"
 
-//Player::Player() : Animation()
-//{
-//	this->myProjectileHandler = ProjectileHandler();
-//}
-//
-
-//Player::Player(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world) : Animation()
-//{
-//	
-//}
-
-Player::Player(): Animation() { }
+Player::Player(): Animation() 
+{
+}
 
 Player::Player(const Player & other) { }
 
@@ -27,10 +18,7 @@ void Player::initiateCursor()
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world)
 {
-	//Variables for handeling the "gun"
-	this->nrOfProjectiles = 0;
-
-	//this->myProjectileHandler = ProjectileHandler(mesh, material, world, this->getPlayerPosAsGLM());
+	this->nrOfProjectiles = 5;
 
 	//Sets the cursor for the player
 	initiateCursor();
@@ -345,7 +333,6 @@ bool Player::addPlayerProjectiles()
 	}
 	else
 	{
-		this->nrOfProjectiles++;
 		return true;
 	}
 }
@@ -354,11 +341,20 @@ bool Player::getCanShoot()
 {
 	if (this->nrOfProjectiles > 0)
 	{
-		return false;
+		return true;
 	}
 	else
 	{
-		this->nrOfProjectiles--;
-		return true;
+		return false;
 	}
+}
+
+void Player::addNrOfProjectiles()
+{
+	this->nrOfProjectiles++;
+}
+
+void Player::decreaseNrOfProjectiles()
+{
+	this->nrOfProjectiles--;
 }
