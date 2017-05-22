@@ -25,7 +25,7 @@ void Player::initiateCursor()
 }
 
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
-bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world)
+bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
 	
 
@@ -52,6 +52,11 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	isHovering = false;
 	isDashing = false;
 	invulTime = 0.f;
+	contactWithEnemy = nullptr;
+
+	this->particleManager = particleManager;
+	this->soundManager = soundManager;
+	this->camera = camera;
 
 	// Creating model
 	model = new Model();
@@ -70,8 +75,23 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	return true;
 }
 
-void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
+void Player::Update(GLint deltaT, b2World* world)
 {
+	// Update player invulnerability time
+	if (invulTime > 0.f)
+	{
+		invulTime -= deltaT * 0.001f;
+	}
+	// Quick fix enemy continuous collision
+	else if (contactWithEnemy)
+	{
+		invulTime = PLAYER_INVULNERABILITY_TIME;
+		camera->screenShake(500.f, 0.5f);
+		particleManager->EffectBloodSplatter(position, getAngleFromTwoPoints(contactWithEnemy->getCenter(), this->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f)); // temp blood effect
+		soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
+		TakeDamage(contactWithEnemy->getDamage());
+	}
+
 	// Are we currently hovering?
 	//isHovering = false;
 	isDashing = false;
@@ -101,10 +121,6 @@ void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 		if (power > PLAYER_POWER_MAX)
 			power = PLAYER_POWER_MAX;
 	}
-
-	// Update player invulnerability time
-	if (invulTime > 0.f)
-		invulTime -= deltaT * 0.001f;
 
 	// Thresholds in velocity
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
@@ -348,6 +364,16 @@ float& Player::getPower()
 bool Player::getIsHovering()
 {
 	return isHovering;
+}
+
+void Player::setContactWithEnemy(Enemy* contact)
+{
+	this->contactWithEnemy = contact;
+}
+
+Enemy* Player::getContactWithEnemy()
+{
+	return contactWithEnemy;
 }
 
 void Player::setInvulTime(GLfloat invulTime)

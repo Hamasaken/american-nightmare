@@ -26,13 +26,9 @@ void MyContactListener::BeginContact(b2Contact* contact)
 	if (player)
 	{
 		Enemy* enemy = dynamic_cast<Enemy*>(bodyB);
-		if (enemy && player->getInvulTime() <= 0.f)
+		if (enemy)
 		{
-			player->setInvulTime(PLAYER_INVULNERABILITY_TIME);
-			camera->screenShake(500.f, 0.5f);
-			particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyB->getCenter(), bodyA->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f)); // temp blood effect
-			soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
-			player->TakeDamage(enemy->getDamage());
+			player->setContactWithEnemy(enemy);
 		}
 
 		Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
@@ -80,7 +76,18 @@ void MyContactListener::BeginContact(b2Contact* contact)
 
 void MyContactListener::EndContact(b2Contact* contact)
 {
+	Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
+	Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
 
+	Player* player = dynamic_cast<Player*>(bodyA);
+	if (player)
+	{
+		Enemy* enemy = dynamic_cast<Enemy*>(bodyB);
+		if (enemy)
+		{
+			player->setContactWithEnemy(nullptr);
+		}
+	}
 }
 
 void MyContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
