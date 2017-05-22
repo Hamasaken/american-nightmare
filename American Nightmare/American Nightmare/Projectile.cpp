@@ -2,8 +2,8 @@
 
 Projectile::Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos)
 {
-	Entity::Start(mesh, material, world, pos, glm::vec3(1.0, 1.0, 0.5), b2BodyType::b2_dynamicBody, b2Shape::e_circle, true, 1.0, 0.25);
-
+	Entity::Start(mesh, material, world, pos, glm::vec3(1.0, 1.0, 1.0), b2BodyType::b2_dynamicBody, b2Shape::e_circle, true, 1.0, 0.25);
+	
 	this->damage = 10;
 	this->damageOn = false;
 	this->marked = false;
@@ -18,10 +18,7 @@ Projectile::~Projectile()
 
 void Projectile::fireBullet(b2World* world, glm::vec2 position, glm::vec2 direction)
 {	
-	//cout << "this will happend" << endl;
-	hitbox->getBody()->SetTransform(b2Vec2(position.x, position.y), 0);
-	hitbox->getBody()->ApplyLinearImpulseToCenter({direction.x * 50000.f, direction.y * 50000.f }, true);
-	//this->setIsFired(true);
+	hitbox->getBody()->ApplyLinearImpulseToCenter({direction.x * 500.f, direction.y * 500.f }, true);
 }
 
 b2Vec2 Projectile::normalize(const b2Vec2& source)

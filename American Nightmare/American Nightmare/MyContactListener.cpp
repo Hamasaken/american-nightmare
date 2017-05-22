@@ -43,33 +43,36 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			if (myProjectile)
 			{
 				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 0.15f);
-				myProjectile->setmarked(true);
 
-				if (player->addPlayerProjectiles() == true)
+				if (player->addPlayerProjectiles() == true && sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)
 				{
+					player->addNrOfProjectiles();
 					myProjectile->setmarked(true);
 				}
 			}
 		}
-		//Fixa Senare
-		Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
-		Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
-		if (vacuumA || vacuumB)
-		{
-			printf("vacuum\n");
-			printf("vacuum IS ALIVE First\n");
-			Enemy* enemyA = dynamic_cast<Enemy*>(bodyA);
-			Enemy* enemyB = dynamic_cast<Enemy*>(bodyB);
-			if (enemyA || enemyB)
-			{
-				printf("vacuum IS ALIVE Second\n");
-				//printf("Enemy is hurting you!!!\n");
-				//enemy->getBody()->ApplyForce(b2Vec2(0, -1000), b2Vec2(), true);
 
-				printf("Enemy is hurting you!!!\n");
-				player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
-			}
-		}
+		//Fixa Senare
+
+		//Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
+		//Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
+		//if (vacuumA || vacuumB)
+		//{
+		//	printf("vacuum\n");
+		//	//printf("vacuum IS ALIVE First\n");
+		//	Projectile* enemyA = dynamic_cast<Projectile*>(bodyA);
+		//	Projectile* enemyB = dynamic_cast<Projectile*>(bodyB);
+		//	if (enemyA || enemyB)
+		//	{
+		//		printf("vacuum IS ALIVE Second\n");
+		//		//printf("Enemy is hurting you!!!\n");
+		//		//enemy->getBody()->ApplyForce(b2Vec2(0, -1000), b2Vec2(), true);
+		//		
+		//		printf("Enemy is hurting you!!!\n");
+		//		player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
+		//	}
+		//}
+
 	}
 }
 

@@ -116,10 +116,10 @@ private:
 	MyContactListener contactManager;
 	QuadTree* quadTree;
 
+	//Variables for projectileHandler
 	ProjectileHandler* myPH;
-	////Projectile* moveble;
-
-	//void deleteProjects(b2World* world);
+	bool wasPressed;
+	bool isPressed;
 
 };
 
