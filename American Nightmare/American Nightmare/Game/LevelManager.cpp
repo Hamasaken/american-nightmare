@@ -262,7 +262,7 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	LoadLevelSpawners(levelFile.spawners);
 	LoadLevelTriggers(levelFile.triggers);
 	LoadLevelEffects(levelFile.effects);
-	
+
 	// Setting start position
 	player->setPosition(glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 0));
 
@@ -671,7 +671,8 @@ void LevelManager::CheckTriggers()
 			////////////////////////////////////////////////////////////
 			// Popup - For popups with text/pictures, anything
 			////////////////////////////////////////////////////////////
-			case Trigger::POPUP:				
+			case Trigger::POPUP:
+				ActivatePopup(trigger->getData(), 3000.f);
 				break;
 
 			////////////////////////////////////////////////////////////
@@ -732,6 +733,7 @@ void LevelManager::CheckTriggers()
 			// Save - Save station for the player, saves the game
 			////////////////////////////////////////////////////////////
 			case Trigger::SAVE:
+				ActivatePopup("Saved.", 2000.f);
 				break;
 
 			////////////////////////////////////////////////////////////

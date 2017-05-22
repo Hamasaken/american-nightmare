@@ -147,6 +147,9 @@ private:
 
 	void deleteProjects(b2World* world);
 
+
+	// Lägg till en bool i screengame som ska resettas EFTER collisionen för att undvika crash
+
 };
 
 #endif  !LEVELMANAGER_H

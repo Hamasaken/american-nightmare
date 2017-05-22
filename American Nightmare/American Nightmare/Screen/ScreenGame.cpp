@@ -71,7 +71,6 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
 	if (materialManager->getMaterial("boltmaterial") == nullptr) printf("Bolt Material not found\n");
 
-
 	////////////////////////////////////////////////////////////
 	// Creating Particle Manager
 	////////////////////////////////////////////////////////////
@@ -100,7 +99,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
 	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Exit to Desktop", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
 	guiManager->AddText(glm::vec3(0.f, 0.70f, 0.f), 80.f, "Paused", FONT_PATH INGAME_FONT);
-	guiManager->setAlpha(0.f);
+	guiManager->setAlpha(1.f);
 	guiManager->setShader(shaderManager->getShader("texture"));
 	guiManager->setInstantCenter(glm::vec2(0, 2));
 
@@ -122,10 +121,15 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(-0.3, -0.96, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_bar_red"), meshManager->getMesh("quad"));
 	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(0.3, -0.96, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quad"));
 	uiManager->AddText(glm::vec3(-0.3, -0.96, 0.f), 30.f, "Health", FONT_PATH INGAME_FONT);
-	uiManager->AddText(glm::vec3(0.3, -0.96, 0.f), 30.f, "Power", FONT_PATH INGAME_FONT);
-	uiManager->setAlpha(0.40f);
+	uiManager->AddText(glm::vec3(0.3, -0.96, 0.f), 30.f, "Power", FONT_PATH INGAME_FONT);	
+	uiManager->AddText(glm::vec3(0.f, 2.5, 0.f), 50.f, "You died", FONT_PATH INGAME_FONT);
+	uiManager->AddButton(GUIManager::PLAY, glm::vec3(0.3, 2.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Try again", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	uiManager->AddButton(GUIManager::STARTMENY, glm::vec3(-0.3, 2.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Meny", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	uiManager->setAlpha(0.80f);
+
 	uiManager->setShader(shaderManager->getShader("texture"));
 	uiManager->setInstantCenter(glm::vec2(0, 0));
+
 
 	// Setting startvariables
 	SetStartVariables();
@@ -145,6 +149,7 @@ void ScreenGame::SetStartVariables()
 	levelManager->LoadLevel(LEVEL_PATH "Level2.anl", ARCHIVE_PATH "Assets2.ana");
 
 	// Adding shadow
+	// flyttade upp till start functionen
 	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], glm::vec3(5.f, 5.f, -10.f), glm::vec2(screenSize.x * 0.5, screenSize.y * 0.5), glm::vec2(60, 30), 5.f, 40);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, glm::vec2(60, 30), -30.f, 50);
 	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, glm::vec2(60, 30), -30.f, 50);
@@ -224,13 +229,16 @@ void ScreenGame::Draw()
 		DrawParticles(emitter, shaderManager);
 
 	// Drawing player
-	if (levelManager->getPlayer()->getInvulTime() > 0.f)
+	if (!levelManager->getPlayer()->getIsDead())
 	{
-		if((int)(levelManager->getPlayer()->getInvulTime() * 10.f) % 2 == 0)
+		if (levelManager->getPlayer()->getInvulTime() > 0.f)
+		{
+			if ((int)(levelManager->getPlayer()->getInvulTime() * 10.f) % 2 == 0)
+				DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
+		}
+		else
 			DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 	}
-	else
-		DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
 	// Draw Enemies
 	for (Enemy* enemy : *levelManager->getEntityManager()->getEnemyList())
@@ -329,7 +337,8 @@ void ScreenGame::DrawShadowMaps()
 		// Set shader for transparent objects
 		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
 
-		DrawObjectDirShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+		if (!levelManager->getPlayer()->getIsDead())
+			DrawObjectDirShadowMapTransparent(levelManager->getPlayer(), shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
 		// DRawing enemies
 		for (Enemy* enemy : *levelManager->getEntityManager()->getEnemyList())
@@ -420,11 +429,12 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 		GUIManager::Action action	= buttons[0][i].second;
 		if (btn->getPressed())
 		{
+			soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 			switch (action)
 			{
 			case GUIManager::Action::OK:		Pause(); break;
-			case GUIManager::Action::STARTMENY: soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::StartMeny; break;
-			case GUIManager::Action::EXIT:		soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::Exit; break;
+			case GUIManager::Action::STARTMENY:	*state = State::StartMeny; break;
+			case GUIManager::Action::EXIT:		*state = State::Exit; break;
 			}
 			btn->setPressed(false);
 		}
@@ -458,6 +468,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	// Updating UI presses
 	uiManager->Update(deltaT);
+	if (levelManager->getPlayer()->getIsDead()) uiManager->setCenter(glm::vec2(0, 2));
 	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = uiManager->getButtonList();
 	for (int i = 0; i < buttons->size(); i++)
 	{
@@ -465,10 +476,17 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 		GUIManager::Action action = buttons[0][i].second;
 		if (btn->getPressed())
 		{
+			soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 			switch (action)
 			{
-			case GUIManager::Action::PAUSE: Pause();
+			case GUIManager::Action::PAUSE: Pause(); break;
+			case GUIManager::Action::PLAY: 
+				uiManager->setCenter(glm::vec2(0, 0));
+				SetStartVariables();
 				break; 
+			case GUIManager::EXIT:
+				*state = State::StartMeny;
+				break;
 			}
 			btn->setPressed(false);
 		}
@@ -485,7 +503,6 @@ void ScreenGame::UpdatePausing(GLint deltaT)
 {
 	static GLint pausTimer = 0.f;
 	pausTimer += deltaT;
-	guiManager->setAlpha(pausTimer / PAUS_TIMER);
 	if (pausTimer >= PAUS_TIMER)
 	{
 		pausTimer = 0.f;
@@ -499,7 +516,6 @@ void ScreenGame::UpdateUnpausing(GLint deltaT)
 {
 	static GLint unpausTimer = PAUS_TIMER;
 	unpausTimer -= deltaT;
-	guiManager->setAlpha(unpausTimer / PAUS_TIMER);
 	if (unpausTimer <= NULL)
 	{
 		unpausTimer = PAUS_TIMER;

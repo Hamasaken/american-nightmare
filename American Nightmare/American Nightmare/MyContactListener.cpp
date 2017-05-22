@@ -33,6 +33,12 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyB->getCenter(), bodyA->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f)); // temp blood effect
 			soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
 			player->TakeDamage(enemy->getDamage());
+			if (player->getIsDead())
+			{
+				particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyB->getCenter(), bodyA->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
+				particleManager->EffectBloodSplatter(player->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
+				particleManager->EffectExplosionLights(player->getPosition(), 50, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
+			}
 		}
 
 		Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
@@ -56,7 +62,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 
 	//Fixa Senare
 
-	Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
+/*	Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
 	Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
 	if (vacuumA || vacuumB)
 	{
@@ -74,7 +80,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
 		}
 	}
-
+	*/
 
 }
 
@@ -89,4 +95,6 @@ void MyContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifo
 }
 
 void MyContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
-{	/* handle post-solve event */}
+{
+	/* handle post-solve event */
+}
