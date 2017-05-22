@@ -25,7 +25,7 @@ void Player::initiateCursor()
 }
 
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
-bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world)
+bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
 	//this->myProjectileHandler = ProjectileHandler(mesh, material, world, this->getPlayerPosAsGLM());
 
@@ -50,6 +50,11 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	isHovering = false;
 	isDashing = false;
 	invulTime = 0.f;
+	contactWithEnemy = nullptr;
+
+	this->particleManager = particleManager;
+	this->soundManager = soundManager;
+	this->camera = camera;
 
 	// Creating model
 	model = new Model();
@@ -68,8 +73,23 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	return true;
 }
 
-void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
+void Player::Update(GLint deltaT, b2World* world)
 {
+	// Update player invulnerability time
+	if (invulTime > 0.f)
+	{
+		invulTime -= deltaT * 0.001f;
+	}
+	// Quick fix enemy continuous collision
+	else if (contactWithEnemy)
+	{
+		invulTime = PLAYER_INVULNERABILITY_TIME;
+		camera->screenShake(500.f, 0.5f);
+		particleManager->EffectBloodSplatter(position, getAngleFromTwoPoints(contactWithEnemy->getCenter(), this->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f)); // temp blood effect
+		soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
+		TakeDamage(contactWithEnemy->getDamage());
+	}
+
 	// Are we currently hovering?
 	//isHovering = false;
 	isDashing = false;
@@ -103,10 +123,6 @@ void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 			power = PLAYER_POWER_MAX;
 	}
 
-	// Update player invulnerability time
-	if (invulTime > 0.f)
-		invulTime -= deltaT * 0.001f;
-
 	// Thresholds in velocity
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
 	if (vel.x > PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
@@ -134,9 +150,13 @@ void Player::RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right,
 void Player::TakeDamage(float dmg)
 {
 	hp -= dmg;
-	if (hp <= NULL)
+	if (hp <= NULL && !isDead)
 	{
 		isDead = true;
+		particleManager->EffectBloodSplatter(position, getAngleFromTwoPoints(contactWithEnemy->getCenter(), this->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f));
+		particleManager->EffectBloodSplatter(position, getAngleFromTwoPoints(this->getCenter(), contactWithEnemy->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f));
+		particleManager->EffectExplosionLights(position, 50, glm::vec4(0.4f, 0.05f, 0.025f, 1.f));
+		contactWithEnemy = nullptr;
 	}
 }
 
@@ -354,6 +374,16 @@ float& Player::getPower()
 bool Player::getIsHovering()
 {
 	return isHovering;
+}
+
+void Player::setContactWithEnemy(Enemy* contact)
+{
+	this->contactWithEnemy = contact;
+}
+
+Enemy* Player::getContactWithEnemy()
+{
+	return contactWithEnemy;
 }
 
 void Player::setInvulTime(GLfloat invulTime)

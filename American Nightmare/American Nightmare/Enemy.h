@@ -24,7 +24,7 @@ public:
 	~Enemy();
 
 	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world);
-	void Update(GLint deltaT, b2Vec2 playerPos);
+	void Update(GLint deltaT, b2Vec2 playerPos, bool playerAlive);
 
 	Entity myEntity;
 	////////////////////////////////////////////////////////////

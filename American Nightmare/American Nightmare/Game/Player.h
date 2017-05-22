@@ -4,6 +4,9 @@
 #include "Animation.h"
 #include <SDL.h>
 #include "../ProjectileHandler.h"
+#include "Particle\ParticleManager.h"
+#include "../SoundManager.h"
+#include "Camera.h"
 #include "../Enemy.h"
 #include "../vacuum.h"
 
@@ -85,6 +88,11 @@ private:
 	bool isDashing;				//< If the player is currently dashing
 	bool isHovering;			//< If the player is currently hovering
 	GLfloat invulTime;			//< Player invulnerability timer after being hit
+	Enemy* contactWithEnemy;		//< If player is in contact with an enemy;
+
+	ParticleManager* particleManager;
+	SoundManager* soundManager;
+	Camera* camera;
 
 	//< Rebindable keys 
 	sf::Keyboard::Key key_left;
@@ -99,9 +107,9 @@ public:
 	Player(const Player& other);
 	~Player();
 	 
-	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
+	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera);
 	//bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
-	void Update(GLint deltaT, b2World* world, glm::vec2 pos);
+	void Update(GLint deltaT, b2World* world);
 	//bool Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
 
 	bool addPlayerProjectiles();
@@ -118,6 +126,8 @@ public:
 	glm::vec2 getPlayerPosAsGLM();
 	void setInvulTime(GLfloat invulTime);
 	GLfloat getInvulTime();
+	void setContactWithEnemy(Enemy* contact);
+	Enemy* getContactWithEnemy();
 	//Vacuum* getVac();
 	
 };
