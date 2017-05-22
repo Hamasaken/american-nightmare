@@ -27,23 +27,28 @@
 //		this->myProjectiles[i] = new Projectile(world, shader);
 //}
 
-void ProjectileHandler::initiateProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos)
+void ProjectileHandler::initiateProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, GLuint shader)
 {
 	this->wasPressed = false;
 	this->myShader = shader;
-	this->myMesh =  const_cast<MeshManager::Mesh*>(mesh);
-	this->myMaterial = const_cast<MaterialManager::Material*>(material);
+	/*this->mymesh =  const_cast<Meshmanager::Mesh*>(mesh);
+	this->mymaterial = const_cast<Materialmanager::Material*>(material);*/
 	this->isPressed = false;
-	/*for (int i = 0; i < this->myProjtileVector.size(); i++)
-		myProjtileVector.push_back(new Projectile(myMesh, myMaterial, world, pos));*/
-		//myProjtileVector.push_back(new Projectile(world, myShader, pos));
+
+	/*for (int i = 0; i < 10; i++)
+	{
+		Projectile* p = new Projectile(mesh, material, world, pos);
+		p->setShader(shader);
+		myProjtileVector.push_back(p);
+	}*/
+	//	myProjtileVector.push_back(new Projectile(world, myShader, pos));
 }
 
 ProjectileHandler::ProjectileHandler() {}
 
-ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos)
+ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, GLuint shader)
 {
-	this->initiateProjectiles(mesh, material, world, pos);
+	this->initiateProjectiles(mesh, material, world, pos, shader);
 
 	//for (int i = 0; i < CAP; i++)
 	//{
@@ -63,18 +68,19 @@ ProjectileHandler::~ProjectileHandler()
 
 void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 {
-	this->isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-	if (isPressed && !wasPressed)
-	{
-		this->wasPressed = true;
-		//std::cout << "Something will happen!!!" << std::endl;
-		myProjtileVector.push_back(new Projectile(myMesh, myMaterial, world, position));
-		myProjtileVector.back()->fireBullet(world, position, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1280, 720 }, glm::vec2{ 320, 180 }));
-	}
+	//this->isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+	//if (isPressed && !wasPressed)
+	//{
+	//	this->wasPressed = true;
+	///*	std::cout << "Something will happen!!!" << std::endl;
+	//	myProjtileVector.push_back(new Projectile(myMesh, myMaterial, world, position));
+	//	myProjtileVector.back()->fireBullet(world, position, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1280, 720 }, glm::vec2{ 320, 180 }));
+	//*/
+	//}
 
 	for (int i = 0; i < this->myProjtileVector.size(); i++)
 	{
-		if (myProjtileVector[i]->getIsFired() == true)
+		if (true)
 		{
 			myProjtileVector[i]->Update(deltaT, world, glm::vec3(position.x, position.y, 0.5f));
 		}
@@ -109,4 +115,12 @@ void ProjectileHandler::deleteProjects(b2World* world)
 std::vector<Projectile*> ProjectileHandler::getBullets()
 {
 	return myProjtileVector;
+}
+
+void ProjectileHandler::addProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos)
+{
+	Projectile* p = new Projectile(mesh, material, world, pos);
+	p->setShader(myShader);
+	myProjtileVector.push_back(p);
+	myProjtileVector.back()->fireBullet(world, pos, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1920, 1080 }, glm::vec2{ 0, 0 }));
 }

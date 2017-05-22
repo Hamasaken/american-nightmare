@@ -337,7 +337,7 @@ glm::vec2 Player::getPlayerPosAsGLM()
 
 bool Player::addPlayerProjectiles()
 {
-	if (this->nrOfProjectiles >= this->CAP)
+	if (this->nrOfProjectiles == this->CAP)
 	{
 		return false;
 	}
@@ -348,14 +348,15 @@ bool Player::addPlayerProjectiles()
 	}
 }
 
-bool Player::getCanShoot()const
+bool Player::getCanShoot()
 {
-	if (this->nrOfProjectiles >= this->CAP)
+	if (this->nrOfProjectiles > 0)
 	{
 		return false;
 	}
 	else
 	{
+		this->nrOfProjectiles--;
 		return true;
 	}
 }

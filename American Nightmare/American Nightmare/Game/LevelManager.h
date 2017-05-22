@@ -99,7 +99,7 @@ private:
 	std::vector<Object*> map;	//< Vector with level specific objects
 	std::vector<Hitbox*> hitboxes;
 	std::vector<Trigger*> triggers;
-	//std::vector<Projectile*> projectiles;
+	std::vector<Projectile*> projectiles;
 	Player* player;				//< The player object
 
 	Enemy* enemy;				//< A Enemy object
@@ -117,7 +117,7 @@ private:
 	QuadTree* quadTree;
 
 	ProjectileHandler* myPH;
-	//Projectile* moveble;
+	////Projectile* moveble;
 
 	//void deleteProjects(b2World* world);
 
