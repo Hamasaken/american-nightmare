@@ -85,8 +85,6 @@ bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapSh
 	if (quadTree == nullptr) return false;
 	if (!quadTree->Start(screenSize)) return false;
 
-
-
 	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), mapShader);
 	this->wasPressed = false;
 	this->isPressed = false;
@@ -131,11 +129,16 @@ void LevelManager::Stop()
 	// Unloads the map objects
 	StopMap();
 
-	// Removes the world object
 	if (world != nullptr)
 	{
-		world->Dump();
-		delete world;
+		b2Body* body = world->GetBodyList();
+		while (body != nullptr)
+		{
+			b2Body* extra = body->GetNext();
+		//	world->DestroyBody(body);
+			body = extra;
+		}
+		//	delete world;
 		world = nullptr;
 	}
 
@@ -188,17 +191,11 @@ void LevelManager::StopMap()
 	}
 	triggers.clear();
 
-	// Unloads every projectile on the map
-	for (Projectile* projectile : projectiles)
-	{
-		if (projectile != nullptr)
-		{
-			projectile->Stop();
-			delete projectile;
-			projectile = nullptr;
-		}
-	}
-	projectiles.clear();
+	// Removes the world object
+	std::vector<Projectile*> p = myPH->getBullets();
+	for (int i = 0; i < p.size(); i++)
+		p[i]->setmarked(true);
+	myPH->deleteProjects(world);
 }
 
 void LevelManager::Update(GLint deltaT)

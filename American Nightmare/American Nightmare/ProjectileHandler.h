@@ -5,7 +5,7 @@
 #include "Accessories.h"
 #include <SDL.h>
 
-class ProjectileHandler : public Entity
+class ProjectileHandler
 {
 private:
 	std::vector <Projectile*> myProjtileVector;
