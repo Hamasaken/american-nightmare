@@ -61,8 +61,8 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	this->material = material;
 	model->BuildQuadTexture();
 
-	//vac = new Vacuum();
-	//vac->startVac(nullptr, material2, world, getBody());
+	vac = new Vacuum();
+	vac->startVac(world, getBody());
 
 	// Setting a self-pointer for collision detection
 	getBody()->SetUserData(this);

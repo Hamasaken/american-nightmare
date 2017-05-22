@@ -61,7 +61,7 @@ private:
 	SDL_Cursor* cursor;
 	void initiateCursor();
 
-	//Vacuum* vac;
+	Vacuum* vac;
 
 	// Interactions with player
 	void Walk(Direction dir);	//< Walking in a direction

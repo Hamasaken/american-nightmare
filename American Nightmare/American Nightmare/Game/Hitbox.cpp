@@ -83,7 +83,7 @@ bool Hitbox::InitializeHitboxVacuum(b2World* world, b2Body* player)
 	//vertices[1].Set(2.0f, -0.25f);
 	//vertices[2].Set(2.0f, 0.25f);
 	//int32 count = 3;
-
+	//
 	//b2PolygonShape polygon;
 	//polygon.m_type = b2Shape::e_polygon;
 	//polygon.Set(vertices, count);
