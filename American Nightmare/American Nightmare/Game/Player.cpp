@@ -56,14 +56,6 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	this->soundManager = soundManager;
 	this->camera = camera;
 
-	// Creating model
-	model = new Model();
-	if (model == nullptr) return false;
-	//if (!model->Start(modelName)) return false;
-
-	this->material = material;
-	model->BuildQuadTexture();
-
 	//vac = new Vacuum();
 	//vac->startVac(nullptr, material2, world, getBody());
 
