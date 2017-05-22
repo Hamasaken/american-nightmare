@@ -54,31 +54,55 @@ void MyContactListener::BeginContact(b2Contact* contact)
 
 		//Fixa Senare
 
-		//Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
-		//Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
-		//if (vacuumA || vacuumB)
-		//{
-		//	printf("vacuum\n");
-		//	//printf("vacuum IS ALIVE First\n");
-		//	Projectile* enemyA = dynamic_cast<Projectile*>(bodyA);
-		//	Projectile* enemyB = dynamic_cast<Projectile*>(bodyB);
-		//	if (enemyA || enemyB)
-		//	{
-		//		printf("vacuum IS ALIVE Second\n");
-		//		//printf("Enemy is hurting you!!!\n");
-		//		//enemy->getBody()->ApplyForce(b2Vec2(0, -1000), b2Vec2(), true);
-		//		
-		//		printf("Enemy is hurting you!!!\n");
-		//		player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
-		//	}
-		//}
+		Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
+		Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
+		if (vacuumA || vacuumB)
+		{
+			//printf("vacuum\n");
+			printf("vacuum IS ALIVE First\n");
+			Projectile* enemyA = dynamic_cast<Projectile*>(bodyA);
+			Projectile* enemyB = dynamic_cast<Projectile*>(bodyB);
+			if (enemyA)
+			{
+				printf("vacuum IS ALIVE A\n");
+				enemyA->setIsInVacRange(true);
+				
+			}
+			else if(enemyB)
+			{
+				printf("vacuum IS ALIVE B\n");
+				enemyB->setIsInVacRange(true);
+			}
+		}
 
 	}
 }
 
 void MyContactListener::EndContact(b2Contact* contact)
 {
+	Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
+	Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
 
+	Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
+	Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
+	if (vacuumA || vacuumB)
+	{
+		//printf("vacuum\n");
+		//printf("vacuum IS ALIVE First\n");
+		Projectile* enemyA = dynamic_cast<Projectile*>(bodyA);
+		Projectile* enemyB = dynamic_cast<Projectile*>(bodyB);
+		if (enemyA)
+		{
+			printf("Set false A\n");
+			enemyA->setIsInVacRange(false);
+
+		}
+		else if (enemyB)
+		{
+			printf("Set false B\n");
+			enemyB->setIsInVacRange(false);
+		}
+	}
 }
 
 void MyContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)

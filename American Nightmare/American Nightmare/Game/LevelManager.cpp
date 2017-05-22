@@ -618,6 +618,7 @@ void LevelManager::Update(GLint deltaT)
 	// Checking triggers
 	CheckTriggers();
 
+
 	//Resets variables for projectileHandler
 	this->wasPressed = isPressed;
 }

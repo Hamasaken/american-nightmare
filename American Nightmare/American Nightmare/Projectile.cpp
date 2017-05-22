@@ -7,6 +7,7 @@ Projectile::Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Mat
 	this->damage = 10;
 	this->damageOn = false;
 	this->marked = false;
+	this->isInVacRange = false;
 }
 
 Projectile::Projectile(){}
@@ -68,4 +69,14 @@ void Projectile::setIsFired(bool isProjectileFired)
 bool Projectile::getIsFired()const
 {
 	return this->isProjectileFired;
+}
+
+void Projectile::setIsInVacRange(bool isInVacRange)
+{
+	this->isInVacRange = isInVacRange;
+}
+
+bool Projectile::getIsInVacRange()const
+{
+	return this->isInVacRange;
 }

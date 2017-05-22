@@ -43,13 +43,25 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 		myProjtileVector[i]->Update(deltaT, world, glm::vec3(position.x, position.y, 0.5f));
 	}
 	
+	for (int i = 0; i < this->myProjtileVector.size(); i++)
+	{
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && this->myProjtileVector[i]->getIsInVacRange() == true)
+		{
+			b2Vec2 temp;
+			temp = b2Vec2(position.x - this->myProjtileVector[i]->getHitbox()->getBody()->GetPosition().x,
+				position.y - this->myProjtileVector[i]->getHitbox()->getBody()->GetPosition().y);
+
+			temp = b2Vec2((temp.x / temp.Length()) * 300, (temp.y / temp.Length()) * 300);
+
+			this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(temp, true);
+		}
+	}
 
 	
 }
 
 void ProjectileHandler::deleteProjects(b2World* world)
 {
-	cout << this->myProjtileVector.size() << endl;
 	for (int i = 0; i < this->myProjtileVector.size(); i++)
 	{
 		if (this->myProjtileVector[i]->getmarked() == true)

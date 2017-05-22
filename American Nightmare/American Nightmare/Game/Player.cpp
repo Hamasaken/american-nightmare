@@ -104,6 +104,9 @@ void Player::Update(GLint deltaT, b2World* world, glm::vec2 pos)
 
 	// Correcting texture to hitbox
 	Entity::Update(deltaT);
+
+	//Updating vac
+	vac->Update(this->hitbox->getBody()->GetPosition(), deltaT);
 }
 
 void Player::RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash)
