@@ -32,6 +32,7 @@
 #define PLAYER_POWER_RECHARGE 25.f
 #define PLAYER_POWER_COST_HOVER 60.f
 #define PLAYER_POWER_COST_DASH 50.f
+#define PLAYER_INVULNERABILITY_TIME 2.f
 
 // XBOX CONTROLLER
 #define CONTROLLER_ON true
@@ -64,10 +65,10 @@ private:
 	//Vacuum* vac;
 
 	// Interactions with player
-	void Walk(Direction dir);	//< Walking in a direction
-	void Jump();				//< Jumping
-	void Dash();				//< Dash ability
-	void Hover(GLint deltaT);	//< Hover ability
+	void Walk(Direction dir);			//< Walking in a direction
+	void Jump();						//< Jumping
+	void Dash(sf::Keyboard::Key inKey);	//< Dash ability
+	void Hover(GLint deltaT);			//< Hover ability
 
 	//< Input from user
 	void InputTesting();					//< Rotation & Scale on Player model
@@ -83,6 +84,7 @@ private:
 	bool hasDashed;				//< If the player have dashed or not
 	bool isDashing;				//< If the player is currently dashing
 	bool isHovering;			//< If the player is currently hovering
+	GLfloat invulTime;			//< Player invulnerability timer after being hit
 
 	//< Rebindable keys 
 	sf::Keyboard::Key key_left;
@@ -113,6 +115,8 @@ public:
 	bool getIsDashing();
 	b2Body* getBody();
 	glm::vec2 getPlayerPosAsGLM();
+	void setInvulTime(GLfloat invulTime);
+	GLfloat getInvulTime();
 	//Vacuum* getVac();
 	
 };

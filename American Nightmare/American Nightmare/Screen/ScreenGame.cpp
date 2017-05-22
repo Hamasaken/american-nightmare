@@ -224,7 +224,13 @@ void ScreenGame::Draw()
 		DrawParticles(emitter, shaderManager);
 
 	// Drawing player
-	DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
+	if (levelManager->getPlayer()->getInvulTime() > 0.f)
+	{
+		if((int)(levelManager->getPlayer()->getInvulTime() * 10.f) % 2 == 0)
+			DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
+	}
+	else
+		DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
 	// Draw Enemies
 	for (Enemy* enemy : *levelManager->getEntityManager()->getEnemyList())
