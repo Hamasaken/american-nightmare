@@ -102,6 +102,7 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 			delete e;
 			enemyList.erase(enemyList.begin() + i);
 		}
+
 		*/
 	}
 
