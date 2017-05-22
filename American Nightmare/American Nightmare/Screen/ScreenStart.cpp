@@ -78,6 +78,12 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	background->Start(screenSize, glm::vec3(0.f, 0.f, 0.1f), glm::vec2(1), materialManager->getMaterial("backgroundmaterial"), meshManager->getMesh("quad"));
 	background->setShader(shaderManager->getShader("texture"));
 
+	loadingText = new Text();
+	loadingText->Start(screenSize, FONT_PATH INGAME_FONT, 100.f);
+	loadingText->setShader(shaderManager->getShader("texture"));
+	loadingText->CreateText("loading", glm::vec4(1));
+	loadingText->setColor(glm::vec4(0));
+
 	// Setting starting variables
 	SetStartVariables();
 
@@ -86,15 +92,17 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 
 void ScreenStart::SetStartVariables()
 {
+	isLoading = false;
+
 	// Adding some ambient smoke on startmenu
-	particleManager->EffectConstantSmoke(glm::vec3(2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.7));
-	particleManager->EffectConstantSmoke(glm::vec3(1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.5));
-	particleManager->EffectConstantSmoke(glm::vec3(0, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.4));
-	particleManager->EffectConstantSmoke(glm::vec3(-1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.6));
-	particleManager->EffectConstantSmoke(glm::vec3(-2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.8));
+	particleManager->EffectConstantSmoke(glm::vec3(2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(1, 1, 1, 0.1));
+	particleManager->EffectConstantSmoke(glm::vec3(1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(1, 1, 1, 0.3));
+	particleManager->EffectConstantSmoke(glm::vec3(0, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(1, 1, 1, 0.4));
+	particleManager->EffectConstantSmoke(glm::vec3(-1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(1, 1, 1, 0.3));
+	particleManager->EffectConstantSmoke(glm::vec3(-2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(1, 1, 1, 0.1));
 
 	// Dust effect
-	particleManager->EffectLightDust(glm::vec3(0.f, 3, 0.f), glm::vec3(10, 6, 2), 125, glm::vec4(0.35f));
+	particleManager->EffectLightDust(glm::vec3(0.f, 3, 0.f), glm::vec3(10, 6, 2), 75, glm::vec4(0.55));
 
 	// Backing the camera a little bit backwards
 	camera->setPosition(glm::vec3(0, 0, 15));
@@ -105,6 +113,9 @@ void ScreenStart::SetStartVariables()
 
 void ScreenStart::Update(GLint deltaT)
 {
+	if (isLoading)
+		*state = State::Game;
+
 	// Updating Buttons
 	guiManager->Update(deltaT);
 
@@ -115,12 +126,16 @@ void ScreenStart::Update(GLint deltaT)
 	{
 		if (button.first->getPressed())
 		{
+			soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 			switch (button.second)
 			{
-			case GUIManager::Action::PLAY:		soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::Game;		break;
-			case GUIManager::Action::OPTIONS:	soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::Options;	break;
-			case GUIManager::Action::POSTERS:	soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::Posters;	break;
-			case GUIManager::Action::EXIT:		soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); *state = State::Exit;		break;
+			case GUIManager::Action::PLAY:		
+				loadingText->setColor(glm::vec4(1));
+				isLoading = true;
+				break;
+			case GUIManager::Action::OPTIONS:	*state = State::Options;	break;
+			case GUIManager::Action::POSTERS:	*state = State::Posters;	break;
+			case GUIManager::Action::EXIT:		*state = State::Exit;		break;
 			}
 			button.first->setPressed(false);
 		}
@@ -143,6 +158,7 @@ void ScreenStart::Draw()
 	
 	// Drawing background
 	DrawObjectGUI(background, shaderManager);
+	DrawObjectGUI(loadingText, shaderManager);
 
 	// Drawing GUI
 	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = guiManager->getButtonList();
@@ -162,6 +178,14 @@ void ScreenStart::Draw()
 
 void ScreenStart::Stop()
 {
+	// Deleting text loading
+	if (loadingText != nullptr)
+	{
+		loadingText->Stop();
+		delete loadingText;
+		loadingText = nullptr;
+	}
+
 	// Deleteing background
 	if (background != nullptr)
 	{

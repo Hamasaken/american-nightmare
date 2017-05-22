@@ -46,7 +46,9 @@ public:
 	void Draw();
 
 private:
+	bool isLoading;
 	Button* background;
+	Text* loadingText;
 	MeshManager* meshManager;			//< Mesh Manager
 	MaterialManager* materialManager;	//< Materials & Textures
 	GUIManager* guiManager;				//< Buttons & Text

@@ -239,7 +239,7 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 		glBindTexture(GL_TEXTURE_2D, dynamic_cast<Text*>(object)->getTexture());
 
 		glUniform1i(glGetUniformLocation(object->getShader(), "texture"), 0);
-		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), -1.f);
+		glUniform1f(glGetUniformLocation(object->getShader(), "alpha"), dynamic_cast<Text*>(object)->getColor().a);
 		glUniform3f(glGetUniformLocation(object->getShader(), "diffuse"), dynamic_cast<Text*>(object)->getColor().r, dynamic_cast<Text*>(object)->getColor().g, dynamic_cast<Text*>(object)->getColor().b);
 	}
 	else if (dynamic_cast<Bar*>(object) != nullptr)

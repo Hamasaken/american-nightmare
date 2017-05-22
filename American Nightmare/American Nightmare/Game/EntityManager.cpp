@@ -92,9 +92,17 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 
 void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool playerDead)
 {
-	for (Enemy* e : enemyList)
+	for (int i = 0; i < enemyList.size(); i++)
 	{
+		Enemy* e = enemyList[i];
 		e->Update(deltaT, b2Vec2(playerPosition.x, playerPosition.y), playerDead);
+	/*	if (e->getIsDead())
+		{
+			e->Stop();
+			delete e;
+			enemyList.erase(enemyList.begin() + i);
+		}
+		*/
 	}
 
 	for (Entity* e : entityList)
