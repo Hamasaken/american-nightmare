@@ -230,8 +230,10 @@ void LevelManager::Update(GLint deltaT)
 		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 		wasPressed = true;
 		player->decreaseNrOfProjectiles();
-		if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("Boll"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), true);
-		else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), false);
+	//	if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), true);
+	//	else 
+	//		
+			myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), false);
 	}
 
 	//Update Projectile
@@ -296,12 +298,12 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	LoadArchiveMaterials(archive.materials);
 	LoadArchiveMeshes(archive.meshes);
 
-	AArchiveHandler temp;
+/*	AArchiveHandler temp;
 	temp.readFromFile(ARCHIVE_PATH "Boll.ana");
 	LoadArchiveTextures(temp.textures);
 	LoadArchiveMaterials(temp.materials);
 	LoadArchiveMeshes(temp.meshes);
-
+	*/
 	////////////////////////////////////////////////////////////
 	// Loading Level
 	////////////////////////////////////////////////////////////
@@ -794,7 +796,8 @@ void LevelManager::CheckTriggers()
 						map.erase(map.begin() + i);
 					}
 			}
-			trigger->Stop(world);
+			world->DestroyBody(trigger->getBody());
+			// trigger->Stop(world);
 			delete trigger;
 			triggers.erase(triggers.begin() + i);
 		}
