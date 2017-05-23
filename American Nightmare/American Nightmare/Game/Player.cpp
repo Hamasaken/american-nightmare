@@ -18,7 +18,7 @@ void Player::initiateCursor()
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
-	this->nrOfProjectiles = 10;
+	this->nrOfProjectiles = 100;
 
 	//Sets the cursor for the player
 	initiateCursor();
@@ -48,8 +48,8 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	this->soundManager = soundManager;
 	this->camera = camera;
 
-	//vac = new Vacuum();
-	//vac->startVac(nullptr, material2, world, getBody());
+	vac = new Vacuum();
+	vac->startVac(world, getBody());
 
 	// Setting a self-pointer for collision detection
 	getBody()->SetUserData(this);
@@ -116,6 +116,9 @@ void Player::Update(GLint deltaT, b2World* world)
 	
 	// Updating animation texture
 	updateAnimation(deltaT);
+
+	this->vac->Update(this->getBody()->GetPosition(), deltaT);
+
 
 	// Correcting texture to hitbox
 	Entity::Update(deltaT);

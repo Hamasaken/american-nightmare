@@ -58,27 +58,26 @@ void MyContactListener::BeginContact(b2Contact* contact)
 
 		//Fixa Senare
 
-/*	Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
-	Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
-	if (vacuumA || vacuumB)
-	{
-		printf("vacuum\n");
-		//printf("vacuum IS ALIVE First\n");
-		Projectile* enemyA = dynamic_cast<Projectile*>(bodyA);
-		Projectile* enemyB = dynamic_cast<Projectile*>(bodyB);
-		if (enemyA || enemyB)
+		Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
+		Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
+		if (vacuumA || vacuumB)
 		{
-			printf("vacuum IS ALIVE Second\n");
-			//printf("Enemy is hurting you!!!\n");
-			//enemy->getBody()->ApplyForce(b2Vec2(0, -1000), b2Vec2(), true);
-			
-			printf("Enemy is hurting you!!!\n");
-			player->getBody()->ApplyForce(b2Vec2(0, 0), b2Vec2(), true);
+			//printf("vacuum IS ALIVE First\n");
+			Projectile* projectileA = dynamic_cast<Projectile*>(bodyA);
+			Projectile* projectileB = dynamic_cast<Projectile*>(bodyB);
+			if (projectileA)
+			{
+				projectileA->setIsInVacRange(true);
+				
+			}
+			else if(projectileB)
+			{
+				projectileB->setIsInVacRange(true);
+			}
 		}
-	}
-	*/
 
 }
+
 
 void MyContactListener::EndContact(b2Contact* contact)
 {
@@ -92,6 +91,26 @@ void MyContactListener::EndContact(b2Contact* contact)
 		if (enemy)
 		{
 			player->setContactWithEnemy(nullptr);
+		}
+	}
+
+	Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
+	Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
+
+	Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
+	Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
+	if (vacuumA || vacuumB)
+	{
+		Projectile* projectileA = dynamic_cast<Projectile*>(bodyA);
+		Projectile* projectileB = dynamic_cast<Projectile*>(bodyB);
+		if (projectileA)
+		{
+			projectileA->setIsInVacRange(false);
+
+		}
+		else if (projectileB)
+		{
+			projectileB->setIsInVacRange(false);
 		}
 	}
 }

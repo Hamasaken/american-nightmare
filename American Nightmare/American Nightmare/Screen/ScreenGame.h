@@ -64,6 +64,7 @@ private:
 
 	void DrawShadowMaps();
 
+	Button* background;
 	MeshManager* meshManager;			//< The mesh manager
 	MaterialManager* materialManager;	//< The material manager
 	GameState gameState;				//< Current State of the gameloop

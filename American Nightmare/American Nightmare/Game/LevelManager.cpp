@@ -289,10 +289,26 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	LoadArchiveMaterials(archive.materials);
 	LoadArchiveMeshes(archive.meshes);
 
+/*	AArchiveHandler temp;
+	temp.readFromFile(ARCHIVE_PATH "Boll.ana");
+	LoadArchiveTextures(temp.textures);
+	LoadArchiveMaterials(temp.materials);
+	LoadArchiveMeshes(temp.meshes);
+*/
 	////////////////////////////////////////////////////////////
 	// Loading Level
 	////////////////////////////////////////////////////////////
 	levelFile.readFromFile(levelPath.c_str());
+	/* std::vector<CharData> archivePaths;
+	for (int i = 0; i < archivePaths.size(); i++)
+	{
+		CharData path = archivePaths[i];
+		AArchiveHandler tempArchive;
+		tempArchive.readFromFile(path.data);
+		LoadArchiveTextures(tempArchive.textures);
+		LoadArchiveMaterials(tempArchive.materials);
+		LoadArchiveMeshes(tempArchive.meshes);
+	} */
 	LoadLevelMeshes(levelFile.meshes);
 	LoadLevelLights(levelFile.lights);
 	LoadLevelHitboxes(levelFile.hitboxes);
@@ -654,50 +670,6 @@ void LevelManager::LoadTempLevel()
 	lightManager->AddPointLight(glm::vec4(5, 7, 0, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
 
 }
-
-//void LevelManager::Update(GLint deltaT)
-//{
-//	// Updating player
-//	player->Update(deltaT, world, player->getPlayerPosAsGLM());
-//	if (player->getIsDashing()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(0.25f));
-//	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
-//
-//
-//	
-//
-//	//Update Projectile
-//	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
-//	
-//
-//	//meshManager->getMesh("quad");
-//
-//	// Updating enemies
-////	enemy->Update(deltaT, player->getBody()->GetPosition());
-//
-//	// Updating physics
-//	world->Step(1 / 60.f, 10, 20);
-//
-//
-//	 //for (Projectile* proj : projectiles)
-//		 //proj->Update(deltaT, world, player->getPlayerPosAsGLM());
-//
-//	/* for (Projectile* proj : projectiles)
-//		 proj->Update(deltaT, world, player->getPlayerPosAsGLM());*/
-//
-//	for (Object* object : map)
-//		object->Update(deltaT);
-//
-//	// Updating triggers and checking for collisions
-//	for (Trigger* trigger : triggers)
-//		if (!trigger->getIsTriggered())	
-//			trigger->CheckCollision(player->getBody());
-//	
-//	// Checking triggers
-//	CheckTriggers();
-//
-//	//Resets variables for projectileHandler
-//	this->wasPressed = isPressed;
-//}
 
 void LevelManager::CheckTriggers()
 {
