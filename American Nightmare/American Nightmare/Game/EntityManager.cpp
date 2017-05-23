@@ -99,10 +99,10 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 		if (e->getIsDead())
 		{
 			e->getHitbox()->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -100000), true);
-
-		//	e->Stop();
-		//	delete e;
-		//	enemyList.erase(enemyList.begin() + i);
+			e->Stop();
+			delete e;
+			enemyList.erase(enemyList.begin() + i);
+			i--;
 		}
 
 	}

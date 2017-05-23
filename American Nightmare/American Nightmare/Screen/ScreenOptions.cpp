@@ -50,7 +50,7 @@ bool ScreenOptions::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), glm::vec3(1, 1, 1), glm::vec3(1.f), 1.f, "backgroundtexture", TEXTURE_PATH "background_2.jpg");
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
-	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Smoke Material not found\n");
+	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Background Material not found\n");
 	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
 
 	////////////////////////////////////////////////////////////
@@ -213,6 +213,7 @@ void ScreenOptions::Draw()
 	// Getting view matrix from camera
 	camera->buildViewMatrix();
 	
+	// Drawing background
 	DrawObjectGUI(background, shaderManager);
 
 	// Drawing GUI

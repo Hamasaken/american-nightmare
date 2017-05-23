@@ -293,7 +293,9 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	LoadLevelEffects(levelFile.effects);
 
 	// Setting start position
-	player->setPosition(glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 0));
+	glm::vec3 start = glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 0);
+	player->setPosition(start);
+	player->setStartingPosition(start);
 
 	// Music
 	soundManager->playSong(SoundManager::SONG::MUSIC_BOOGIE);

@@ -46,9 +46,11 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	if (materialManager == nullptr) return false;
 
 	// Loading button texture
+	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), glm::vec3(1, 1, 1), glm::vec3(1.f), 1.f, "backgroundtexture", TEXTURE_PATH "background_5.jpg");
 	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
-	materialManager->AddMaterial("boltmaterial", glm::vec3(0.1f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(1.f), 1.f, "bolttexture", TEXTURE_PATH "bolt.jpg");
+	materialManager->AddMaterial("boltmaterial", glm::vec3(0.1f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(0.5f), 0.5f, "bolttexture", TEXTURE_PATH "GUI_bar_1.jpg");
+	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Background Material not found\n");
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
 	if (materialManager->getMaterial("boltmaterial") == nullptr) printf("Bolt Material not found\n");
@@ -99,10 +101,6 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 			numberOfUnlocked += 1;
 			posterListGUI->AddButton(GUIManager::OK, glm::vec3(x, y, 0), glm::vec2(0.100f, 0.200f), posters[i], meshManager->getMesh("quad"));
 		}
-		else
-		{
-			posterListGUI->AddButton(GUIManager::OPTION_MUTE, glm::vec3(x, y, 0), glm::vec2(0.100f, 0.200f), materialManager->getMaterial("boltmaterial"), meshManager->getMesh("quad"));
-		}
 		x += 0.30f;
 	}
 
@@ -112,6 +110,10 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	// Setting configurations on GuiManager
 	posterListGUI->setAlpha(1.f);
 	posterListGUI->setShader(shaderManager->getShader("texture"));
+
+	background = new Button();
+	background->Start(screenSize, glm::vec3(0.f, 0.f, 0.1f), glm::vec2(1), materialManager->getMaterial("backgroundmaterial"), meshManager->getMesh("quad"));
+	background->setShader(shaderManager->getShader("texture"));
 
 	return true;
 }
@@ -183,6 +185,9 @@ void ScreenPosters::Draw()
 	// Getting view matrix from camera
 	camera->buildViewMatrix();
 	
+	// Drawing background
+	DrawObjectGUI(background, shaderManager);
+
 	// Drawing particles
 	for (ParticleEmitter* emitter : *particleManager->getEmitters())
 		DrawParticles(emitter, shaderManager);
