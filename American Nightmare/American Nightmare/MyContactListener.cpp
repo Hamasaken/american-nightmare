@@ -62,20 +62,19 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
 		if (vacuumA || vacuumB)
 		{
-			//printf("vacuum\n");
-			printf("vacuum IS ALIVE First\n");
-			Projectile* enemyA = dynamic_cast<Projectile*>(bodyA);
-			Projectile* enemyB = dynamic_cast<Projectile*>(bodyB);
-			if (enemyA)
+			//printf("vacuum IS ALIVE First\n");
+			Projectile* projectileA = dynamic_cast<Projectile*>(bodyA);
+			Projectile* projectileB = dynamic_cast<Projectile*>(bodyB);
+			if (projectileA)
 			{
-				printf("vacuum IS ALIVE A\n");
-				enemyA->setIsInVacRange(true);
+				printf("vacuum finde Projectiler\n");
+				projectileA->setIsInVacRange(true);
 				
 			}
-			else if(enemyB)
+			else if(projectileB)
 			{
-				printf("vacuum IS ALIVE B\n");
-				enemyB->setIsInVacRange(true);
+				printf("vacuum finde Projectiler\n");
+				projectileB->setIsInVacRange(true);
 			}
 		}
 
@@ -94,6 +93,25 @@ void MyContactListener::EndContact(b2Contact* contact)
 		if (enemy)
 		{
 			player->setContactWithEnemy(nullptr);
+		}
+	}
+
+	Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
+	Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
+	if (vacuumA || vacuumB)
+	{
+		Projectile* projectileA = dynamic_cast<Projectile*>(bodyA);
+		Projectile* projectileB = dynamic_cast<Projectile*>(bodyB);
+		if (projectileA)
+		{
+			printf("vacuum End contact\n");
+			projectileA->setIsInVacRange(false);
+
+		}
+		else if (projectileB)
+		{
+			printf("vacuum End contact\n");
+			projectileB->setIsInVacRange(false);
 		}
 	}
 }

@@ -47,8 +47,8 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	this->soundManager = soundManager;
 	this->camera = camera;
 
-	//vac = new Vacuum();
-	//vac->startVac(nullptr, material2, world, getBody());
+	vac = new Vacuum();
+	vac->startVac(world, getBody());
 
 	// Setting a self-pointer for collision detection
 	getBody()->SetUserData(this);
@@ -115,6 +115,8 @@ void Player::Update(GLint deltaT, b2World* world)
 	
 	// Updating animation texture
 	updateAnimation(deltaT);
+
+	this->vac->Update(this->getBody()->GetPosition(), deltaT);
 
 
 	// Correcting texture to hitbox

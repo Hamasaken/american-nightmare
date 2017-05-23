@@ -63,7 +63,7 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 			temp = b2Vec2(position.x - this->myProjtileVector[i]->getHitbox()->getBody()->GetPosition().x,
 				position.y - this->myProjtileVector[i]->getHitbox()->getBody()->GetPosition().y);
 
-			temp = b2Vec2((temp.x / temp.Length()) * 300, (temp.y / temp.Length()) * 300);
+			temp = b2Vec2((temp.x / temp.Length()) * 400, (temp.y / temp.Length()) * 400);
 
 			this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(temp, true);
 		}
