@@ -48,10 +48,10 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
 		if (myProjectile)
 		{
-			cout << "You hit an enemy" << endl;
-			particleManager->EffectBloodSplatter(enemy->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f)); // temp blood effect
+			particleManager->EffectBloodSplatter(enemy->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
 			soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
 			enemy->TakeDamage(enemy->getDamage());
+			if (enemy->getIsDead()) particleManager->EffectExplosionLights(enemy->getPosition(), 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f)); 
 		}
 	}
 
@@ -81,6 +81,8 @@ void MyContactListener::BeginContact(b2Contact* contact)
 
 void MyContactListener::EndContact(b2Contact* contact)
 {
+	if (contact == nullptr) return;
+
 	Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
 	Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
 
