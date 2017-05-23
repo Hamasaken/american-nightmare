@@ -98,11 +98,13 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 		e->Update(deltaT, b2Vec2(playerPosition.x, playerPosition.y), playerDead);
 		if (e->getIsDead())
 		{
-			e->getHitbox()->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -100000), true);
-
-		//	e->Stop();
-		//	delete e;
-		//	enemyList.erase(enemyList.begin() + i);
+			world->DestroyBody(e->getHitbox()->getBody());
+			e->Stop();
+			delete e;
+			e = nullptr;
+			enemyList.erase(enemyList.begin() + i);
+			i--;
+			break;
 		}
 
 	}

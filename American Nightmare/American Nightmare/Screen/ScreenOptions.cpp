@@ -46,11 +46,11 @@ bool ScreenOptions::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	if (materialManager == nullptr) return false;
 
 	// Loading materials
-	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.75, 0.75, 0.75), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), glm::vec3(1, 1, 1), glm::vec3(1.f), 1.f, "backgroundtexture", TEXTURE_PATH "background_2.jpg");
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
-	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Smoke Material not found\n");
+	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Background Material not found\n");
 	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
 
 	////////////////////////////////////////////////////////////
@@ -67,25 +67,25 @@ bool ScreenOptions::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
 	
 	// Options Start
-	guiManager->AddButton(GUIManager::OPTION_MUTE, glm::vec3(0, 0.40f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "sound - On", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.f, 1, 0.f, 1));
-	guiManager->AddButton(GUIManager::OPTION_SHADOWS, glm::vec3(0, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "shadows - High", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.f, 1, 0.f, 1));
-	guiManager->AddButton(GUIManager::OPTION_QUALITY, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Quality - High", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.f, 1, 0.f, 1));
-	guiManager->AddButton(GUIManager::OPTION_REBIND, glm::vec3(0, -0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Rebind keys", FONT_PATH INGAME_FONT, 28.f, glm::vec4(1.f, 1, 1.f, 1));
-	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.60f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	guiManager->AddButton(GUIManager::OPTION_MUTE, glm::vec3(0, 0.40f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "sound - On", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.f, 1, 0.3f, 1));
+	guiManager->AddButton(GUIManager::OPTION_SHADOWS, glm::vec3(0, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "shadows - High", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.f, 1, 0.3f, 1));
+	guiManager->AddButton(GUIManager::OPTION_QUALITY, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Quality - High", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.f, 1, 0.3f, 1));
+	guiManager->AddButton(GUIManager::OPTION_REBIND, glm::vec3(0, -0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Rebind keys", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.60f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
 	guiManager->AddText(glm::vec3(0.f, 0.60f, 0.f), 80.f, "Options", FONT_PATH INGAME_FONT);
 
 	// Options rebind keys
-	guiManager->AddButton(GUIManager::OK, glm::vec3(-1.4, 0.40f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Walk Left - a", FONT_PATH INGAME_FONT, 28.f, glm::vec4(1.f, 1, 1.f, 1));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(-1.4, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Walk Right - d", FONT_PATH INGAME_FONT, 28.f, glm::vec4(1.f, 1, 1.f, 1));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(-1.4, 0.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Jump - w", FONT_PATH INGAME_FONT, 28.f, glm::vec4(1.f, 1, 1.f, 1));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(-2.0, 0.40f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Hover - Space", FONT_PATH INGAME_FONT, 28.f, glm::vec4(1.f, 1, 1.f, 1));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(-2.0, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Dash - lcontrol", FONT_PATH INGAME_FONT, 28.f, glm::vec4(1.f, 1, 1.f, 1));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(-2.6, 0.40f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Reload - right click", FONT_PATH INGAME_FONT, 28.f, glm::vec4(1.f, 1, 1.f, 1));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(-2.6, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Shoot - left click", FONT_PATH INGAME_FONT, 28.f, glm::vec4(1.f, 1, 1.f, 1));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(-1.4, 0.40f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Walk Left - a", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(-1.4, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Walk Right - d", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(-1.4, 0.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Jump - w", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(-2.0, 0.40f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Hover - Space", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(-2.0, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Dash - lcontrol", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(-2.6, 0.40f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Reload - right click", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(-2.6, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Shoot - left click", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
 	
-	guiManager->AddButton(GUIManager::OK, glm::vec3(-2.6, -0.60f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Defaults", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(-2.0, -0.60f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Save", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
-	guiManager->AddButton(GUIManager::CANCEL, glm::vec3(-1.4, -0.60f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(-2.6, -0.60f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Defaults", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(-2.0, -0.60f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Save", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::CANCEL, glm::vec3(-1.4, -0.60f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
 	guiManager->AddText(glm::vec3(-2.f, 0.80f, 0.f), 80.f, "Rebind Keys", FONT_PATH INGAME_FONT);
 	
 	guiManager->setAlpha(1.f);
@@ -146,12 +146,12 @@ void ScreenOptions::Update(GLint deltaT)
 					glm::vec4 clr = btn->getText()->getColor();
 					if (clr.r == 0.f)
 					{
-						clr = glm::vec4(1, 0, 0, 1);
+						clr = glm::vec4(1, .3, .3, 1);
 						btn->getText()->setString("sound - Off");
 					}
 					else
 					{
-						clr = glm::vec4(0, 1, 0, 1);
+						clr = glm::vec4(0, 1, .3, 1);
 						btn->getText()->setString("sound - On");
 					}
 					btn->getText()->setColor(clr);
@@ -164,12 +164,12 @@ void ScreenOptions::Update(GLint deltaT)
 					glm::vec4 clr = btn->getText()->getColor();
 					if (clr.r == 0.f)
 					{
-						clr = glm::vec4(1, 0, 0, 1);
+						clr = glm::vec4(1, .3, .3, 1);
 						btn->getText()->setString("shadows - Low");
 					}
 					else
 					{
-						clr = glm::vec4(0, 1, 0, 1);
+						clr = glm::vec4(0, 1, .3, 1);
 						btn->getText()->setString("shadows - High");
 					}
 					btn->getText()->setColor(clr);
@@ -190,12 +190,12 @@ void ScreenOptions::Update(GLint deltaT)
 					glm::vec4 clr = btn->getText()->getColor();
 					if (clr.r == 0.f)
 					{
-						clr = glm::vec4(1, 0, 0, 1);
+						clr = glm::vec4(1, .3, .3, 1);
 						btn->getText()->setString("Quality - Low");
 					}
 					else
 					{
-						clr = glm::vec4(0, 1, 0, 1);
+						clr = glm::vec4(0, 1, .3, 1);
 						btn->getText()->setString("Quality - High");
 					}
 					btn->getText()->setColor(clr);
@@ -213,6 +213,7 @@ void ScreenOptions::Draw()
 	// Getting view matrix from camera
 	camera->buildViewMatrix();
 	
+	// Drawing background
 	DrawObjectGUI(background, shaderManager);
 
 	// Drawing GUI

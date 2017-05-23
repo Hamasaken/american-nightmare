@@ -31,28 +31,28 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			player->setContactWithEnemy(enemy);
 		}
 
-			Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
-			if (myProjectile)
+		Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
+		if (myProjectile)
+		{
+			soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 0.15f);
+			if (player->addPlayerProjectiles() == true && sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)
 			{
-				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 0.15f);
-
-				if (player->addPlayerProjectiles() == true && sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)
-				{
-					player->addNrOfProjectiles();
-					myProjectile->setmarked(true);
-				}
+				player->addNrOfProjectiles();
+				myProjectile->setmarked(true);
 			}
 		}
+	}
+
 	Enemy* enemy = dynamic_cast<Enemy*>(bodyA);
 	if (enemy)
 	{
 		Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
 		if (myProjectile)
 		{
-			cout << "You hit an enemy" << endl;
-			particleManager->EffectBloodSplatter(enemy->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f)); // temp blood effect
+			particleManager->EffectBloodSplatter(enemy->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
 			soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
 			enemy->TakeDamage(enemy->getDamage());
+			if (enemy->getIsDead()) particleManager->EffectExplosionLights(enemy->getPosition(), 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f)); 
 		}
 	}
 
@@ -84,16 +84,13 @@ void MyContactListener::BeginContact(b2Contact* contact)
 
 void MyContactListener::EndContact(b2Contact* contact)
 {
-	Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
-	Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
+	if (contact == nullptr) return;
 
-	if (bodyA != nullptr) return;
-	if (bodyB != nullptr) return;
+	Player* player = static_cast<Player*>(contact->GetFixtureA()->GetBody()->GetUserData());
+	Enemy* enemy = static_cast<Enemy*>(contact->GetFixtureB()->GetBody()->GetUserData());
 
-	Player* player = dynamic_cast<Player*>(bodyA);
 	if (player)
 	{
-		Enemy* enemy = dynamic_cast<Enemy*>(bodyB);
 		if (enemy)
 		{
 			player->setContactWithEnemy(nullptr);

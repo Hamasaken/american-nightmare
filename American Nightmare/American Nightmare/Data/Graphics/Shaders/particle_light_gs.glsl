@@ -20,14 +20,19 @@ out fData
 	float size;
 }frag;    
 
+// Uniform
+uniform mat4 world;
+uniform mat4 view;
+uniform mat4 projection;
 
 void CreateVertex(vec4 color, vec3 position, vec2 offset, vec2 size)
 {
 	frag.color = color;
-	frag.position = position + vec3(offset.x, offset.y, 0.0);
-	frag.center = position;
+	frag.position = vec3(projection * view * world * (vec4(position + vec3(offset.x, offset.y, 0.0), 0)));
+	frag.center = vec3(projection * view * world * vec4(position, 0));
 	frag.size = size.x;
-    gl_Position = gl_in[0].gl_Position + vec4(offset.x, offset.y, 0.0, 0.0);
+	
+	gl_Position = projection * view * world * ((gl_in[0].gl_Position + vec4(offset.x, offset.y, 0.0, 0.0)));
     EmitVertex();
 }
 

@@ -88,7 +88,8 @@ private:
 	bool isDashing;				//< If the player is currently dashing
 	bool isHovering;			//< If the player is currently hovering
 	GLfloat invulTime;			//< Player invulnerability timer after being hit
-	Enemy* contactWithEnemy;		//< If player is in contact with an enemy;
+	Enemy* contactWithEnemy;	//< If player is in contact with an enemy;
+	glm::vec3 startPosition;	//< The save station or the starting point on level
 
 	ParticleManager* particleManager;
 	SoundManager* soundManager;
@@ -112,7 +113,7 @@ public:
 	void Update(GLint deltaT, b2World* world);
 	//bool Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
 
-	
+	void Reset();
 	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash);
 	void TakeDamage(float dmg);
 	bool getIsDead();
@@ -123,6 +124,7 @@ public:
 	bool getIsDashing();
 	b2Body* getBody();
 	glm::vec2 getPlayerPosAsGLM();
+	void setStartingPosition(glm::vec3 position);
 	void setInvulTime(GLfloat invulTime);
 	GLfloat getInvulTime();
 	void setContactWithEnemy(Enemy* contact);
