@@ -5,8 +5,9 @@ void ProjectileHandler::initiateProjectiles(const MeshManager::Mesh* mesh, const
 {
 	
 	this->myShader = shader;
-	/*this->mymesh =  const_cast<Meshmanager::Mesh*>(mesh);
-	this->mymaterial = const_cast<Materialmanager::Material*>(material);*/
+	this->myMesh =  const_cast<MeshManager::Mesh*>(mesh);
+	this->myMaterial = const_cast<MaterialManager::Material*>(material);
+	/*this->mymaterial = const_cast<Materialmanager::Material*>(material);*/
 	
 	/*for (int i = 0; i < 10; i++)
 	{
@@ -79,11 +80,14 @@ void ProjectileHandler::deleteProjects(b2World* world)
 		if (this->myProjtileVector[i]->getmarked() == true)
 		{
 			Projectile* temp = this->myProjtileVector[i];
-			this->myProjtileVector[i] = this->myProjtileVector.back();
-			this->myProjtileVector.back() = temp;
+//			world->DestroyBody(temp->getHitbox()->getBody());
+			myProjtileVector.erase(myProjtileVector.begin() + i);
+
+			//			this->myProjtileVector[i] = this->myProjtileVector.back();
+//			this->myProjtileVector.back() = temp;
 			//this->myProjtileVector.back()->~Projectile();
-			//world->DestroyBody(this->myProjtileVector.back()->getHitbox()->getBody());
-			this->myProjtileVector.pop_back();
+//			world->DestroyBody(this->myProjtileVector.back()->getHitbox()->getBody());
+//			this->myProjtileVector.pop_back();
 		}
 	}
 }

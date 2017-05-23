@@ -100,7 +100,6 @@ void Hitbox::Stop()
 {
 	if (body != nullptr)
 	{
-		body->Dump();
 		body = nullptr;
 	}
 }
