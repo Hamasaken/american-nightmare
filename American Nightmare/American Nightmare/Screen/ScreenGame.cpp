@@ -130,6 +130,10 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager->setShader(shaderManager->getShader("texture"));
 	uiManager->setInstantCenter(glm::vec2(0, 0));
 
+	background = new Button();
+	background->Start(screenSize, glm::vec3(0.f, 0.f, 0.f), glm::vec2(1), materialManager->getMaterial("backgroundmaterial"), meshManager->getMesh("quad"));
+	background->setShader(shaderManager->getShader("texture"));
+
 	// Setting startvariables
 	SetStartVariables();
 
@@ -172,6 +176,10 @@ void ScreenGame::Draw()
 	// Draw shadow maps
 	if (shadowManager.getUseShadows())
 		DrawShadowMaps();
+
+
+	DrawObjectGUI(background, shaderManager);
+
 
 	// Disable Blend for DR
 	glDisable(GL_BLEND);
@@ -219,7 +227,6 @@ void ScreenGame::Draw()
 	glEnable(GL_BLEND);
 
 	//DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
-
 	// DR: Light pass
 	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
