@@ -69,9 +69,10 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Plays another SFX even though one is already playing
 	// \param effect The enum name of the SFX
+	// \param offset The offset max/min of the volume (0:100)
 	// \param offset The offset max/min of the pitchchange (0:1)
 	////////////////////////////////////////////////////////////
-	void playSFXOverDrive(SFX effect, float offset = 0.1f);
+	void playSFXOverDrive(SFX effect, float volume = 100.f, float offset = 0.1f);
 
 	////////////////////////////////////////////////////////////
 	// \brief Plays a specific SFX

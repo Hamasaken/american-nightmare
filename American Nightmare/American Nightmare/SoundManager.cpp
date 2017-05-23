@@ -72,16 +72,13 @@ void SoundManager::stopSFX(SFX effect)
 	}
 }
 
-void SoundManager::playSFXOverDrive(SFX effect, float offset)
+void SoundManager::playSFXOverDrive(SFX effect, float volume, float offset)
 {
 	if (SFX_ON)
 	{
-		if (sfx[effect].getStatus() != sf::Sound::Status::Playing)
-		{
-			sfx[effect].setPitch(1);
-			sfx[effect].setPitch(getRandomFloat(1 - offset, 1 + offset));
-			sfx[effect].play();
-		}
+		sfx[effect].setVolume(volume);
+		sfx[effect].setPitch(getRandomFloat(1 - offset, 1 + offset));
+		sfx[effect].play();
 	}
 }
 
