@@ -4,6 +4,8 @@ Projectile::Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Mat
 {
 	Entity::Start(mesh, material, world, pos, glm::vec3(BULLET_SIZE_X, BULLET_SIZE_Y, BULLET_SIZE_Z), b2BodyType::b2_dynamicBody, b2Shape::e_polygon, false, 0.5f, 0.05);
 
+	hitbox->getBody()->SetSleepingAllowed(false);
+
 	this->scale = glm::vec3(BULLET_SIZE_X, BULLET_SIZE_Y, BULLET_SIZE_Z);
 	this->damage = 10;
 	this->damageOn = false;

@@ -76,7 +76,7 @@ bool Hitbox::InitializeHitboxVacuum(b2World* world, b2Body* player)
 
 	b2CircleShape circleShape;
 	circleShape.m_p.Set(0, 0);
-	circleShape.m_radius = 8;
+	circleShape.m_radius = 4;
 
 	//b2Vec2 vertices[3];
 	//vertices[0].Set(0.0f, 0.0f);
