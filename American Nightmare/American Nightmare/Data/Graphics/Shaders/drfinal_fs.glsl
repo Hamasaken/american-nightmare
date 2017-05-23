@@ -204,6 +204,4 @@ void main () {
 		//result = bufferDif;
 
 	fragment_color = vec4(result.rgb, 1.f);
-
-	//fragment_color = vec4(fragPos, 1.f);
 }
