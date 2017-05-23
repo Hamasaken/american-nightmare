@@ -298,7 +298,7 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	player->setStartingPosition(start);
 
 	// Music
-	soundManager->playSong(SoundManager::SONG::MUSIC_BOOGIE);
+	soundManager->playSong(SoundManager::SONG::GOOD_ROCKIN_TONIGHT);
 	
 	// Dust effect
 	particleManager->EffectLightDust(glm::vec3(0, 10, 0));

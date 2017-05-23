@@ -51,8 +51,8 @@ void SoundManager::loadSongs()
 	std::string pathToFolder = MUSIC_PATH;
 
 	// Load all songs here
-	song[MUSIC_WOOP].openFromFile(pathToFolder + "woop.ogg");
-	song[MUSIC_BOOGIE].openFromFile(pathToFolder + "boogie.ogg");
+	song[URANIUM_FEVER].openFromFile(pathToFolder + "Uranium Fever.ogg");
+	song[GOOD_ROCKIN_TONIGHT].openFromFile(pathToFolder + "Good Rockin Tonight.ogg");
 
 	// Setting every song as looping and setting volume
 	for (sf::Music& m : song)
