@@ -652,41 +652,6 @@ void LevelManager::LoadTempLevel()
 
 }
 
-	//Update Projectile
-	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
-	
-
-	//meshManager->getMesh("quad");
-
-	// Updating enemies
-	enemy->Update(deltaT, player->getBody()->GetPosition());
-
-	// Updating physics
-	world->Step(1 / 60.f, 10, 20);
-
-
-	 //for (Projectile* proj : projectiles)
-		 //proj->Update(deltaT, world, player->getPlayerPosAsGLM());
-
-	/* for (Projectile* proj : projectiles)
-		 proj->Update(deltaT, world, player->getPlayerPosAsGLM());*/
-
-	for (Object* object : map)
-		object->Update(deltaT);
-
-	// Updating triggers and checking for collisions
-	for (Trigger* trigger : triggers)
-		if (!trigger->getIsTriggered())	
-			trigger->CheckCollision(player->getBody());
-	
-	// Checking triggers
-	CheckTriggers();
-
-
-	//Resets variables for projectileHandler
-	this->wasPressed = isPressed;
-}
-
 void LevelManager::CheckTriggers()
 {
 	for (int i = 0; i < triggers.size(); i++)
