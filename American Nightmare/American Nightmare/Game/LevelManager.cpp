@@ -316,6 +316,14 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 
+	Object* background = new Object();
+	background->setShader(mapShader);
+	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
+	background->setScale(glm::vec3(192, 80, 1));
+	background->setPosition(glm::vec3(0, 40, -5));
+	map.push_back(background);
+
+
 	// Loading temp level
 	//LoadTempLevel(shader);
 
