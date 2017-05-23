@@ -28,23 +28,6 @@ ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const Materi
 
 ProjectileHandler::~ProjectileHandler()
 {
-	for (int i = 0; i < myProjtileVector.size(); i++)
-	{
-		myProjtileVector[i]->setmarked(true);
-	}
-	for (int i = 0; i < this->myProjtileVector.size(); i++)
-	{
-		if (this->myProjtileVector[i]->getmarked() == true)
-		{
-			Projectile* temp = this->myProjtileVector[i];
-			this->myProjtileVector[i] = this->myProjtileVector.back();
-			this->myProjtileVector.back() = temp;
-			//this->myProjtileVector.back()->~Projectile();
-			//world->DestroyBody(this->myProjtileVector.back()->getHitbox()->getBody());
-			this->myProjtileVector.pop_back();
-		}
-	}
-	myProjtileVector.clear();
 }
 
 void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
@@ -80,14 +63,15 @@ void ProjectileHandler::deleteProjects(b2World* world)
 		if (this->myProjtileVector[i]->getmarked() == true)
 		{
 			Projectile* temp = this->myProjtileVector[i];
-//			world->DestroyBody(temp->getHitbox()->getBody());
-			myProjtileVector.erase(myProjtileVector.begin() + i);
+			//world->DestroyBody(temp->getHitbox()->getBody());
+		
 
-			//			this->myProjtileVector[i] = this->myProjtileVector.back();
-//			this->myProjtileVector.back() = temp;
+			this->myProjtileVector[i] = this->myProjtileVector.back();
+			this->myProjtileVector.back() = temp;
+			//myProjtileVector.erase(myProjtileVector.begin());
 			//this->myProjtileVector.back()->~Projectile();
-//			world->DestroyBody(this->myProjtileVector.back()->getHitbox()->getBody());
-//			this->myProjtileVector.pop_back();
+			//world->DestroyBody(this->myProjtileVector.back()->getHitbox()->getBody());
+			this->myProjtileVector.pop_back();
 		}
 	}
 }
