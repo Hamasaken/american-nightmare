@@ -52,7 +52,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (materialManager == nullptr) return false;
 
 	// Loading materials
-	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.75, 0.75, 0.75), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	materialManager->AddMaterial("GUI_bar_blue", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.7), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.jpg");
 	materialManager->AddMaterial("GUI_bar_red", glm::vec3(0.1f), glm::vec3(0.7, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
 	materialManager->AddMaterial("playermaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.5f), 0.01f, "playertexture", TEXTURE_PATH "Walk01.png");
@@ -95,9 +95,9 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
-	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Meny", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
-	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
-	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Exit to Desktop", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Meny", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::OK, glm::vec3(0, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0, -0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Exit to Desktop", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
 	guiManager->AddText(glm::vec3(0.f, 0.70f, 0.f), 80.f, "Paused", FONT_PATH INGAME_FONT);
 	guiManager->setAlpha(1.f);
 	guiManager->setShader(shaderManager->getShader("texture"));
@@ -117,14 +117,14 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager = new GUIManager();
 	if (uiManager == nullptr) return false;
 	if (!uiManager->Start(screenSize, screenPosition)) return false;
-	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.89f, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Pause", FONT_PATH INGAME_FONT, 17.5f, glm::vec4(0.875f));
+	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.89f, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Pause", FONT_PATH INGAME_FONT, 17.5f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
 	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(-0.3, -0.96, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_bar_red"), meshManager->getMesh("quad"));
 	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(0.3, -0.96, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quad"));
 	uiManager->AddText(glm::vec3(-0.3, -0.96, 0.f), 30.f, "Health", FONT_PATH INGAME_FONT);
 	uiManager->AddText(glm::vec3(0.3, -0.96, 0.f), 30.f, "Power", FONT_PATH INGAME_FONT);	
 	uiManager->AddText(glm::vec3(0.f, 2.5, 0.f), 50.f, "You died", FONT_PATH INGAME_FONT);
-	uiManager->AddButton(GUIManager::PLAY, glm::vec3(0.0, 2.0f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Try again", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
-	uiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0.0, 1.8f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Meny", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	uiManager->AddButton(GUIManager::PLAY, glm::vec3(0.0, 2.0f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Try again", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	uiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0.0, 1.8f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Meny", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
 	uiManager->setAlpha(1.f);
 
 	uiManager->setShader(shaderManager->getShader("texture"));

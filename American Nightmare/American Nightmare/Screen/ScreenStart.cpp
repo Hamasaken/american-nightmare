@@ -46,7 +46,7 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	if (materialManager == nullptr) return false;
 
 	// Loading materials
-	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.5f), 0.5f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
+	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.9, 0.9, 0.9), glm::vec3(0.5f), 0.5f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), glm::vec3(1, 1, 1), glm::vec3(1.f), 1.f, "backgroundtexture", TEXTURE_PATH "background_3.jpg");
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(0.3f, 0.4f, 0.9f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
@@ -65,10 +65,10 @@ bool ScreenStart::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* s
 	guiManager = new GUIManager();
 	if (guiManager == nullptr) return false;
 	if (!guiManager->Start(screenSize, screenPosition)) return false;
-	guiManager->AddButton(GUIManager::PLAY, glm::vec3(-0.60, -0.80f, 0), glm::vec2(0.185f, 0.04955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "play", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
-	guiManager->AddButton(GUIManager::OPTIONS, glm::vec3(-0.20, -0.80f, 0), glm::vec2(0.185f, 0.04955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "options", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
-	guiManager->AddButton(GUIManager::POSTERS, glm::vec3(0.20, -0.80f, 0), glm::vec2(0.185f, 0.04955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "posters", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
-	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0.60, -0.80f, 0), glm::vec2(0.185f, 0.04955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "exit", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.875f));
+	guiManager->AddButton(GUIManager::PLAY, glm::vec3(-0.60, -0.80f, 0), glm::vec2(0.185f, 0.04955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "play", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::OPTIONS, glm::vec3(-0.20, -0.80f, 0), glm::vec2(0.185f, 0.04955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "options", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::POSTERS, glm::vec3(0.20, -0.80f, 0), glm::vec2(0.185f, 0.04955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "posters", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::EXIT, glm::vec3(0.60, -0.80f, 0), glm::vec2(0.185f, 0.04955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "exit", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
 	guiManager->AddText(glm::vec3(0.f, 0.6f, 0.f), 120.f, "American Nightmare", FONT_PATH INGAME_FONT);
 	guiManager->setShader(shaderManager->getShader("texture"));
 	guiManager->setAlpha(1.f);
