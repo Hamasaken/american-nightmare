@@ -2,7 +2,7 @@
 
 Projectile::Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos)
 {
-	Entity::Start(mesh, material, world, pos, glm::vec3(BULLET_SIZE_X, BULLET_SIZE_Y, BULLET_SIZE_Z), b2BodyType::b2_dynamicBody, b2Shape::e_polygon, false, 1.0, 0.25);
+	Entity::Start(mesh, material, world, pos, glm::vec3(BULLET_SIZE_X, BULLET_SIZE_Y, BULLET_SIZE_Z), b2BodyType::b2_dynamicBody, b2Shape::e_polygon, false, 0.5f, 0.25);
 
 	this->scale = glm::vec3(BULLET_SIZE_X, BULLET_SIZE_Y, BULLET_SIZE_Z);
 	this->damage = 10;
@@ -16,7 +16,7 @@ Projectile::~Projectile() { }
 
 void Projectile::fireBullet(b2World* world, glm::vec2 position, glm::vec2 direction)
 {	
-	hitbox->getBody()->ApplyLinearImpulseToCenter({direction.x * 500.f, direction.y * 500.f }, true);
+	hitbox->getBody()->ApplyLinearImpulseToCenter({direction.x * 150.f, direction.y * 150.f }, true);
 }
 
 b2Vec2 Projectile::normalize(const b2Vec2& source)

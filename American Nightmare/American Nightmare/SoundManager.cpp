@@ -41,6 +41,7 @@ void SoundManager::loadSFXs()
 	sfx[SFX_RtoL] = loadSFX(pathToFolder + "sfx_rightToLeft.wav");
 	sfx[SFX_SUCTION] = loadSFX(pathToFolder + "sfx_suction.wav");
 	sfx[SFX_FIRE] = loadSFX(pathToFolder + "sfx_fire.ogg");
+	sfx[SFX_STEPS] = loadSFX(pathToFolder + "sfx_footsteps.wav");
 
 	// Setting every sfx at deicided volume
 	for (sf::Sound& s : sfx)
@@ -65,7 +66,7 @@ void SoundManager::loadSongs()
 
 void SoundManager::stopSFX(SFX effect)
 {
-	if (SFX_ON && sfx[effect].getStatus() == sf::Sound::Playing)
+	if (SFX_ON)
 	{
 		sfx[effect].stop();
 	}
@@ -75,28 +76,37 @@ void SoundManager::playSFXOverDrive(SFX effect, float offset)
 {
 	if (SFX_ON)
 	{
-		sfx[effect].setPitch(1);
-		sfx[effect].setPitch(getRandomFloat(1 - offset, 1 + offset));
-		sfx[effect].play();
+		if (sfx[effect].getStatus() != sf::Sound::Status::Playing)
+		{
+			sfx[effect].setPitch(1);
+			sfx[effect].setPitch(getRandomFloat(1 - offset, 1 + offset));
+			sfx[effect].play();
+		}
 	}
 }
 
 void SoundManager::playSFX(SFX effect)
 {
-	if (SFX_ON && sfx[effect].getStatus() != sf::Sound::Playing)
+	if (SFX_ON)
 	{
-		sfx[effect].setPitch(1);
-		sfx[effect].play();
+		if (sfx[effect].getStatus() != sf::Sound::Status::Playing)
+		{
+			sfx[effect].setPitch(1);
+			sfx[effect].play();
+		}
 	}
 }
 
 void SoundManager::playModifiedSFX(SFX effect, float volume, float offset)
 {
-	if (SFX_ON && sfx[effect].getStatus() != sf::Sound::Playing)
+	if (SFX_ON)
 	{
-		sfx[effect].setVolume(volume);
-		sfx[effect].setPitch(getRandomFloat(1 - offset, 1 + offset));
-		sfx[effect].play();
+		if (sfx[effect].getStatus() != sf::Sound::Status::Playing)
+		{
+			sfx[effect].setVolume(volume);
+			sfx[effect].setPitch(getRandomFloat(1 - offset, 1 + offset));
+			sfx[effect].play();
+		}
 	}
 }
 
@@ -106,39 +116,35 @@ void SoundManager::playSong(SONG song)
 	{
 		if (nrOfMusicPlayingCurrently != -1)
 		{
-			if (this->song[nrOfMusicPlayingCurrently].getStatus() == sf::Sound::Playing)
-				pauseMusic();
+			stopMusic();
 		}
 
 		nrOfMusicPlayingCurrently = song;
-		this->song[nrOfMusicPlayingCurrently].play();
+		this->song[song].play();
 	}
 }
 
 void SoundManager::stopMusic()
 {
-	if (MUSIC_ON && nrOfMusicPlayingCurrently != -1)
+	if (MUSIC_ON)
 	{
-		if (song[nrOfMusicPlayingCurrently].getStatus() == sf::Sound::Playing)
-			song[nrOfMusicPlayingCurrently].stop();
+		song[nrOfMusicPlayingCurrently].stop();
 	}
 }
 
 void SoundManager::pauseMusic()
 {
-	if (MUSIC_ON && nrOfMusicPlayingCurrently != -1)
+	if (MUSIC_ON)
 	{
-		if (song[nrOfMusicPlayingCurrently].getStatus() == sf::Sound::Playing)
-			song[nrOfMusicPlayingCurrently].pause();
+		song[nrOfMusicPlayingCurrently].pause();
 	}
 }
 
 void SoundManager::continueMusic()
 {
-	if (MUSIC_ON && nrOfMusicPlayingCurrently != -1)
+	if (MUSIC_ON)
 	{
-		if (song[nrOfMusicPlayingCurrently].getStatus() == sf::Sound::Paused)
-			song[nrOfMusicPlayingCurrently].play();
+		song[nrOfMusicPlayingCurrently].play();
 	}
 }
 

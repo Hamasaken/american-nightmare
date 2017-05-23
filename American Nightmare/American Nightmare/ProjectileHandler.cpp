@@ -74,5 +74,7 @@ void ProjectileHandler::fireProjectiles(const MeshManager::Mesh* mesh, const Mat
 	Projectile* p = new Projectile(mesh, material, world, pos);
 	p->setShader(myShader);
 	myProjtileVector.push_back(p);
-	myProjtileVector.back()->fireBullet(world, pos, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1920, 1080 }, glm::vec2{ 0, 0 }));
+
+	glm::vec2 direction = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1920, 1080 }, glm::vec2{ 0, 0 });
+	myProjtileVector.back()->fireBullet(world, pos, direction);
 }

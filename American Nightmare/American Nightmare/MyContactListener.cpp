@@ -42,6 +42,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			}
 		}
 	}
+
 	Enemy* enemy = dynamic_cast<Enemy*>(bodyA);
 	if (enemy)
 	{

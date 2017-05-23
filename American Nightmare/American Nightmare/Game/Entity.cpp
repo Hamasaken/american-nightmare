@@ -41,13 +41,13 @@ bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 //	return true;
 //}
 
-bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World * world, glm::vec2 position, glm::vec3 size, b2BodyType type, b2Shape::Type shapeType, bool fixedRotate, float density, float friction)
+bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World * world, glm::vec2 position, glm::vec3 size, b2BodyType type, b2Shape::Type shapeType, bool fixedRotate, float mass, float friction)
 {
 	Object::Start(mesh, material);
 
 	hitbox = new Hitbox();
 	if (hitbox == nullptr) return false;
-	if (!hitbox->InitializeHitbox(world, position, size, type, shapeType, fixedRotate, density, friction))
+	if (!hitbox->InitializeHitbox(world, position, size, type, shapeType, fixedRotate, mass, friction))
 		return false;
 
 	// Updating size
