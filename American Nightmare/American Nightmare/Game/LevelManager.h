@@ -39,7 +39,7 @@ public:
 	// \param particleManager ptr to the particle manager
 	// \return Returns true if everything went well
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, GLuint guiShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera);
+	bool Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playerShader, GLuint mapShader, GLuint guiShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads whole level
@@ -81,6 +81,7 @@ public:
 	EntityManager* getEntityManager();
 	Player* getPlayer();
 	Text* getPopup();
+	ProjectileHandler* getPH();
 	//Projectile* getProjectile();
 	//ProjectileHandler* getProjectiles();
 
@@ -148,7 +149,8 @@ private:
 	bool wasPressed;
 	bool isPressed;
 
-
+	glm::vec2 screenSize;
+	glm::vec2 screenPos;
 	// Lägg till en bool i screengame som ska resettas EFTER collisionen för att undvika crash
 
 };

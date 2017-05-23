@@ -15,7 +15,7 @@ LevelManager::LevelManager(const LevelManager & other) { }
 
 LevelManager::~LevelManager() { }
 
-bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, GLuint guiShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
+bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playerShader, GLuint mapShader, GLuint guiShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
 	// Getting parameters
 	this->materialManager = materialManager;
@@ -26,6 +26,9 @@ bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapSh
 	this->playerShader = playerShader;
 	this->mapShader = mapShader;
 	this->guiShader = guiShader;
+	this->screenSize = screenSize;
+	this->screenPos = screenPos;
+
 
 	// Creatin bool vector for posters
 	for (int i = 0; i < 10; i++)
@@ -85,7 +88,7 @@ bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapSh
 	if (quadTree == nullptr) return false;
 	if (!quadTree->Start(screenSize)) return false;
 
-	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), mapShader);
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), mapShader, screenPos, screenSize);
 	this->wasPressed = false;
 	this->isPressed = false;
 
@@ -432,6 +435,9 @@ void LevelManager::LoadLevelSpawners(std::vector<LSpawner> spawner)
 	for (int i = 0; i < spawner.size(); i++)
 	{
 		LSpawner spawn = spawner[i];
+		entityManager->SpawnEntity(spawn.spawnerType, arrayToVec2(spawn.position));
+		entityManager->SpawnEntity(spawn.spawnerType, arrayToVec2(spawn.position));
+		entityManager->SpawnEntity(spawn.spawnerType, arrayToVec2(spawn.position));
 		entityManager->SpawnEntity(spawn.spawnerType, arrayToVec2(spawn.position));
 	}
 }
@@ -841,6 +847,11 @@ Player* LevelManager::getPlayer() { return player; }
 Text* LevelManager::getPopup()
 {
 	return popup;
+}
+
+ProjectileHandler * LevelManager::getPH()
+{
+	return myPH;
 }
 
 //ProjectileHandler* LevelManager::getProjectiles() { return myPH; }

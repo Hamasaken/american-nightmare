@@ -18,7 +18,7 @@ void Player::initiateCursor()
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
-	this->nrOfProjectiles = 5;
+	this->nrOfProjectiles = 10;
 
 	//Sets the cursor for the player
 	initiateCursor();

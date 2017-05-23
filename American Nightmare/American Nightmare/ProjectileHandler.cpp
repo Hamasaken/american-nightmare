@@ -20,10 +20,12 @@ void ProjectileHandler::initiateProjectiles(const MeshManager::Mesh* mesh, const
 
 ProjectileHandler::ProjectileHandler() {}
 
-ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, GLuint shader)
+ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, GLuint shader, glm::vec2 screenPos, glm::vec2 screenSize)
 {
 	this->initiateProjectiles(mesh, material, world, pos, shader);
 
+	this->screenSize = screenSize;
+	this->screenPos = screenPos;
 }
 
 ProjectileHandler::~ProjectileHandler()
@@ -67,11 +69,18 @@ std::vector<Projectile*> ProjectileHandler::getBullets()
 	return myProjtileVector;
 }
 
+void ProjectileHandler::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos)
+{
+	this->screenPos = screenPos;
+	this->screenSize = screenSize;
+}
+
 void ProjectileHandler::fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos)
 {
-	glm::vec2 direction = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2(1280, 720), glm::vec2(320, 180));
+	glm::vec2 direction = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y + 150), screenSize, screenPos);
+
 	direction = glm::normalize(direction);
-	Projectile* p = new Projectile(mesh, material, world, pos + glm::vec2(3 * direction.x, 3 * -(direction.y)));
+	Projectile* p = new Projectile(mesh, material, world, pos + glm::vec2(1.35f * direction.x, -(direction.y)));
 	p->setShader(myShader);
 	myProjtileVector.push_back(p);
 	myProjtileVector.back()->fireBullet(world, pos, direction);
