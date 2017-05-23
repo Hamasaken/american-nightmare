@@ -44,13 +44,8 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 	{
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && this->myProjtileVector[i]->getIsInVacRange() == true)
 		{
-			b2Vec2 temp;
-			temp = b2Vec2(position.x - this->myProjtileVector[i]->getHitbox()->getBody()->GetPosition().x,
-				position.y - this->myProjtileVector[i]->getHitbox()->getBody()->GetPosition().y);
-
-			temp = b2Vec2((temp.x / temp.Length()) * 400, (temp.y / temp.Length()) * 400);
-
-			this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(temp, true);
+			float angle = getAngleFromTwoPoints(glm::vec3(position, 0), this->myProjtileVector[i]->getPosition());
+			this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 500.f, -sin(angle) * 500.f), true);
 		}
 	}
 
