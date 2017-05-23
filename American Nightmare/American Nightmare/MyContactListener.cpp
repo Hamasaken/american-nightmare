@@ -96,6 +96,9 @@ void MyContactListener::EndContact(b2Contact* contact)
 		}
 	}
 
+	Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
+	Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
+
 	Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
 	Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
 	if (vacuumA || vacuumB)
