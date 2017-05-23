@@ -114,13 +114,3 @@ void MyContactListener::EndContact(b2Contact* contact)
 		}
 	}
 }
-
-void MyContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
-{
-	/* handle pre-solve event */
-}
-
-void MyContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
-{
-	/* handle post-solve event */
-}

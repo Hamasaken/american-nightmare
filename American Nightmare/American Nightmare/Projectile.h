@@ -30,7 +30,7 @@ private:
 
 public:
 	//Projectile(b2World *world, GLuint shader, glm::vec2 pos);
-	Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos);
+	Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos, bool isCircle);
 	Projectile();
 	~Projectile();
 

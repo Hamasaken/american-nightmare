@@ -28,7 +28,7 @@ public:
 	void deleteProjects(b2World* world);
 	std::vector<Projectile*> getBullets();
 	void UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos);
-	void fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos);
+	void fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, bool isCircle);
 };
 
 #endif

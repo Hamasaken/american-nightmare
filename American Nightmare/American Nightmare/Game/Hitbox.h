@@ -29,7 +29,7 @@ public:
 	// \optional friction Friction of the shape, defaults as 10.f
 	// \optional isSensor If the hitbox have collision or not
 	////////////////////////////////////////////////////////////
-	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, bool fixedRotate = true, float mass = 25.0f, float friction = 0.75f, bool isBullet = false, bool isSensor = false);
+	bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, bool fixedRotate = true, float mass = 5.0f, float friction = 0.5f, float radius = 5.f, bool isBullet = false, bool isSensor = false);
 
 	//bool InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType = b2Shape::e_polygon, float density = 1000.f, float friction = 1.f, bool isBullet = false);
 	
@@ -61,7 +61,17 @@ protected:
 	// \param friction The friction coffeinent [0:1]
 	// \param isSensor If the shape have colission or not
 	////////////////////////////////////////////////////////////
-	virtual void ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float mass, float friction, bool isSensor);
+	virtual void ModifyRectangleShape(glm::vec2 size, b2Shape::Type shapeType, float mass, float friction, bool isSensor);
+
+	////////////////////////////////////////////////////////////
+	// \brief Creates a shape object and sends it into body
+	// \param size The size in width and height in meters 
+	// \param shapeType The type of shape to be created (polygon, circle, rope, mm)
+	// \param mass The mass in kg
+	// \param friction The friction coffeinent [0:1]
+	// \param isSensor If the shape have colission or not
+	////////////////////////////////////////////////////////////
+	virtual void ModifyCircleShape(glm::vec2 radius, b2Shape::Type shapeType, float mass, float friction, bool isSensor);
 
 	b2Body* body;			//< The body object inside world
 	b2Fixture* fixture;

@@ -19,12 +19,12 @@ bool Hitbox::InitializeHitbox(b2World* world)
 	AddBodyToWorld(world, glm::vec2(1.f, 1.f), b2_dynamicBody, false, false);
 
 	// Creating shape for body
-	ModifyShape(glm::vec2(1.f, 1.f), b2Shape::e_polygon, 0.f, 10.f, false);
+	ModifyRectangleShape(glm::vec2(1.f, 1.f), b2Shape::e_polygon, 0.f, 10.f, false);
 
 	return true;
 }
 
-bool Hitbox::InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType, bool canRotate, float density, float friction, bool isBullet, bool isSensor)
+bool Hitbox::InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size, b2BodyType type, b2Shape::Type shapeType, bool canRotate, float density, float friction, float radius, bool isBullet, bool isSensor)
 {
 	// Checking if world is created
 	if (world == nullptr) return false;
@@ -33,7 +33,9 @@ bool Hitbox::InitializeHitbox(b2World* world, glm::vec2 position, glm::vec2 size
 	AddBodyToWorld(world, position, type, canRotate, isBullet);
 
 	// Creating shape for body
-	ModifyShape(size, shapeType, density, friction, isSensor);
+	if (shapeType == b2Shape::e_circle)			ModifyCircleShape(size, shapeType, density, friction, isSensor);
+	else if (shapeType == b2Shape::e_polygon)	ModifyRectangleShape(size, shapeType, density, friction, isSensor);
+	else return false;
 	
 	return true;
 }
@@ -42,33 +44,9 @@ bool Hitbox::InitializeHitboxVacuum(b2World* world, b2Body* player)
 {
 	if (world == nullptr) return false;
 
-	//if (body != nullptr) body->Dump();
-	//b2BodyDef bodyDef;
-	//bodyDef.type = b2_dynamicBody;
-	//bodyDef.active = true;
-	//bodyDef.position = b2Vec2(player->GetPosition().x + 2, player->GetPosition().y);
-	//body = world->CreateBody(&bodyDef);
-	//
-	//b2Vec2 vertices[3];
-	//vertices[0].Set(0.0f, 0.0f);
-	//vertices[1].Set(2.0f, -0.25f);
-	//vertices[2].Set(2.0f, 0.25f);
-	//int32 count = 3;
-	//
-	//b2PolygonShape polygon;
-	//polygon.m_type = b2Shape::e_polygon;
-	//polygon.Set(vertices, count);
-	//
-	//b2FixtureDef fixture;
-	//fixture.shape = &polygon;
-	//fixture.isSensor = true;
-	//body->CreateFixture(&fixture);
-	//
-	//body->SetGravityScale(0);
-
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
-	bodyDef.position = b2Vec2(player->GetPosition().x + 2, player->GetPosition().y);
+	bodyDef.position = b2Vec2(player->GetPosition().x, player->GetPosition().y);
 	bodyDef.fixedRotation = false;
 	bodyDef.active = true;
 
@@ -77,16 +55,6 @@ bool Hitbox::InitializeHitboxVacuum(b2World* world, b2Body* player)
 	b2CircleShape circleShape;
 	circleShape.m_p.Set(0, 0);
 	circleShape.m_radius = 8;
-
-	//b2Vec2 vertices[3];
-	//vertices[0].Set(0.0f, 0.0f);
-	//vertices[1].Set(2.0f, -0.25f);
-	//vertices[2].Set(2.0f, 0.25f);
-	//int32 count = 3;
-	//
-	//b2PolygonShape polygon;
-	//polygon.m_type = b2Shape::e_polygon;
-	//polygon.Set(vertices, count);
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &circleShape;
@@ -124,7 +92,7 @@ void Hitbox::AddBodyToWorld(b2World* world, glm::vec2 position, b2BodyType type,
 	body = world->CreateBody(&bodyDef);
 }
 
-void Hitbox::ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float mass, float friction, bool isSensor)
+void Hitbox::ModifyRectangleShape(glm::vec2 size, b2Shape::Type shapeType, float mass, float friction, bool isSensor)
 {
 	// Creating shape for body
 	b2PolygonShape shape;
@@ -140,6 +108,23 @@ void Hitbox::ModifyShape(glm::vec2 size, b2Shape::Type shapeType, float mass, fl
 	fixtureDef.restitution = 0.0f;							// bouncy ball [0:1]
 	fixture = body->CreateFixture(&fixtureDef);
 //	body->SetTransform(b2Vec2(0, 0), 0.f);
+}
+
+void Hitbox::ModifyCircleShape(glm::vec2 radius, b2Shape::Type shapeType, float mass, float friction, bool isSensor)
+{
+	// Creating shape for body
+	b2CircleShape shape;
+	shape.m_type = shapeType;
+	shape.m_radius = radius.x / 2;
+	shape.m_p.Set(0, 0);
+
+	b2FixtureDef fixtureDef;
+	fixtureDef.isSensor = isSensor;
+	fixtureDef.shape = &shape;
+	fixtureDef.density = 4 * mass / (radius.x * radius.y);		// in kg/m^2
+	fixtureDef.friction = friction;						// friction [0:1]
+	fixtureDef.restitution = 0.0f;							// bouncy ball [0:1]
+	fixture = body->CreateFixture(&fixtureDef);
 }
 
 b2Body * Hitbox::getBody()
