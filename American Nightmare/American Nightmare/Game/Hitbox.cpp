@@ -62,12 +62,15 @@ bool Hitbox::InitializeHitboxVacuum(b2World* world, b2Body* player)
 	fixture = body->CreateFixture(&fixtureDef);
 
 	body->SetGravityScale(0);
+
+	return true;
 }
 
-void Hitbox::Stop()
+void Hitbox::Stop(b2World* world)
 {
 	if (body != nullptr)
 	{
+	//	world->DestroyBody(body);
 		body = nullptr;
 	}
 }

@@ -397,6 +397,11 @@ Enemy* Player::getContactWithEnemy()
 	return contactWithEnemy;
 }
 
+Vacuum * Player::getVac()
+{
+	return vac;
+}
+
 void Player::setInvulTime(GLfloat invulTime)
 {
 	this->invulTime = invulTime;

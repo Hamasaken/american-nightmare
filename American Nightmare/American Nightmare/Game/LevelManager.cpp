@@ -126,7 +126,14 @@ void LevelManager::Stop()
 	// Deleting player
 	if (player != nullptr)
 	{
-		world->DestroyBody(player->getBody());
+		if (player->getVac() != nullptr)
+		{
+			Vacuum* vac = player->getVac();
+			vac->Stop();
+			delete vac;
+			vac = nullptr;
+		}
+
 		player->Stop();
 		delete player;
 		player = nullptr;
@@ -179,7 +186,7 @@ void LevelManager::StopMap()
 	{
 		if (hitbox != nullptr)
 		{
-			hitbox->Stop();
+			hitbox->Stop(world);
 			delete hitbox;
 			hitbox = nullptr;
 		}
@@ -191,7 +198,7 @@ void LevelManager::StopMap()
 	{
 		if (trigger != nullptr)
 		{
-			trigger->Stop();
+			trigger->Stop(world);
 			delete trigger;
 			trigger = nullptr;
 		}
@@ -787,8 +794,7 @@ void LevelManager::CheckTriggers()
 						map.erase(map.begin() + i);
 					}
 			}
-			world->DestroyBody(trigger->getBody());
-			trigger->Stop();
+			trigger->Stop(world);
 			delete trigger;
 			triggers.erase(triggers.begin() + i);
 		}

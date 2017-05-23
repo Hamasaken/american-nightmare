@@ -22,6 +22,7 @@ public:
 
 protected:
 	Hitbox* hitbox;
+	b2World* world;
 };
 
 #endif // !ENTITY_H

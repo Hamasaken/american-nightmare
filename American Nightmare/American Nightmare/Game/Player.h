@@ -129,7 +129,7 @@ public:
 	GLfloat getInvulTime();
 	void setContactWithEnemy(Enemy* contact);
 	Enemy* getContactWithEnemy();
-	//Vacuum* getVac();
+	Vacuum* getVac();
 
 	
 	bool addPlayerProjectiles();

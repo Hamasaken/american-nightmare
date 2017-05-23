@@ -1,45 +1,21 @@
 #include "vacuum.h"
 
-Vacuum::Vacuum()
-{
-}
+Vacuum::Vacuum() { }
 
-
-Vacuum::~Vacuum()
-{
-	
-}
+Vacuum::~Vacuum() { }
 
 void Vacuum::startVac(b2World* world, b2Body* player)
 {
 	Entity:Start(world, player);
-
-	// Setting starting variables
-	position = glm::vec3(0, 0, 0);
-	rotation = glm::vec3(0, 0, 0);
-	scale = glm::vec3(1, 1, 1);
-
-	// Creating model
-	model = new Model();
-	if (model == nullptr);
-	//if (!model->Start(modelName));
-
-	this->material = material;
-	model->BuildQuadTexture();
-
 	hitbox->getBody()->SetUserData(this);
-	//b2RevoluteJointDef jointDef;
 
+	//b2RevoluteJointDef jointDef;
 	//jointDef.bodyA = player;
 	//jointDef.bodyA = hitbox->getBody();
-
 	//jointDef.localAnchorA.Set(0, 0);
 	//jointDef.localAnchorB.Set(0, 0);
-
 	//jointDef.collideConnected = false;
-
-	////jointDef.Initialize(player, body, b2Vec2(0, 0));
-
+	//jointDef.Initialize(player, body, b2Vec2(0, 0));
 	//joint = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 }
 
