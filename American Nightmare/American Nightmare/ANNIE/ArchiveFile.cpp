@@ -260,7 +260,7 @@ void AArchiveHandler::readFromFile(const char* path)
 
 		//Read all lights
 		lights.resize(archiveHeader.nrOfLights);
-		in.read(reinterpret_cast<char*>(&lights[0]), sizeof(ALight) * archiveHeader.nrOfLights);
+		in.read(reinterpret_cast<char*>(lights.data()), sizeof(ALight) * archiveHeader.nrOfLights);
 	}
 }
 

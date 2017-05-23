@@ -67,13 +67,11 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			Projectile* projectileB = dynamic_cast<Projectile*>(bodyB);
 			if (projectileA)
 			{
-				printf("vacuum finde Projectiler\n");
 				projectileA->setIsInVacRange(true);
 				
 			}
 			else if(projectileB)
 			{
-				printf("vacuum finde Projectiler\n");
 				projectileB->setIsInVacRange(true);
 			}
 		}
@@ -107,13 +105,11 @@ void MyContactListener::EndContact(b2Contact* contact)
 		Projectile* projectileB = dynamic_cast<Projectile*>(bodyB);
 		if (projectileA)
 		{
-			printf("vacuum End contact\n");
 			projectileA->setIsInVacRange(false);
 
 		}
 		else if (projectileB)
 		{
-			printf("vacuum End contact\n");
 			projectileB->setIsInVacRange(false);
 		}
 	}

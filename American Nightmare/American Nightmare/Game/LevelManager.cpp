@@ -289,10 +289,26 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	LoadArchiveMaterials(archive.materials);
 	LoadArchiveMeshes(archive.meshes);
 
+/*	AArchiveHandler temp;
+	temp.readFromFile(ARCHIVE_PATH "Boll.ana");
+	LoadArchiveTextures(temp.textures);
+	LoadArchiveMaterials(temp.materials);
+	LoadArchiveMeshes(temp.meshes);
+*/
 	////////////////////////////////////////////////////////////
 	// Loading Level
 	////////////////////////////////////////////////////////////
 	levelFile.readFromFile(levelPath.c_str());
+	/* std::vector<CharData> archivePaths;
+	for (int i = 0; i < archivePaths.size(); i++)
+	{
+		CharData path = archivePaths[i];
+		AArchiveHandler tempArchive;
+		tempArchive.readFromFile(path.data);
+		LoadArchiveTextures(tempArchive.textures);
+		LoadArchiveMaterials(tempArchive.materials);
+		LoadArchiveMeshes(tempArchive.meshes);
+	} */
 	LoadLevelMeshes(levelFile.meshes);
 	LoadLevelLights(levelFile.lights);
 	LoadLevelHitboxes(levelFile.hitboxes);
@@ -315,14 +331,6 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	lightManager->AddDirectionalLight(glm::vec4(5, 20, 10, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
 	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
-
-	Object* background = new Object();
-	background->setShader(mapShader);
-	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
-	background->setScale(glm::vec3(80, 0, 1));
-	background->setPosition(glm::vec3(0, 10, -5));
-	map.push_back(background);
-
 
 	// Loading temp level
 	//LoadTempLevel(shader);
