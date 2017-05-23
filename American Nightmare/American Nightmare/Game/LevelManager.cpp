@@ -29,7 +29,6 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	this->screenSize = screenSize;
 	this->screenPos = screenPos;
 
-
 	// Creatin bool vector for posters
 	for (int i = 0; i < 10; i++)
 		unlockedPosters.push_back(0);
@@ -105,28 +104,12 @@ void LevelManager::Stop()
 		popup = nullptr;
 	}
 
-	// Deleting player
-	if (player != nullptr)
-	{
-		player->Stop();
-		delete player;
-		player = nullptr;
-	}
-
 	// Deleting quadtree
 	if (quadTree != nullptr)
 	{
 		quadTree->Stop();
 		delete quadTree;
 		quadTree = nullptr;
-	}
-
-	// Unloads every entity on map
-	if (entityManager != nullptr)
-	{
-		entityManager->Stop();
-		delete entityManager;
-		entityManager = nullptr;
 	}
 
 	// Unloads light manager
@@ -139,6 +122,23 @@ void LevelManager::Stop()
 
 	// Unloads the map objects
 	StopMap();
+
+	// Deleting player
+	if (player != nullptr)
+	{
+		world->DestroyBody(player->getBody());
+		player->Stop();
+		delete player;
+		player = nullptr;
+	}
+
+	// Unloads every entity on map
+	if (entityManager != nullptr)
+	{
+		entityManager->Stop();
+		delete entityManager;
+		entityManager = nullptr;
+	}
 
 	if (world != nullptr)
 	{
@@ -207,11 +207,13 @@ void LevelManager::StopMap()
 
 void LevelManager::Update(GLint deltaT)
 {
+	// Updating physics
+	world->Step(1 / 60.f, 10, 10);
+
 	// Updating player
 	player->Update(deltaT, world);
 	if (player->getIsDashing()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(0.25f));
 	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
-
 
 	//For projectiles
 	isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
@@ -221,7 +223,8 @@ void LevelManager::Update(GLint deltaT)
 		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 		wasPressed = true;
 		player->decreaseNrOfProjectiles();
-		myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
+		if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("Boll"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), true);
+		else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), false);
 	}
 
 	//Update Projectile
@@ -231,9 +234,6 @@ void LevelManager::Update(GLint deltaT)
 
 	// Updating every entity
 	entityManager->Update(deltaT, player->getPosition(), player->getIsDead());
-
-	// Updating physics
-	world->Step(1 / 60.f, 10, 20);
 
 	// Updating every object on map
 	//deleteProjects(world);
@@ -289,12 +289,12 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	LoadArchiveMaterials(archive.materials);
 	LoadArchiveMeshes(archive.meshes);
 
-/*	AArchiveHandler temp;
+	AArchiveHandler temp;
 	temp.readFromFile(ARCHIVE_PATH "Boll.ana");
 	LoadArchiveTextures(temp.textures);
 	LoadArchiveMaterials(temp.materials);
 	LoadArchiveMeshes(temp.meshes);
-*/
+
 	////////////////////////////////////////////////////////////
 	// Loading Level
 	////////////////////////////////////////////////////////////
@@ -787,6 +787,7 @@ void LevelManager::CheckTriggers()
 						map.erase(map.begin() + i);
 					}
 			}
+			world->DestroyBody(trigger->getBody());
 			trigger->Stop();
 			delete trigger;
 			triggers.erase(triggers.begin() + i);
