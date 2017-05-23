@@ -59,6 +59,7 @@ bool GUIManager::AddButton(Action action, glm::vec3 position, glm::vec2 size, co
 	{
 		if (!btn->StartText(text, fontName, characterSize, textColor)) 
 			return false;
+
 	}
 
 	btn->setShader(shader);

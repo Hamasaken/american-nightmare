@@ -98,6 +98,7 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 		e->Update(deltaT, b2Vec2(playerPosition.x, playerPosition.y), playerDead);
 		if (e->getIsDead())
 		{
+			world->DestroyBody(e->getHitbox()->getBody());
 			e->Stop();
 			delete e;
 			e = nullptr;
