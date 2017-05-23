@@ -18,7 +18,7 @@ void Player::initiateCursor()
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
-	this->nrOfProjectiles = 5;
+	this->nrOfProjectiles = 10;
 
 	//Sets the cursor for the player
 	initiateCursor();
@@ -33,6 +33,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	hp = PLAYER_HP;
 	isDead = false;
 	position = glm::vec3(0, 20, 0);
+	startPosition = position;
 	rotation = glm::vec3(0, 0, 0);
 	scale = glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_SIZE_Z);
 	power = PLAYER_POWER_MAX;
@@ -123,6 +124,23 @@ void Player::Update(GLint deltaT, b2World* world)
 	Entity::Update(deltaT);
 }
 
+void Player::Reset()
+{
+	// Going to save point
+	hitbox->getBody()->SetTransform(b2Vec2(startPosition.x, startPosition.y), 0);
+
+	// Resetting variables
+	hp = PLAYER_HP;
+	isDead = false;
+	power = PLAYER_POWER_MAX;
+	hasJumped = false;
+	hasDashed = false;
+	isHovering = false;
+	isDashing = false;
+	invulTime = 0.f;
+	contactWithEnemy = nullptr;
+}
+
 void Player::RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash)
 {
 	this->key_left = key_left;
@@ -158,6 +176,7 @@ void Player::Walk(Direction dir)
 		switch (dir)
 		{
 		case LEFT:
+			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 			if (vel.x > -PLAYER_MAX_VEL_X)
 			{
 				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
@@ -165,6 +184,7 @@ void Player::Walk(Direction dir)
 			}
 			break;
 		case RIGHT:
+			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 			if (vel.x < PLAYER_MAX_VEL_X)
 			{
 				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
@@ -172,6 +192,7 @@ void Player::Walk(Direction dir)
 			}
 			break;
 		case STOPPED:
+			soundManager->stopSFX(SoundManager::SFX_STEPS);
 			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
 			break;
 		}
@@ -181,6 +202,7 @@ void Player::Walk(Direction dir)
 		switch (dir)
 		{
 		case LEFT:
+			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 			if (vel.x > -PLAYER_MAX_VEL_X)
 			{
 				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X * 0.35f, 0), true);
@@ -188,6 +210,7 @@ void Player::Walk(Direction dir)
 			}
 			break;
 		case RIGHT:
+			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 			if (vel.x < PLAYER_MAX_VEL_X)
 			{
 				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X * 0.35f, 0), true);
@@ -195,6 +218,7 @@ void Player::Walk(Direction dir)
 			}
 			break;
 		case STOPPED:
+			soundManager->stopSFX(SoundManager::SFX_STEPS);
 			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
 			break;
 		}
@@ -208,6 +232,7 @@ void Player::Jump()
 
 	if (!hasJumped)
 	{
+		soundManager->stopSFX(SoundManager::SFX_STEPS);
 		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
 		vel.y = hitbox->getBody()->GetLinearVelocity().y;
 		hasJumped = true;
@@ -389,6 +414,11 @@ glm::vec2 Player::getPlayerPosAsGLM()
 	myVec.y = hitbox->getPosition().y;
 	//myVec.z = 0.5f;
 	return myVec;
+}
+
+void Player::setStartingPosition(glm::vec3 position)
+{
+	this->startPosition = position;
 }
 
 bool Player::addPlayerProjectiles()

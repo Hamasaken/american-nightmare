@@ -5,8 +5,9 @@ void ProjectileHandler::initiateProjectiles(const MeshManager::Mesh* mesh, const
 {
 	
 	this->myShader = shader;
-	/*this->mymesh =  const_cast<Meshmanager::Mesh*>(mesh);
-	this->mymaterial = const_cast<Materialmanager::Material*>(material);*/
+	this->myMesh =  const_cast<MeshManager::Mesh*>(mesh);
+	this->myMaterial = const_cast<MaterialManager::Material*>(material);
+	/*this->mymaterial = const_cast<Materialmanager::Material*>(material);*/
 	
 	/*for (int i = 0; i < 10; i++)
 	{
@@ -19,36 +20,20 @@ void ProjectileHandler::initiateProjectiles(const MeshManager::Mesh* mesh, const
 
 ProjectileHandler::ProjectileHandler() {}
 
-ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, GLuint shader)
+ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, GLuint shader, glm::vec2 screenPos, glm::vec2 screenSize)
 {
 	this->initiateProjectiles(mesh, material, world, pos, shader);
 
+	this->screenSize = screenSize;
+	this->screenPos = screenPos;
 }
 
 ProjectileHandler::~ProjectileHandler()
 {
-	for (int i = 0; i < myProjtileVector.size(); i++)
-	{
-		myProjtileVector[i]->setmarked(true);
-	}
-	for (int i = 0; i < this->myProjtileVector.size(); i++)
-	{
-		if (this->myProjtileVector[i]->getmarked() == true)
-		{
-			Projectile* temp = this->myProjtileVector[i];
-			this->myProjtileVector[i] = this->myProjtileVector.back();
-			this->myProjtileVector.back() = temp;
-			//this->myProjtileVector.back()->~Projectile();
-			//world->DestroyBody(this->myProjtileVector.back()->getHitbox()->getBody());
-			this->myProjtileVector.pop_back();
-		}
-	}
-	myProjtileVector.clear();
 }
 
 void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position)
 {
-
 	deleteProjects(world);
 	for (int i = 0; i < this->myProjtileVector.size(); i++)
 	{
@@ -79,11 +64,12 @@ void ProjectileHandler::deleteProjects(b2World* world)
 		if (this->myProjtileVector[i]->getmarked() == true)
 		{
 			Projectile* temp = this->myProjtileVector[i];
-			this->myProjtileVector[i] = this->myProjtileVector.back();
-			this->myProjtileVector.back() = temp;
-			//this->myProjtileVector.back()->~Projectile();
-			//world->DestroyBody(this->myProjtileVector.back()->getHitbox()->getBody());
-			this->myProjtileVector.pop_back();
+			world->DestroyBody(temp->getHitbox()->getBody());
+			temp->Stop();
+			delete temp;
+			temp = nullptr;
+			myProjtileVector.erase(myProjtileVector.begin() + i);
+			i--;
 		}
 	}
 }
@@ -94,10 +80,19 @@ std::vector<Projectile*> ProjectileHandler::getBullets()
 	return myProjtileVector;
 }
 
+void ProjectileHandler::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos)
+{
+	this->screenPos = screenPos;
+	this->screenSize = screenSize;
+}
+
 void ProjectileHandler::fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos)
 {
-	Projectile* p = new Projectile(mesh, material, world, pos);
+	glm::vec2 direction = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y - 150), screenSize, screenPos);
+
+	direction = glm::normalize(direction);
+	Projectile* p = new Projectile(mesh, material, world, pos + glm::vec2(1.35f * direction.x, -(direction.y)));
 	p->setShader(myShader);
 	myProjtileVector.push_back(p);
-	myProjtileVector.back()->fireBullet(world, pos, fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), glm::vec2{ 1920, 1080 }, glm::vec2{ 0, 0 }));
+	myProjtileVector.back()->fireBullet(world, pos, direction);
 }

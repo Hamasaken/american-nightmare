@@ -46,6 +46,7 @@ public:
 	void UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos);
 
 private:
+	Button* background;
 	std::vector<uint16_t> unlockedPosters;
 	MeshManager* meshManager;			//< Mesh Manager
 	MaterialManager* materialManager;	//< Materials & Textures

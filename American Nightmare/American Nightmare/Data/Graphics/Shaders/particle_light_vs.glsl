@@ -13,18 +13,13 @@ out vData
 	vec2 size;
 }vertex;
 
-// Uniform
-uniform mat4 world;
-uniform mat4 view;
-uniform mat4 projection;
-
 void main(void)
 {
 	// Setting color + size + middle position
 	vertex.color = inputColor;
 	vertex.size = inputSize;
-	vertex.position = vec3(projection * view* world * vec4(inputPosition, 1.f));
+	vertex.position = inputPosition;
 
 	// Setting vertex position according to matrices
-	gl_Position = projection * view * world * vec4(inputPosition, 1.f);
+	gl_Position = vec4(inputPosition, 1.f);
 }

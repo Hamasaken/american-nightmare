@@ -6,6 +6,10 @@
 #include <Box2D.h>
 #include "Game\Hitbox.h"
 
+#define BULLET_SIZE_X 0.5f
+#define BULLET_SIZE_Y 0.5f
+#define BULLET_SIZE_Z 1.f
+
 class Projectile : public Entity
 {
 private:

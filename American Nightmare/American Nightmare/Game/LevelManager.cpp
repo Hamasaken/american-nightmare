@@ -15,7 +15,7 @@ LevelManager::LevelManager(const LevelManager & other) { }
 
 LevelManager::~LevelManager() { }
 
-bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapShader, GLuint guiShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
+bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playerShader, GLuint mapShader, GLuint guiShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
 	// Getting parameters
 	this->materialManager = materialManager;
@@ -26,6 +26,9 @@ bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapSh
 	this->playerShader = playerShader;
 	this->mapShader = mapShader;
 	this->guiShader = guiShader;
+	this->screenSize = screenSize;
+	this->screenPos = screenPos;
+
 
 	// Creatin bool vector for posters
 	for (int i = 0; i < 10; i++)
@@ -85,9 +88,7 @@ bool LevelManager::Start(glm::vec2 screenSize, GLuint playerShader, GLuint mapSh
 	if (quadTree == nullptr) return false;
 	if (!quadTree->Start(screenSize)) return false;
 
-
-
-	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), mapShader);
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), mapShader, screenPos, screenSize);
 	this->wasPressed = false;
 	this->isPressed = false;
 
@@ -128,27 +129,29 @@ void LevelManager::Stop()
 		entityManager = nullptr;
 	}
 
+	// Unloads light manager
+	if (lightManager != nullptr)
+	{
+		lightManager->Clear();
+		delete lightManager;
+		lightManager = nullptr;
+	}
+
 	// Unloads the map objects
 	StopMap();
 
-	// Removes the world object
 	if (world != nullptr)
 	{
-		world->Dump();
-//		delete world;
+		b2Body* body = world->GetBodyList();
+		while (body != nullptr)
+		{
+			b2Body* extra = body->GetNext();
+		//	world->DestroyBody(body);
+			body = extra;
+		}
+		//	delete world;
 		world = nullptr;
 	}
-
-	if (myPH != nullptr)
-	{
-
-
-		myPH = nullptr;
-	}
-
-	// Unloads light manager
-	lightManager->Clear();
-	delete lightManager;
 
 	// These are getting removed somewhere else
 	materialManager = nullptr;
@@ -195,17 +198,11 @@ void LevelManager::StopMap()
 	}
 	triggers.clear();
 
-	// Unloads every projectile on the map
-	for (Projectile* projectile : projectiles)
-	{
-		if (projectile != nullptr)
-		{
-			projectile->Stop();
-			delete projectile;
-			projectile = nullptr;
-		}
-	}
-	projectiles.clear();
+	// Removes the world object
+	std::vector<Projectile*> p = myPH->getBullets();
+	for (int i = 0; i < p.size(); i++)
+		p[i]->setmarked(true);
+	myPH->deleteProjects(world);
 }
 
 void LevelManager::Update(GLint deltaT)
@@ -221,6 +218,7 @@ void LevelManager::Update(GLint deltaT)
 
 	if (isPressed && !wasPressed && player->getCanShoot() == true)
 	{
+		soundManager->playModifiedSFX(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 		wasPressed = true;
 		player->decreaseNrOfProjectiles();
 		myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
@@ -303,10 +301,12 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	LoadLevelEffects(levelFile.effects);
 
 	// Setting start position
-	player->setPosition(glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 0));
+	glm::vec3 start = glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 0);
+	player->setPosition(start);
+	player->setStartingPosition(start);
 
 	// Music
-	soundManager->playSong(SoundManager::SONG::MUSIC_BOOGIE);
+	soundManager->playSong(SoundManager::SONG::URANIUM_FEVER);
 	
 	// Dust effect
 	particleManager->EffectLightDust(glm::vec3(0, 10, 0));
@@ -436,6 +436,7 @@ void LevelManager::LoadLevelSpawners(std::vector<LSpawner> spawner)
 	{
 		LSpawner spawn = spawner[i];
 		entityManager->SpawnEntity(spawn.spawnerType, arrayToVec2(spawn.position));
+		entityManager->SpawnEntity(spawn.spawnerType, glm::vec2(-15, 0));
 	}
 }
 
@@ -505,11 +506,6 @@ void LevelManager::LoadLevelEffects(std::vector<LEffect> effects)
 
 void LevelManager::LoadTempLevel()
 {
-	////////////////////////////////////////////////////////////
-	// Level Music
-	////////////////////////////////////////////////////////////
-	soundManager->playSong(SoundManager::SONG::MUSIC_BOOGIE);
-
 	////////////////////////////////////////////////////////////
 	// Map Visuals
 	////////////////////////////////////////////////////////////
@@ -688,7 +684,8 @@ void LevelManager::CheckTriggers()
 			////////////////////////////////////////////////////////////
 			case Trigger::POSTER:
 				remove = true;
-				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 50, glm::vec4(0.25, 1, 0.85, 1));
+				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 50, glm::vec4(0.25, 1, 0.25, 1));
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_POWERUP, 50, 0.05f);
 				UnlockPoster(2);
 				ActivatePopup("You unlocked a poster!", 2000.f);
 				break;
@@ -804,6 +801,11 @@ Player* LevelManager::getPlayer() { return player; }
 Text* LevelManager::getPopup()
 {
 	return popup;
+}
+
+ProjectileHandler * LevelManager::getPH()
+{
+	return myPH;
 }
 
 //ProjectileHandler* LevelManager::getProjectiles() { return myPH; }
