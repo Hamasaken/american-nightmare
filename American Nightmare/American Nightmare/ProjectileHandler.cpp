@@ -77,7 +77,7 @@ void ProjectileHandler::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 s
 
 void ProjectileHandler::fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos)
 {
-	glm::vec2 direction = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y + 150), screenSize, screenPos);
+	glm::vec2 direction = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y - 150), screenSize, screenPos);
 
 	direction = glm::normalize(direction);
 	Projectile* p = new Projectile(mesh, material, world, pos + glm::vec2(1.35f * direction.x, -(direction.y)));
