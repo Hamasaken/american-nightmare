@@ -7,7 +7,8 @@ enum class ETriggerType
 	door,
 	deathZone,
 	poster,
-	garbageBin
+	garbageBin, 
+	message
 };
 
 enum class ESpawnerType
