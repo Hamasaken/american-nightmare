@@ -51,6 +51,8 @@ void ProjectileHandler::deleteProjects(b2World* world)
 		if (this->myProjtileVector[i]->getmarked() == true)
 		{
 			Projectile* temp = this->myProjtileVector[i];
+			world->DestroyBody(temp->getHitbox()->getBody());
+			temp->Stop();
 			delete temp;
 			temp = nullptr;
 			myProjtileVector.erase(myProjtileVector.begin() + i);
