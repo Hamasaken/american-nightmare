@@ -87,7 +87,8 @@ void Player::Update(GLint deltaT, b2World* world)
 		hasDashed = false;
 
 	// Did we hit a surface?
-	if (hitbox->getBody()->GetLinearVelocity().y == 0.f && hasJumped) { hasJumped = false; isDashing = true; }
+	if (hitbox->getBody()->GetLinearVelocity().y != 0.f) { hasJumped = true; }
+	else if (hitbox->getBody()->GetLinearVelocity().y == 0.f && hasJumped) { hasJumped = false; isDashing = true; }
 
 	// Getting user input
 	if (!isDead)
