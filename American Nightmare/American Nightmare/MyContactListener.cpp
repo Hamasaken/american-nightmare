@@ -93,7 +93,9 @@ void MyContactListener::EndContact(b2Contact* contact)
 	Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
 	Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
 
-	Player* player = dynamic_cast<Player*>(bodyA);
+	Player* player = nullptr;
+
+	player = dynamic_cast<Player*>(bodyA);
 	if (player)
 	{
 		Enemy* enemy = dynamic_cast<Enemy*>(bodyB);
@@ -102,21 +104,24 @@ void MyContactListener::EndContact(b2Contact* contact)
 			player->setContactWithEnemy(nullptr);
 		}
 	}
-
-	Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
-	Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
-	if (vacuumA || vacuumB)
+	else
 	{
-		Projectile* projectileA = dynamic_cast<Projectile*>(bodyA);
-		Projectile* projectileB = dynamic_cast<Projectile*>(bodyB);
-		if (projectileA)
+		Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
+		Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
+		if (vacuumA || vacuumB)
 		{
-			projectileA->setIsInVacRange(false);
+			Projectile* projectileA = dynamic_cast<Projectile*>(bodyA);
+			Projectile* projectileB = dynamic_cast<Projectile*>(bodyB);
+			if (projectileA)
+			{
+				projectileA->setIsInVacRange(false);
 
-		}
-		else if (projectileB)
-		{
-			projectileB->setIsInVacRange(false);
+			}
+			else if (projectileB)
+			{
+				projectileB->setIsInVacRange(false);
+			}
 		}
 	}
+	
 }
