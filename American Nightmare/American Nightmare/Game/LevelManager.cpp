@@ -211,6 +211,7 @@ void LevelManager::Update(GLint deltaT)
 
 	if (isPressed && !wasPressed && player->getCanShoot() == true)
 	{
+		soundManager->playModifiedSFX(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 		wasPressed = true;
 		player->decreaseNrOfProjectiles();
 		myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
@@ -497,11 +498,6 @@ void LevelManager::LoadLevelEffects(std::vector<LEffect> effects)
 
 void LevelManager::LoadTempLevel()
 {
-	////////////////////////////////////////////////////////////
-	// Level Music
-	////////////////////////////////////////////////////////////
-	soundManager->playSong(SoundManager::SONG::MUSIC_BOOGIE);
-
 	////////////////////////////////////////////////////////////
 	// Map Visuals
 	////////////////////////////////////////////////////////////

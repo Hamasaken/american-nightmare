@@ -40,6 +40,7 @@ void SoundManager::loadSFXs()
 	sfx[SFX_LtoR] = loadSFX(pathToFolder + "sfx_leftToRight.wav");
 	sfx[SFX_RtoL] = loadSFX(pathToFolder + "sfx_rightToLeft.wav");
 	sfx[SFX_SUCTION] = loadSFX(pathToFolder + "sfx_suction.wav");
+	sfx[SFX_FIRE] = loadSFX(pathToFolder + "sfx_fire.ogg");
 
 	// Setting every sfx at deicided volume
 	for (sf::Sound& s : sfx)

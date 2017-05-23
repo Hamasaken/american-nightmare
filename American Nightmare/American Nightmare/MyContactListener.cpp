@@ -31,18 +31,17 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			player->setContactWithEnemy(enemy);
 		}
 
-			Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
-			if (myProjectile)
+		Projectile* myProjectile = dynamic_cast<Projectile*>(bodyB);
+		if (myProjectile)
+		{
+			soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 0.15f);
+			if (player->addPlayerProjectiles() == true && sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)
 			{
-				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 0.15f);
-
-				if (player->addPlayerProjectiles() == true && sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)
-				{
-					player->addNrOfProjectiles();
-					myProjectile->setmarked(true);
-				}
+				player->addNrOfProjectiles();
+				myProjectile->setmarked(true);
 			}
 		}
+	}
 	Enemy* enemy = dynamic_cast<Enemy*>(bodyA);
 	if (enemy)
 	{
@@ -85,8 +84,8 @@ void MyContactListener::EndContact(b2Contact* contact)
 	Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
 	Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
 
-	if (bodyA != nullptr) return;
-	if (bodyB != nullptr) return;
+	if (bodyA == nullptr) return;
+	if (bodyB == nullptr) return;
 
 	Player* player = dynamic_cast<Player*>(bodyA);
 	if (player)
