@@ -436,9 +436,6 @@ void LevelManager::LoadLevelSpawners(std::vector<LSpawner> spawner)
 	{
 		LSpawner spawn = spawner[i];
 		entityManager->SpawnEntity(spawn.spawnerType, arrayToVec2(spawn.position));
-		entityManager->SpawnEntity(spawn.spawnerType, arrayToVec2(spawn.position));
-		entityManager->SpawnEntity(spawn.spawnerType, arrayToVec2(spawn.position));
-		entityManager->SpawnEntity(spawn.spawnerType, arrayToVec2(spawn.position));
 	}
 }
 
