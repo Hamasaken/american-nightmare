@@ -13,7 +13,6 @@ void Camera::setPosition(glm::vec3 position) { this->position = position; }
 
 void Camera::smoothToPosition(glm::vec3 position)
 {
-//	this->position += (position - this->position) * 1.f;
 	this->position.x += (position.x - this->position.x) * CAMERA_SPEED;
 	this->position.y += (position.y - this->position.y) * CAMERA_SPEED * 3;
 }
