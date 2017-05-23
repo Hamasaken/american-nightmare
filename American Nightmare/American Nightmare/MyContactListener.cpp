@@ -83,16 +83,11 @@ void MyContactListener::EndContact(b2Contact* contact)
 {
 	if (contact == nullptr) return;
 
-	Object* bodyA = static_cast<Object*>(contact->GetFixtureA()->GetBody()->GetUserData());
-	Object* bodyB = static_cast<Object*>(contact->GetFixtureB()->GetBody()->GetUserData());
+	Player* player = static_cast<Player*>(contact->GetFixtureA()->GetBody()->GetUserData());
+	Enemy* enemy = static_cast<Enemy*>(contact->GetFixtureB()->GetBody()->GetUserData());
 
-	if (bodyA == nullptr) return;
-	if (bodyB == nullptr) return;
-
-	Player* player = dynamic_cast<Player*>(bodyA);
 	if (player)
 	{
-		Enemy* enemy = dynamic_cast<Enemy*>(bodyB);
 		if (enemy)
 		{
 			player->setContactWithEnemy(nullptr);

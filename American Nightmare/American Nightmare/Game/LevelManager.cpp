@@ -126,6 +126,14 @@ void LevelManager::Stop()
 		entityManager = nullptr;
 	}
 
+	// Unloads light manager
+	if (lightManager != nullptr)
+	{
+		lightManager->Clear();
+		delete lightManager;
+		lightManager = nullptr;
+	}
+
 	// Unloads the map objects
 	StopMap();
 
@@ -141,10 +149,6 @@ void LevelManager::Stop()
 		//	delete world;
 		world = nullptr;
 	}
-
-	// Unloads light manager
-	lightManager->Clear();
-	delete lightManager;
 
 	// These are getting removed somewhere else
 	materialManager = nullptr;
