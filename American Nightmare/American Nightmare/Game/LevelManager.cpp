@@ -319,8 +319,8 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	Object* background = new Object();
 	background->setShader(mapShader);
 	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
-	background->setScale(glm::vec3(192, 80, 1));
-	background->setPosition(glm::vec3(0, 40, -5));
+	background->setScale(glm::vec3(192, 96, 1));
+	background->setPosition(glm::vec3(0, 0, -30));
 	map.push_back(background);
 
 
