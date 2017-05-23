@@ -173,6 +173,7 @@ void Player::Walk(Direction dir)
 		switch (dir)
 		{
 		case LEFT:
+			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 			if (vel.x > -PLAYER_MAX_VEL_X)
 			{
 				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
@@ -180,6 +181,7 @@ void Player::Walk(Direction dir)
 			}
 			break;
 		case RIGHT:
+			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 			if (vel.x < PLAYER_MAX_VEL_X)
 			{
 				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
@@ -187,6 +189,7 @@ void Player::Walk(Direction dir)
 			}
 			break;
 		case STOPPED:
+			soundManager->stopSFX(SoundManager::SFX_STEPS);
 			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
 			break;
 		}
@@ -196,6 +199,7 @@ void Player::Walk(Direction dir)
 		switch (dir)
 		{
 		case LEFT:
+			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 			if (vel.x > -PLAYER_MAX_VEL_X)
 			{
 				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X * 0.35f, 0), true);
@@ -203,6 +207,7 @@ void Player::Walk(Direction dir)
 			}
 			break;
 		case RIGHT:
+			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 			if (vel.x < PLAYER_MAX_VEL_X)
 			{
 				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X * 0.35f, 0), true);
@@ -210,6 +215,7 @@ void Player::Walk(Direction dir)
 			}
 			break;
 		case STOPPED:
+			soundManager->stopSFX(SoundManager::SFX_STEPS);
 			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
 			break;
 		}
@@ -223,6 +229,7 @@ void Player::Jump()
 
 	if (!hasJumped)
 	{
+		soundManager->stopSFX(SoundManager::SFX_STEPS);
 		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
 		vel.y = hitbox->getBody()->GetLinearVelocity().y;
 		hasJumped = true;

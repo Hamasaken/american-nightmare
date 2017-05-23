@@ -28,7 +28,8 @@ public:
 		SFX_LtoR,
 		SFX_RtoL,
 		SFX_SUCTION,
-		SFX_FIRE
+		SFX_FIRE,
+		SFX_STEPS
 	};
 
 	// Put song names here, and then load them in the loadSongs functions

@@ -7,7 +7,7 @@
 #define LIGHT_DEFAULT_COLOR		glm::vec4(1.f, 0.1f, 0.05f, 1.f)
 #define LIGHT_DEFAULT_AMOUNT	25
 #define LIGHT_SIZE				randBetweenF(0.4f, 0.9f)
-#define VELOCITY				randBetweenF(-0.7f, 0.15f)
+#define VELOCITY				randBetweenF(-0.15f, 0.15f)
 #define VELOCITY_FALL_OFF		randBetweenF(0.35f, 0.45f)
 #define PARTICLE_LIFETIME		randBetweenF(100.f, 900.f)
 
