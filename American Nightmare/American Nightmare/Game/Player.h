@@ -130,6 +130,7 @@ public:
 	void setContactWithEnemy(Enemy* contact);
 	Enemy* getContactWithEnemy();
 	Vacuum* getVac();
+	void setHasJumped(bool hasJumped);
 
 	
 	bool addPlayerProjectiles();

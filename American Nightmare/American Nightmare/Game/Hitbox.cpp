@@ -70,6 +70,7 @@ void Hitbox::Stop(b2World* world)
 {
 	if (body != nullptr)
 	{
+		body->SetUserData(nullptr);
 	//	world->DestroyBody(body);
 		body = nullptr;
 	}
@@ -92,6 +93,7 @@ void Hitbox::AddBodyToWorld(b2World* world, glm::vec2 position, b2BodyType type,
 	bodyDef.position = b2Vec2(position.x, -position.y);
 	bodyDef.fixedRotation = canRotate;
 	bodyDef.active = true;
+	bodyDef.userData = this;
 	body = world->CreateBody(&bodyDef);
 }
 

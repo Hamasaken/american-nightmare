@@ -16,7 +16,6 @@ private:
 	ParticleManager* particleManager;
 	SoundManager* soundManager;
 	Camera* camera;
-
 public:
 	MyContactListener();
 	~MyContactListener();

@@ -86,10 +86,6 @@ void Player::Update(GLint deltaT, b2World* world)
 	if (dashCooldown < NULL)
 		hasDashed = false;
 
-	// Did we hit a surface?
-	if (hitbox->getBody()->GetLinearVelocity().y != 0.f) { hasJumped = true; }
-	else if (hitbox->getBody()->GetLinearVelocity().y == 0.f && hasJumped) { hasJumped = false; isDashing = true; }
-
 	// Getting user input
 	if (!isDead)
 	{
@@ -405,6 +401,11 @@ Enemy* Player::getContactWithEnemy()
 Vacuum * Player::getVac()
 {
 	return vac;
+}
+
+void Player::setHasJumped(bool hasJumped)
+{
+	this->hasJumped = hasJumped;
 }
 
 void Player::setInvulTime(GLfloat invulTime)
