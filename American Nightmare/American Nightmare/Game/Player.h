@@ -131,7 +131,8 @@ public:
 	Enemy* getContactWithEnemy();
 	Vacuum* getVac();
 	void setHasJumped(bool hasJumped);
-
+	bool getHasJumped();
+	bool getAmmoFull();
 	
 	bool addPlayerProjectiles();
 	bool getCanShoot();

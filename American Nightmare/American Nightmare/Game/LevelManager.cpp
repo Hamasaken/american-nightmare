@@ -233,12 +233,12 @@ void LevelManager::Update(GLint deltaT)
 		//	if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), true);
 		//	else 
 		//		
-		myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), false);
+		myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), false);
 	}
 
 
 	//Update Projectile
-	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
+	myPH->Update(deltaT, world, player->getPlayerPosAsGLM(), player->getAmmoFull());
 
 	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
 

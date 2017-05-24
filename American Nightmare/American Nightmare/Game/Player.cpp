@@ -408,6 +408,19 @@ void Player::setHasJumped(bool hasJumped)
 	this->hasJumped = hasJumped;
 }
 
+bool Player::getHasJumped()
+{
+	return hasJumped;
+}
+
+bool Player::getAmmoFull()
+{
+	if (CAP <= nrOfProjectiles)
+		return false;
+
+	return true;
+}
+
 void Player::setInvulTime(GLfloat invulTime)
 {
 	this->invulTime = invulTime;

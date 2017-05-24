@@ -101,10 +101,15 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			Projectile* projectile = dynamic_cast<Projectile*>(other);
 			if (projectile)
 			{
-				particleManager->EffectBloodSplatter(enemy->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
-				soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
-				enemy->TakeDamage(enemy->getDamage());
-				if (enemy->getIsDead()) particleManager->EffectExplosionLights(enemy->getPosition(), 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
+				b2Vec2 vec = projectile->getHitbox()->getBody()->GetLinearVelocity();
+				if (abs(vec.x) > 15.f || abs(vec.y) > 15.f)
+				{
+					particleManager->EffectBloodSplatter(enemy->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
+					soundManager->playSFX(SoundManager::SFX_HIT);
+					enemy->TakeDamage(enemy->getDamage());
+					if (enemy->getIsDead())
+						particleManager->EffectExplosionLights(enemy->getPosition(), 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
+				}
 			}
 		}
 		else
