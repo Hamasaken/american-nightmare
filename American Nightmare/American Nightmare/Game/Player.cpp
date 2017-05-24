@@ -18,7 +18,7 @@ void Player::initiateCursor()
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
-	this->nrOfProjectiles = 10;
+	this->nrOfProjectiles = 100;
 
 	//Sets the cursor for the player
 	initiateCursor();
@@ -87,7 +87,8 @@ void Player::Update(GLint deltaT, b2World* world)
 		hasDashed = false;
 
 	// Did we hit a surface?
-	if (hitbox->getBody()->GetLinearVelocity().y == 0.f && hasJumped) { hasJumped = false; isDashing = true; }
+	if (hitbox->getBody()->GetLinearVelocity().y != 0.f) { hasJumped = true; }
+	else if (hitbox->getBody()->GetLinearVelocity().y == 0.f && hasJumped) { hasJumped = false; isDashing = true; }
 
 	// Getting user input
 	if (!isDead)
@@ -156,8 +157,13 @@ void Player::TakeDamage(float dmg)
 	if (hp <= NULL && !isDead)
 	{
 		isDead = true;
-		particleManager->EffectBloodSplatter(position, getAngleFromTwoPoints(contactWithEnemy->getCenter(), this->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f));
-		particleManager->EffectBloodSplatter(position, getAngleFromTwoPoints(this->getCenter(), contactWithEnemy->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f));
+
+		if (contactWithEnemy != nullptr)
+		{
+			particleManager->EffectBloodSplatter(position, getAngleFromTwoPoints(contactWithEnemy->getCenter(), this->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f));
+			particleManager->EffectBloodSplatter(position, getAngleFromTwoPoints(this->getCenter(), contactWithEnemy->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f));
+		}
+
 		particleManager->EffectExplosionLights(position, 50, glm::vec4(0.4f, 0.05f, 0.025f, 1.f));
 		contactWithEnemy = nullptr;
 	}
@@ -394,6 +400,11 @@ void Player::setContactWithEnemy(Enemy* contact)
 Enemy* Player::getContactWithEnemy()
 {
 	return contactWithEnemy;
+}
+
+Vacuum * Player::getVac()
+{
+	return vac;
 }
 
 void Player::setInvulTime(GLfloat invulTime)

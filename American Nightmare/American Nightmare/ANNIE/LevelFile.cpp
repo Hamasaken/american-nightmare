@@ -85,31 +85,31 @@ void LLevelHandler::readFromFile(const char* path)
 
 		//Read archives
 		archives.resize(levelHeader.nrOfArchives);
-		in.read((reinterpret_cast<char*>(archives.data())), sizeof(CharData) * levelHeader.nrOfArchives); //&archives[0] doesn't work. WHY???
+		in.read((reinterpret_cast<char*>(archives.data())), sizeof(CharData) * levelHeader.nrOfArchives);
 
 		//Read meshes
 		meshes.resize(levelHeader.nrOfMeshes);
-		in.read((reinterpret_cast<char*>(&meshes[0])), sizeof(LMesh) * levelHeader.nrOfMeshes);
+		in.read((reinterpret_cast<char*>(meshes.data())), sizeof(LMesh) * levelHeader.nrOfMeshes);
 
 		//Read lights
 		lights.resize(levelHeader.nrOfLights);
-		in.read((reinterpret_cast<char*>(&lights[0])), sizeof(LLight) * levelHeader.nrOfLights);
+		in.read((reinterpret_cast<char*>(lights.data())), sizeof(LLight) * levelHeader.nrOfLights);
 
 		//Read hitboxes
 		hitboxes.resize(levelHeader.nrOfHitboxes);
-		in.read((reinterpret_cast<char*>(&hitboxes[0])), sizeof(LHitbox) * levelHeader.nrOfHitboxes);
+		in.read((reinterpret_cast<char*>(hitboxes.data())), sizeof(LHitbox) * levelHeader.nrOfHitboxes);
 
 		//Read triggers
 		triggers.resize(levelHeader.nrOfTriggers);
-		in.read((reinterpret_cast<char*>(&triggers[0])), sizeof(LTrigger) * levelHeader.nrOfTriggers);
+		in.read((reinterpret_cast<char*>(triggers.data())), sizeof(LTrigger) * levelHeader.nrOfTriggers);
 
 		//Read spawners
 		spawners.resize(levelHeader.nrOfSpawners);
-		in.read((reinterpret_cast<char*>(&spawners[0])), sizeof(LSpawner) * levelHeader.nrOfSpawners);
+		in.read((reinterpret_cast<char*>(spawners.data())), sizeof(LSpawner) * levelHeader.nrOfSpawners);
 
 		//Read effects
 		effects.resize(levelHeader.nrOfEffects);
-		in.read((reinterpret_cast<char*>(&effects[0])), sizeof(LEffect) * levelHeader.nrOfEffects);
+		in.read((reinterpret_cast<char*>(effects.data())), sizeof(LEffect) * levelHeader.nrOfEffects);
 	}
 }
 

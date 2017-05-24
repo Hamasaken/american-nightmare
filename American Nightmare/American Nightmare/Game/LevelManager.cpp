@@ -29,7 +29,6 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	this->screenSize = screenSize;
 	this->screenPos = screenPos;
 
-
 	// Creatin bool vector for posters
 	for (int i = 0; i < 10; i++)
 		unlockedPosters.push_back(0);
@@ -105,28 +104,12 @@ void LevelManager::Stop()
 		popup = nullptr;
 	}
 
-	// Deleting player
-	if (player != nullptr)
-	{
-		player->Stop();
-		delete player;
-		player = nullptr;
-	}
-
 	// Deleting quadtree
 	if (quadTree != nullptr)
 	{
 		quadTree->Stop();
 		delete quadTree;
 		quadTree = nullptr;
-	}
-
-	// Unloads every entity on map
-	if (entityManager != nullptr)
-	{
-		entityManager->Stop();
-		delete entityManager;
-		entityManager = nullptr;
 	}
 
 	// Unloads light manager
@@ -139,6 +122,30 @@ void LevelManager::Stop()
 
 	// Unloads the map objects
 	StopMap();
+
+	// Deleting player
+	if (player != nullptr)
+	{
+		if (player->getVac() != nullptr)
+		{
+			Vacuum* vac = player->getVac();
+			vac->Stop();
+			delete vac;
+			vac = nullptr;
+		}
+
+		player->Stop();
+		delete player;
+		player = nullptr;
+	}
+
+	// Unloads every entity on map
+	if (entityManager != nullptr)
+	{
+		entityManager->Stop();
+		delete entityManager;
+		entityManager = nullptr;
+	}
 
 	if (world != nullptr)
 	{
@@ -179,7 +186,7 @@ void LevelManager::StopMap()
 	{
 		if (hitbox != nullptr)
 		{
-			hitbox->Stop();
+			hitbox->Stop(world);
 			delete hitbox;
 			hitbox = nullptr;
 		}
@@ -191,7 +198,7 @@ void LevelManager::StopMap()
 	{
 		if (trigger != nullptr)
 		{
-			trigger->Stop();
+			trigger->Stop(world);
 			delete trigger;
 			trigger = nullptr;
 		}
@@ -207,22 +214,28 @@ void LevelManager::StopMap()
 
 void LevelManager::Update(GLint deltaT)
 {
+	// Updating physics
+	world->Step(1 / 60.f, 10, 10);
+
 	// Updating player
 	player->Update(deltaT, world);
 	if (player->getIsDashing()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(0.25f));
 	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
 
-
 	//For projectiles
-	isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-
+	if (!player->getIsDead())
+		isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 	if (isPressed && !wasPressed && player->getCanShoot() == true)
 	{
 		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 		wasPressed = true;
 		player->decreaseNrOfProjectiles();
-		myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM());
+		//	if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), true);
+		//	else 
+		//		
+		myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), false);
 	}
+
 
 	//Update Projectile
 	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
@@ -231,9 +244,6 @@ void LevelManager::Update(GLint deltaT)
 
 	// Updating every entity
 	entityManager->Update(deltaT, player->getPosition(), player->getIsDead());
-
-	// Updating physics
-	world->Step(1 / 60.f, 10, 20);
 
 	// Updating every object on map
 	//deleteProjects(world);
@@ -254,7 +264,7 @@ void LevelManager::Update(GLint deltaT)
 	{
 		glm::vec4 color = popup->getColor();
 		float currentAlpha = color.a;
-		currentAlpha += (popupAlpha - currentAlpha) * 0.035f;
+		currentAlpha += (popupAlpha - currentAlpha) * 0.1f;
 		popup->setColor(glm::vec4(currentAlpha));
 		popupTimer -= deltaT;
 		if (popupTimer < NULL)	popupAlpha = -0.05f;
@@ -289,10 +299,26 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	LoadArchiveMaterials(archive.materials);
 	LoadArchiveMeshes(archive.meshes);
 
+/*	AArchiveHandler temp;
+	temp.readFromFile(ARCHIVE_PATH "Boll.ana");
+	LoadArchiveTextures(temp.textures);
+	LoadArchiveMaterials(temp.materials);
+	LoadArchiveMeshes(temp.meshes);
+	*/
 	////////////////////////////////////////////////////////////
 	// Loading Level
 	////////////////////////////////////////////////////////////
 	levelFile.readFromFile(levelPath.c_str());
+	/* std::vector<CharData> archivePaths;
+	for (int i = 0; i < archivePaths.size(); i++)
+	{
+		CharData path = archivePaths[i];
+		AArchiveHandler tempArchive;
+		tempArchive.readFromFile(path.data);
+		LoadArchiveTextures(tempArchive.textures);
+		LoadArchiveMaterials(tempArchive.materials);
+		LoadArchiveMeshes(tempArchive.meshes);
+	} */
 	LoadLevelMeshes(levelFile.meshes);
 	LoadLevelLights(levelFile.lights);
 	LoadLevelHitboxes(levelFile.hitboxes);
@@ -301,7 +327,7 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	LoadLevelEffects(levelFile.effects);
 
 	// Setting start position
-	glm::vec3 start = glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 0);
+	glm::vec3 start = glm::vec3(levelFile.levelHeader.playerSpawn[0], levelFile.levelHeader.playerSpawn[1] - 5, 0);
 	player->setPosition(start);
 	player->setStartingPosition(start);
 
@@ -319,8 +345,8 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	Object* background = new Object();
 	background->setShader(mapShader);
 	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
-	background->setScale(glm::vec3(80, 0, 1));
-	background->setPosition(glm::vec3(0, 10, -5));
+	background->setScale(glm::vec3(192, 96, 1));
+	background->setPosition(glm::vec3(0, 0, -30));
 	map.push_back(background);
 
 
@@ -398,7 +424,10 @@ void LevelManager::LoadLevelMeshes(std::vector<LMesh> meshes)
 			printf("Loading Object with mesh: %s\n", mesh->name.data);
 		else printf("Could not find mesh: %s\n", mesh->name.data);
 
-		object->Start(meshManager->getMesh(mesh->name.data), materialManager->getMaterial(mesh->name.data));
+		const MaterialManager::Material* material = materialManager->getMaterial(mesh->name.data);
+		if (material == nullptr) material = materialManager->getMaterial("missingmaterial");
+
+		object->Start(meshManager->getMesh(mesh->name.data), material);
 		object->setScale(glm::vec3(mesh->scale[0], mesh->scale[1], mesh->scale[2]));
 		object->setRotation(glm::vec3(glm::radians(mesh->rotation[0]), glm::radians(mesh->rotation[1]), glm::radians(mesh->rotation[2])));
 		object->setPosition(glm::vec3(mesh->position[0], mesh->position[1], mesh->position[2]));
@@ -460,11 +489,9 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		Trigger::TriggerType outTriggerType;
 		switch (trigger.triggerType)
 		{
-		case ETriggerType::poster:		outTriggerType = Trigger::POSTER; break;
-		case ETriggerType::deathZone:	outTriggerType = Trigger::DEATH; break;
-		case ETriggerType::garbageBin:	outTriggerType = Trigger::EFFECT; break;
-		case ETriggerType::door:		
-			outTriggerType = Trigger::POSTER; 
+		case ETriggerType::poster:		
+		{	
+			outTriggerType = Trigger::POSTER;
 			Poster* poster = new Poster();
 			poster->setShader(mapShader);
 			poster->Start(meshManager->getMesh("quad"), materialManager->getMaterial("postermaterial_2"));
@@ -473,6 +500,20 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 			poster->setPosition(glm::vec3(hitbox.position[0], hitbox.position[1] + hitbox.scale[1] / 2, 0));
 			map.push_back(poster);
 			outTrigger->setMapPart(poster);
+		}
+			break;
+		case ETriggerType::deathZone:	
+			outTriggerType = Trigger::DEATH; 
+			break;
+		case ETriggerType::garbageBin:	
+			outTriggerType = Trigger::EFFECT; 
+			break;
+		case ETriggerType::message:		
+			outTriggerType = Trigger::POPUP; 
+			outTrigger->setData(trigger.data.data);
+			break;
+		case ETriggerType::door:	
+			outTriggerType = Trigger::DOOR;
 			break; 
 		}
 
@@ -483,7 +524,7 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		this->triggers.push_back(outTrigger);
 
 		// Adding a constant smoke on trigger for testing
-		particleManager->EffectConstantSmoke(glm::vec3(outTrigger->getPosition(), 0.f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.3f));
+//		particleManager->EffectConstantSmoke(glm::vec3(outTrigger->getPosition(), 0.f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.3f));
 	}
 
 }
@@ -496,16 +537,17 @@ void LevelManager::LoadLevelEffects(std::vector<LEffect> effects)
 	for (int i = 0; i < effects.size(); i++)
 	{
 		LEffect effect = effects[i];
+
 		switch (effect.effectType)
 		{
 		case EEffectType::smoke: 
-			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]), materialManager->getTextureID("smoketexture"));
+			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 25);
 			break;
 		case EEffectType::dust:
-			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.40f, 0.3f, 0.3f, 0.7f));
+			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 25, glm::vec4(0.40f, 0.3f, 0.3f, 0.7f));
 			break;
 		case EEffectType::steam:
-			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.3f, 0.30f, 0.5f, 0.7f));
+			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 25, glm::vec4(0.3f, 0.30f, 0.5f, 0.7f));
 			break;
 		}
 	}
@@ -683,6 +725,7 @@ void LevelManager::CheckTriggers()
 			// Popup - For popups with text/pictures, anything
 			////////////////////////////////////////////////////////////
 			case Trigger::POPUP:
+				remove = true;
 				ActivatePopup(trigger->getData(), 3000.f);
 				break;
 
@@ -694,7 +737,7 @@ void LevelManager::CheckTriggers()
 				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 50, glm::vec4(0.25, 1, 0.25, 1));
 				soundManager->playModifiedSFX(SoundManager::SFX::SFX_POWERUP, 50, 0.05f);
 				UnlockPoster(2);
-				ActivatePopup("You unlocked a poster!", 2000.f);
+				ActivatePopup("You unlocked a poster!", 3000.f);
 				break;
 
 			////////////////////////////////////////////////////////////
@@ -771,7 +814,8 @@ void LevelManager::CheckTriggers()
 						map.erase(map.begin() + i);
 					}
 			}
-			trigger->Stop();
+			world->DestroyBody(trigger->getBody());
+			// trigger->Stop(world);
 			delete trigger;
 			triggers.erase(triggers.begin() + i);
 		}

@@ -155,6 +155,12 @@ void main () {
 
 	vec4 result = vec4(0);
 
+	if(fragPos.z == -30.f)
+	{
+		fragment_color = vec4(0.f, 0.f, 0.f, 0.f);
+		return;
+	}
+
 	result += bufferAmb;
 
 	float shadow = 0;

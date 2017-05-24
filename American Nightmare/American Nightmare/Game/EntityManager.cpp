@@ -71,6 +71,7 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 			e->Start(board.mesh, board.material, world, false); //Test for flying zombie false == normal zombie/ true == flying zombie
 			e->setShader(board.shader);
 			e->AddAnimation(board.textureID, board.normalMap, board.animationFile);
+			e->setPosition(glm::vec3(position.x, -position.y, 0));
 			enemyList.push_back(e);
 		} break;
 	
@@ -79,6 +80,7 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 			Entity* e = new Entity();
 			e->Start(board.mesh, board.material, world);
 			e->setShader(board.shader);
+			e->setPosition(glm::vec3(position.x, -position.y, 0));
 			entityList.push_back(e);
 		} break;
 
@@ -104,7 +106,6 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 			e = nullptr;
 			enemyList.erase(enemyList.begin() + i);
 			i--;
-			break;
 		}
 
 	}

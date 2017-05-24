@@ -52,9 +52,11 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (materialManager == nullptr) return false;
 
 	// Loading materials
+	materialManager->AddMaterial("missingmaterial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "missingtexture", TEXTURE_PATH "MissingTexture.png");
 	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.75, 0.75, 0.75), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	materialManager->AddMaterial("GUI_bar_blue", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.7), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.jpg");
 	materialManager->AddMaterial("GUI_bar_red", glm::vec3(0.1f), glm::vec3(0.7, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
+	materialManager->AddMaterial("GUI_bar_white", glm::vec3(0.1f), glm::vec3(0.8, 0.8, 0.8), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
 	materialManager->AddMaterial("playermaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.5f), 0.01f, "playertexture", TEXTURE_PATH "Walk01.png");
 	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "lighttexture", TEXTURE_PATH "gammal-dammsugare.jpg");
 	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "groundtexture", TEXTURE_PATH "temp_ground.jpg");
@@ -63,7 +65,9 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	materialManager->AddMaterial("boltmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "bolttexture", TEXTURE_PATH "bolt.jpg");
 	for (int i = 1; i < 11; i++) materialManager->AddMaterial("postermaterial_" + std::to_string(i), glm::vec3(1.f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "poster_" + std::to_string(i), (POSTER_PATH "poster_" + std::to_string(i) + ".jpg"));
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
-	if (materialManager->getMaterial("GUI_2_mat") == nullptr) printf("Button Material not found\n");
+	if (materialManager->getMaterial("GUI_bar_blue") == nullptr) printf("Button Material not found\n");
+	if (materialManager->getMaterial("GUI_bar_red") == nullptr) printf("Button Material not found\n");
+	if (materialManager->getMaterial("GUI_bar_white") == nullptr) printf("Button Material not found\n");
 	if (materialManager->getMaterial("playermaterial") == nullptr) printf("Player Material not found\n");
 	if (materialManager->getMaterial("lightmaterial") == nullptr) printf("Light Material not found\n");
 	if (materialManager->getMaterial("groundmaterial") == nullptr) printf("Ground Material not found\n");
@@ -130,6 +134,10 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager->setShader(shaderManager->getShader("texture"));
 	uiManager->setInstantCenter(glm::vec2(0, 0));
 
+	background = new Button();
+	background->Start(screenSize, glm::vec3(0.f, 0.f, 0.f), glm::vec2(1), materialManager->getMaterial("backgroundmaterial"), meshManager->getMesh("quad"));
+	background->setShader(shaderManager->getShader("texture"));
+
 	// Setting startvariables
 	SetStartVariables();
 
@@ -145,7 +153,7 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 18.5f));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(LEVEL_PATH "Level2.anl", ARCHIVE_PATH "Assets2.ana");
+	levelManager->LoadLevel(LEVEL_PATH "Level1.anl", ARCHIVE_PATH "Level1.ana");
 
 	// Adding shadow
 	// flyttade upp till start functionen
@@ -172,6 +180,9 @@ void ScreenGame::Draw()
 	// Draw shadow maps
 	if (shadowManager.getUseShadows())
 		DrawShadowMaps();
+
+	// Drawing background
+	DrawObjectGUI(background, shaderManager);
 
 	// Disable Blend for DR
 	glDisable(GL_BLEND);
@@ -219,7 +230,6 @@ void ScreenGame::Draw()
 	glEnable(GL_BLEND);
 
 	//DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
-
 	// DR: Light pass
 	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
@@ -309,7 +319,7 @@ void ScreenGame::DrawShadowMaps()
 		// Set Viewport to resolution of shadow map
 		glViewport(0, 0, shadowManager.getDirectionalShadowMapList()[i]->resolution.x, shadowManager.getDirectionalShadowMapList()[i]->resolution.y);
 
-		shadowManager.getDirectionalShadowMapList()[i]->UpdateLightSpace(camera->getPosition(), glm::vec2(20, 10), 1.f, 20.f);
+		shadowManager.getDirectionalShadowMapList()[i]->UpdateLightSpace(camera->getPosition(), glm::vec2(40, 20), 1.f, 30.f);
 		// Bind depth FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, shadowManager.getDirectionalShadowMapList()[i]->shadowFBO);
 
