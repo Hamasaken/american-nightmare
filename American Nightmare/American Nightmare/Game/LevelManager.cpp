@@ -443,7 +443,7 @@ void LevelManager::LoadLevelHitboxes(std::vector<LHitbox> hitboxes)
 	for (int i = 0; i < hitboxes.size(); i++)
 	{
 		Hitbox* hitbox = new Hitbox();
-		hitbox->InitializeHitbox(world, glm::vec2(-levelFile.hitboxes[i].position[0], levelFile.hitboxes[i].position[1]), glm::vec2(levelFile.hitboxes[i].scale[0], levelFile.hitboxes[i].scale[1]), b2_staticBody);
+		hitbox->InitializeHitbox(world, glm::vec2(levelFile.hitboxes[i].position[0], levelFile.hitboxes[i].position[1]), glm::vec2(levelFile.hitboxes[i].scale[0], levelFile.hitboxes[i].scale[1]), b2_staticBody);
 		this->hitboxes.push_back(hitbox);
 	}
 }
