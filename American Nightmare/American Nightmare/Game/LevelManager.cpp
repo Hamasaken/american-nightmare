@@ -410,8 +410,8 @@ void LevelManager::LoadLevelMeshes(std::vector<LMesh> meshes)
 void LevelManager::LoadLevelHitboxes(std::vector<LHitbox> hitboxes)
 {
 	////////////////////////////////////////////////////////////
-	// Loading Hitboxes
-	////////////////////////////////////////////////////////////
+	// Loading Hitboxes										 //
+	///////////////////////////////////////////////////////////
 	for (int i = 0; i < hitboxes.size(); i++)
 	{
 		Hitbox* hitbox = new Hitbox();
@@ -423,8 +423,8 @@ void LevelManager::LoadLevelHitboxes(std::vector<LHitbox> hitboxes)
 void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 {
 	////////////////////////////////////////////////////////////
-	// Loading Lights
-	////////////////////////////////////////////////////////////
+	// Loading Lights										 //
+	//////////////////////////////////////////////////////////
 	for (int i = 0; i < lights.size(); i++)
 	{
 		ALight* light = archive.getLight(lights[i].name.data);

@@ -57,7 +57,6 @@ void MyContactListener::BeginContact(b2Contact* contact)
 	}
 
 		//Fixa Senare
-
 		Vacuum* vacuumA = dynamic_cast<Vacuum*>(bodyA);
 		Vacuum* vacuumB = dynamic_cast<Vacuum*>(bodyB);
 		if (vacuumA || vacuumB)
