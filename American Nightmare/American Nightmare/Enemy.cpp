@@ -91,12 +91,12 @@ void Enemy::Movement(b2Vec2 playerPos)
 	if (playerPos.x < hitbox->getBody()->GetPosition().x - 0.3f)
 	{
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2( -ENEMY_VEL_X, hitbox->getBody()->GetLinearVelocity().y), true );
-		directionIsRight = true;
+		directionIsRight = false;
 	}
 	else if (playerPos.x > hitbox->getBody()->GetPosition().x + 0.3f)
 	{
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2( ENEMY_VEL_X, hitbox->getBody()->GetLinearVelocity().y), true );
-		directionIsRight = false;
+		directionIsRight = true;
 	}
 
 	// Thresholds in velocity

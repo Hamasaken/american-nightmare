@@ -13,7 +13,7 @@
 
 #define ENEMY_UPDATE_DISTANCE 18
 
-#define ENEMY_MAX_VEL_X 4.25f
+#define ENEMY_MAX_VEL_X 2.25f
 #define ENEMY_MAX_VEL_Y 20.f
 
 class Enemy: public Animation
