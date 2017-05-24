@@ -59,6 +59,12 @@ bool MaterialManager::AddMaterial(std::string matName, glm::vec3 ambient, glm::v
 			materialList.push_back(tempMaterial);
 			return true;
 		}
+		else
+		{
+			tempMaterial->texture = textureList[0];
+			materialList.push_back(tempMaterial);
+			return true;
+		}
 	}
 
 	return false;
@@ -82,7 +88,7 @@ GLuint MaterialManager::loadTexture(std::string inImage)
 	sf::Image* sfImage = new sf::Image();
 	if (!sfImage->loadFromFile(inImage))
 	{
-		throw std::runtime_error("Could not load texture");
+		return 0;
 	}
 
 	if (sfImage != nullptr)
