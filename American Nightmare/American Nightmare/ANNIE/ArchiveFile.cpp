@@ -1,12 +1,18 @@
 #include "ArchiveFile.h"
 
+AMaterial::AMaterial()
+{
+	strncpy(diffuseMap.name, "none", NAME_SIZE);
+	strncpy(normalMap.name, "none", NAME_SIZE);
+	strncpy(specularMap.name, "none", NAME_SIZE);
+}
+
 
 AArchiveHeader::AArchiveHeader()
 {
 	nameSize = NAME_SIZE;
 	version = ARCHIVE_FILE_VERSION;
 
-	
 	srand(static_cast<unsigned int>(time(NULL)));
 	uid = rand() % 65036 + 500; //The 500 first uid's are reserved
 	nextID = 1; //Slot 0 is reserved

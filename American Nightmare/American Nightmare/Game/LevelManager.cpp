@@ -232,12 +232,9 @@ void LevelManager::Update(GLint deltaT)
 		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 		wasPressed = true;
 		player->decreaseNrOfProjectiles();
-		//	if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), true);
-		//	else 
-		//		
-		myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), false);
+		if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), true);
+		else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), false);
 	}
-
 
 	//Update Projectile
 	myPH->Update(deltaT, world, player->getPlayerPosAsGLM(), player->getAmmoFull());
@@ -277,7 +274,7 @@ void LevelManager::Update(GLint deltaT)
 	CheckTriggers();
 
 	//Resets variables for projectileHandler
-		this->wasPressed = isPressed;
+	this->wasPressed = isPressed;
 }
 
 void LevelManager::ActivatePopup(std::string text, GLfloat timer)
@@ -301,12 +298,6 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	LoadArchiveMaterials(archive.materials);
 	LoadArchiveMeshes(archive.meshes);
 
-/*	AArchiveHandler temp;
-	temp.readFromFile(ARCHIVE_PATH "Boll.ana");
-	LoadArchiveTextures(temp.textures);
-	LoadArchiveMaterials(temp.materials);
-	LoadArchiveMeshes(temp.meshes);
-	*/
 	////////////////////////////////////////////////////////////
 	// Loading Level
 	////////////////////////////////////////////////////////////
@@ -447,6 +438,7 @@ void LevelManager::LoadLevelHitboxes(std::vector<LHitbox> hitboxes)
 	{
 		Hitbox* hitbox = new Hitbox();
 		hitbox->InitializeHitbox(world, glm::vec2(levelFile.hitboxes[i].position[0], levelFile.hitboxes[i].position[1]), glm::vec2(levelFile.hitboxes[i].scale[0], levelFile.hitboxes[i].scale[1]), b2_staticBody);
+		hitbox->getBody()->SetTransform(b2Vec2(levelFile.hitboxes[i].position[0], levelFile.hitboxes[i].position[1]), levelFile.hitboxes[i].rotation);
 		this->hitboxes.push_back(hitbox);
 	}
 }
@@ -718,6 +710,10 @@ void LevelManager::CheckTriggers()
 				// Checks if the door have a level file
 				if (!trigger->getData().empty())
 				{
+
+			//		Stop();
+			//		Start(screenSize, screenPos, playerShader, mapShader, guiShader, materialManager, meshManager, particleManager, soundManager, camera);
+
 					// Loads new level with the current player's shader
 					LoadLevel(trigger->getData(), trigger->getData());
 				} 

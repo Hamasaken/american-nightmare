@@ -74,6 +74,8 @@ struct AMaterial
 	float opacity;
 	float shininess;
 	float reflectionFactor;
+
+	AMaterial();
 };
 
 

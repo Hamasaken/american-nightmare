@@ -2,12 +2,13 @@
 
 #include "Header.h"
 
+
 enum class ETriggerType
 {
 	door,
 	deathZone,
 	poster,
-	garbageBin, 
+	garbageBin,
 	message
 };
 
@@ -29,6 +30,11 @@ enum class EEffectType
 
 
 
+struct StringData
+{
+	uint16_t size;
+	string data;
+};
 
 struct CharData
 {
@@ -64,20 +70,22 @@ struct LHitbox
 	float scale[2];
 };
 
+
+
+
 struct LTrigger
 {
 	ETriggerType triggerType;
-	CharData data;
+	StringData data;
 
 	LHitbox hitbox;
 };
 
 
-
 struct LSpawner
 {
 	ESpawnerType spawnerType;
-	CharData data;
+	StringData data;
 
 	float position[2];
 };
@@ -85,7 +93,7 @@ struct LSpawner
 struct LEffect
 {
 	EEffectType effectType;
-	CharData data;
+	StringData data;
 
 	float position[2];
 };

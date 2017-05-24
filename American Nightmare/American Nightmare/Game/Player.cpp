@@ -42,6 +42,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	isHovering = false;
 	isDashing = false;
 	invulTime = 0.f;
+	shockwaveCooldown = 0.f;
 	contactWithEnemy = nullptr;
 
 	this->particleManager = particleManager;
@@ -85,6 +86,8 @@ void Player::Update(GLint deltaT, b2World* world)
 	}
 	if (dashCooldown < NULL)
 		hasDashed = false;
+
+	shockwaveCooldown -= deltaT;
 
 	// Getting user input
 	if (!isDead)
@@ -281,6 +284,39 @@ void Player::Hover(GLint deltaT)
 	}
 }
 
+void Player::Shockwave()
+{
+	if (shockwaveCooldown < NULL)
+	{
+		particleManager->EffectSmokeCloud(position, 14, 50, glm::vec4(1.f));
+		b2Vec2 pos;
+		float angle = 0.f;
+		b2ContactEdge* contact = vac->getBody()->GetContactList();
+		while (contact != nullptr)
+		{
+			if (contact->contact->GetFixtureA()->GetBody()->GetUserData() != this &&
+				contact->contact->GetFixtureB()->GetBody()->GetUserData() != this)
+			{
+				if (contact->contact->GetFixtureA()->GetBody()->GetUserData() == vac)
+				{
+					pos = contact->contact->GetFixtureB()->GetBody()->GetPosition();
+					angle = getAngleFromTwoPoints(glm::vec3(pos.x, pos.y, 0.f), position);
+					contact->contact->GetFixtureB()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 10000.f, sin(angle) * 10000.f), true);
+				}
+				else
+				{
+					pos = contact->contact->GetFixtureA()->GetBody()->GetPosition();
+					angle = getAngleFromTwoPoints(glm::vec3(pos.x, pos.y, 0.f), position);
+					contact->contact->GetFixtureA()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 10000.f, sin(angle) * 10000.f), true);
+				}
+			}
+			contact = contact->next;
+		}
+		power -= PLAYER_POWER_COST_SHOCKWAVE;
+		shockwaveCooldown = PLAYER_SHOCKWAVE_CD;
+	}
+}
+
 void Player::InputTesting()
 {
 	// Move in Z axis
@@ -300,7 +336,13 @@ void Player::InputTesting()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) rotation.x -= 0.1f;
 }
 
-void Player::InputMouse() { }
+void Player::InputMouse() 
+{
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle) && power >= PLAYER_POWER_COST_SHOCKWAVE)
+	{
+		Shockwave();
+	}
+}
 
 void Player::InputKeyboard(GLint deltaT)
 {

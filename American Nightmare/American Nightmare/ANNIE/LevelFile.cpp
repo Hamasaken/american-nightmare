@@ -58,9 +58,33 @@ void LLevelHandler::writeToFile(const char* path) const
 	out.write(reinterpret_cast<const char*>(meshes.data()), sizeof(LMesh) * levelHeader.nrOfMeshes);
 	out.write(reinterpret_cast<const char*>(lights.data()), sizeof(LLight) * levelHeader.nrOfLights);
 	out.write(reinterpret_cast<const char*>(hitboxes.data()), sizeof(LHitbox) * levelHeader.nrOfHitboxes);
-	out.write(reinterpret_cast<const char*>(triggers.data()), sizeof(LTrigger) * levelHeader.nrOfTriggers);
-	out.write(reinterpret_cast<const char*>(spawners.data()), sizeof(LSpawner) * levelHeader.nrOfSpawners);
-	out.write(reinterpret_cast<const char*>(effects.data()), sizeof(LEffect) * levelHeader.nrOfEffects);
+
+	//Write triggers
+	for (int i = 0; i < levelHeader.nrOfTriggers; i++)
+	{
+		out.write(reinterpret_cast<const char*>(&triggers[i].triggerType), sizeof(ETriggerType));
+		out.write(reinterpret_cast<const char*>(&triggers[i].data.size), sizeof(StringData::size));
+		out.write(reinterpret_cast<const char*>(triggers[i].data.data.data()), sizeof(char) * triggers[i].data.size);
+		out.write(reinterpret_cast<const char*>(&triggers[i].hitbox), sizeof(LHitbox));
+	}
+	
+	//Write spawners
+	for (int i = 0; i < levelHeader.nrOfSpawners; i++)
+	{
+		out.write(reinterpret_cast<const char*>(&spawners[i].spawnerType), sizeof(ESpawnerType));
+		out.write(reinterpret_cast<const char*>(&spawners[i].data.size), sizeof(StringData::size));
+		out.write(reinterpret_cast<const char*>(spawners[i].data.data.data()), sizeof(char) * spawners[i].data.size);
+		out.write(reinterpret_cast<const char*>(&spawners[i].position), sizeof(LSpawner::position));
+	}
+
+	//Write effects
+	for (int i = 0; i < levelHeader.nrOfEffects; i++)
+	{
+		out.write(reinterpret_cast<const char*>(&effects[i].effectType), sizeof(EEffectType));
+		out.write(reinterpret_cast<const char*>(&effects[i].data.size), sizeof(StringData::size));
+		out.write(reinterpret_cast<const char*>(effects[i].data.data.data()), sizeof(char) * effects[i].data.size);
+		out.write(reinterpret_cast<const char*>(&effects[i].position), sizeof(LEffect::position));
+	}
 
 	out.close(); //Close the file
 }
@@ -101,15 +125,36 @@ void LLevelHandler::readFromFile(const char* path)
 
 		//Read triggers
 		triggers.resize(levelHeader.nrOfTriggers);
-		in.read((reinterpret_cast<char*>(triggers.data())), sizeof(LTrigger) * levelHeader.nrOfTriggers);
+		for (int i = 0; i < levelHeader.nrOfTriggers; i++)
+		{
+			in.read(reinterpret_cast<char*>(&triggers[i].triggerType), sizeof(ETriggerType));
+			in.read(reinterpret_cast<char*>(&triggers[i].data.size), sizeof(StringData::size));
+			triggers[i].data.data.resize(triggers[i].data.size);
+			in.read(reinterpret_cast<char*>(&triggers[i].data.data[0]), sizeof(char) * triggers[i].data.size);
+			in.read(reinterpret_cast<char*>(&triggers[i].hitbox), sizeof(LHitbox));
+		}
 
 		//Read spawners
 		spawners.resize(levelHeader.nrOfSpawners);
-		in.read((reinterpret_cast<char*>(spawners.data())), sizeof(LSpawner) * levelHeader.nrOfSpawners);
+		for (int i = 0; i < levelHeader.nrOfSpawners; i++)
+		{
+			in.read(reinterpret_cast<char*>(&spawners[i].spawnerType), sizeof(ESpawnerType));
+			in.read(reinterpret_cast<char*>(&spawners[i].data.size), sizeof(StringData::size));
+			spawners[i].data.data.resize(spawners[i].data.size);
+			in.read(reinterpret_cast<char*>(&spawners[i].data.data[0]), sizeof(char) * spawners[i].data.size);
+			in.read(reinterpret_cast<char*>(&spawners[i].position), sizeof(LSpawner::position));
+		}
 
 		//Read effects
 		effects.resize(levelHeader.nrOfEffects);
-		in.read((reinterpret_cast<char*>(effects.data())), sizeof(LEffect) * levelHeader.nrOfEffects);
+		for (int i = 0; i < levelHeader.nrOfEffects; i++)
+		{
+			in.read(reinterpret_cast<char*>(&effects[i].effectType), sizeof(EEffectType));
+			in.read(reinterpret_cast<char*>(&effects[i].data.size), sizeof(StringData::size));
+			effects[i].data.data.resize(effects[i].data.size);
+			in.read(reinterpret_cast<char*>(&effects[i].data.data[0]), sizeof(char) * effects[i].data.size);
+			in.read(reinterpret_cast<char*>(&effects[i].position), sizeof(LEffect::position));
+		}
 	}
 }
 

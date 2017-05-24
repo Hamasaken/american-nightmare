@@ -36,6 +36,8 @@
 #define PLAYER_POWER_COST_HOVER 60.f
 #define PLAYER_POWER_COST_DASH 50.f
 #define PLAYER_INVULNERABILITY_TIME 2.f
+#define PLAYER_SHOCKWAVE_CD 500.f
+#define PLAYER_POWER_COST_SHOCKWAVE 50.f
 
 // XBOX CONTROLLER
 #define CONTROLLER_ON true
@@ -72,6 +74,7 @@ private:
 	void Jump();						//< Jumping
 	void Dash(sf::Keyboard::Key inKey);	//< Dash ability
 	void Hover(GLint deltaT);			//< Hover ability
+	void Shockwave();
 
 	//< Input from user
 	void InputTesting();					//< Rotation & Scale on Player model
@@ -83,6 +86,7 @@ private:
 	float hp;					//< The amount of hp the player have
 	GLfloat power;				//< Players resource for dashing and hovering etc
 	GLfloat dashCooldown;		//< Dash ability cooldown
+	GLfloat shockwaveCooldown;	//< Dash ability cooldown
 	bool hasJumped;				//< If the player have jumped or not
 	bool hasDashed;				//< If the player have dashed or not
 	bool isDashing;				//< If the player is currently dashing

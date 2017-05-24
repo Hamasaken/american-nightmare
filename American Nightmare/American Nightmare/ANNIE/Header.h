@@ -11,9 +11,9 @@
 #include <vector>
 
 
-#define NAME_SIZE 50
-#define ARCHIVE_FILE_VERSION 106
-#define LEVEL_FILE_VERSION 102
+#define NAME_SIZE 40
+#define ARCHIVE_FILE_VERSION 107
+#define LEVEL_FILE_VERSION 103
 
 
 #define ANNIE_HITBOX "ANNIE_HITBOX"

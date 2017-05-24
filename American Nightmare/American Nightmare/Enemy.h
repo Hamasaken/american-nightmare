@@ -6,10 +6,10 @@
 #define ENEMY_SIZE_X 2.f
 #define ENEMY_SIZE_Y 2.f
 #define ENEMY_SIZE_Z 1.f
-#define ENEMY_MASS 20.f
+#define ENEMY_MASS 70.f
 #define ENEMY_FRICTION 0.25f
-#define ENEMY_VEL_X 2500.f  //20000.f
-#define ENEMY_VEL_Y 600.f
+#define ENEMY_VEL_X 4000.f  //20000.f
+#define ENEMY_VEL_Y 2000.f
 
 #define ENEMY_UPDATE_DISTANCE 18
 

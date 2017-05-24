@@ -78,7 +78,7 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 	case ESpawnerType::trash:
 		{
 			Entity* e = new Entity();
-			e->Start(board.mesh, board.material, world);
+			e->Start(board.mesh, board.material, world, glm::vec2(position.x, position.y), glm::vec3(1, 1, 1), b2BodyType::b2_dynamicBody);
 			e->setShader(board.shader);
 			e->setPosition(glm::vec3(position.x, -position.y, 0));
 			entityList.push_back(e);
