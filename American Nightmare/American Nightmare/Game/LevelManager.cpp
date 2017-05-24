@@ -516,7 +516,7 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		this->triggers.push_back(outTrigger);
 
 		// Adding a constant smoke on trigger for testing
-		particleManager->EffectConstantSmoke(glm::vec3(outTrigger->getPosition(), 0.f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.3f));
+//		particleManager->EffectConstantSmoke(glm::vec3(outTrigger->getPosition(), 0.f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.3f));
 	}
 
 }
@@ -529,16 +529,17 @@ void LevelManager::LoadLevelEffects(std::vector<LEffect> effects)
 	for (int i = 0; i < effects.size(); i++)
 	{
 		LEffect effect = effects[i];
+
 		switch (effect.effectType)
 		{
 		case EEffectType::smoke: 
-			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]), materialManager->getTextureID("smoketexture"));
+			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 25);
 			break;
 		case EEffectType::dust:
-			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.40f, 0.3f, 0.3f, 0.7f));
+			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 25, glm::vec4(0.40f, 0.3f, 0.3f, 0.7f));
 			break;
 		case EEffectType::steam:
-			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], effect.position[2]), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.3f, 0.30f, 0.5f, 0.7f));
+			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 25, glm::vec4(0.3f, 0.30f, 0.5f, 0.7f));
 			break;
 		}
 	}
