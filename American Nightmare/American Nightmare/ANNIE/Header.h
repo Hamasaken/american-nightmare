@@ -11,9 +11,9 @@
 #include <vector>
 
 
-#define NAME_SIZE 30
-#define ARCHIVE_FILE_VERSION 100
-#define LEVEL_FILE_VERSION 101
+#define NAME_SIZE 40
+#define ARCHIVE_FILE_VERSION 106
+#define LEVEL_FILE_VERSION 102
 
 
 #define ANNIE_HITBOX "ANNIE_HITBOX"
@@ -21,6 +21,11 @@
 #define ANNIE_SPAWNPOINT "ANNIE_SPAWNPOINT"
 #define ANNIE_SPAWNER "ANNIE_SPAWNER"
 #define ANNIE_EFFECT "ANNIE_EFFECT"
+
+
+#define DATA_PATH "Data/"
+#define TEXTURE_PATH "Data/Graphics/Textures/"
+#define TEXTURE_FOLDER "Textures/"
 
 
 using namespace std;

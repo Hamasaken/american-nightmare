@@ -166,7 +166,7 @@ public:
 	~AArchiveHandler();
 
 	
-	uint16_t getUniqueID();
+	const uint16_t getUniqueID();
 
 	AMesh* getMesh(const uint16_t uid);
 	AMesh* getMesh(const char* name);

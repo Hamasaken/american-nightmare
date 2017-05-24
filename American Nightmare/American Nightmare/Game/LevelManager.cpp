@@ -326,7 +326,7 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	LoadLevelEffects(levelFile.effects);
 
 	// Setting start position
-	glm::vec3 start = glm::vec3(arrayToVec2(levelFile.levelHeader.playerSpawn), 0);
+	glm::vec3 start = glm::vec3(levelFile.levelHeader.playerSpawn[0], levelFile.levelHeader.playerSpawn[1] - 5, 0);
 	player->setPosition(start);
 	player->setStartingPosition(start);
 
@@ -440,7 +440,7 @@ void LevelManager::LoadLevelHitboxes(std::vector<LHitbox> hitboxes)
 	for (int i = 0; i < hitboxes.size(); i++)
 	{
 		Hitbox* hitbox = new Hitbox();
-		hitbox->InitializeHitbox(world, glm::vec2(levelFile.hitboxes[i].position[0], levelFile.hitboxes[i].position[1]), glm::vec2(levelFile.hitboxes[i].scale[0], levelFile.hitboxes[i].scale[1]), b2_staticBody);
+		hitbox->InitializeHitbox(world, glm::vec2(-levelFile.hitboxes[i].position[0], levelFile.hitboxes[i].position[1]), glm::vec2(levelFile.hitboxes[i].scale[0], levelFile.hitboxes[i].scale[1]), b2_staticBody);
 		this->hitboxes.push_back(hitbox);
 	}
 }
@@ -488,6 +488,11 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		case ETriggerType::poster:		outTriggerType = Trigger::POSTER; break;
 		case ETriggerType::deathZone:	outTriggerType = Trigger::DEATH; break;
 		case ETriggerType::garbageBin:	outTriggerType = Trigger::EFFECT; break;
+		case ETriggerType::message:		
+			outTriggerType = Trigger::POPUP; 
+			outTrigger->setData(trigger.data.data);
+			
+			break;
 		case ETriggerType::door:		
 			outTriggerType = Trigger::POSTER; 
 			Poster* poster = new Poster();
@@ -684,7 +689,7 @@ void LevelManager::CheckTriggers()
 {
 	for (int i = 0; i < triggers.size(); i++)
 	{
-		bool remove = false;
+		bool remove = true;
 		Trigger* trigger = triggers[i];
 		if (trigger->getIsTriggered())
 		{
@@ -715,7 +720,6 @@ void LevelManager::CheckTriggers()
 			// Poster - Unlockables
 			////////////////////////////////////////////////////////////
 			case Trigger::POSTER:
-				remove = true;
 				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 50, glm::vec4(0.25, 1, 0.25, 1));
 				soundManager->playModifiedSFX(SoundManager::SFX::SFX_POWERUP, 50, 0.05f);
 				UnlockPoster(2);

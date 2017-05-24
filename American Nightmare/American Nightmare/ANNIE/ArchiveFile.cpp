@@ -1,11 +1,13 @@
 #include "ArchiveFile.h"
 
+
 AArchiveHeader::AArchiveHeader()
 {
 	nameSize = NAME_SIZE;
 	version = ARCHIVE_FILE_VERSION;
 
-	srand(time(NULL));
+	
+	srand(static_cast<unsigned int>(time(NULL)));
 	uid = rand() % 65036 + 500; //The 500 first uid's are reserved
 	nextID = 1; //Slot 0 is reserved
 
@@ -17,18 +19,26 @@ AArchiveHeader::AArchiveHeader()
 	nrOfTextures = 0;
 }
 
-AArchiveHandler::AArchiveHandler() { }
+AArchiveHandler::AArchiveHandler()
+{
+}
 
-AArchiveHandler::~AArchiveHandler() { }
+AArchiveHandler::~AArchiveHandler()
+{
+}
 
-uint16_t AArchiveHandler::getUniqueID()
+
+
+
+const uint16_t AArchiveHandler::getUniqueID()
 {
 	return archiveHeader.nextID++;
 }
 
+
 AMesh* AArchiveHandler::getMesh(const uint16_t uid)
 {
-	for (int i = 0; i < meshes.size(); i++)
+	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
 		if (meshes[i].identifier.uid == uid)
 		{
@@ -39,7 +49,7 @@ AMesh* AArchiveHandler::getMesh(const uint16_t uid)
 }
 AMesh* AArchiveHandler::getMesh(const char* name)
 {
-	for (int i = 0; i < meshes.size(); i++)
+	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
 		if (strcmp(meshes[i].identifier.name, name) == 0)
 		{
@@ -52,7 +62,7 @@ AMesh* AArchiveHandler::getMesh(const char* name)
 
 ATexture* AArchiveHandler::getTexture(const uint16_t uid)
 {
-	for (int i = 0; i < textures.size(); i++)
+	for (unsigned int i = 0; i < textures.size(); i++)
 	{
 		if (textures[i].identifier.uid == uid)
 		{
@@ -63,7 +73,7 @@ ATexture* AArchiveHandler::getTexture(const uint16_t uid)
 }
 ATexture* AArchiveHandler::getTexture(const char* name)
 {
-	for (int i = 0; i < textures.size(); i++)
+	for (unsigned int i = 0; i < textures.size(); i++)
 	{
 		if (strcmp(textures[i].identifier.name, name) == 0)
 		{
@@ -76,7 +86,7 @@ ATexture* AArchiveHandler::getTexture(const char* name)
 
 AMaterial* AArchiveHandler::getMaterial(const uint16_t uid)
 {
-	for (int i = 0; i < materials.size(); i++)
+	for (unsigned int i = 0; i < materials.size(); i++)
 	{
 		if (materials[i].identifier.uid == uid)
 		{
@@ -87,7 +97,7 @@ AMaterial* AArchiveHandler::getMaterial(const uint16_t uid)
 }
 AMaterial* AArchiveHandler::getMaterial(const char* name)
 {
-	for (int i = 0; i < materials.size(); i++)
+	for (unsigned int i = 0; i < materials.size(); i++)
 	{
 		if (strcmp(materials[i].identifier.name, name) == 0)
 		{
@@ -100,7 +110,7 @@ AMaterial* AArchiveHandler::getMaterial(const char* name)
 
 ACamera* AArchiveHandler::getCamera(const uint16_t uid)
 {
-	for (int i = 0; i < cameras.size(); i++)
+	for (unsigned int i = 0; i < cameras.size(); i++)
 	{
 		if (cameras[i].identifier.uid == uid)
 		{
@@ -111,7 +121,7 @@ ACamera* AArchiveHandler::getCamera(const uint16_t uid)
 }
 ACamera* AArchiveHandler::getCamera(const char* name)
 {
-	for (int i = 0; i < cameras.size(); i++)
+	for (unsigned int i = 0; i < cameras.size(); i++)
 	{
 		if (strcmp(cameras[i].identifier.name, name) == 0)
 		{
@@ -124,7 +134,7 @@ ACamera* AArchiveHandler::getCamera(const char* name)
 
 ALight* AArchiveHandler::getLight(const uint16_t uid)
 {
-	for (int i = 0; i < lights.size(); i++)
+	for (unsigned int i = 0; i < lights.size(); i++)
 	{
 		if (lights[i].identifier.uid == uid)
 		{
@@ -135,7 +145,7 @@ ALight* AArchiveHandler::getLight(const uint16_t uid)
 }
 ALight* AArchiveHandler::getLight(const char* name)
 {
-	for (int i = 0; i < lights.size(); i++)
+	for (unsigned int i = 0; i < lights.size(); i++)
 	{
 		if (strcmp(lights[i].identifier.name, name) == 0)
 		{
@@ -144,6 +154,9 @@ ALight* AArchiveHandler::getLight(const char* name)
 	}
 	return nullptr;
 }
+
+
+
 
 void AArchiveHandler::emptyArchive()
 {
@@ -230,7 +243,7 @@ void AArchiveHandler::readFromFile(const char* path)
 
 			//Read all verticies
 			tempMesh.vertices.resize(tempMesh.nrOfVerticies);
-			in.read(reinterpret_cast<char*>(&tempMesh.vertices[0]), sizeof(AVertex) * tempMesh.nrOfVerticies);
+			in.read(reinterpret_cast<char*>(tempMesh.vertices.data()), sizeof(AVertex) * tempMesh.nrOfVerticies);
 
 			meshes.push_back(tempMesh);
 		}
@@ -263,6 +276,7 @@ void AArchiveHandler::readFromFile(const char* path)
 		in.read(reinterpret_cast<char*>(lights.data()), sizeof(ALight) * archiveHeader.nrOfLights);
 	}
 }
+
 
 
 
