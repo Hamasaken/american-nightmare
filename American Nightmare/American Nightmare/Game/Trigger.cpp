@@ -5,7 +5,7 @@ bool Trigger::InitializeTrigger(TriggerType type, b2World * world, glm::vec2 pos
 	this->triggerType = type;
 	this->data = data;
 
-	if (!InitializeHitbox(world, position, size, b2BodyType::b2_kinematicBody, b2Shape::e_polygon, true, 0, 0, false, isSensor))
+	if (!InitializeHitbox(world, position, size, b2BodyType::b2_kinematicBody, b2Shape::e_polygon, true, 0, 0, false, true))
 		return false;
 
 	return true;

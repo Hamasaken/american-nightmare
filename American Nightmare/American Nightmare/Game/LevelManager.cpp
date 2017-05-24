@@ -692,7 +692,7 @@ void LevelManager::CheckTriggers()
 {
 	for (int i = 0; i < triggers.size(); i++)
 	{
-		bool remove = true;
+		bool remove = false;
 		Trigger* trigger = triggers[i];
 		if (trigger->getIsTriggered())
 		{
@@ -716,6 +716,7 @@ void LevelManager::CheckTriggers()
 			// Popup - For popups with text/pictures, anything
 			////////////////////////////////////////////////////////////
 			case Trigger::POPUP:
+				remove = true;
 				ActivatePopup(trigger->getData(), 3000.f);
 				break;
 
@@ -723,6 +724,7 @@ void LevelManager::CheckTriggers()
 			// Poster - Unlockables
 			////////////////////////////////////////////////////////////
 			case Trigger::POSTER:
+				remove = true;
 				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 50, glm::vec4(0.25, 1, 0.25, 1));
 				soundManager->playModifiedSFX(SoundManager::SFX::SFX_POWERUP, 50, 0.05f);
 				UnlockPoster(2);
