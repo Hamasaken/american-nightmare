@@ -264,7 +264,7 @@ void LevelManager::Update(GLint deltaT)
 	{
 		glm::vec4 color = popup->getColor();
 		float currentAlpha = color.a;
-		currentAlpha += (popupAlpha - currentAlpha) * 0.035f;
+		currentAlpha += (popupAlpha - currentAlpha) * 0.1f;
 		popup->setColor(glm::vec4(currentAlpha));
 		popupTimer -= deltaT;
 		if (popupTimer < NULL)	popupAlpha = -0.05f;
@@ -737,7 +737,7 @@ void LevelManager::CheckTriggers()
 				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 50, glm::vec4(0.25, 1, 0.25, 1));
 				soundManager->playModifiedSFX(SoundManager::SFX::SFX_POWERUP, 50, 0.05f);
 				UnlockPoster(2);
-				ActivatePopup("You unlocked a poster!", 2000.f);
+				ActivatePopup("You unlocked a poster!", 3000.f);
 				break;
 
 			////////////////////////////////////////////////////////////
