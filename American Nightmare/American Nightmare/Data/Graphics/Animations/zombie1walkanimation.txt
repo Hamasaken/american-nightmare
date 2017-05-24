@@ -1,0 +1,4 @@
+name zombie1walk
+tf 34
+dim 5 7
+fps 32
