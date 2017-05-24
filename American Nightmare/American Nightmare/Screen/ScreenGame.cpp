@@ -180,9 +180,8 @@ void ScreenGame::Draw()
 	if (shadowManager.getUseShadows())
 		DrawShadowMaps();
 
-
+	// Drawing background
 	DrawObjectGUI(background, shaderManager);
-
 
 	// Disable Blend for DR
 	glDisable(GL_BLEND);
