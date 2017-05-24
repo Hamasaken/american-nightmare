@@ -223,18 +223,19 @@ void LevelManager::Update(GLint deltaT)
 	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
 
 	//For projectiles
-	isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-
+	if (!player->getIsDead())
+		isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 	if (isPressed && !wasPressed && player->getCanShoot() == true)
 	{
 		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 		wasPressed = true;
 		player->decreaseNrOfProjectiles();
-	//	if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), true);
-	//	else 
-	//		
-			myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), false);
+		//	if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), true);
+		//	else 
+		//		
+		myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), false);
 	}
+
 
 	//Update Projectile
 	myPH->Update(deltaT, world, player->getPlayerPosAsGLM());
@@ -488,16 +489,9 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		Trigger::TriggerType outTriggerType;
 		switch (trigger.triggerType)
 		{
-		case ETriggerType::poster:		outTriggerType = Trigger::POSTER; break;
-		case ETriggerType::deathZone:	outTriggerType = Trigger::DEATH; break;
-		case ETriggerType::garbageBin:	outTriggerType = Trigger::EFFECT; break;
-		case ETriggerType::message:		
-			outTriggerType = Trigger::POPUP; 
-			outTrigger->setData(trigger.data.data);
-			
-			break;
-		case ETriggerType::door:		
-			outTriggerType = Trigger::POSTER; 
+		case ETriggerType::poster:		
+		{	
+			outTriggerType = Trigger::POSTER;
 			Poster* poster = new Poster();
 			poster->setShader(mapShader);
 			poster->Start(meshManager->getMesh("quad"), materialManager->getMaterial("postermaterial_2"));
@@ -506,6 +500,20 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 			poster->setPosition(glm::vec3(hitbox.position[0], hitbox.position[1] + hitbox.scale[1] / 2, 0));
 			map.push_back(poster);
 			outTrigger->setMapPart(poster);
+		}
+			break;
+		case ETriggerType::deathZone:	
+			outTriggerType = Trigger::DEATH; 
+			break;
+		case ETriggerType::garbageBin:	
+			outTriggerType = Trigger::EFFECT; 
+			break;
+		case ETriggerType::message:		
+			outTriggerType = Trigger::POPUP; 
+			outTrigger->setData(trigger.data.data);
+			break;
+		case ETriggerType::door:	
+			outTriggerType = Trigger::DOOR;
 			break; 
 		}
 
