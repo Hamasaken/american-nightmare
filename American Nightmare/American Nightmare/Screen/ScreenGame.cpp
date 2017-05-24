@@ -52,6 +52,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (materialManager == nullptr) return false;
 
 	// Loading materials
+	materialManager->AddMaterial("missingmaterial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "missingtexture", TEXTURE_PATH "MissingTexture.png");
 	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.75, 0.75, 0.75), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	materialManager->AddMaterial("GUI_bar_blue", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.7), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.jpg");
 	materialManager->AddMaterial("GUI_bar_red", glm::vec3(0.1f), glm::vec3(0.7, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");

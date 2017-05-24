@@ -423,7 +423,10 @@ void LevelManager::LoadLevelMeshes(std::vector<LMesh> meshes)
 			printf("Loading Object with mesh: %s\n", mesh->name.data);
 		else printf("Could not find mesh: %s\n", mesh->name.data);
 
-		object->Start(meshManager->getMesh(mesh->name.data), materialManager->getMaterial(mesh->name.data));
+		const MaterialManager::Material* material = materialManager->getMaterial(mesh->name.data);
+		if (material == nullptr) material = materialManager->getMaterial("missingmaterial");
+
+		object->Start(meshManager->getMesh(mesh->name.data), material);
 		object->setScale(glm::vec3(mesh->scale[0], mesh->scale[1], mesh->scale[2]));
 		object->setRotation(glm::vec3(glm::radians(mesh->rotation[0]), glm::radians(mesh->rotation[1]), glm::radians(mesh->rotation[2])));
 		object->setPosition(glm::vec3(mesh->position[0], mesh->position[1], mesh->position[2]));
