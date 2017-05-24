@@ -152,7 +152,7 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 18.5f));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(LEVEL_PATH "Level2.anl", ARCHIVE_PATH "Assets2.ana");
+	levelManager->LoadLevel(LEVEL_PATH "Level1.anl", ARCHIVE_PATH "Level1.ana");
 
 	// Adding shadow
 	// flyttade upp till start functionen
