@@ -38,7 +38,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			{
 				player->addNrOfProjectiles();
 				myProjectile->setmarked(true);
-				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 30, 0.15f);
+				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 0.15f);
 			}
 		}
 	}
@@ -67,13 +67,11 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			Projectile* projectileB = dynamic_cast<Projectile*>(bodyB);
 			if (projectileA)
 			{
-				printf("vacuum finde Projectiler\n");
 				projectileA->setIsInVacRange(true);
 				
 			}
 			else if(projectileB)
 			{
-				printf("vacuum finde Projectiler\n");
 				projectileB->setIsInVacRange(true);
 			}
 		}
@@ -107,13 +105,10 @@ void MyContactListener::EndContact(b2Contact* contact)
 		Projectile* projectileB = dynamic_cast<Projectile*>(bodyB);
 		if (projectileA)
 		{
-			printf("vacuum End contact\n");
 			projectileA->setIsInVacRange(false);
-
 		}
 		else if (projectileB)
 		{
-			printf("vacuum End contact\n");
 			projectileB->setIsInVacRange(false);
 		}
 	}

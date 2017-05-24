@@ -23,7 +23,7 @@ public:
 	Enemy(const Enemy& other);
 	~Enemy();
 
-	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world);
+	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world, bool isFlying);
 	void Update(GLint deltaT, b2Vec2 playerPos, bool playerAlive);
 
 	Entity myEntity;
@@ -31,12 +31,15 @@ public:
 	// \brief Gets input from user and moves accordingly
 	////////////////////////////////////////////////////////////
 	void Movement(b2Vec2 playerPos);
+	void MovementForFlyingZombie(b2Vec2 playerPos); //Test for flying Zombie
 	int hp;
 	float getDamage();
 	void TakeDamage(float dmg);
 	bool isDead;
 	bool getIsDead()const;
 
+	//Test for flying Zombie
+	bool isFlying;
 private:
 	float damage;
 	b2Body* getBody();

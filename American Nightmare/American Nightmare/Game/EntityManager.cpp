@@ -68,7 +68,7 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 	case ESpawnerType::flying1:
 		{
 			Enemy* e = new Enemy();
-			e->Start(board.mesh, board.material, world);
+			e->Start(board.mesh, board.material, world, false); //Test for flying zombie false == normal zombie/ true == flying zombie
 			e->setShader(board.shader);
 			e->AddAnimation(board.textureID, board.normalMap, board.animationFile);
 			enemyList.push_back(e);
