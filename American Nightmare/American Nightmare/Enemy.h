@@ -9,7 +9,7 @@
 #define ENEMY_MASS 20.f
 #define ENEMY_FRICTION 0.25f
 #define ENEMY_VEL_X 2500.f  //20000.f
-#define ENEMY_VEL_Y 50000.f
+#define ENEMY_VEL_Y 1500.f
 
 #define ENEMY_UPDATE_DISTANCE 18
 

@@ -80,13 +80,13 @@ void Enemy::Movement(b2Vec2 playerPos)
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y)) rotation.z += 2.f;
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) rotation.z -= 2.f;
 
-	/*
+	
 	// Jumps if stuck
 	if (hitbox->getBody()->GetLinearVelocity().x == 0.f && hitbox->getBody()->GetLinearVelocity().y == 0.f)
 	{
 		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -ENEMY_VEL_Y), true);
 	}
-	*/
+	
 
 	if (playerPos.x < hitbox->getBody()->GetPosition().x - 0.3f)
 	{
