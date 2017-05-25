@@ -32,6 +32,7 @@ protected:
 	bool changeActiveAnimation(GLuint index);
 	void updateAnimation(GLfloat deltaT);
 	bool directionIsRight;
+	bool isLooping;
 private:
 
 	// Holds information about a single animation (for exmaple a jumping animation)
