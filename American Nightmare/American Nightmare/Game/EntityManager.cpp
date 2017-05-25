@@ -104,9 +104,8 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 		{
 			e->Update(deltaT, b2Vec2(playerPosition.x, playerPosition.y), playerDead);
 
-			soundManager->playSFX((rand() % 2) ?
-				SoundManager::SFX_ZOMBIE_1 :
-				SoundManager::SFX_ZOMBIE_2);
+			SoundManager::SFX sfx = (rand() % 2) ? SoundManager::SFX_ZOMBIE_1 : SoundManager::SFX_ZOMBIE_2;
+			soundManager->playModifiedSFX(sfx, 10, 0.05f);
 		}
 
 		if (e->getIsDead())

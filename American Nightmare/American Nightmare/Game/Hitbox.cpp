@@ -19,7 +19,7 @@ bool Hitbox::InitializeHitbox(b2World* world)
 	AddBodyToWorld(world, glm::vec2(1.f, 1.f), b2_dynamicBody, false, false);
 
 	// Creating shape for body
-	ModifyRectangleShape(glm::vec2(1.f, 1.f), b2Shape::e_polygon, 0.f, 10.f, false);
+	ModifyRectangleShape(glm::vec2(1.f, 1.f), b2Shape::e_polygon, 2.f, 10.f, false);
 
 	return true;
 }

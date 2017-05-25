@@ -37,14 +37,18 @@ public:
 		SFX_DASH,
 		SFX_JUMP,
 		SFX_HURT, 
-		SFX_HOVER
+		SFX_HOVER, 
+		SFX_LASER, 
+		SFX_DEATH
 	};
 
 	// Put song names here, and then load them in the loadSongs functions
 	enum SONG
 	{
+		FOX_BOOGIE,
 		URANIUM_FEVER,
-		GOOD_ROCKIN_TONIGHT
+		GOOD_ROCKIN_TONIGHT, 
+		JAZZY_INTERLUDE
 	};
 
 	SoundManager();

@@ -89,7 +89,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	if (quadTree == nullptr) return false;
 	if (!quadTree->Start(screenSize)) return false;
 
-	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), mapShader, screenPos, screenSize);
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, soundManager, particleManager, player->getPlayerPosAsGLM(), mapShader, screenPos, screenSize);
 	this->wasPressed = false;
 	this->isPressed = false;
 
@@ -229,7 +229,7 @@ void LevelManager::Update(GLint deltaT)
 		isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 	if (isPressed && !wasPressed && player->getCanShoot() == true)
 	{
-		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
+		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 10, 0.1f);
 		wasPressed = true;
 		player->decreaseNrOfProjectiles();
 		if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), true);
@@ -325,8 +325,8 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	player->setStartingPosition(start);
 
 	// Music
-	soundManager->playSong(SoundManager::SONG::URANIUM_FEVER);
-	soundManager->playSFX(SoundManager::SFX::SFX_BIRDS);
+	soundManager->playSong(SoundManager::SONG::JAZZY_INTERLUDE);
+	soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BIRDS, 100.f, 0);
 	
 	// Dust effect
 	particleManager->EffectLightDust(glm::vec3(0, 10, 0));

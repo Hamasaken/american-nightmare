@@ -22,7 +22,8 @@ public:
 	////////////////////////////////////////////////////////////
 	void EffectExplosionLights(glm::vec3 position, 
 		int amount = LIGHT_DEFAULT_AMOUNT,
-		glm::vec4 color = LIGHT_DEFAULT_COLOR);
+		glm::vec4 color = LIGHT_DEFAULT_COLOR,
+		float size = LIGHT_SIZE);
 
 	////////////////////////////////////////////////////////////
 	// \brief Creates a blood splatter effect
@@ -35,7 +36,8 @@ public:
 	void EffectBloodSplatter(glm::vec3 position, float angle, 
 		float strength = BLOOD_DEFAULT_STRENGTH,
 		int amount = BLOOD_DEFAULT_AMOUNT,
-		glm::vec4 color = BLOOD_DEFAULT_COLOR);
+		glm::vec4 color = BLOOD_DEFAULT_COLOR,
+		float size = BLOOD_SIZE);
 
 	////////////////////////////////////////////////////////////
 	// \brief Creates an explosion with given texture
@@ -46,7 +48,20 @@ public:
 	////////////////////////////////////////////////////////////
 	void EffectSmokeCloud(glm::vec3 position, GLuint texture,
 		int amount = TEXTURE_DEFAULT_AMOUNT,
-		glm::vec4 color = TEXTURE_DEFAULT_COLOR);
+		glm::vec4 color = TEXTURE_DEFAULT_COLOR,
+		float size = TEXTURE_SIZE);
+
+	////////////////////////////////////////////////////////////
+	// \brief Creates an explosion with blood
+	// \param position The position of explosion
+	// \optional amount The amount of spawned blood particles
+	// \optional color The color of the most blood
+	//  - \note Only works if you've used the setDefaultTextures() func
+	////////////////////////////////////////////////////////////
+	void EffectBloodCloud(glm::vec3 position,
+		int amount = TEXTURE_DEFAULT_AMOUNT,
+		glm::vec4 color = TEXTURE_DEFAULT_COLOR,
+		float size = TEXTURE_SIZE);
 
 	////////////////////////////////////////////////////////////
 	// \brief Creates an explosion of nuts and bolts with given texture (gravity is really high)
@@ -55,7 +70,8 @@ public:
 	// \optional amount The amount of spawned blood particles
 	////////////////////////////////////////////////////////////
 	void EffectNutsAndBolts(glm::vec3 position, GLuint texture,
-		int amount = TEXTURE_DEFAULT_AMOUNT);
+		int amount = TEXTURE_DEFAULT_AMOUNT,
+		float size = NUTS_SIZE);
 
 	////////////////////////////////////////////////////////////
 	// \brief Creates an explosion with given texture
@@ -66,7 +82,8 @@ public:
 	////////////////////////////////////////////////////////////
 	void EffectConstantSmoke(glm::vec3 position, GLuint texture,
 		int amount = TEXTURE_DEFAULT_AMOUNT,
-		glm::vec4 color = TEXTURE_DEFAULT_COLOR);
+		glm::vec4 color = TEXTURE_DEFAULT_COLOR,
+		float size = TEXTURE_SIZE);
 
 	////////////////////////////////////////////////////////////
 	// \brief Creates an explosion with given texture
@@ -78,7 +95,8 @@ public:
 	void EffectLightDust(glm::vec3 center = LIGHT_DUST_DEFAULT_CENTER, 
 		glm::vec3 dimensions = LIGHT_DUST_DEFAULT_DIMENSIONS,
 		int amount = LIGHT_DUST_DEFAULT_AMOUNT,
-		glm::vec4 color = LIGHT_DUST_DEFAULT_COLOR);
+		glm::vec4 color = LIGHT_DUST_DEFAULT_COLOR,
+		float size = LIGHT_DUST_SIZE);
 
 	////////////////////////////////////////////////////////////
 	// \brief Creates an smoke signal which always is active until level switch
@@ -90,9 +108,11 @@ public:
 	////////////////////////////////////////////////////////////
 	void EffectSmokeSignal(glm::vec3 position, GLuint texture, float angle,
 		int amount = SIGNAL_DEFAULT_AMOUNT,
-		glm::vec4 color = TEXTURE_DEFAULT_COLOR);
+		glm::vec4 color = TEXTURE_DEFAULT_COLOR,
+		float size = SIGNAL_DEFAULT_SIZE);
 
 	void ShaderPair(GLuint shader, ParticleType type);
+	void setDefaultTextures(GLuint smokeTexture, GLuint bloodTexture);
 	GLuint getShaderFromPair(ParticleType type);
 	void Update(GLfloat deltaT);
 
@@ -100,6 +120,11 @@ public:
 
 private:
 	GLuint shader;
+
+	// temps, if you leave texture as 0 it will default to either
+	GLuint smokeTexture;
+	GLuint bloodTexture;
+
 	std::vector<std::pair<ParticleType, GLuint>> shaderPairs;
 	std::vector<Vertex> vertices;
 	std::vector<ParticleEmitter*> emitters;

@@ -107,11 +107,11 @@ void ScreenOptions::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 15));
 
 	// Adding some ambient smoke on options
-	particleManager->EffectConstantSmoke(glm::vec3(2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.7));
-	particleManager->EffectConstantSmoke(glm::vec3(1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.5));
-	particleManager->EffectConstantSmoke(glm::vec3(0, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.4));
-	particleManager->EffectConstantSmoke(glm::vec3(-1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.6));
-	particleManager->EffectConstantSmoke(glm::vec3(-2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.8));
+	particleManager->EffectConstantSmoke(glm::vec3(2, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.7));
+	particleManager->EffectConstantSmoke(glm::vec3(1, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.5));
+	particleManager->EffectConstantSmoke(glm::vec3(0, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.4));
+	particleManager->EffectConstantSmoke(glm::vec3(-1, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.6));
+	particleManager->EffectConstantSmoke(glm::vec3(-2, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.8));
 
 	// Dust effect
 	particleManager->EffectLightDust(glm::vec3(0.f, 3, 0.f), glm::vec3(8, 8, 2), 50, glm::vec4(0.33f));
@@ -132,16 +132,15 @@ void ScreenOptions::Update(GLint deltaT)
 		GUIManager::Action action = buttons[0][i].second;
 		if (btn->getPressed())
 		{
+			soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 			switch (action)
 			{ 
 			case GUIManager::Action::STARTMENY:			
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); 
 				*state = State::StartMeny;	
 				break;
 			case GUIManager::Action::OPTION_MUTE:		
 			{
 				soundManager->mute();
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 				{
 					glm::vec4 clr = btn->getText()->getColor();
 					if (clr.r == 0.f)
@@ -159,7 +158,6 @@ void ScreenOptions::Update(GLint deltaT)
 			}
 				break;
 			case GUIManager::Action::OPTION_SHADOWS:
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 				{
 					glm::vec4 clr = btn->getText()->getColor();
 					if (clr.r == 0.f)
@@ -177,15 +175,12 @@ void ScreenOptions::Update(GLint deltaT)
 				printf("Not fully done yet.. :D\n");
 				break;
 			case GUIManager::Action::OPTION_REBIND:
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 				guiManager->setCenter(glm::vec2(-2, 0));
 				break;
 			case GUIManager::Action::CANCEL:
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 				guiManager->setCenter(glm::vec2(0, 0));
 				break;
 			case GUIManager::Action::OPTION_QUALITY:
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 				{
 					glm::vec4 clr = btn->getText()->getColor();
 					if (clr.r == 0.f)
