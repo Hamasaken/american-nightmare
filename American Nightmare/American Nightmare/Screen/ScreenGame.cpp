@@ -335,7 +335,7 @@ void ScreenGame::DrawShadowMaps()
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 
-		glCullFace(GL_FRONT);
+		//glCullFace(GL_FRONT);
 		
 
 		float playerX = levelManager->getPlayer()->getPosition().x;
@@ -344,7 +344,7 @@ void ScreenGame::DrawShadowMaps()
 		for (Object* object : levelManager->getMap())
 				DrawObjectDirShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 	
-		glCullFace(GL_BACK);
+		//glCullFace(GL_BACK);
 
 		// Drawing movable entities
 		for (Entity* entity : *levelManager->getEntityManager()->getEntityList())

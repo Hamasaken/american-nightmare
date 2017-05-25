@@ -330,7 +330,7 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	particleManager->EffectLightDust(glm::vec3(0, 10, 0));
 
 	// Temp directional light for shadows
-	lightManager->AddDirectionalLight(glm::vec4(5, 20, 10, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
+	lightManager->AddDirectionalLight(glm::vec4(5, 20, 10, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 
@@ -415,8 +415,7 @@ void LevelManager::LoadLevelMeshes(std::vector<LMesh> meshes)
 		if (meshManager->getMesh(mesh->name.data) != nullptr)
 			printf("Loading Object with mesh: %s\n", mesh->name.data);
 		else printf("Could not find mesh: %s\n", mesh->name.data);
-
-		const MaterialManager::Material* material = materialManager->getMaterial(mesh->name.data);
+		const MaterialManager::Material* material = materialManager->getMaterial(archive.getMesh(mesh->name.data)->material.name);
 		if (material == nullptr) material = materialManager->getMaterial("missingmaterial");
 
 		object->Start(meshManager->getMesh(mesh->name.data), material);

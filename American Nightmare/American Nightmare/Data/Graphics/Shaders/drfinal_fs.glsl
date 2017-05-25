@@ -161,6 +161,7 @@ void main () {
 		return;
 	}
 
+	result += 0.1f * bufferDif;
 	result += bufferAmb;
 
 	float shadow = 0;
