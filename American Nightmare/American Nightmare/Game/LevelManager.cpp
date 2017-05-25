@@ -89,7 +89,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	if (quadTree == nullptr) return false;
 	if (!quadTree->Start(screenSize)) return false;
 
-	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, soundManager, player->getPlayerPosAsGLM(), mapShader, screenPos, screenSize);
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, soundManager, particleManager, player->getPlayerPosAsGLM(), mapShader, screenPos, screenSize);
 	this->wasPressed = false;
 	this->isPressed = false;
 

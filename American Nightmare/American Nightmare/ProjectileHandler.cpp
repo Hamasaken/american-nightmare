@@ -20,10 +20,11 @@ void ProjectileHandler::initiateProjectiles(const MeshManager::Mesh* mesh, const
 
 ProjectileHandler::ProjectileHandler() {}
 
-ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, SoundManager* soundManager, glm::vec2 pos, GLuint shader, glm::vec2 screenPos, glm::vec2 screenSize)
+ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, SoundManager* soundManager, ParticleManager* particleManager, glm::vec2 pos, GLuint shader, glm::vec2 screenPos, glm::vec2 screenSize)
 {
 	this->initiateProjectiles(mesh, material, world, pos, shader);
 
+	this->particleManager = particleManager;
 	this->soundManager = soundManager;
 	this->screenSize = screenSize;
 	this->screenPos = screenPos;
@@ -38,7 +39,10 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position,
 	deleteProjects(world);
 	for (int i = 0; i < this->myProjtileVector.size(); i++)
 	{
-		myProjtileVector[i]->Update(deltaT, world, glm::vec3(position.x, position.y, 0.5f));
+		Projectile* p = myProjtileVector[i];
+		if (abs(p->getHitbox()->getBody()->GetLinearVelocity().x) > 5.f && rand() % 2 == 1)
+			particleManager->EffectSmokeCloud(p->getPosition(), 0, 1);
+		p->Update(deltaT, world, glm::vec3(position.x, position.y, 0.5f));
 	}
 	
 	if (!ammoFull)

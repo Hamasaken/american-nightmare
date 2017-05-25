@@ -4,6 +4,7 @@
 #include "Projectile.h"
 #include "Accessories.h"
 #include "SoundManager.h"
+#include "Game\Particle\ParticleManager.h"
 #include <SDL.h>
 
 class ProjectileHandler
@@ -15,6 +16,7 @@ private:
 	glm::vec2 screenSize;
 	glm::vec2 screenPos;
 	SoundManager* soundManager;
+	ParticleManager* particleManager;
 	MeshManager::Mesh* myMesh;
 	MaterialManager::Material* myMaterial;
 
@@ -22,7 +24,7 @@ private:
 
 public:
 	//ProjectileHandler(b2World* world, GLuint shader, int CAP = 10);
-	ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, SoundManager* soundManager, glm::vec2 pos, GLuint shader, glm::vec2 screenPos, glm::vec2 screenSize);
+	ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, SoundManager* soundManager, ParticleManager* particleManager, glm::vec2 pos, GLuint shader, glm::vec2 screenPos, glm::vec2 screenSize);
 	ProjectileHandler();
 	~ProjectileHandler();
 
