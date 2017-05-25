@@ -330,7 +330,7 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	particleManager->EffectLightDust(glm::vec3(0, 10, 0));
 
 	// Temp directional light for shadows
-	lightManager->AddDirectionalLight(glm::vec4(5, 20, 10, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
+	//lightManager->AddDirectionalLight(glm::vec4(5, 20, 10, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 
@@ -452,12 +452,12 @@ void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 		LLight l = lights[i];
 		if (light->lightType == ELightType::eDirectional)
 		{
-			// pekar i negativ z
-			// gör en rotation matrix
+			glm::vec3 dir = { 0, 0, -1 };
+			dir = glm::rotateX(dir, glm::radians(l.rotation[0]));
+			dir = glm::rotateY(dir, glm::radians(l.rotation[1]));
+			dir = glm::rotateZ(dir, glm::radians(l.rotation[2]));
 
-	//		glm::rotate()
-
-	//		lightManager->AddDirectionalLight(glm::vec4(1.f), glm::vec4(arrayToVec3(l.rotation), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.01f);
+			lightManager->AddDirectionalLight(glm::vec4(1.f), glm::vec4(dir, 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.01f);
 		}
 		else
 		{
