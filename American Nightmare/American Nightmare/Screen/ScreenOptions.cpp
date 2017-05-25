@@ -132,16 +132,15 @@ void ScreenOptions::Update(GLint deltaT)
 		GUIManager::Action action = buttons[0][i].second;
 		if (btn->getPressed())
 		{
+			soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 			switch (action)
 			{ 
 			case GUIManager::Action::STARTMENY:			
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); 
 				*state = State::StartMeny;	
 				break;
 			case GUIManager::Action::OPTION_MUTE:		
 			{
 				soundManager->mute();
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 				{
 					glm::vec4 clr = btn->getText()->getColor();
 					if (clr.r == 0.f)
@@ -159,7 +158,6 @@ void ScreenOptions::Update(GLint deltaT)
 			}
 				break;
 			case GUIManager::Action::OPTION_SHADOWS:
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 				{
 					glm::vec4 clr = btn->getText()->getColor();
 					if (clr.r == 0.f)
@@ -177,15 +175,12 @@ void ScreenOptions::Update(GLint deltaT)
 				printf("Not fully done yet.. :D\n");
 				break;
 			case GUIManager::Action::OPTION_REBIND:
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 				guiManager->setCenter(glm::vec2(-2, 0));
 				break;
 			case GUIManager::Action::CANCEL:
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 				guiManager->setCenter(glm::vec2(0, 0));
 				break;
 			case GUIManager::Action::OPTION_QUALITY:
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 				{
 					glm::vec4 clr = btn->getText()->getColor();
 					if (clr.r == 0.f)

@@ -131,6 +131,7 @@ void Player::Reset()
 {
 	// Going to save point
 	hitbox->getBody()->SetTransform(b2Vec2(startPosition.x, startPosition.y), 0);
+	hitbox->getBody()->SetAwake(true);
 
 	// Resetting variables
 	hp = PLAYER_HP;
@@ -166,7 +167,10 @@ void Player::TakeDamage(float dmg)
 			particleManager->EffectBloodSplatter(position, getAngleFromTwoPoints(this->getCenter(), contactWithEnemy->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f));
 		}
 
+		this->getBody()->SetLinearVelocity({ 0, 0 });
+		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_DEATH, 50, 0.f);
 		particleManager->EffectExplosionLights(position, 50, glm::vec4(0.4f, 0.05f, 0.025f, 1.f));
+		particleManager->EffectBloodCloud(position, 10, glm::vec4(1.f), randBetweenF(1.f, 1.75f));
 		contactWithEnemy = nullptr;
 	}
 }
@@ -295,8 +299,9 @@ void Player::Shockwave()
 {
 	if (shockwaveCooldown < NULL)
 	{
-		soundManager->playSFXOverDrive(SoundManager::SFX_SHOCKWAVE, 100, 0.025);
-		particleManager->EffectSmokeCloud(position, 14, 50, glm::vec4(1.f));
+		soundManager->playSFXOverDrive(SoundManager::SFX_SHOCKWAVE, 100);
+		particleManager->EffectSmokeCloud(position, 0, 20, glm::vec4(0.15f), 5.f);
+		particleManager->EffectExplosionLights(position, 40, glm::vec4(0.15), 1.5f);
 		b2Vec2 pos;
 		float angle = 0.f;
 		b2ContactEdge* contact = vac->getBody()->GetContactList();

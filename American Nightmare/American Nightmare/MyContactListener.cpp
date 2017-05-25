@@ -53,7 +53,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			{
 				player->addNrOfProjectiles();
 				projectile->setmarked(true);
-				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 30, 0.15f);
+				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 40, 0.15f);
 			}
 			float angle = getAngleFromTwoPoints(projectile->getPosition(), player->getPosition());
 			if (angle < 0 && angle > -3.14) player->setHasJumped(false);
@@ -105,10 +105,14 @@ void MyContactListener::BeginContact(b2Contact* contact)
 				if (abs(vec.x) > 15.f || abs(vec.y) > 15.f)
 				{
 					particleManager->EffectBloodSplatter(enemy->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
-					soundManager->playSFX(SoundManager::SFX_HIT);
+					soundManager->playSFXOverDrive(SoundManager::SFX_HIT, 40, 0.1f);
 					enemy->TakeDamage(enemy->getDamage());
 					if (enemy->getIsDead())
-						particleManager->EffectExplosionLights(enemy->getPosition(), 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
+					{
+						soundManager->playSFXOverDrive(SoundManager::SFX_DEATH, 30, 0.0f);
+						particleManager->EffectExplosionLights(enemy->getPosition(), 15, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
+						particleManager->EffectBloodCloud(enemy->getPosition(), 10, glm::vec4(1.f), randBetweenF(1.f, 1.75f));
+					}
 				}
 			}
 		}
@@ -131,75 +135,6 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			}
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/*
-	Player* player = nullptr;
-	Enemy* enemy = nullptr;
-	Projectile* projectileA = nullptr;
-	Projectile* projectileB = nullptr;
-
-	player = dynamic_cast<Player*>(bodyA);
-	if (!player)
-	{
-		player = dynamic_cast<Player*>(bodyB);
-		if (player)
-		{
-			Object* temp = bodyA;
-			bodyA = bodyB;
-			bodyB = temp;
-		}
-	} 
-
-	if (player && !player->getIsDead())
-	{
-		enemy = dynamic_cast<Enemy*>(bodyB);
-		projectileA = dynamic_cast<Projectile*>(bodyA);
-		if (enemy)
-		{
-			player->setContactWithEnemy(enemy);
-		}
-		else if (projectileA)
-		{
-			if (player->addPlayerProjectiles() == true && sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)
-			{
-				player->addNrOfProjectiles();
-				projectileA->setmarked(true);
-				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 30, 0.15f);
-			}
-		}
-		else
-		{
-			Vacuum* vac = dynamic_cast<Vacuum*>(bodyB);
-			if (!vac)
-			{
-				Entity* ent = dynamic_cast<Entity*>(bodyB);
-				if (!ent)
-				{
-					Hitbox* hitbox = static_cast<Hitbox*>(contact->GetFixtureB()->GetBody()->GetUserData());
-					if (hitbox)
-					{
-						float angle = getAngleFromTwoPoints(glm::vec3(hitbox->getPosition(), 0), player->getPosition());
-						printf("%f\n", angle);
-						if (angle < 0 && angle > -3.14) player->setHasJumped(false);
-					}
-				}
-			}
-		}
-	}
-	*/
-
 }
 
 

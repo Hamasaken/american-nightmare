@@ -108,7 +108,7 @@ void ScreenStart::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 15));
 
 	// Setting meny music
-	soundManager->playSong(SoundManager::SONG::GOOD_ROCKIN_TONIGHT);
+	soundManager->playSong(SoundManager::SONG::FOX_BOOGIE);
 }
 
 void ScreenStart::Update(GLint deltaT)
@@ -126,7 +126,7 @@ void ScreenStart::Update(GLint deltaT)
 	{
 		if (button.first->getPressed())
 		{
-			soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
+			soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 			switch (button.second)
 			{
 			case GUIManager::Action::PLAY:		

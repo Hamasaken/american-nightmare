@@ -157,10 +157,10 @@ void ScreenPosters::Update(GLint deltaT)
 		GUIManager::Action action = buttons[0][i].second;
 		if (btn->getPressed())
 		{
+			soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 			switch (action)
 			{
 				case GUIManager::Action::OK:
-					soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 					soundManager->playModifiedSFX(SoundManager::SFX::SFX_RtoL, 70, 0.05f);
 					timerOnExplosion = EXPLOSION_TIMER;
 					shouldExplode = true;
@@ -168,10 +168,9 @@ void ScreenPosters::Update(GLint deltaT)
 					posterListGUI->getButton(0)->setMaterial(btn->getMaterial());
 					break;
 				case GUIManager::Action::CANCEL:
-					soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); 
-					posterListGUI->setCenter(glm::vec2(0, 0)); break;
+					posterListGUI->setCenter(glm::vec2(0, 0)); 
+					break;
 				case GUIManager::Action::STARTMENY: 
-					soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 					*state = State::StartMeny; 
 					break; 
 			}

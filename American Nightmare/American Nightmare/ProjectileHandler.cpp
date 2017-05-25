@@ -20,10 +20,11 @@ void ProjectileHandler::initiateProjectiles(const MeshManager::Mesh* mesh, const
 
 ProjectileHandler::ProjectileHandler() {}
 
-ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, GLuint shader, glm::vec2 screenPos, glm::vec2 screenSize)
+ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, SoundManager* soundManager, glm::vec2 pos, GLuint shader, glm::vec2 screenPos, glm::vec2 screenSize)
 {
 	this->initiateProjectiles(mesh, material, world, pos, shader);
 
+	this->soundManager = soundManager;
 	this->screenSize = screenSize;
 	this->screenPos = screenPos;
 }
@@ -42,12 +43,17 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position,
 	
 	if (!ammoFull)
 	{
-		for (int i = 0; i < this->myProjtileVector.size(); i++)
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 		{
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && this->myProjtileVector[i]->getIsInVacRange() == true)
+			soundManager->playSFXOverDrive(SoundManager::SFX_HOVER, 15, 0.25f);
+			for (int i = 0; i < this->myProjtileVector.size(); i++)
 			{
-				float angle = getAngleFromTwoPoints(glm::vec3(position, 0), this->myProjtileVector[i]->getPosition());
-				this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 500.f, -sin(angle) * 500.f), true);
+				if (this->myProjtileVector[i]->getIsInVacRange() == true)
+				{
+					soundManager->playSFXOverDrive(SoundManager::SFX_HOVER, 40, 0.25f);
+					float angle = getAngleFromTwoPoints(glm::vec3(position, 0), this->myProjtileVector[i]->getPosition());
+					this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 500.f, -sin(angle) * 500.f), true);
+				}
 			}
 		}
 	}
