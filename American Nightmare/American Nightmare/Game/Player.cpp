@@ -15,13 +15,20 @@ void Player::initiateCursor()
 	SDL_SetCursor(cursor);
 }
 
+void Player::initiateProjectile()
+{
+	this->nrOfProjectiles = 10;
+	this->fireDirection = { 0.0f, 0.0f };
+}
+
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
-	this->nrOfProjectiles = 100;
-
 	//Sets the cursor for the player
 	initiateCursor();
+
+	//Sets variables for projectile/gun
+	initiateProjectile();
 
 	// Starting entity variables (including hitbox)
 	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_MASS, PLAYER_FRICTION);
@@ -92,10 +99,11 @@ void Player::Update(GLint deltaT, b2World* world)
 	// Getting user input
 	if (!isDead)
 	{
-		InputKeyboard(deltaT);
+		//InputKeyboard(deltaT);
 		InputMouse();
-		InputTesting();
-		if (CONTROLLER_ON) InputController(deltaT);
+		InputTesting(); 
+		InputController(deltaT);
+		//if (CONTROLLER_ON) InputController(deltaT);
 	}
 
 	// Recharging power meter
@@ -387,6 +395,14 @@ void Player::InputController(GLint deltaT)
 		if (sf::Joystick::isButtonPressed(0, BTN_RT))
 			printf("RT.\n");
 
+
+		//This will set the firedirection to the direction of the right-thumbstick
+		this->fireDirection = glm::vec2(sf::Joystick::getAxisPosition(0, sf::Joystick::U) / 100.0f, sf::Joystick::getAxisPosition(0, sf::Joystick::R) / 100.0f);
+
+		//cout << "X: " << fireDirection.x << ", Y: " << fireDirection.y << endl;
+
+		
+		
 		float leftAxis = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X) / 100.f;
 		if (leftAxis < -0.1f || leftAxis > 0.1f) // Controller offset
 		{
@@ -490,7 +506,7 @@ void Player::setStartingPosition(glm::vec3 position)
 
 bool Player::addPlayerProjectiles()
 {
-	if (this->nrOfProjectiles == this->CAP)
+	if (this->nrOfProjectiles >= this->CAP)
 	{
 		return false;
 	}
@@ -520,4 +536,9 @@ void Player::addNrOfProjectiles()
 void Player::decreaseNrOfProjectiles()
 {
 	this->nrOfProjectiles--;
+}
+
+glm::vec2 Player::getFireDirection()const
+{
+	return this->fireDirection;
 }

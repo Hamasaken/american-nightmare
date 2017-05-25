@@ -58,10 +58,12 @@ class Player : public Animation
 {
 private:
 	enum Direction { LEFT, RIGHT, STOPPED };
-	
+
 	//Variables for handling projectile/Weapon
 	int nrOfProjectiles;
-	const int CAP = 10;
+	const int CAP = 25;
+	glm::vec2 fireDirection;
+	void initiateProjectile();
 
 	//variable & function for cursor
 	SDL_Cursor* cursor;
@@ -143,5 +145,7 @@ public:
 
 	void addNrOfProjectiles();
 	void decreaseNrOfProjectiles();
+
+	glm::vec2 getFireDirection()const;
 };
 #endif // !PLAYER_H
