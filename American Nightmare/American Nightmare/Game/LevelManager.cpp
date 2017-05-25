@@ -452,7 +452,12 @@ void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 		LLight l = lights[i];
 		if (light->lightType == ELightType::eDirectional)
 		{
-			lightManager->AddDirectionalLight(glm::vec4(1.f), glm::vec4(arrayToVec3(l.rotation), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.1f);
+			// pekar i negativ z
+			// gör en rotation matrix
+
+	//		glm::rotate()
+
+	//		lightManager->AddDirectionalLight(glm::vec4(1.f), glm::vec4(arrayToVec3(l.rotation), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.01f);
 		}
 		else
 		{
