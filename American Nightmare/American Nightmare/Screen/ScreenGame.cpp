@@ -194,20 +194,24 @@ void ScreenGame::Draw()
 	glBindFramebuffer(GL_FRAMEBUFFER, drRendering.getDRFBO());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	float playerX = levelManager->getPlayer()->getPosition().x;
+
 	// Drawing map
 	for (Object* object : levelManager->getMap())
-		DrawObjectGeometryPass(object, shaderManager);
+			DrawObjectGeometryPass(object, shaderManager);
 
 	// Drawing movable entities
 	for (Entity* entity : *levelManager->getEntityManager()->getEntityList())
-		DrawObjectGeometryPass(entity, shaderManager);
+		if (abs(entity->getPosition().x - playerX) < 35.f)
+			DrawObjectGeometryPass(entity, shaderManager);
 
 	////TEST
 	//for(Projectile* proj : levelManager->getProj())
 	//	DrawObjectGeometryPass(proj, shaderManager);
 
 	for (Projectile* projectiles : levelManager->getProjectiles())
-		DrawObjectGeometryPass(projectiles, shaderManager);
+		if (abs(projectiles->getPosition().x - playerX) < 35.f)
+			DrawObjectGeometryPass(projectiles, shaderManager);
 
 	//TEST
 	//for(Projectile* proj : levelManager->getProj())
@@ -293,7 +297,7 @@ void ScreenGame::Draw()
 	DrawObjectGUI(levelManager->getPopup(), shaderManager);
 
 	// Temp shadow map debug
-	/*if (shadowManager.getUseShadows())
+	if (shadowManager.getUseShadows())
 	{
 		shaderManager->setShader("debug");
 
@@ -310,7 +314,7 @@ void ScreenGame::Draw()
 		glDisable(GL_DEPTH_TEST);
 		drRendering.getFinalRenderQuad()->Draw();
 		glEnable(GL_DEPTH_TEST);
-	}*/
+	}
 
 }
 
@@ -322,7 +326,7 @@ void ScreenGame::DrawShadowMaps()
 		// Set Viewport to resolution of shadow map
 		glViewport(0, 0, shadowManager.getDirectionalShadowMapList()[i]->resolution.x, shadowManager.getDirectionalShadowMapList()[i]->resolution.y);
 
-		shadowManager.getDirectionalShadowMapList()[i]->UpdateLightSpace(camera->getPosition(), glm::vec2(40, 20), 1.f, 30.f);
+		shadowManager.getDirectionalShadowMapList()[i]->UpdateLightSpace(camera->getPosition(), glm::vec2(40, 20), -2.f, 30.f);
 		// Bind depth FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, shadowManager.getDirectionalShadowMapList()[i]->shadowFBO);
 
@@ -333,18 +337,23 @@ void ScreenGame::DrawShadowMaps()
 
 		glCullFace(GL_FRONT);
 		
+
+		float playerX = levelManager->getPlayer()->getPosition().x;
+
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
-			DrawObjectDirShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+				DrawObjectDirShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 	
 		glCullFace(GL_BACK);
 
 		// Drawing movable entities
 		for (Entity* entity : *levelManager->getEntityManager()->getEntityList())
-			DrawObjectDirShadowMap(entity, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+			if (abs(entity->getPosition().x - playerX) < 35.f)
+				DrawObjectDirShadowMap(entity, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
 		for (Projectile* projectiles : levelManager->getProjectiles())
-			DrawObjectDirShadowMap(projectiles, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+			if (abs(projectiles->getPosition().x - playerX) < 35.f)
+				DrawObjectDirShadowMap(projectiles, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
 		// Set shader for transparent objects
 		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());

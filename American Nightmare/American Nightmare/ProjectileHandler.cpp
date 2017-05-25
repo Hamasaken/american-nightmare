@@ -42,6 +42,17 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position,
 		Projectile* p = myProjtileVector[i];
 		if (abs(p->getHitbox()->getBody()->GetLinearVelocity().x) > 5.f && rand() % 2 == 1)
 			particleManager->EffectSmokeCloud(p->getPosition(), 0, 1);
+
+		float dist = abs(p->getHitbox()->getBody()->GetPosition().x - position.x);
+		b2Body* body = p->getHitbox()->getBody();
+		if (!body->IsAwake())
+		{
+			if (dist < 20.f)
+				body->SetAwake(true);
+		}
+		else if (dist >= 20.f)
+			body->SetAwake(false);
+
 		p->Update(deltaT, world, glm::vec3(position.x, position.y, 0.5f));
 	}
 	
