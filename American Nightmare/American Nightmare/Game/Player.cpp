@@ -238,7 +238,7 @@ void Player::Jump()
 {
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
 
-	if (!hasJumped)
+	if (!hasJumped && vel.y > -0.5f)
 	{
 		soundManager->stopSFX(SoundManager::SFX_STEPS);
 		soundManager->playSFXOverDrive(SoundManager::SFX_JUMP, 80.f);
