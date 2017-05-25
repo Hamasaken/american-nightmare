@@ -183,55 +183,40 @@ bool Player::getIsDead()
 void Player::Walk(Direction dir)
 {
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
-	if (!hasJumped)
+	if (hasJumped)
 	{
+		soundManager->stopSFX(SoundManager::SFX_STEPS);
 		switch (dir)
 		{
 		case LEFT:
-			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
-			if (vel.x > -PLAYER_MAX_VEL_X)
-			{
-				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
-				directionIsRight = true;
-			}
+			hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
+			directionIsRight = true;
 			break;
 		case RIGHT:
-			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
-			if (vel.x < PLAYER_MAX_VEL_X)
-			{
-				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
-				directionIsRight = false;
-			}
-			break;
-		case STOPPED:
-			soundManager->stopSFX(SoundManager::SFX_STEPS);
-			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+			hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
+			directionIsRight = false;
 			break;
 		}
+		vel.x = hitbox->getBody()->GetLinearVelocity().x;
+		hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
 	}
 	else
 	{
 		switch (dir)
 		{
 		case LEFT:
-			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
-			if (vel.x > -PLAYER_MAX_VEL_X)
-			{
-				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X * 0.35f, 0), true);
-				directionIsRight = true;
-			}
+			hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
+			directionIsRight = true;
+			soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 			break;
 		case RIGHT:
-			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
-			if (vel.x < PLAYER_MAX_VEL_X)
-			{
-				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X * 0.35f, 0), true);
-				directionIsRight = false;
-			}
+			hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
+			directionIsRight = false;
+			soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 			break;
 		case STOPPED:
 			soundManager->stopSFX(SoundManager::SFX_STEPS);
-			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+			hitbox->getBody()->SetLinearVelocity(b2Vec2(0, vel.y));
 			break;
 		}
 	}
@@ -267,10 +252,12 @@ void Player::Dash(sf::Keyboard::Key inKey)
 		float angle;
 		if (inKey == key_left)
 			angle = -glm::pi<float>() * 0.5f;
-		else
+		else if (inKey == key_right)
 			angle = glm::pi<float>() * 0.5f;
+		else if (inKey == key_jump)
+			angle = glm::pi<float>();
 
-		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(sin(angle) * PLAYER_DASH_VEL, cos(angle) * PLAYER_DASH_VEL), true);
+		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(sin(angle) * PLAYER_DASH_VEL, (cos(angle) * PLAYER_DASH_VEL) * 0.25), true);
 	}
 }
 
@@ -373,7 +360,11 @@ void Player::InputKeyboard(GLint deltaT)
 	}
 	else	Walk(STOPPED);
 
-	if (sf::Keyboard::isKeyPressed(key_jump)) Jump();
+	if (sf::Keyboard::isKeyPressed(key_jump)) 
+	{
+		Jump();
+		if (sf::Keyboard::isKeyPressed(key_dash) && power >= PLAYER_POWER_COST_DASH) Dash(key_jump);
+	}
 	if (sf::Keyboard::isKeyPressed(key_hover) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
 	else isHovering = false;
 }
