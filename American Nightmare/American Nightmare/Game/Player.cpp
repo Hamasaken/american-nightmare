@@ -300,10 +300,10 @@ void Player::Shockwave()
 	if (shockwaveCooldown < NULL)
 	{
 		soundManager->playSFXOverDrive(SoundManager::SFX_SHOCKWAVE, 100);
-		particleManager->EffectSmokeCloud(position + glm::vec3(0, 0, 1), 0, 10, glm::vec4(0.55f), 5.f);
-		particleManager->EffectSmokeCloud(position + glm::vec3(0, 0, 1), 0, 10, glm::vec4(0.20f), 3.f);
-		particleManager->EffectExplosionLights(position, 12, glm::vec4(0.85f), 2.f);
-		particleManager->EffectExplosionLights(position, 12, glm::vec4(0.25), 1.f);
+		particleManager->EffectSmokeCloud(position, 0, 5, glm::vec4(0.85f), 3.f);
+		particleManager->EffectSmokeCloud(position, 0, 5, glm::vec4(0.35f), 2.5f);
+		particleManager->EffectExplosionLights(position, 12, glm::vec4(0.45), 1.5f);
+		particleManager->EffectExplosionLights(position, 12, glm::vec4(0.25), 0.90f);
 		b2Vec2 pos;
 		float angle = 0.f;
 		b2ContactEdge* contact = vac->getBody()->GetContactList();
