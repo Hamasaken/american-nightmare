@@ -75,7 +75,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 
 	entityManager = new EntityManager();
 	if (entityManager == nullptr) return false;
-	if (!entityManager->Start(world, screenSize)) return false;
+	if (!entityManager->Start(world, soundManager, screenSize)) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::zombie1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::zombie2, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::skater1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt")) return false;
@@ -326,6 +326,7 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 
 	// Music
 	soundManager->playSong(SoundManager::SONG::URANIUM_FEVER);
+	soundManager->playSFX(SoundManager::SFX::SFX_BIRDS);
 	
 	// Dust effect
 	particleManager->EffectLightDust(glm::vec3(0, 10, 0));

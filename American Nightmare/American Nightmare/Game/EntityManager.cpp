@@ -6,9 +6,10 @@ EntityManager::EntityManager(const EntityManager & other) { }
 
 EntityManager::~EntityManager() { }
 
-bool EntityManager::Start(b2World* world, glm::vec2 screenSize)
+bool EntityManager::Start(b2World* world, SoundManager* soundManager, glm::vec2 screenSize)
 {
 	this->world = world;
+	this->soundManager = soundManager;
 	this->screenSize = screenSize;
 
 	return true;
@@ -97,7 +98,17 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 	for (int i = 0; i < enemyList.size(); i++)
 	{
 		Enemy* e = enemyList[i];
-		e->Update(deltaT, b2Vec2(playerPosition.x, playerPosition.y), playerDead);
+
+		// Check if enemy is on screen
+		if (std::abs(playerPosition.x - e->getPosition().x) < ENEMY_UPDATE_DISTANCE)
+		{
+			e->Update(deltaT, b2Vec2(playerPosition.x, playerPosition.y), playerDead);
+
+			soundManager->playSFX((rand() % 2) ?
+				SoundManager::SFX_ZOMBIE_1 :
+				SoundManager::SFX_ZOMBIE_2);
+		}
+
 		if (e->getIsDead())
 		{
 			world->DestroyBody(e->getHitbox()->getBody());

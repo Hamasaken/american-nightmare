@@ -71,7 +71,8 @@ void Player::Update(GLint deltaT, b2World* world)
 		invulTime = PLAYER_INVULNERABILITY_TIME;
 		camera->screenShake(500.f, 0.5f);
 		particleManager->EffectBloodSplatter(position, getAngleFromTwoPoints(contactWithEnemy->getCenter(), this->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f)); // temp blood effect
-		soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
+		soundManager->playSFX(SoundManager::SFX_HIT);
+		soundManager->playSFXOverDrive(SoundManager::SFX_HURT, 50.f);
 		TakeDamage(contactWithEnemy->getDamage());
 	}
 
@@ -101,6 +102,8 @@ void Player::Update(GLint deltaT, b2World* world)
 	// Recharging power meter
 	if (!isHovering)
 	{
+		soundManager->stopSFX(SoundManager::SFX_HOVER);
+
 		power += deltaT * 0.001f * PLAYER_POWER_RECHARGE;
 
 		if (power > PLAYER_POWER_MAX)
@@ -117,8 +120,8 @@ void Player::Update(GLint deltaT, b2World* world)
 	// Updating animation texture
 	updateAnimation(deltaT);
 
+	// Updating vac
 	this->vac->Update(this->getBody()->GetPosition(), deltaT);
-
 
 	// Correcting texture to hitbox
 	Entity::Update(deltaT);
@@ -238,6 +241,7 @@ void Player::Jump()
 	if (!hasJumped)
 	{
 		soundManager->stopSFX(SoundManager::SFX_STEPS);
+		soundManager->playSFXOverDrive(SoundManager::SFX_JUMP, 80.f);
 		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
 		vel.y = hitbox->getBody()->GetLinearVelocity().y;
 		hasJumped = true;
@@ -249,6 +253,7 @@ void Player::Dash(sf::Keyboard::Key inKey)
 {
 	if (!hasDashed)
 	{
+		soundManager->playSFXOverDrive(SoundManager::SFX_DASH, 50.f);
 		power -= PLAYER_POWER_COST_DASH;
 		isDashing = true;
 		hasDashed = true;
@@ -269,6 +274,8 @@ void Player::Hover(GLint deltaT)
 {
 	static float yPos;
 
+	soundManager->playModifiedSFX(SoundManager::SFX_HOVER, 30, 0.01);
+
 	if (isHovering)
 	{
 		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
@@ -288,6 +295,7 @@ void Player::Shockwave()
 {
 	if (shockwaveCooldown < NULL)
 	{
+		soundManager->playSFXOverDrive(SoundManager::SFX_SHOCKWAVE, 100, 0.025);
 		particleManager->EffectSmokeCloud(position, 14, 50, glm::vec4(1.f));
 		b2Vec2 pos;
 		float angle = 0.f;
@@ -301,13 +309,13 @@ void Player::Shockwave()
 				{
 					pos = contact->contact->GetFixtureB()->GetBody()->GetPosition();
 					angle = getAngleFromTwoPoints(glm::vec3(pos.x, pos.y, 0.f), position);
-					contact->contact->GetFixtureB()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 10000.f, sin(angle) * 10000.f), true);
+					contact->contact->GetFixtureB()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * PLAYER_SHOCKWAVE_POWER, sin(angle) * PLAYER_SHOCKWAVE_POWER), true);
 				}
 				else
 				{
 					pos = contact->contact->GetFixtureA()->GetBody()->GetPosition();
 					angle = getAngleFromTwoPoints(glm::vec3(pos.x, pos.y, 0.f), position);
-					contact->contact->GetFixtureA()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 10000.f, sin(angle) * 10000.f), true);
+					contact->contact->GetFixtureA()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * PLAYER_SHOCKWAVE_POWER, sin(angle) * PLAYER_SHOCKWAVE_POWER), true);
 				}
 			}
 			contact = contact->next;

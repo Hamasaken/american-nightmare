@@ -42,6 +42,14 @@ void SoundManager::loadSFXs()
 	sfx[SFX_SUCTION] = loadSFX(pathToFolder + "sfx_suction.wav");
 	sfx[SFX_FIRE] = loadSFX(pathToFolder + "sfx_fire.ogg");
 	sfx[SFX_STEPS] = loadSFX(pathToFolder + "sfx_footsteps.wav");
+	sfx[SFX_BIRDS] = loadSFX(pathToFolder + "sfx_birds.ogg");
+	sfx[SFX_SHOCKWAVE] = loadSFX(pathToFolder + "sfx_shockwave.wav");
+	sfx[SFX_ZOMBIE_1] = loadSFX(pathToFolder + "sfx_zombie_1.wav");
+	sfx[SFX_ZOMBIE_2] = loadSFX(pathToFolder + "sfx_zombie_2.wav");
+	sfx[SFX_DASH] = loadSFX(pathToFolder + "sfx_dash.wav");
+	sfx[SFX_JUMP] = loadSFX(pathToFolder + "sfx_jump.wav");
+	sfx[SFX_HURT] = loadSFX(pathToFolder + "sfx_hurt.ogg");
+	sfx[SFX_HOVER] = loadSFX(pathToFolder + "sfx_hover.wav");
 
 	// Setting every sfx at deicided volume
 	for (sf::Sound& s : sfx)
