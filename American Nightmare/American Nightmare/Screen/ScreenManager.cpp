@@ -1,5 +1,7 @@
 #include "ScreenManager.h"
 
+std::vector<uint16_t> unlockedPosters;
+
 ScreenManager::ScreenManager()
 {
 	// Setting every screen as nullptrs
@@ -20,6 +22,13 @@ bool ScreenManager::Start(glm::vec2 screenSize, glm::vec2 screenPosition, HWND h
 	this->hwnd = hwnd;
 	this->screenSize = screenSize;
 	this->screenPosition = screenPosition;
+
+	// Checking to see how many unlocked posters we have
+	unlockedPosters.resize(10);
+	ifstream in("Data/savedata.fu", ios::binary);
+	if (in.is_open())
+		in.read(reinterpret_cast<char*>(unlockedPosters.data()), sizeof(uint16_t) * 10);
+	in.close();
 
 	// Setting start screen
 	currentState = State(START_STATE);

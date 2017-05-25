@@ -137,7 +137,7 @@ private:
 	GLboolean popupActive;
 
 	// Unlocked posters
-	std::vector<uint16_t> unlockedPosters;
+	//std::vector<uint16_t> unlockedPosters;
 
 	// Shaders
 	GLuint mapShader;

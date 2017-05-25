@@ -45,7 +45,7 @@ bool Hitbox::InitializeHitboxVacuum(b2World* world, b2Body* player)
 	if (world == nullptr) return false;
 
 	b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
+	bodyDef.type = b2_kinematicBody;
 	bodyDef.position = b2Vec2(player->GetPosition().x, player->GetPosition().y);
 	bodyDef.fixedRotation = false;
 	bodyDef.active = true;
@@ -54,7 +54,7 @@ bool Hitbox::InitializeHitboxVacuum(b2World* world, b2Body* player)
 
 	b2CircleShape circleShape;
 	circleShape.m_p.Set(0, 0);
-	circleShape.m_radius = 7;
+	circleShape.m_radius = 8;
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &circleShape;

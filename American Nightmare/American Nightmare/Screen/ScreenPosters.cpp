@@ -1,5 +1,7 @@
 #include "ScreenPosters.h"
 
+extern std::vector<uint16_t> unlockedPosters;
+
 ScreenPosters::ScreenPosters() : Screen()
 {
 	shaderManager = nullptr;
@@ -68,13 +70,6 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	////////////////////////////////////////////////////////////
 	meshManager = new MeshManager();
 	if (meshManager == nullptr) return false;
-
-	// Checking to see how many unlocked posters we have
-	unlockedPosters.resize(10);
-	ifstream in("Data/savedata.fu", ios::binary);
-	if (in.is_open())
-		in.read(reinterpret_cast<char*>(unlockedPosters.data()), sizeof(uint16_t) * 10);
-	in.close();
 
 	////////////////////////////////////////////////////////////
 	// Creating a GUI manager	
