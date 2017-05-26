@@ -1,4 +1,4 @@
-#version 430
+#version 440 core
 
 // Input
 layout(location = 0) in vec3 inputPosition;
