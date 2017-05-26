@@ -62,6 +62,9 @@ void ShadowManager::createDirectionalShadowBuffer(GLuint &shadowFBO, GLuint &sha
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float* color = new float[4]{ 1, 1, 1, 1 };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, color);
+	delete color;
 
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMap, 0);
