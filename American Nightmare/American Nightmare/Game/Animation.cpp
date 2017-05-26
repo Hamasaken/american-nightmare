@@ -7,8 +7,9 @@ Animation::Animation() : Entity()
 	currentFrameUV.uvTopRight = glm::vec2();
 	currentFrameUV.uvBotLeft = glm::vec2();
 	currentFrameUV.uvBotRight = glm::vec2();
-	bool directionisRight = true;
-	bool isLooping = true;
+	directionIsRight = true;
+	isLooping = true;
+	isReversed = false;
 }
 
 Animation::Animation(const Animation& other) {}
@@ -148,15 +149,26 @@ void Animation::updateAnimation(GLfloat deltaT)
 	}
 
 	// Get current frame
-	currentAnimation->currentFrame += 0.001 * deltaT * currentAnimation->fps;
+	if(!isReversed)
+		currentAnimation->currentFrame += 0.001 * deltaT * currentAnimation->fps;
+	else
+		currentAnimation->currentFrame -= 0.001 * deltaT * currentAnimation->fps;
 
 	// If current frame is above total amount of frames - reset to 0
 	if (isLooping)
 	{
-		while (currentAnimation->currentFrame >= currentAnimation->totalFrames)
+		if (!isReversed)
 		{
-			currentAnimation->currentFrame -= currentAnimation->totalFrames;
+			while (currentAnimation->currentFrame >= currentAnimation->totalFrames)
+			{
+				currentAnimation->currentFrame -= currentAnimation->totalFrames;
+			}
 		}
+		else
+			while (currentAnimation->currentFrame <= -1.f)
+			{
+				currentAnimation->currentFrame += currentAnimation->totalFrames;
+			}
 	}
 	// If the animation shouldn't loop we set it to the last frame of the spritesheet
 	else
