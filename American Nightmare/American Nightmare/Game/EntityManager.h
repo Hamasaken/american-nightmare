@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Entity.h"
 #include "../Enemy.h"
+#include "../ProjectileHandler.h"
 
 class EntityManager
 {
@@ -48,7 +49,7 @@ public:
 	EntityManager(const EntityManager& other);
 	~EntityManager();
 
-	bool Start(b2World* world, SoundManager* soundManager, glm::vec2 screenSize);
+	bool Start(b2World* world, SoundManager* soundManager, ProjectileHandler* ph, glm::vec2 screenSize);
 	void Stop();
 
 	bool AddEntityBoard(ESpawnerType type, GLuint shader, const MeshManager::Mesh* mesh, const MaterialManager::Material* material);
@@ -63,6 +64,7 @@ public:
 private:
 	EntityBoard getBoard(ESpawnerType type);
 
+	ProjectileHandler* ph;
 	b2World* world;
 	SoundManager* soundManager;
 	glm::vec2 screenSize; // For only updating/drawing things inside with quadtree

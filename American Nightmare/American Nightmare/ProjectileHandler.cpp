@@ -3,7 +3,7 @@
 
 void ProjectileHandler::initiateProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, GLuint shader)
 {
-	
+	this->world = world;
 	this->myShader = shader;
 	this->myMesh =  const_cast<MeshManager::Mesh*>(mesh);
 	this->myMaterial = const_cast<MaterialManager::Material*>(material);
@@ -103,7 +103,14 @@ void ProjectileHandler::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 s
 	this->screenSize = screenSize;
 }
 
-void ProjectileHandler::fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, bool isJumping, bool isCircle)
+void ProjectileHandler::spawnProjectile(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, glm::vec2 pos, bool isCircle)
+{
+	Projectile* p = new Projectile(mesh, material, world, pos, isCircle);
+	p->setShader(myShader);
+	myProjtileVector.push_back(p);
+}
+
+void ProjectileHandler::fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, glm::vec2 pos, bool isJumping, bool isCircle)
 {
 	glm::vec2 direction = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y - 150), screenSize, screenPos);
 	direction = glm::normalize(direction);

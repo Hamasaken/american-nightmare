@@ -67,13 +67,20 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	player->AddAnimation(materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
 
 	////////////////////////////////////////////////////////////
+	// Creating Projectile Handler
+	////////////////////////////////////////////////////////////
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, soundManager, particleManager, player->getPlayerPosAsGLM(), mapShader, screenPos, screenSize);
+	this->wasPressed = false;
+	this->isPressed = false;
+
+	////////////////////////////////////////////////////////////
 	// Creating the Entity Manager (Enemies/Trash/etc)
 	////////////////////////////////////////////////////////////
 	tempNomralMapIndex = materialManager->AddTexture("zombie1walknormalmap", TEXTURE_PATH "Zombie1WalkN.png");
 
 	entityManager = new EntityManager();
 	if (entityManager == nullptr) return false;
-	if (!entityManager->Start(world, soundManager, screenSize)) return false;
+	if (!entityManager->Start(world, soundManager, myPH, screenSize)) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::zombie1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::zombie2, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::skater1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
@@ -86,10 +93,6 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	quadTree = new QuadTree();
 	if (quadTree == nullptr) return false;
 	if (!quadTree->Start(screenSize)) return false;
-
-	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, soundManager, particleManager, player->getPlayerPosAsGLM(), mapShader, screenPos, screenSize);
-	this->wasPressed = false;
-	this->isPressed = false;
 
 	return true;
 }
@@ -230,8 +233,8 @@ void LevelManager::Update(GLint deltaT)
 		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 10, 0.1f);
 		wasPressed = true;
 		player->decreaseNrOfProjectiles();
-		if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("boltmaterial"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), true);
-		else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), false);
+		if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("boltmaterial"), player->getPlayerPosAsGLM(), player->getHasJumped(), true);
+		else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), player->getPlayerPosAsGLM(), player->getHasJumped(), false);
 	}
 
 	//Update Projectile
