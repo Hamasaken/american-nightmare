@@ -11,8 +11,6 @@ private:
 	std::vector <Projectile*> myProjtileVector;
 	GLuint myShader;
 
-	glm::vec2 screenSize;
-	glm::vec2 screenPos;
 	MeshManager::Mesh* myMesh;
 	MaterialManager::Material* myMaterial;
 
@@ -20,15 +18,15 @@ private:
 
 public:
 	//ProjectileHandler(b2World* world, GLuint shader, int CAP = 10);
-	ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, GLuint shader, glm::vec2 screenPos, glm::vec2 screenSize);
+	ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, GLuint shader);
 	ProjectileHandler();
 	~ProjectileHandler();
 
 	void Update(GLint deltaT, b2World* world, glm::vec2 position, bool ammoFull);
 	void deleteProjects(b2World* world);
 	std::vector<Projectile*> getBullets();
-	void UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos);
-	void fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, bool isJumping, bool isCircle);
+
+	void fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, bool isJumping, bool isCircle, glm::vec2 fireDirection);
 };
 
 #endif

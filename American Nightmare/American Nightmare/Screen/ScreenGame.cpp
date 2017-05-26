@@ -544,7 +544,8 @@ void ScreenGame::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPo
 	uiManager->setScreenPosition(screenPos);
 	uiManager->setScreenSize(screenSize);
 
-	levelManager->getPH()->UpdateScreenProperties(screenSize, screenPos);
+	levelManager->getPlayer()->UpdateScreenProperties(screenSize, screenPos);
+	//levelManager->getPH()->UpdateScreenProperties(screenSize, screenPos);
 }
 
 void ScreenGame::Stop()

@@ -60,8 +60,8 @@ private:
 	enum Direction { LEFT, RIGHT, STOPPED };
 
 	//Variables for handling projectile/Weapon
-	int nrOfProjectiles;
-	const int CAP = 25;
+	int ammo;
+	const int ammoCap = 25;
 	glm::vec2 fireDirection;
 	void initiateProjectile();
 
@@ -107,6 +107,10 @@ private:
 	sf::Keyboard::Key key_jump;
 	sf::Keyboard::Key key_hover;
 	sf::Keyboard::Key key_dash;
+
+	//Screen properties
+	glm::vec2 screenPos;
+	glm::vec2 screenSize;
 	
 public:
 	Player();
@@ -147,5 +151,7 @@ public:
 	void decreaseNrOfProjectiles();
 
 	glm::vec2 getFireDirection()const;
+
+	void UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos);
 };
 #endif // !PLAYER_H

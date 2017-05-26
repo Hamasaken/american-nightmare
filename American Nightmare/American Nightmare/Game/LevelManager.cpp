@@ -89,7 +89,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	if (quadTree == nullptr) return false;
 	if (!quadTree->Start(screenSize)) return false;
 
-	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), mapShader, screenPos, screenSize);
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), mapShader);
 	this->wasPressed = false;
 	this->isPressed = false;
 
@@ -226,16 +226,33 @@ void LevelManager::Update(GLint deltaT)
 
 	//For projectiles
 	if (!player->getIsDead())
-		isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-	if (isPressed && !wasPressed && player->getCanShoot() == true)
 	{
-		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
-		wasPressed = true;
-		player->decreaseNrOfProjectiles();
-		if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), true);
-		else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), false);
+		if (sf::Joystick::isConnected(0))
+		{
+			isPressed = sf::Joystick::isButtonPressed(0, BTN_RB);
+			if (isPressed && !wasPressed && player->getCanShoot() == true)
+			{
+				cout << "Something" << endl;
+				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
+				wasPressed = true;
+				player->decreaseNrOfProjectiles();
+				if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), true, player->getFireDirection());
+				else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), false, player->getFireDirection());
+			}
+		}
+		else
+		{
+			isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+			if (isPressed && !wasPressed && player->getCanShoot() == true)
+			{
+				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
+				wasPressed = true;
+				player->decreaseNrOfProjectiles();
+				if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), true, player->getFireDirection());
+				else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), false, player->getFireDirection());
+			}
+		}
 	}
-
 	//Update Projectile
 	myPH->Update(deltaT, world, player->getPlayerPosAsGLM(), player->getAmmoFull());
 
