@@ -541,6 +541,8 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 			// Adding trigger to vector
 			this->triggers.push_back(outTrigger);
 		}
+		else
+			delete outTrigger;
 	}
 }
 
