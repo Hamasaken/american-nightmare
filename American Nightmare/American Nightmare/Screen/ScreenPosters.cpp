@@ -241,6 +241,13 @@ void ScreenPosters::Stop()
 		meshManager = nullptr;
 	}
 
+	if (background != nullptr)
+	{
+		background->Stop();
+		delete background;
+		background = nullptr;
+	}
+
 	// Deletes Camera & OpenGL ptr
 	Screen::Stop();
 }
