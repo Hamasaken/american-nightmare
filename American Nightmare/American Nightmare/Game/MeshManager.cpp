@@ -96,12 +96,16 @@ std::vector<MeshManager::Mesh*> MeshManager::getMeshList() const
 
 void MeshManager::MakeDefaultQuad()
 {
-	Model* model;
-	model = new Model();
+	Model* model = new Model();
 	model->BuildQuadTexture();
 
-	Mesh* mesh;
-	mesh = new Mesh("quad", model);
+	Mesh* mesh = new Mesh("quad", model);
+	meshList.push_back(mesh);
+
+	model = new Model();
+	model->BuildQuadTextureBig();
+
+	mesh = new Mesh("quadbig", model);
 	meshList.push_back(mesh);
 }
 

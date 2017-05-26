@@ -9,12 +9,7 @@ Button::Button(const Button & other) { }
 
 Button::~Button() 
 {
-	if (model != nullptr)
-	{
-		model->Stop();
-		delete model;
-		model = nullptr;
-	}
+
 }
 
 bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, const MaterialManager::Material* material, const MeshManager::Mesh* mesh)
@@ -32,10 +27,6 @@ bool Button::Start(glm::vec2 screenSize, glm::vec3 position, glm::vec2 size, con
 	this->prevState = Nothing;
 	this->pressed = false;
 	this->alpha = BTN_ALPHA_NORMAL;
-
-	model = new Model();
-	if (model == nullptr) return false;
-	model->BuildQuadTextureBig();
 
 	return true;
 }

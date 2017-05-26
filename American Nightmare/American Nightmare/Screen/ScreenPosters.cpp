@@ -78,8 +78,8 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	if (posterListGUI == nullptr) return false;
 	if (!posterListGUI->Start(screenSize, screenPosition)) return false;
 
-	posterListGUI->AddButton(GUIManager::CANCEL, glm::vec3(2.f, 0, 0), glm::vec2(0.400f, 0.800f), posters[0], meshManager->getMesh("quad"));
-	posterListGUI->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.85f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	posterListGUI->AddButton(GUIManager::CANCEL, glm::vec3(2.f, 0, 0), glm::vec2(0.400f, 0.800f), posters[0], meshManager->getMesh("quadbig"));
+	posterListGUI->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.85f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
 	posterListGUI->AddText(glm::vec3(0.f, 0.75f, 0.f), 80.f, "Posters", FONT_PATH INGAME_FONT);
 
 	// Setting starting variables
@@ -94,7 +94,7 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 		if (unlockedPosters[i] == 1)
 		{
 			numberOfUnlocked += 1;
-			posterListGUI->AddButton(GUIManager::OK, glm::vec3(x, y, 0), glm::vec2(0.100f, 0.200f), posters[i], meshManager->getMesh("quad"));
+			posterListGUI->AddButton(GUIManager::OK, glm::vec3(x, y, 0), glm::vec2(0.100f, 0.200f), posters[i], meshManager->getMesh("quadbig"));
 		}
 		x += 0.30f;
 	}
@@ -107,7 +107,7 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	posterListGUI->setShader(shaderManager->getShader("texture"));
 
 	background = new Button();
-	background->Start(screenSize, glm::vec3(0.f, 0.f, 0.1f), glm::vec2(1), materialManager->getMaterial("backgroundmaterial"), meshManager->getMesh("quad"));
+	background->Start(screenSize, glm::vec3(0.f, 0.f, 0.1f), glm::vec2(1), materialManager->getMaterial("backgroundmaterial"), meshManager->getMesh("quadbig"));
 	background->setShader(shaderManager->getShader("texture"));
 
 	return true;
