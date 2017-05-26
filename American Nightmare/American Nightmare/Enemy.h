@@ -7,7 +7,7 @@
 #define ENEMY_SIZE_Y 2.f
 #define ENEMY_SIZE_Z 1.f
 #define ENEMY_MASS 70.f
-#define ENEMY_FRICTION 0.30f
+#define ENEMY_FRICTION 0.20f
 #define ENEMY_VEL_X 1000.f  //20000.f
 #define ENEMY_VEL_Y 500.f
 
