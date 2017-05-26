@@ -52,7 +52,13 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		Hitbox* hitbox = static_cast<Hitbox*>(ptr);
 		if (projectile)
 		{
-			if (player->addPlayerProjectiles() == true && sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)
+			if (player->addPlayerProjectiles() == true && sf::Joystick::isButtonPressed(0, 4))
+			{
+				player->addNrOfProjectiles();
+				projectile->setmarked(true);
+				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 40, 0.15f);
+			}
+			else if (player->addPlayerProjectiles() == true && sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)
 			{
 				player->addNrOfProjectiles();
 				projectile->setmarked(true);
@@ -64,6 +70,8 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		else if (enemy)
 		{
 			player->setContactWithEnemy(enemy);
+			float angle = getAngleFromTwoPoints(player->getPosition(), player->getPosition());
+			if (angle < 0 && angle > -3.14) player->setHasJumped(false);
 		}
 		else if (vacuum)
 		{
