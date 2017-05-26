@@ -56,7 +56,21 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position,
 	
 	if (!ammoFull)
 	{
-		/*if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+		if (sf::Joystick::isButtonPressed(0, 4))
+		{
+			soundManager->playSFXOverDrive(SoundManager::SFX_HOVER, 15, 0.25f);
+			for (int i = 0; i < this->myProjtileVector.size(); i++)
+			{
+
+				if (this->myProjtileVector[i]->getIsInVacRange() == true)
+				{
+					soundManager->playSFXOverDrive(SoundManager::SFX_HOVER, 40, 0.25f);
+					float angle = getAngleFromTwoPoints(glm::vec3(position, 0), this->myProjtileVector[i]->getPosition());
+					this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 500.f, -sin(angle) * 500.f), true);
+				}
+			}
+		}
+		else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 		{
 			soundManager->playSFXOverDrive(SoundManager::SFX_HOVER, 15, 0.25f);
 			for (int i = 0; i < this->myProjtileVector.size(); i++)
@@ -68,26 +82,9 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position,
 					this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 500.f, -sin(angle) * 500.f), true);
 				}
 			}
-		}*/
-		for (int i = 0; i < this->myProjtileVector.size(); i++)
-		{
-
-			if (sf::Joystick::isButtonPressed(0, 4) && this->myProjtileVector[i]->getIsInVacRange() == true)
-			{
-				soundManager->playSFXOverDrive(SoundManager::SFX_HOVER, 40, 0.25f);
-				float angle = getAngleFromTwoPoints(glm::vec3(position, 0), this->myProjtileVector[i]->getPosition());
-				this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 500.f, -sin(angle) * 500.f), true);
-			}
-			else if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && this->myProjtileVector[i]->getIsInVacRange() == true)
-			{
-				soundManager->playSFXOverDrive(SoundManager::SFX_HOVER, 40, 0.25f);
-				float angle = getAngleFromTwoPoints(glm::vec3(position, 0), this->myProjtileVector[i]->getPosition());
-				this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 500.f, -sin(angle) * 500.f), true);
-			}
 		}
+		
 	}
-
-	
 }
 
 void ProjectileHandler::deleteProjects(b2World* world)
