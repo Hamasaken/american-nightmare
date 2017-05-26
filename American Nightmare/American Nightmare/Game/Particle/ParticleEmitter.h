@@ -28,8 +28,9 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Updates every particle in this emitter
 	// \param deltaT Time between each frame in milliseconds
+	// \param playerPos For optimization, temporary 20meters away from players not getting makeVErtices
 	////////////////////////////////////////////////////////////
-	virtual void Update(GLfloat deltaT);
+	virtual void Update(GLfloat deltaT, glm::vec2 playerPos);
 
 	void MakeVertices();
 	void Draw();
@@ -64,7 +65,7 @@ class IncreasingParticleEmitter : public ParticleEmitter
 public:
 	void SignalSmoke(glm::vec3 position, GLuint texture, float angle, glm::vec4 color, glm::vec2 size, int amount);
 	void SignalFire(glm::vec3 position, GLuint texture, float angle, glm::vec4 color, glm::vec2 size, int amount);
-	void Update(GLfloat deltaT);
+	void Update(GLfloat deltaT, glm::vec2 playerPos);
 };
 
 #endif // !PARTICLEEMITTER_H

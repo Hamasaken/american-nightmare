@@ -69,7 +69,7 @@ void Player::Update(GLint deltaT, b2World* world)
 	else if (contactWithEnemy)
 	{
 		invulTime = PLAYER_INVULNERABILITY_TIME;
-		camera->screenShake(500.f, 0.5f);
+		camera->screenShake(600.f, 0.6f);
 		particleManager->EffectBloodSplatter(position, getAngleFromTwoPoints(contactWithEnemy->getCenter(), this->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f)); // temp blood effect
 		soundManager->playSFX(SoundManager::SFX_HIT);
 		soundManager->playSFXOverDrive(SoundManager::SFX_HURT, 50.f);
@@ -242,7 +242,10 @@ void Player::Dash(sf::Keyboard::Key inKey)
 {
 	if (!hasDashed)
 	{
-		soundManager->playSFXOverDrive(SoundManager::SFX_DASH, 50.f);
+		camera->screenShake(250.f, 0.35f);
+		SoundManager::SFX sfx = (inKey == key_left) ? SoundManager::SFX::SFX_LtoR : SoundManager::SFX::SFX_RtoL;
+		if (inKey == key_jump) sfx = SoundManager::SFX::SFX_DASH;
+		soundManager->playSFXOverDrive(sfx, 50.f);
 		power -= PLAYER_POWER_COST_DASH;
 		isDashing = true;
 		hasDashed = true;
@@ -286,6 +289,7 @@ void Player::Shockwave()
 {
 	if (shockwaveCooldown < NULL)
 	{
+		camera->screenShake(750.f, 0.75f);
 		soundManager->playSFXOverDrive(SoundManager::SFX_SHOCKWAVE, 100);
 		particleManager->EffectSmokeCloud(position, 0, 5, glm::vec4(0.85f), 3.f);
 		particleManager->EffectSmokeCloud(position, 0, 5, glm::vec4(0.35f), 2.5f);

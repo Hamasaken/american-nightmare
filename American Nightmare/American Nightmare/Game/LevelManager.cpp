@@ -41,7 +41,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	popupActive = false;
 
 	// Starting contact manager
-	contactManager.Start(particleManager, soundManager, camera);
+	contactManager.Start(particleManager, soundManager, myPH, materialManager, meshManager, camera);
 
 	// Starting world 
 	world = new b2World(b2Vec2(NULL, GRAVITY * GRAVITY_SCALE));
@@ -85,7 +85,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	if (!entityManager->AddEntityBoard(ESpawnerType::zombie2, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::skater1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::flying1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::trash, mapShader, meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"))) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::trash, mapShader, meshManager->getMesh("quad"), materialManager->getMaterial("boxmaterial"))) return false;
 
 	////////////////////////////////////////////////////////////
 	// Creating the Quad Tree Object
@@ -233,8 +233,9 @@ void LevelManager::Update(GLint deltaT)
 		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 10, 0.1f);
 		wasPressed = true;
 		player->decreaseNrOfProjectiles();
-		if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("boltmaterial"), player->getPlayerPosAsGLM(), player->getHasJumped(), true);
-		else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), player->getPlayerPosAsGLM(), player->getHasJumped(), false);
+		camera->screenShake(250.f, 0.5f);
+		if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), player->getPlayerPosAsGLM(), player->getHasJumped(), true);
+		else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("boxmaterial"), player->getPlayerPosAsGLM(), player->getHasJumped(), false);
 	}
 
 	//Update Projectile

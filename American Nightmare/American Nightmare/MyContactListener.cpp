@@ -9,12 +9,15 @@ MyContactListener::~MyContactListener()
 	camera = nullptr;
 }
 
-void MyContactListener::Start(ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
+void MyContactListener::Start(ParticleManager* particleManager, SoundManager* soundManager, ProjectileHandler* ph, MaterialManager* materialManager, MeshManager* meshManager, Camera* camera)
 {
 	// Getting different managers parameters
 	this->particleManager = particleManager;
 	this->soundManager = soundManager;
 	this->camera = camera;
+	this->materialManager = materialManager;
+	this->meshManager = meshManager;
+	this->ph = ph;
 }
 
 void MyContactListener::BeginContact(b2Contact* contact)
@@ -104,12 +107,18 @@ void MyContactListener::BeginContact(b2Contact* contact)
 				b2Vec2 vec = projectile->getHitbox()->getBody()->GetLinearVelocity();
 				if (abs(vec.x) > 15.f || abs(vec.y) > 15.f)
 				{
+					camera->screenShake(250.f, 0.25f);
 					particleManager->EffectBloodSplatter(enemy->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
 					soundManager->playSFXOverDrive(SoundManager::SFX_HIT, 40, 0.1f);
 					enemy->TakeDamage(enemy->getDamage());
 					if (enemy->getIsDead())
 					{
-						soundManager->playSFXOverDrive(SoundManager::SFX_DEATH, 30, 0.0f);
+						camera->screenShake(750.f, 1.f);
+			//			ph->spawnProjectile(meshManager->getMesh("quad"), materialManager->getMaterial("boxmaterial"), glm::vec2(enemy->getPosition()), true);
+			//			ph->getBullets()->back()->fireBullet(enemy->getPosition(), glm::vec2(rand() % 25, rand() % 25));
+			//			ph->spawnProjectile(meshManager->getMesh("quad"), materialManager->getMaterial("boxmaterial"), enemy->getPosition(), true);
+			//			ph->getBullets()->back()->fireBullet(enemy->getPosition(), glm::vec2(rand() % 25, rand() % 25));
+						soundManager->playSFXOverDrive(SoundManager::SFX_DEATH, 50, 0.0f);
 						particleManager->EffectExplosionLights(enemy->getPosition(), 15, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
 						particleManager->EffectBloodCloud(enemy->getPosition(), 10, glm::vec4(1.f), randBetweenF(1.f, 1.75f));
 					}

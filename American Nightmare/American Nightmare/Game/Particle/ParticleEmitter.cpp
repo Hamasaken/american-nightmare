@@ -117,7 +117,7 @@ void ParticleEmitter::Stop()
 	glDeleteVertexArrays(1, &vertexArray);
 }
 
-void ParticleEmitter::Update(GLfloat deltaT)
+void ParticleEmitter::Update(GLfloat deltaT, glm::vec2 playerPos)
 {
 	// Updating particles and checking if they are dead or not
 	for (int i = 0; i < particles.size(); i++)
@@ -134,8 +134,11 @@ void ParticleEmitter::Update(GLfloat deltaT)
 	// If this emitter is out of particles, otherwise, build vertexarray
 	if (particles.size() == 0)
 		isComplete = true;
-	else
-		MakeVertices();
+	else 
+	{
+		if (abs(playerPos.x - position.x) < 25.f)
+			MakeVertices();
+	}
 }
 
 void ParticleEmitter::MakeVertices()
@@ -226,11 +229,12 @@ void IncreasingParticleEmitter::SignalFire(glm::vec3 position, GLuint texture, f
 	}
 }
 
-void IncreasingParticleEmitter::Update(GLfloat deltaT)
+void IncreasingParticleEmitter::Update(GLfloat deltaT, glm::vec2 playerPos)
 {
 	// Updating particles and checking if they are dead or not
 	for (int i = 0; i < particles.size(); i++)
 		particles[i]->Update(deltaT);
-
-	MakeVertices();
+	
+	if (abs(playerPos.x - position.x) < 25.f)
+		MakeVertices();
 }

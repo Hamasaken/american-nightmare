@@ -123,5 +123,5 @@ void ProjectileHandler::fireProjectiles(const MeshManager::Mesh* mesh, const Mat
 	Projectile* p = new Projectile(mesh, material, world, pos + glm::vec2(1.35f * direction.x, -(direction.y) * 1.5f), isCircle);
 	p->setShader(myShader);
 	myProjtileVector.push_back(p);
-	myProjtileVector.back()->fireBullet(world, pos, direction);
+	myProjtileVector.back()->fireBullet(pos, direction);
 }

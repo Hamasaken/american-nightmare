@@ -154,12 +154,12 @@ void ParticleManager::EffectSmokeSignal(glm::vec3 position, GLuint texture, floa
 	emitters.push_back(emitter);
 }
 
-void ParticleManager::Update(GLfloat deltaT)
+void ParticleManager::Update(GLfloat deltaT, glm::vec2 playerPos)
 {
 	for (int i = 0; i < int(emitters.size()); i++)
 	{
 		if (!emitters[i]->getIsComplete())
-			emitters[i]->Update(deltaT);
+			emitters[i]->Update(deltaT, playerPos);
 		else
 		{
 			emitters[i]->Stop();
