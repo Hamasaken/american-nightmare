@@ -546,7 +546,6 @@ bool Player::addPlayerProjectiles()
 	{
 		return true;
 	}
-	*/
 }
 
 bool Player::getCanShoot()

@@ -69,7 +69,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	////////////////////////////////////////////////////////////
 	// Creating Projectile Handler
 	////////////////////////////////////////////////////////////
-	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, soundManager, particleManager, player->getPlayerPosAsGLM(), mapShader, screenPos, screenSize);
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, soundManager, particleManager, player->getPlayerPosAsGLM(), mapShader);
 	this->wasPressed = false;
 	this->isPressed = false;
 
@@ -233,10 +233,10 @@ void LevelManager::Update(GLint deltaT)
 			isPressed = sf::Joystick::isButtonPressed(0, BTN_RB);
 			if (isPressed && !wasPressed && player->getCanShoot() == true)
 			{
-				
 				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 				wasPressed = true;
 				player->decreaseNrOfProjectiles();
+				camera->screenShake(250.0f, 0.5f);
 				if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), true, player->getFireDirection());
 				else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), false, player->getFireDirection());
 			}
