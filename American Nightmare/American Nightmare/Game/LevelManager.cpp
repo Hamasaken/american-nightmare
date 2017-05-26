@@ -238,6 +238,7 @@ void LevelManager::Update(GLint deltaT)
 		if (sf::Joystick::isConnected(0))
 		{
 			isPressed = sf::Joystick::isButtonPressed(0, BTN_RB);
+			if (!player->getCanShoot() && isPressed && !wasPressed) soundManager->playSFXOverDrive(SoundManager::SFX_EMPTY, 25, 0.15f);
 			if (isPressed && !wasPressed && player->getCanShoot() == true)
 			{
 				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
@@ -251,6 +252,7 @@ void LevelManager::Update(GLint deltaT)
 		else
 		{
 			isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+			if (!player->getCanShoot() && isPressed && !wasPressed) soundManager->playSFXOverDrive(SoundManager::SFX_EMPTY, 25, 0.15f);
 			if (isPressed && !wasPressed && player->getCanShoot() == true)
 			{
 				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
