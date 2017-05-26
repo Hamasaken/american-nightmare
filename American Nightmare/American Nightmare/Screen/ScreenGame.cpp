@@ -175,11 +175,15 @@ void ScreenGame::SetStartVariables()
 
 	// Adding shadow
 	// flyttade upp till start functionen
-	shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], glm::vec3(5.f, 5.f, -10.f), glm::vec2(screenSize.x * 0.5, screenSize.y * 0.5), glm::vec2(60, 30), 5.f, 40);
-	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, glm::vec2(60, 30), -30.f, 50);
-	//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, glm::vec2(60, 30), -30.f, 50);
-	//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[1], glm::vec2(256, 256), 45, 0.1f);
-	shadowManager.setUseShadows(true);
+	if (levelManager->getLightManager()->getDirectionalLightList().size() > 0)
+	{
+		shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], glm::vec3(5.f, 5.f, -10.f), glm::vec2(screenSize.x * 0.5, screenSize.y * 0.5), glm::vec2(60, 30), 5.f, 40);
+		//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, glm::vec2(60, 30), -30.f, 50);
+		//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, glm::vec2(60, 30), -30.f, 50);
+		//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[1], glm::vec2(256, 256), 45, 0.1f);
+		shadowManager.setUseShadows(true);
+	}
+	
 }
 
 void ScreenGame::Update(GLint deltaT)
@@ -312,7 +316,7 @@ void ScreenGame::Draw()
 	DrawObjectGUI(levelManager->getPopup(), shaderManager);
 
 	// Temp shadow map debug
-/*	if (shadowManager.getUseShadows())
+	if (shadowManager.getUseShadows())
 	{
 		shaderManager->setShader("debug");
 
@@ -330,7 +334,7 @@ void ScreenGame::Draw()
 		drRendering.getFinalRenderQuad()->Draw();
 		glEnable(GL_DEPTH_TEST);
 	}
-	*/
+	
 }
 
 void ScreenGame::DrawShadowMaps()
