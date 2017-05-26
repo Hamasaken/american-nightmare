@@ -30,29 +30,27 @@ sf::Sound SoundManager::loadSFX(std::string path)
 
 void SoundManager::loadSFXs()
 {
-	std::string pathToFolder = SFX_PATH;
-
 	// Load every SFX here
-	sfx[SFX_BIP] = loadSFX(pathToFolder + "sfx_bip.wav");
-	sfx[SFX_HIT] = loadSFX(pathToFolder + "sfx_hit.wav");
-	sfx[SFX_UNLOCK] = loadSFX(pathToFolder + "sfx_unlock.wav");
-	sfx[SFX_BTN] = loadSFX(pathToFolder + "sfx_btn.wav");
-	sfx[SFX_LtoR] = loadSFX(pathToFolder + "sfx_leftToRight.wav");
-	sfx[SFX_RtoL] = loadSFX(pathToFolder + "sfx_rightToLeft.wav");
-	sfx[SFX_SUCTION] = loadSFX(pathToFolder + "sfx_suction.wav");
-	sfx[SFX_FIRE] = loadSFX(pathToFolder + "sfx_fire.ogg");
-	sfx[SFX_STEPS] = loadSFX(pathToFolder + "sfx_footsteps.wav");
-	sfx[SFX_BIRDS] = loadSFX(pathToFolder + "sfx_birds.ogg");
-	sfx[SFX_SHOCKWAVE] = loadSFX(pathToFolder + "sfx_shockwave.wav");
-	sfx[SFX_LASER] = loadSFX(pathToFolder + "sfx_laser.wav");
-	sfx[SFX_ZOMBIE_1] = loadSFX(pathToFolder + "sfx_zombie_1.wav");
-	sfx[SFX_ZOMBIE_2] = loadSFX(pathToFolder + "sfx_zombie_2.wav");
-	sfx[SFX_DASH] = loadSFX(pathToFolder + "sfx_dash.wav");
-	sfx[SFX_JUMP] = loadSFX(pathToFolder + "sfx_jump.wav");
-	sfx[SFX_HURT] = loadSFX(pathToFolder + "sfx_hurt.ogg");
-	sfx[SFX_HOVER] = loadSFX(pathToFolder + "sfx_hover.wav");
-	sfx[SFX_DEATH] = loadSFX(pathToFolder + "sfx_death.wav");
-	sfx[SFX_GAMEOVER] = loadSFX(pathToFolder + "sfx_gameover.ogg");
+	sfx[SFX_BIP] = loadSFX(SFX_PATH "sfx_bip.wav");
+	sfx[SFX_HIT] = loadSFX(SFX_PATH "sfx_hit.wav");
+	sfx[SFX_UNLOCK] = loadSFX(SFX_PATH "sfx_unlock.wav");
+	sfx[SFX_BTN] = loadSFX(SFX_PATH "sfx_btn.wav");
+	sfx[SFX_LtoR] = loadSFX(SFX_PATH "sfx_leftToRight.wav");
+	sfx[SFX_RtoL] = loadSFX(SFX_PATH "sfx_rightToLeft.wav");
+	sfx[SFX_SUCTION] = loadSFX(SFX_PATH "sfx_suction.wav");
+	sfx[SFX_FIRE] = loadSFX(SFX_PATH "sfx_fire.ogg");
+	sfx[SFX_STEPS] = loadSFX(SFX_PATH "sfx_footsteps.wav");
+	sfx[SFX_BIRDS] = loadSFX(SFX_PATH "sfx_birds.ogg");
+	sfx[SFX_SHOCKWAVE] = loadSFX(SFX_PATH "sfx_shockwave.wav");
+	sfx[SFX_LASER] = loadSFX(SFX_PATH "sfx_laser.wav");
+	sfx[SFX_ZOMBIE_1] = loadSFX(SFX_PATH "sfx_zombie_1.wav");
+	sfx[SFX_ZOMBIE_2] = loadSFX(SFX_PATH "sfx_zombie_2.wav");
+	sfx[SFX_DASH] = loadSFX(SFX_PATH "sfx_dash.wav");
+	sfx[SFX_JUMP] = loadSFX(SFX_PATH "sfx_jump.wav");
+	sfx[SFX_HURT] = loadSFX(SFX_PATH "sfx_hurt.ogg");
+	sfx[SFX_HOVER] = loadSFX(SFX_PATH "sfx_hover.wav");
+	sfx[SFX_DEATH] = loadSFX(SFX_PATH "sfx_death.wav");
+	sfx[SFX_GAMEOVER] = loadSFX(SFX_PATH "sfx_gameover.ogg");
 
 	// Setting every sfx at deicided volume
 	for (sf::Sound& s : sfx)
@@ -61,13 +59,12 @@ void SoundManager::loadSFXs()
 
 void SoundManager::loadSongs()
 {
-	std::string pathToFolder = MUSIC_PATH;
-
 	// Load all songs here
-	song[FOX_BOOGIE].openFromFile(pathToFolder + "Fox Boogie.ogg");
-	song[URANIUM_FEVER].openFromFile(pathToFolder + "Uranium Fever.ogg");
-	song[GOOD_ROCKIN_TONIGHT].openFromFile(pathToFolder + "Good Rockin Tonight.ogg");
-	song[JAZZY_INTERLUDE].openFromFile(pathToFolder + "Jazzy Interlude.ogg");
+	song[FOX_BOOGIE].openFromFile(MUSIC_PATH "Fox Boogie.ogg");
+	song[URANIUM_FEVER].openFromFile(MUSIC_PATH "Uranium Fever.ogg");
+	song[GOOD_ROCKIN_TONIGHT].openFromFile(MUSIC_PATH "Good Rockin Tonight.ogg");
+	song[JAZZY_INTERLUDE].openFromFile(MUSIC_PATH "Jazzy Interlude.ogg");
+	song[RHYTM_FOR_YOU].openFromFile(MUSIC_PATH "Rhythm for You.ogg");
 
 	// Setting every song as looping and setting volume
 	for (sf::Music& m : song)
