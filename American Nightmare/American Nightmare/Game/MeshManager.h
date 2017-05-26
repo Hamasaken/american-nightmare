@@ -34,6 +34,11 @@ public:
 	Mesh* getMesh(std::string name) const;
 	std::vector<Mesh*> getMeshList() const;
 private:
+
+	void MakeDefaultQuad();
+	void MakeDefaultCube();
+	void MakeDefaultSphere();
+
 	std::vector<Mesh*> meshList;
 };
 

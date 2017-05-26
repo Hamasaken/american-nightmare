@@ -2,14 +2,9 @@
 
 MeshManager::MeshManager()
 {
-	// Making basic quad mesh
-	Model* model;
-	model = new Model();
-	model->BuildQuadTexture();
-	Mesh* mesh;
-	mesh = new Mesh("quad", model);
-
-	meshList.push_back(mesh);
+	MakeDefaultQuad();
+	MakeDefaultCube();
+	MakeDefaultSphere();
 }
 
 MeshManager::MeshManager(const MeshManager& other) { }
@@ -97,6 +92,32 @@ MeshManager::Mesh* MeshManager::getMesh(std::string name) const
 std::vector<MeshManager::Mesh*> MeshManager::getMeshList() const
 {
 	return meshList;
+}
+
+void MeshManager::MakeDefaultQuad()
+{
+	Model* model;
+	model = new Model();
+	model->BuildQuadTexture();
+
+	Mesh* mesh;
+	mesh = new Mesh("quad", model);
+	meshList.push_back(mesh);
+}
+
+void MeshManager::MakeDefaultCube()
+{
+	Model* model;
+	model = new Model();
+	model->BuildCubeTexture();
+
+	Mesh* mesh;
+	mesh = new Mesh("cube", model);
+	meshList.push_back(mesh);
+}
+
+void MeshManager::MakeDefaultSphere()
+{
 }
 
 
