@@ -48,7 +48,7 @@ public:
 	EntityManager(const EntityManager& other);
 	~EntityManager();
 
-	bool Start(b2World* world, glm::vec2 screenSize);
+	bool Start(b2World* world, SoundManager* soundManager, glm::vec2 screenSize);
 	void Stop();
 
 	bool AddEntityBoard(ESpawnerType type, GLuint shader, const MeshManager::Mesh* mesh, const MaterialManager::Material* material);
@@ -64,6 +64,7 @@ private:
 	EntityBoard getBoard(ESpawnerType type);
 
 	b2World* world;
+	SoundManager* soundManager;
 	glm::vec2 screenSize; // For only updating/drawing things inside with quadtree
 
 	std::vector<EntityBoard> entityBoards;

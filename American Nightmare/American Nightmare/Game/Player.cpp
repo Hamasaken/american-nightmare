@@ -31,7 +31,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	initiateProjectile();
 
 	// Starting entity variables (including hitbox)
-	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(PLAYER_SIZE_X, PLAYER_SIZE_Y, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_MASS, PLAYER_FRICTION);
+	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(PLAYER_SIZE_X * 0.45f, PLAYER_SIZE_Y * 0.9f, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_MASS, PLAYER_FRICTION);
 
 	// Set default keys
 	RebindKeys(KEY_LEFT, KEY_RIGHT, KEY_JUMP, KEY_HOVER, KEY_DASH);
@@ -81,7 +81,8 @@ void Player::Update(GLint deltaT, b2World* world)
 		invulTime = PLAYER_INVULNERABILITY_TIME;
 		camera->screenShake(500.f, 0.5f);
 		particleManager->EffectBloodSplatter(position, getAngleFromTwoPoints(contactWithEnemy->getCenter(), this->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f)); // temp blood effect
-		soundManager->playSFX(SoundManager::SFX_HIT);	// temp hit sfx
+		soundManager->playSFX(SoundManager::SFX_HIT);
+		soundManager->playSFXOverDrive(SoundManager::SFX_HURT, 50.f);
 		TakeDamage(contactWithEnemy->getDamage());
 	}
 
@@ -112,6 +113,8 @@ void Player::Update(GLint deltaT, b2World* world)
 	// Recharging power meter
 	if (!isHovering)
 	{
+		soundManager->stopSFX(SoundManager::SFX_HOVER);
+
 		power += deltaT * 0.001f * PLAYER_POWER_RECHARGE;
 
 		if (power > PLAYER_POWER_MAX)
@@ -128,8 +131,8 @@ void Player::Update(GLint deltaT, b2World* world)
 	// Updating animation texture
 	updateAnimation(deltaT);
 
+	// Updating vac
 	this->vac->Update(this->getBody()->GetPosition(), deltaT);
-
 
 	// Correcting texture to hitbox
 	Entity::Update(deltaT);
@@ -139,6 +142,7 @@ void Player::Reset()
 {
 	// Going to save point
 	hitbox->getBody()->SetTransform(b2Vec2(startPosition.x, startPosition.y), 0);
+	hitbox->getBody()->SetAwake(true);
 
 	// Resetting variables
 	hp = PLAYER_HP;
@@ -174,7 +178,10 @@ void Player::TakeDamage(float dmg)
 			particleManager->EffectBloodSplatter(position, getAngleFromTwoPoints(this->getCenter(), contactWithEnemy->getCenter()), 0.08f, 25, glm::vec4(0.4f, 0.05f, 0.025f, 1.f));
 		}
 
+		this->getBody()->SetLinearVelocity({ 0, 0 });
+		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_DEATH, 50, 0.f);
 		particleManager->EffectExplosionLights(position, 50, glm::vec4(0.4f, 0.05f, 0.025f, 1.f));
+		particleManager->EffectBloodCloud(position, 10, glm::vec4(1.f), randBetweenF(1.f, 1.75f));
 		contactWithEnemy = nullptr;
 	}
 }
@@ -187,55 +194,40 @@ bool Player::getIsDead()
 void Player::Walk(Direction dir)
 {
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
-	if (!hasJumped)
+	if (hasJumped)
 	{
+		soundManager->stopSFX(SoundManager::SFX_STEPS);
 		switch (dir)
 		{
 		case LEFT:
-			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
-			if (vel.x > -PLAYER_MAX_VEL_X)
-			{
-				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X, 0), true);
-				directionIsRight = true;
-			}
+			hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
+			directionIsRight = true;
 			break;
 		case RIGHT:
-			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
-			if (vel.x < PLAYER_MAX_VEL_X)
-			{
-				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X, 0), true);
-				directionIsRight = false;
-			}
-			break;
-		case STOPPED:
-			soundManager->stopSFX(SoundManager::SFX_STEPS);
-			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+			hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
+			directionIsRight = false;
 			break;
 		}
+		vel.x = hitbox->getBody()->GetLinearVelocity().x;
+		hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
 	}
 	else
 	{
 		switch (dir)
 		{
 		case LEFT:
-			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
-			if (vel.x > -PLAYER_MAX_VEL_X)
-			{
-				hitbox->getBody()->ApplyForceToCenter(b2Vec2(-PLAYER_VEL_X * 0.35f, 0), true);
-				directionIsRight = true;
-			}
+			hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
+			directionIsRight = true;
+			soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 			break;
 		case RIGHT:
-			if (vel.y == 0.f) soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
-			if (vel.x < PLAYER_MAX_VEL_X)
-			{
-				hitbox->getBody()->ApplyForceToCenter(b2Vec2(PLAYER_VEL_X * 0.35f, 0), true);
-				directionIsRight = false;
-			}
+			hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
+			directionIsRight = false;
+			soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 			break;
 		case STOPPED:
 			soundManager->stopSFX(SoundManager::SFX_STEPS);
-			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+			hitbox->getBody()->SetLinearVelocity(b2Vec2(0, vel.y));
 			break;
 		}
 	}
@@ -246,9 +238,10 @@ void Player::Jump()
 {
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
 
-	if (!hasJumped)
+	if (!hasJumped && vel.y > -0.5f)
 	{
 		soundManager->stopSFX(SoundManager::SFX_STEPS);
+		soundManager->playSFXOverDrive(SoundManager::SFX_JUMP, 80.f);
 		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
 		vel.y = hitbox->getBody()->GetLinearVelocity().y;
 		hasJumped = true;
@@ -260,6 +253,7 @@ void Player::Dash(sf::Keyboard::Key inKey)
 {
 	if (!hasDashed)
 	{
+		soundManager->playSFXOverDrive(SoundManager::SFX_DASH, 50.f);
 		power -= PLAYER_POWER_COST_DASH;
 		isDashing = true;
 		hasDashed = true;
@@ -269,16 +263,20 @@ void Player::Dash(sf::Keyboard::Key inKey)
 		float angle;
 		if (inKey == key_left)
 			angle = -glm::pi<float>() * 0.5f;
-		else
+		else if (inKey == key_right)
 			angle = glm::pi<float>() * 0.5f;
+		else if (inKey == key_jump)
+			angle = glm::pi<float>();
 
-		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(sin(angle) * PLAYER_DASH_VEL, cos(angle) * PLAYER_DASH_VEL), true);
+		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(sin(angle) * PLAYER_DASH_VEL, (cos(angle) * PLAYER_DASH_VEL) * 0.25), true);
 	}
 }
 
 void Player::Hover(GLint deltaT)
 {
 	static float yPos;
+
+	soundManager->playModifiedSFX(SoundManager::SFX_HOVER, 30, 0.01);
 
 	if (isHovering)
 	{
@@ -299,7 +297,11 @@ void Player::Shockwave()
 {
 	if (shockwaveCooldown < NULL)
 	{
-		particleManager->EffectSmokeCloud(position, 14, 50, glm::vec4(1.f));
+		soundManager->playSFXOverDrive(SoundManager::SFX_SHOCKWAVE, 100);
+		particleManager->EffectSmokeCloud(position, 0, 5, glm::vec4(0.85f), 3.f);
+		particleManager->EffectSmokeCloud(position, 0, 5, glm::vec4(0.35f), 2.5f);
+		particleManager->EffectExplosionLights(position, 12, glm::vec4(0.45), 1.5f);
+		particleManager->EffectExplosionLights(position, 12, glm::vec4(0.25), 0.90f);
 		b2Vec2 pos;
 		float angle = 0.f;
 		b2ContactEdge* contact = vac->getBody()->GetContactList();
@@ -312,13 +314,13 @@ void Player::Shockwave()
 				{
 					pos = contact->contact->GetFixtureB()->GetBody()->GetPosition();
 					angle = getAngleFromTwoPoints(glm::vec3(pos.x, pos.y, 0.f), position);
-					contact->contact->GetFixtureB()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 10000.f, sin(angle) * 10000.f), true);
+					contact->contact->GetFixtureB()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * PLAYER_SHOCKWAVE_POWER, sin(angle) * PLAYER_SHOCKWAVE_POWER), true);
 				}
 				else
 				{
 					pos = contact->contact->GetFixtureA()->GetBody()->GetPosition();
 					angle = getAngleFromTwoPoints(glm::vec3(pos.x, pos.y, 0.f), position);
-					contact->contact->GetFixtureA()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 10000.f, sin(angle) * 10000.f), true);
+					contact->contact->GetFixtureA()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * PLAYER_SHOCKWAVE_POWER, sin(angle) * PLAYER_SHOCKWAVE_POWER), true);
 				}
 			}
 			contact = contact->next;
@@ -369,7 +371,11 @@ void Player::InputKeyboard(GLint deltaT)
 	}
 	else	Walk(STOPPED);
 
-	if (sf::Keyboard::isKeyPressed(key_jump)) Jump();
+	if (sf::Keyboard::isKeyPressed(key_jump)) 
+	{
+		Jump();
+		if (sf::Keyboard::isKeyPressed(key_dash) && power >= PLAYER_POWER_COST_DASH) Dash(key_jump);
+	}
 	if (sf::Keyboard::isKeyPressed(key_hover) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
 	else isHovering = false;
 }
@@ -450,6 +456,11 @@ float& Player::getHP()
 float& Player::getPower()
 {
 	return power;
+}
+
+float& Player::getNrOfProjectiles()
+{
+	return (float&)nrOfProjectiles;
 }
 
 bool Player::getIsHovering()

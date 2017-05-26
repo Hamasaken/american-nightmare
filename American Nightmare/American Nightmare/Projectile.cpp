@@ -2,9 +2,9 @@
 
 Projectile::Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World *world, glm::vec2 pos, bool isCircle)
 {
-	Entity::Start(mesh, material, world, pos, glm::vec3(BULLET_SIZE_X, BULLET_SIZE_Y, BULLET_SIZE_Z), b2BodyType::b2_dynamicBody, ((isCircle) ? b2Shape::e_circle : b2Shape::e_polygon), false, BULLET_MASS, 0.05);
+	Entity::Start(mesh, material, world, pos, glm::vec3(BULLET_SIZE_X, BULLET_SIZE_Y, BULLET_SIZE_Z), b2BodyType::b2_dynamicBody, ((isCircle) ? b2Shape::e_circle : b2Shape::e_polygon), false, BULLET_MASS, 0.95);
 	this->scale = glm::vec3(BULLET_SIZE_X, BULLET_SIZE_Y, BULLET_SIZE_Z);
-	hitbox->getBody()->SetSleepingAllowed(false);
+	hitbox->getBody()->SetSleepingAllowed(true);
 	this->damage = 10;
 	this->damageOn = false;
 	this->marked = false;

@@ -8,6 +8,7 @@ class Trigger : public Hitbox
 public:
 	enum TriggerType 
 	{
+		NOTHING,		// ..
 		DOOR,			// changes the current level
 		POPUP,			// tutorial popups
 		PUSH,			// moves an entity

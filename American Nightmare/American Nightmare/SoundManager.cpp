@@ -42,6 +42,16 @@ void SoundManager::loadSFXs()
 	sfx[SFX_SUCTION] = loadSFX(pathToFolder + "sfx_suction.wav");
 	sfx[SFX_FIRE] = loadSFX(pathToFolder + "sfx_fire.ogg");
 	sfx[SFX_STEPS] = loadSFX(pathToFolder + "sfx_footsteps.wav");
+	sfx[SFX_BIRDS] = loadSFX(pathToFolder + "sfx_birds.ogg");
+	sfx[SFX_SHOCKWAVE] = loadSFX(pathToFolder + "sfx_shockwave.ogg");
+	sfx[SFX_LASER] = loadSFX(pathToFolder + "sfx_laser.wav");
+	sfx[SFX_ZOMBIE_1] = loadSFX(pathToFolder + "sfx_zombie_1.wav");
+	sfx[SFX_ZOMBIE_2] = loadSFX(pathToFolder + "sfx_zombie_2.wav");
+	sfx[SFX_DASH] = loadSFX(pathToFolder + "sfx_dash.wav");
+	sfx[SFX_JUMP] = loadSFX(pathToFolder + "sfx_jump.wav");
+	sfx[SFX_HURT] = loadSFX(pathToFolder + "sfx_hurt.ogg");
+	sfx[SFX_HOVER] = loadSFX(pathToFolder + "sfx_hover.wav");
+	sfx[SFX_DEATH] = loadSFX(pathToFolder + "sfx_death.wav");
 
 	// Setting every sfx at deicided volume
 	for (sf::Sound& s : sfx)
@@ -53,8 +63,10 @@ void SoundManager::loadSongs()
 	std::string pathToFolder = MUSIC_PATH;
 
 	// Load all songs here
+	song[FOX_BOOGIE].openFromFile(pathToFolder + "Fox Boogie.ogg");
 	song[URANIUM_FEVER].openFromFile(pathToFolder + "Uranium Fever.ogg");
 	song[GOOD_ROCKIN_TONIGHT].openFromFile(pathToFolder + "Good Rockin Tonight.ogg");
+	song[JAZZY_INTERLUDE].openFromFile(pathToFolder + "Jazzy Interlude.ogg");
 
 	// Setting every song as looping and setting volume
 	for (sf::Music& m : song)
@@ -111,13 +123,16 @@ void SoundManager::playSong(SONG song)
 {
 	if (MUSIC_ON)
 	{
-		if (nrOfMusicPlayingCurrently != -1)
+		if (nrOfMusicPlayingCurrently != -1 && nrOfMusicPlayingCurrently != song)
 		{
 			stopMusic();
 		}
 
-		nrOfMusicPlayingCurrently = song;
-		this->song[song].play();
+		if (nrOfMusicPlayingCurrently != song)
+		{
+			nrOfMusicPlayingCurrently = song;
+			this->song[nrOfMusicPlayingCurrently].play();
+		}
 	}
 }
 

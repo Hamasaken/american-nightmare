@@ -4,8 +4,8 @@
 #include "Accessories.h"
 
 // The maximum capicity of SFX and Songs
-#define SFX_CAPACITY	10
-#define SONG_CAPACITY	10
+#define SFX_CAPACITY	30
+#define SONG_CAPACITY	30
 
 // Volume of Music and SFX
 #define VOLUME_MUSIC	50
@@ -29,14 +29,26 @@ public:
 		SFX_RtoL,
 		SFX_SUCTION,
 		SFX_FIRE,
-		SFX_STEPS
+		SFX_STEPS, 
+		SFX_BIRDS,
+		SFX_SHOCKWAVE,
+		SFX_ZOMBIE_1,
+		SFX_ZOMBIE_2, 
+		SFX_DASH,
+		SFX_JUMP,
+		SFX_HURT, 
+		SFX_HOVER, 
+		SFX_LASER, 
+		SFX_DEATH
 	};
 
 	// Put song names here, and then load them in the loadSongs functions
 	enum SONG
 	{
+		FOX_BOOGIE,
 		URANIUM_FEVER,
-		GOOD_ROCKIN_TONIGHT
+		GOOD_ROCKIN_TONIGHT, 
+		JAZZY_INTERLUDE
 	};
 
 	SoundManager();

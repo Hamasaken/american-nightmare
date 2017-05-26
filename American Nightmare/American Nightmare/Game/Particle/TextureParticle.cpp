@@ -16,7 +16,7 @@ void TextureParticle::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size)
 	lifeTime = TEXTURE_LIFETIME;
 	rotationSpeed = TEXTURE_ROTATION;
 	lifeTimeStart = lifeTime;
-	velocity = glm::vec3(TEXTURE_VELOCITY, TEXTURE_VELOCITY, randBetweenF(-0.0035f, 0.0035f));
+	velocity = glm::vec3(TEXTURE_VELOCITY, TEXTURE_VELOCITY, randBetweenF(-0.0015f, 0.0015f));
 }
 
 void TextureParticle::Update(GLfloat deltaT)

@@ -56,6 +56,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.75, 0.75, 0.75), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
 	materialManager->AddMaterial("GUI_bar_blue", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.7), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.jpg");
 	materialManager->AddMaterial("GUI_bar_red", glm::vec3(0.1f), glm::vec3(0.7, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
+	materialManager->AddMaterial("GUI_bar_green", glm::vec3(0.1f), glm::vec3(0.5, 0.7, 0.5), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
 	materialManager->AddMaterial("GUI_bar_white", glm::vec3(0.1f), glm::vec3(0.8, 0.8, 0.8), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
 	materialManager->AddMaterial("playermaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.5f), 0.01f, "playertexture", TEXTURE_PATH "Walk01.png");
 	materialManager->AddMaterial("zombie1material", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.5f), 0.01f, "zombie1walk", TEXTURE_PATH "Zombie1Walk.png");
@@ -63,6 +64,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "groundtexture", TEXTURE_PATH "temp_ground.jpg");
 	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "backgroundtexture", TEXTURE_PATH "temp_background.jpg");
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
+	materialManager->AddMaterial("bloodmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "bloodtexture", TEXTURE_PATH "blood.png");
 	materialManager->AddMaterial("boltmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "bolttexture", TEXTURE_PATH "bolt.jpg");
 	for (int i = 1; i < 11; i++) materialManager->AddMaterial("postermaterial_" + std::to_string(i), glm::vec3(1.f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "poster_" + std::to_string(i), (POSTER_PATH "poster_" + std::to_string(i) + ".jpg"));
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
@@ -87,6 +89,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::TEXTURE);
 	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::SMOKE);
 	particleManager->ShaderPair(shaderManager->getShader("particle_cube"), ParticleType::NUTSBOLTS);
+	particleManager->setDefaultTextures(materialManager->getTextureID("smoketexture"), materialManager->getTextureID("bloodtexture"));
 
 	////////////////////////////////////////////////////////////
 	// Creating Models
@@ -123,14 +126,22 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (uiManager == nullptr) return false;
 	if (!uiManager->Start(screenSize, screenPosition)) return false;
 	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.89f, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Pause", FONT_PATH INGAME_FONT, 17.5f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
-	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(-0.3, -0.96, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_bar_red"), meshManager->getMesh("quad"));
+	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(-0.3f, -0.96, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_bar_red"), meshManager->getMesh("quad"));
 	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(0.3, -0.96, 0), glm::vec2(0.45, 0.1191), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quad"));
+	uiManager->AddBar(levelManager->getPlayer()->getNrOfProjectiles(), levelManager->getPlayer()->getNrOfProjectiles(), glm::vec3(-0.9, -0.7, 0), glm::vec2(0.50, 0.10), materialManager->getMaterial("GUI_bar_green"), meshManager->getMesh("quad"));
+	uiManager->getBar(2)->setRotation(glm::vec3(0, 0, 3.14 * 0.5f));
+	
 	uiManager->AddText(glm::vec3(-0.3, -0.96, 0.f), 30.f, "Health", FONT_PATH INGAME_FONT);
-	uiManager->AddText(glm::vec3(0.3, -0.96, 0.f), 30.f, "Power", FONT_PATH INGAME_FONT);	
+	uiManager->AddText(glm::vec3(0.3, -0.96, 0.f), 30.f, "Power", FONT_PATH INGAME_FONT);
+	uiManager->AddText(glm::vec3(-0.9, -0.7, 0.f), 30.f, "Scrap", FONT_PATH INGAME_FONT);
 	uiManager->AddText(glm::vec3(0.f, 2.5, 0.f), 50.f, "You died", FONT_PATH INGAME_FONT);
 	uiManager->AddButton(GUIManager::PLAY, glm::vec3(0.0, 2.0f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Try again", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
 	uiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0.0, 1.8f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quad"), "Meny", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
 	uiManager->setAlpha(1.f);
+
+	uiManager->getBar(0)->setAlpha(0.35f);
+	uiManager->getBar(1)->setAlpha(0.35f);
+	uiManager->getBar(2)->setAlpha(0.35f);
 
 	uiManager->setShader(shaderManager->getShader("texture"));
 	uiManager->setInstantCenter(glm::vec2(0, 0));
@@ -151,7 +162,7 @@ void ScreenGame::SetStartVariables()
 	gameState = PLAYING;
 
 	// Backing the camera a little bit backwards
-	camera->setPosition(glm::vec3(0, 0, 18.5f));
+	camera->setPosition(glm::vec3(0, 0, 16.0f));
 
 	// Making wall & floor bigger
 	levelManager->LoadLevel(LEVEL_PATH "Level1.anl", ARCHIVE_PATH "Level1.ana");
@@ -192,20 +203,24 @@ void ScreenGame::Draw()
 	glBindFramebuffer(GL_FRAMEBUFFER, drRendering.getDRFBO());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	float playerX = levelManager->getPlayer()->getPosition().x;
+
 	// Drawing map
 	for (Object* object : levelManager->getMap())
-		DrawObjectGeometryPass(object, shaderManager);
+			DrawObjectGeometryPass(object, shaderManager);
 
 	// Drawing movable entities
 	for (Entity* entity : *levelManager->getEntityManager()->getEntityList())
-		DrawObjectGeometryPass(entity, shaderManager);
+		if (abs(entity->getPosition().x - playerX) < 35.f)
+			DrawObjectGeometryPass(entity, shaderManager);
 
 	////TEST
 	//for(Projectile* proj : levelManager->getProj())
 	//	DrawObjectGeometryPass(proj, shaderManager);
 
 	for (Projectile* projectiles : levelManager->getProjectiles())
-		DrawObjectGeometryPass(projectiles, shaderManager);
+		if (abs(projectiles->getPosition().x - playerX) < 35.f)
+			DrawObjectGeometryPass(projectiles, shaderManager);
 
 	//TEST
 	//for(Projectile* proj : levelManager->getProj())
@@ -291,7 +306,7 @@ void ScreenGame::Draw()
 	DrawObjectGUI(levelManager->getPopup(), shaderManager);
 
 	// Temp shadow map debug
-	/*if (shadowManager.getUseShadows())
+/*	if (shadowManager.getUseShadows())
 	{
 		shaderManager->setShader("debug");
 
@@ -308,8 +323,8 @@ void ScreenGame::Draw()
 		glDisable(GL_DEPTH_TEST);
 		drRendering.getFinalRenderQuad()->Draw();
 		glEnable(GL_DEPTH_TEST);
-	}*/
-
+	}
+	*/
 }
 
 void ScreenGame::DrawShadowMaps()
@@ -320,7 +335,7 @@ void ScreenGame::DrawShadowMaps()
 		// Set Viewport to resolution of shadow map
 		glViewport(0, 0, shadowManager.getDirectionalShadowMapList()[i]->resolution.x, shadowManager.getDirectionalShadowMapList()[i]->resolution.y);
 
-		shadowManager.getDirectionalShadowMapList()[i]->UpdateLightSpace(camera->getPosition(), glm::vec2(40, 20), 1.f, 30.f);
+		shadowManager.getDirectionalShadowMapList()[i]->UpdateLightSpace(camera->getPosition(), glm::vec2(40, 20), -2.f, 30.f);
 		// Bind depth FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, shadowManager.getDirectionalShadowMapList()[i]->shadowFBO);
 
@@ -329,20 +344,25 @@ void ScreenGame::DrawShadowMaps()
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 
-		glCullFace(GL_FRONT);
+		//glCullFace(GL_FRONT);
 		
+
+		float playerX = levelManager->getPlayer()->getPosition().x;
+
 		// Drawing shadowmap
 		for (Object* object : levelManager->getMap())
-			DrawObjectDirShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+				DrawObjectDirShadowMap(object, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 	
-		glCullFace(GL_BACK);
+		//glCullFace(GL_BACK);
 
 		// Drawing movable entities
 		for (Entity* entity : *levelManager->getEntityManager()->getEntityList())
-			DrawObjectDirShadowMap(entity, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+			if (abs(entity->getPosition().x - playerX) < 35.f)
+				DrawObjectDirShadowMap(entity, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
 		for (Projectile* projectiles : levelManager->getProjectiles())
-			DrawObjectDirShadowMap(projectiles, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
+			if (abs(projectiles->getPosition().x - playerX) < 35.f)
+				DrawObjectDirShadowMap(projectiles, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
 		// Set shader for transparent objects
 		shaderManager->setShader(shadowManager.getDirectionalShadowShaderTr());
@@ -439,7 +459,7 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 		GUIManager::Action action	= buttons[0][i].second;
 		if (btn->getPressed())
 		{
-			soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
+			soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 			switch (action)
 			{
 			case GUIManager::Action::OK:		Pause(); break;

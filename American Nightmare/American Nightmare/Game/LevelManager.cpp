@@ -1,5 +1,7 @@
 #include "LevelManager.h"
 
+extern std::vector<uint16_t> unlockedPosters;
+
 LevelManager::LevelManager() 
 {
 	this->materialManager = nullptr;
@@ -28,10 +30,6 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	this->guiShader = guiShader;
 	this->screenSize = screenSize;
 	this->screenPos = screenPos;
-
-	// Creatin bool vector for posters
-	for (int i = 0; i < 10; i++)
-		unlockedPosters.push_back(0);
 
 	// Popup Settings
 	popup = new Text();
@@ -75,11 +73,11 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 
 	entityManager = new EntityManager();
 	if (entityManager == nullptr) return false;
-	if (!entityManager->Start(world, screenSize)) return false;
+	if (!entityManager->Start(world, soundManager, screenSize)) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::zombie1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::zombie2, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt")) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::skater1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt")) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::flying1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::zombie2, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::skater1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::flying1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::trash, mapShader, meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"))) return false;
 
 	////////////////////////////////////////////////////////////
@@ -89,7 +87,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	if (quadTree == nullptr) return false;
 	if (!quadTree->Start(screenSize)) return false;
 
-	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), mapShader);
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, soundManager, particleManager, player->getPlayerPosAsGLM(), mapShader, screenPos, screenSize);
 	this->wasPressed = false;
 	this->isPressed = false;
 
@@ -342,13 +340,14 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	player->setStartingPosition(start);
 
 	// Music
-	soundManager->playSong(SoundManager::SONG::URANIUM_FEVER);
+	soundManager->playSong(SoundManager::SONG::JAZZY_INTERLUDE);
+	soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BIRDS, 100.f, 0);
 	
 	// Dust effect
 	particleManager->EffectLightDust(glm::vec3(0, 10, 0));
 
 	// Temp directional light for shadows
-	lightManager->AddDirectionalLight(glm::vec4(5, 20, 10, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 0.3f);
+	//lightManager->AddDirectionalLight(glm::vec4(5, 20, 10, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 
@@ -433,8 +432,7 @@ void LevelManager::LoadLevelMeshes(std::vector<LMesh> meshes)
 		if (meshManager->getMesh(mesh->name.data) != nullptr)
 			printf("Loading Object with mesh: %s\n", mesh->name.data);
 		else printf("Could not find mesh: %s\n", mesh->name.data);
-
-		const MaterialManager::Material* material = materialManager->getMaterial(mesh->name.data);
+		const MaterialManager::Material* material = materialManager->getMaterial(archive.getMesh(mesh->name.data)->material.name);
 		if (material == nullptr) material = materialManager->getMaterial("missingmaterial");
 
 		object->Start(meshManager->getMesh(mesh->name.data), material);
@@ -455,7 +453,7 @@ void LevelManager::LoadLevelHitboxes(std::vector<LHitbox> hitboxes)
 	{
 		Hitbox* hitbox = new Hitbox();
 		hitbox->InitializeHitbox(world, glm::vec2(levelFile.hitboxes[i].position[0], levelFile.hitboxes[i].position[1]), glm::vec2(levelFile.hitboxes[i].scale[0], levelFile.hitboxes[i].scale[1]), b2_staticBody);
-		hitbox->getBody()->SetTransform(b2Vec2(levelFile.hitboxes[i].position[0], levelFile.hitboxes[i].position[1]), levelFile.hitboxes[i].rotation);
+		hitbox->getBody()->SetTransform(b2Vec2(levelFile.hitboxes[i].position[0], -levelFile.hitboxes[i].position[1]), -glm::radians(levelFile.hitboxes[i].rotation));
 		this->hitboxes.push_back(hitbox);
 	}
 }
@@ -468,10 +466,23 @@ void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 	for (int i = 0; i < lights.size(); i++)
 	{
 		ALight* light = archive.getLight(lights[i].name.data);
-		if(light->decayType == EDecayType::eLinear)
-			lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.1f, 1, 10.f, 1.f);
-		else if(light->decayType == EDecayType::eQuadratic)
-			lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.1f, 1, 1.f, 10.f);
+		LLight l = lights[i];
+		if (light->lightType == ELightType::eDirectional)
+		{
+			glm::vec3 dir = { 0, 0, -1 };
+			dir = glm::rotateX(dir, glm::radians(l.rotation[0]));
+			dir = glm::rotateY(dir, glm::radians(l.rotation[1]));
+			dir = glm::rotateZ(dir, glm::radians(l.rotation[2]));
+
+			lightManager->AddDirectionalLight(glm::vec4(1.f), glm::vec4(dir, 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.01f);
+		}
+		else
+		{
+			if (light->decayType == EDecayType::eLinear)
+				lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.1f, 1, 10.f, 1.f);
+			else if (light->decayType == EDecayType::eQuadratic)
+				lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.1f, 1, 1.f, 10.f);
+		}
 	}
 }
 
@@ -502,15 +513,22 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		{
 		case ETriggerType::poster:		
 		{	
-			outTriggerType = Trigger::POSTER;
-			Poster* poster = new Poster();
-			poster->setShader(mapShader);
-			poster->Start(meshManager->getMesh("quad"), materialManager->getMaterial("postermaterial_2"));
-			LHitbox hitbox = triggers[i].hitbox;
-			poster->setScale(glm::vec3(hitbox.scale[0], hitbox.scale[1], 1));
-			poster->setPosition(glm::vec3(hitbox.position[0], hitbox.position[1] + hitbox.scale[1] / 2, 0));
-			map.push_back(poster);
-			outTrigger->setMapPart(poster);
+			if (unlockedPosters[atoi(trigger.data.data.c_str()) - 1] == 0)
+			{
+				outTriggerType = Trigger::POSTER;
+				Poster* poster = new Poster();
+				poster->setShader(mapShader);
+				poster->Start(meshManager->getMesh("quad"), materialManager->getMaterial("postermaterial_" + std::to_string(atoi(trigger.data.data.c_str()))));
+				LHitbox hitbox = triggers[i].hitbox;
+				poster->setScale(glm::vec3(hitbox.scale[0], hitbox.scale[1], 1));
+				poster->setPosition(glm::vec3(hitbox.position[0], hitbox.position[1] + hitbox.scale[1] / 2, 0));
+				map.push_back(poster);
+				outTrigger->setMapPart(poster);
+			}
+			else
+			{
+				outTriggerType = Trigger::NOTHING;
+			}
 		}
 			break;
 		case ETriggerType::deathZone:	
@@ -528,16 +546,15 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 			break; 
 		}
 
-		LHitbox hitbox = triggers[i].hitbox;
-		outTrigger->InitializeTrigger(outTriggerType, world, glm::vec2(hitbox.position[0], hitbox.position[1]), glm::vec2(hitbox.scale[0], hitbox.scale[1]), trigger.data.data, true);
-		
-		// Adding trigger to vector
-		this->triggers.push_back(outTrigger);
+		if (outTriggerType != Trigger::NOTHING)
+		{
+			LHitbox hitbox = triggers[i].hitbox;
+			outTrigger->InitializeTrigger(outTriggerType, world, glm::vec2(hitbox.position[0], hitbox.position[1]), glm::vec2(hitbox.scale[0], hitbox.scale[1]), trigger.data.data, true);
 
-		// Adding a constant smoke on trigger for testing
-//		particleManager->EffectConstantSmoke(glm::vec3(outTrigger->getPosition(), 0.f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.3f));
+			// Adding trigger to vector
+			this->triggers.push_back(outTrigger);
+		}
 	}
-
 }
 
 void LevelManager::LoadLevelEffects(std::vector<LEffect> effects)
@@ -552,13 +569,13 @@ void LevelManager::LoadLevelEffects(std::vector<LEffect> effects)
 		switch (effect.effectType)
 		{
 		case EEffectType::smoke: 
-			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 25);
+			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 30);
 			break;
 		case EEffectType::dust:
-			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 25, glm::vec4(0.40f, 0.3f, 0.3f, 0.7f));
+			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 30, glm::vec4(0.40f, 0.3f, 0.3f, 0.7f));
 			break;
 		case EEffectType::steam:
-			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 25, glm::vec4(0.3f, 0.30f, 0.5f, 0.7f));
+			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 30, glm::vec4(0.3f, 0.30f, 0.5f, 0.7f));
 			break;
 		}
 	}
@@ -751,7 +768,7 @@ void LevelManager::CheckTriggers()
 				remove = true;
 				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 50, glm::vec4(0.25, 1, 0.25, 1));
 				soundManager->playModifiedSFX(SoundManager::SFX::SFX_POWERUP, 50, 0.05f);
-				UnlockPoster(2);
+				UnlockPoster(atoi(trigger->getData().c_str()) - 1);
 				ActivatePopup("You unlocked a poster!", 3000.f);
 				break;
 
@@ -841,6 +858,7 @@ void LevelManager::UnlockPoster(int index)
 {
 	//Create file at path
 	ofstream out("Data/savedata.fu", ios::binary);
+
 	unlockedPosters[index] = 1;
 
 	//Write header

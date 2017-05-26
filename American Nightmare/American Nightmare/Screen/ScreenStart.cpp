@@ -95,11 +95,11 @@ void ScreenStart::SetStartVariables()
 	isLoading = false;
 
 	// Adding some ambient smoke on startmenu
-	particleManager->EffectConstantSmoke(glm::vec3(2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(1, 1, 1, 0.1));
-	particleManager->EffectConstantSmoke(glm::vec3(1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(1, 1, 1, 0.3));
-	particleManager->EffectConstantSmoke(glm::vec3(0, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(1, 1, 1, 0.4));
-	particleManager->EffectConstantSmoke(glm::vec3(-1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(1, 1, 1, 0.3));
-	particleManager->EffectConstantSmoke(glm::vec3(-2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(1, 1, 1, 0.1));
+	particleManager->EffectConstantSmoke(glm::vec3(2, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.7));
+	particleManager->EffectConstantSmoke(glm::vec3(1, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.5));
+	particleManager->EffectConstantSmoke(glm::vec3(0, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.4));
+	particleManager->EffectConstantSmoke(glm::vec3(-1, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.6));
+	particleManager->EffectConstantSmoke(glm::vec3(-2, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.8));
 
 	// Dust effect
 	particleManager->EffectLightDust(glm::vec3(0.f, 3, 0.f), glm::vec3(10, 6, 2), 75, glm::vec4(0.55));
@@ -108,7 +108,7 @@ void ScreenStart::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 15));
 
 	// Setting meny music
-	soundManager->playSong(SoundManager::SONG::GOOD_ROCKIN_TONIGHT);
+	soundManager->playSong(SoundManager::SONG::FOX_BOOGIE);
 }
 
 void ScreenStart::Update(GLint deltaT)
@@ -126,7 +126,7 @@ void ScreenStart::Update(GLint deltaT)
 	{
 		if (button.first->getPressed())
 		{
-			soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
+			soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 			switch (button.second)
 			{
 			case GUIManager::Action::PLAY:		

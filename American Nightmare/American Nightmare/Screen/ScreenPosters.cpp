@@ -1,5 +1,7 @@
 #include "ScreenPosters.h"
 
+extern std::vector<uint16_t> unlockedPosters;
+
 ScreenPosters::ScreenPosters() : Screen()
 {
 	shaderManager = nullptr;
@@ -69,13 +71,6 @@ bool ScreenPosters::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	meshManager = new MeshManager();
 	if (meshManager == nullptr) return false;
 
-	// Checking to see how many unlocked posters we have
-	unlockedPosters.resize(10);
-	ifstream in("Data/savedata.fu", ios::binary);
-	if (in.is_open())
-		in.read(reinterpret_cast<char*>(unlockedPosters.data()), sizeof(uint16_t) * 10);
-	in.close();
-
 	////////////////////////////////////////////////////////////
 	// Creating a GUI manager	
 	////////////////////////////////////////////////////////////
@@ -124,11 +119,11 @@ void ScreenPosters::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 15));
 
 	// Adding some ambient smoke on postermeny
-	particleManager->EffectConstantSmoke(glm::vec3(2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.7));
-	particleManager->EffectConstantSmoke(glm::vec3(1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.5));
-	particleManager->EffectConstantSmoke(glm::vec3(0, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.4));
-	particleManager->EffectConstantSmoke(glm::vec3(-1, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.6));
-	particleManager->EffectConstantSmoke(glm::vec3(-2, 2, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.8));
+	particleManager->EffectConstantSmoke(glm::vec3(2, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.7));
+	particleManager->EffectConstantSmoke(glm::vec3(1, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.5));
+	particleManager->EffectConstantSmoke(glm::vec3(0, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.4));
+	particleManager->EffectConstantSmoke(glm::vec3(-1, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.6));
+	particleManager->EffectConstantSmoke(glm::vec3(-2, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.8));
 
 	// Dust effect
 	particleManager->EffectLightDust(glm::vec3(0.f, 3, 0.f), glm::vec3(8, 8, 2), 50, glm::vec4(0.33f));
@@ -157,10 +152,10 @@ void ScreenPosters::Update(GLint deltaT)
 		GUIManager::Action action = buttons[0][i].second;
 		if (btn->getPressed())
 		{
+			soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 			switch (action)
 			{
 				case GUIManager::Action::OK:
-					soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 					soundManager->playModifiedSFX(SoundManager::SFX::SFX_RtoL, 70, 0.05f);
 					timerOnExplosion = EXPLOSION_TIMER;
 					shouldExplode = true;
@@ -168,10 +163,9 @@ void ScreenPosters::Update(GLint deltaT)
 					posterListGUI->getButton(0)->setMaterial(btn->getMaterial());
 					break;
 				case GUIManager::Action::CANCEL:
-					soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f); 
-					posterListGUI->setCenter(glm::vec2(0, 0)); break;
+					posterListGUI->setCenter(glm::vec2(0, 0)); 
+					break;
 				case GUIManager::Action::STARTMENY: 
-					soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
 					*state = State::StartMeny; 
 					break; 
 			}
