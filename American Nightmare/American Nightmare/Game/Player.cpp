@@ -15,13 +15,25 @@ void Player::initiateCursor()
 	SDL_SetCursor(cursor);
 }
 
-//bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
-bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
+void Player::initiateProjectile()
 {
-	this->nrOfProjectiles = 100;
+	this->ammo = 6;
+	this->fireDirection = { 0.0f, 0.0f };
+}
+
+//bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
+bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera, glm::vec2 screenPos, glm::vec2 screenSize)
+{
+	//Initiates screen properties
+	this->screenPos = screenPos;
+	this->screenSize = screenSize;
+
 
 	//Sets the cursor for the player
 	initiateCursor();
+
+	//Sets variables for projectile/gun
+	initiateProjectile();
 
 	// Starting entity variables (including hitbox)
 	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(PLAYER_SIZE_X * 0.45f, PLAYER_SIZE_Y * 0.9f, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_MASS, PLAYER_FRICTION);
@@ -55,11 +67,26 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	// Setting a self-pointer for collision detection
 	getBody()->SetUserData(this);
 
+	//Sets screen properties
+	UpdateScreenProperties(screenSize, screenPos);
+
 	return true;
 }
 
 void Player::Update(GLint deltaT, b2World* world)
 {
+	//This will set the firedirection to the direction of the right-thumbstick
+	if (sf::Joystick::isConnected(0))
+	{
+		this->fireDirection = glm::vec2(sf::Joystick::getAxisPosition(0, sf::Joystick::U), sf::Joystick::getAxisPosition(0, sf::Joystick::R));
+		fireDirection = glm::normalize(fireDirection);
+	}
+	else //This is for the mouse
+	{
+		this->fireDirection = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y - 150), screenSize, screenPos);
+		this->fireDirection = glm::normalize(fireDirection);
+	}
+
 	// Update player invulnerability time
 	if (invulTime > 0.f)
 	{
@@ -95,8 +122,9 @@ void Player::Update(GLint deltaT, b2World* world)
 	{
 		InputKeyboard(deltaT);
 		InputMouse();
-		InputTesting();
-		if (CONTROLLER_ON) InputController(deltaT);
+		InputTesting(); 
+		InputController(deltaT);
+		//if (CONTROLLER_ON) InputController(deltaT);
 	}
 
 	// Recharging power meter
@@ -117,6 +145,9 @@ void Player::Update(GLint deltaT, b2World* world)
 	if (vel.y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, PLAYER_MAX_VEL_Y));
 	if (vel.y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, -PLAYER_MAX_VEL_Y));
 	
+
+	
+
 	// Updating animation texture
 	updateAnimation(deltaT);
 
@@ -400,6 +431,7 @@ void Player::InputController(GLint deltaT)
 		if (sf::Joystick::isButtonPressed(0, BTN_RT))
 			printf("RT.\n");
 
+		
 		float leftAxis = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X) / 100.f;
 		if (leftAxis < -0.1f || leftAxis > 0.1f) // Controller offset
 		{
@@ -440,7 +472,7 @@ float& Player::getPower()
 
 float& Player::getNrOfProjectiles()
 {
-	return (float&)nrOfProjectiles;
+	return (float&)ammo;
 }
 
 bool Player::getIsHovering()
@@ -475,7 +507,7 @@ bool Player::getHasJumped()
 
 bool Player::getAmmoFull()
 {
-	if (CAP <= nrOfProjectiles)
+	if (ammoCap > ammo)
 		return false;
 
 	return true;
@@ -508,10 +540,7 @@ void Player::setStartingPosition(glm::vec3 position)
 
 bool Player::addPlayerProjectiles()
 {
-	return true;
-
-	/*
-	if (this->nrOfProjectiles <= this->CAP)
+	if (this->ammo >= this->ammoCap)
 	{
 		return false;
 	}
@@ -519,12 +548,11 @@ bool Player::addPlayerProjectiles()
 	{
 		return true;
 	}
-	*/
 }
 
 bool Player::getCanShoot()
 {
-	if (this->nrOfProjectiles > 0)
+	if (this->ammo > 0)
 	{
 		return true;
 	}
@@ -536,10 +564,21 @@ bool Player::getCanShoot()
 
 void Player::addNrOfProjectiles()
 {
-	this->nrOfProjectiles++;
+	this->ammo++;
 }
 
 void Player::decreaseNrOfProjectiles()
 {
-	this->nrOfProjectiles--;
+	this->ammo--;
+}
+
+glm::vec2 Player::getFireDirection()const
+{
+	return this->fireDirection;
+}
+
+void Player::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos)
+{
+	this->screenPos = screenPos;
+	this->screenSize = screenSize;
 }
