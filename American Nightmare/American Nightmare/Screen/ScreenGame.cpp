@@ -218,7 +218,7 @@ void ScreenGame::Draw()
 	//for(Projectile* proj : levelManager->getProj())
 	//	DrawObjectGeometryPass(proj, shaderManager);
 
-	for (Projectile* projectiles : levelManager->getProjectiles())
+	for (Projectile* projectiles : *levelManager->getProjectiles())
 		if (abs(projectiles->getPosition().x - playerX) < 35.f)
 			DrawObjectGeometryPass(projectiles, shaderManager);
 
@@ -360,7 +360,7 @@ void ScreenGame::DrawShadowMaps()
 			if (abs(entity->getPosition().x - playerX) < 35.f)
 				DrawObjectDirShadowMap(entity, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
-		for (Projectile* projectiles : levelManager->getProjectiles())
+		for (Projectile* projectiles : *levelManager->getProjectiles())
 			if (abs(projectiles->getPosition().x - playerX) < 35.f)
 				DrawObjectDirShadowMap(projectiles, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
@@ -404,7 +404,7 @@ void ScreenGame::DrawShadowMaps()
 		for (Entity* entity : *levelManager->getEntityManager()->getEntityList())
 			DrawObjectPointShadowMap(entity, shaderManager, shadowManager.getPointShadowMapList()[i]);
 
-		for (Projectile* projectiles : levelManager->getProjectiles())
+		for (Projectile* projectiles : *levelManager->getProjectiles())
 			DrawObjectPointShadowMap(projectiles, shaderManager, shadowManager.getPointShadowMapList()[i]);
 
 

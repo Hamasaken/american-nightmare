@@ -92,9 +92,9 @@ void ProjectileHandler::deleteProjects(b2World* world)
 }
 
 
-std::vector<Projectile*> ProjectileHandler::getBullets()
+std::vector<Projectile*>* ProjectileHandler::getBullets()
 {
-	return myProjtileVector;
+	return &myProjtileVector;
 }
 
 void ProjectileHandler::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos)

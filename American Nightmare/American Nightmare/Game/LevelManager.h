@@ -75,7 +75,7 @@ public:
 	///////////////////////////////////////////////////////////
 	std::vector<Object*> getMap();
 	//std::vector<Projectile*> getProj();
-	std::vector<Projectile*> getProjectiles();
+	std::vector<Projectile*>* getProjectiles();
 
 	const LightManager* getLightManager() const;
 	EntityManager* getEntityManager();

@@ -206,7 +206,7 @@ void LevelManager::StopMap()
 	triggers.clear();
 
 	// Removes the world object
-	std::vector<Projectile*> p = myPH->getBullets();
+	std::vector<Projectile*> p = *myPH->getBullets();
 	for (int i = 0; i < p.size(); i++)
 		p[i]->setmarked(true);
 	myPH->deleteProjects(world);
@@ -856,9 +856,9 @@ std::vector<Object*> LevelManager::getMap()
 	return map;
 }
 
-std::vector<Projectile*> LevelManager::getProjectiles()
+std::vector<Projectile*>* LevelManager::getProjectiles()
 {
-	return this->myPH->getBullets();
+	return (myPH->getBullets());
 }
 
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
