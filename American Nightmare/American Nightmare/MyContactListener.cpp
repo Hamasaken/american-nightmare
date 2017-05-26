@@ -49,7 +49,13 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		Hitbox* hitbox = static_cast<Hitbox*>(ptr);
 		if (projectile)
 		{
-			if (player->addPlayerProjectiles() == true && sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)
+			if (player->addPlayerProjectiles() == true && sf::Joystick::isButtonPressed(0, 4))
+			{
+				player->addNrOfProjectiles();
+				projectile->setmarked(true);
+				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 40, 0.15f);
+			}
+			else if (player->addPlayerProjectiles() == true && sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)
 			{
 				player->addNrOfProjectiles();
 				projectile->setmarked(true);

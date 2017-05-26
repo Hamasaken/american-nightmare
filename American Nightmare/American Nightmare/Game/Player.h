@@ -70,7 +70,7 @@ private:
 
 	//Variables for handling projectile/Weapon
 	int ammo;
-	const int ammoCap = 25;
+	const int ammoCap = 5;
 	glm::vec2 fireDirection;
 	void initiateProjectile();
 
@@ -127,7 +127,7 @@ public:
 	Player(const Player& other);
 	~Player();
 	 
-	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera);
+	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera, glm::vec2 screenPos, glm::vec2 screenSize);
 	//bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
 	void Update(GLint deltaT, b2World* world);
 	//bool Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);

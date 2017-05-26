@@ -20,14 +20,12 @@ void ProjectileHandler::initiateProjectiles(const MeshManager::Mesh* mesh, const
 
 ProjectileHandler::ProjectileHandler() {}
 
-ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, SoundManager* soundManager, ParticleManager* particleManager, glm::vec2 pos, GLuint shader, glm::vec2 screenPos, glm::vec2 screenSize)
+ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, SoundManager* soundManager, ParticleManager* particleManager, glm::vec2 pos, GLuint shader)
 {
 	this->initiateProjectiles(mesh, material, world, pos, shader);
 
 	this->particleManager = particleManager;
 	this->soundManager = soundManager;
-	this->screenSize = screenSize;
-	this->screenPos = screenPos;
 }
 
 ProjectileHandler::~ProjectileHandler()
@@ -78,7 +76,6 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position,
 
 		if (sf::Joystick::isButtonPressed(0, 4) && this->myProjtileVector[i]->getIsInVacRange() == true)
 		{
-			cout << "Hejsan" << endl;
 			float angle = getAngleFromTwoPoints(glm::vec3(position, 0), this->myProjtileVector[i]->getPosition());
 			this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 500.f, -sin(angle) * 500.f), true);
 		}

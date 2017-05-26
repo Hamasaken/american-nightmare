@@ -17,13 +17,18 @@ void Player::initiateCursor()
 
 void Player::initiateProjectile()
 {
-	this->ammo = 10;
+	this->ammo = 6;
 	this->fireDirection = { 0.0f, 0.0f };
 }
 
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
-bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
+bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera, glm::vec2 screenPos, glm::vec2 screenSize)
 {
+	//Initiates screen properties
+	this->screenPos = screenPos;
+	this->screenSize = screenSize;
+
+
 	//Sets the cursor for the player
 	initiateCursor();
 
@@ -70,6 +75,18 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 
 void Player::Update(GLint deltaT, b2World* world)
 {
+	//This will set the firedirection to the direction of the right-thumbstick
+	if (sf::Joystick::isConnected(0))
+	{
+		this->fireDirection = glm::vec2(sf::Joystick::getAxisPosition(0, sf::Joystick::U), sf::Joystick::getAxisPosition(0, sf::Joystick::R));
+		fireDirection = glm::normalize(fireDirection);
+	}
+	else //This is for the mouse
+	{
+		this->fireDirection = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y - 150), screenSize, screenPos);
+		this->fireDirection = glm::normalize(fireDirection);
+	}
+
 	// Update player invulnerability time
 	if (invulTime > 0.f)
 	{
@@ -128,6 +145,9 @@ void Player::Update(GLint deltaT, b2World* world)
 	if (vel.y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, PLAYER_MAX_VEL_Y));
 	if (vel.y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, -PLAYER_MAX_VEL_Y));
 	
+
+	
+
 	// Updating animation texture
 	updateAnimation(deltaT);
 
@@ -403,21 +423,6 @@ void Player::InputController(GLint deltaT)
 			printf("LT.\n");
 		if (sf::Joystick::isButtonPressed(0, BTN_RT))
 			printf("RT.\n");
-
-
-		//This will set the firedirection to the direction of the right-thumbstick
-		if (sf::Joystick::isConnected(0))
-		{
-			this->fireDirection = glm::vec2(sf::Joystick::getAxisPosition(0, sf::Joystick::U), sf::Joystick::getAxisPosition(0, sf::Joystick::R));
-			fireDirection = glm::normalize(fireDirection);
-			//sf::Joystick::off
-			//cout << "X: " << fireDirection.x << ", Y: " << fireDirection.y << endl;				
-		}
-		else
-		{
-			this->fireDirection = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y - 150), screenSize, screenPos);
-			fireDirection = glm::normalize(fireDirection);
-		}
 
 		
 		float leftAxis = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X) / 100.f;

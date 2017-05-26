@@ -61,7 +61,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	//Test with a player who has a gun too fire with
 	player = new Player();
 	if (player == nullptr) return false;
-	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial"), world, particleManager, soundManager, camera))
+	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial"), world, particleManager, soundManager, camera, screenPos, screenSize))
 		return false;
 	player->setShader(playerShader);
 	player->AddAnimation(materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
@@ -87,7 +87,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	if (quadTree == nullptr) return false;
 	if (!quadTree->Start(screenSize)) return false;
 
-	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, soundManager, particleManager, player->getPlayerPosAsGLM(), mapShader, screenPos, screenSize);
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, soundManager, particleManager, player->getPlayerPosAsGLM(), mapShader);
 	this->wasPressed = false;
 	this->isPressed = false;
 
@@ -230,7 +230,7 @@ void LevelManager::Update(GLint deltaT)
 			isPressed = sf::Joystick::isButtonPressed(0, BTN_RB);
 			if (isPressed && !wasPressed && player->getCanShoot() == true)
 			{
-				cout << "Something" << endl;
+				
 				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 				wasPressed = true;
 				player->decreaseNrOfProjectiles();
@@ -243,6 +243,7 @@ void LevelManager::Update(GLint deltaT)
 			isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 			if (isPressed && !wasPressed && player->getCanShoot() == true)
 			{
+				cout << "Something" << endl;
 				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 				wasPressed = true;
 				player->decreaseNrOfProjectiles();
