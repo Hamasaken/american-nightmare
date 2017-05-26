@@ -17,7 +17,7 @@ Projectile::~Projectile() { }
 
 void Projectile::fireBullet(glm::vec2 position, glm::vec2 direction)
 {	
-	hitbox->getBody()->ApplyLinearImpulseToCenter({direction.x * 300.f, direction.y * 300.f }, true);
+	hitbox->getBody()->ApplyLinearImpulseToCenter({direction.x * 75.f, direction.y * 75.f }, true);
 }
 
 b2Vec2 Projectile::normalize(const b2Vec2& source)

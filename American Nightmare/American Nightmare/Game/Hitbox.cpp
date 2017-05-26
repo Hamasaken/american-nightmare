@@ -108,7 +108,7 @@ void Hitbox::ModifyRectangleShape(glm::vec2 size, b2Shape::Type shapeType, float
 	b2FixtureDef fixtureDef;
 	fixtureDef.isSensor = isSensor;
 	fixtureDef.shape = &shape;
-	fixtureDef.density = 4 * mass / (size.x * size.y);		// in kg/m^2
+	fixtureDef.density = mass / (size.x * size.y);		// in kg/m^2
 	fixtureDef.friction = friction;						// friction [0:1]
 	fixtureDef.restitution = 0.0f;							// bouncy ball [0:1]
 	fixture = body->CreateFixture(&fixtureDef);
@@ -126,7 +126,7 @@ void Hitbox::ModifyCircleShape(glm::vec2 radius, b2Shape::Type shapeType, float 
 	b2FixtureDef fixtureDef;
 	fixtureDef.isSensor = isSensor;
 	fixtureDef.shape = &shape;
-	fixtureDef.density = 4 * mass / (radius.x * radius.y);		// in kg/m^2
+	fixtureDef.density = mass / (radius.x * radius.y);		// in kg/m^2
 	fixtureDef.friction = friction;						// friction [0:1]
 	fixtureDef.restitution = 0.0f;							// bouncy ball [0:1]
 	fixture = body->CreateFixture(&fixtureDef);

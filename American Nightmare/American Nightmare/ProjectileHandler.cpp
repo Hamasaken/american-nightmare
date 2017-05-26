@@ -66,7 +66,7 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position,
 				{
 					soundManager->playSFXOverDrive(SoundManager::SFX_HOVER, 40, 0.25f);
 					float angle = getAngleFromTwoPoints(glm::vec3(position, 0), this->myProjtileVector[i]->getPosition());
-					this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 500.f, -sin(angle) * 500.f), true);
+					this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 125.f, -sin(angle) * 125.f), true);
 				}
 			}
 		}
@@ -79,7 +79,7 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position,
 				{
 					soundManager->playSFXOverDrive(SoundManager::SFX_HOVER, 40, 0.25f);
 					float angle = getAngleFromTwoPoints(glm::vec3(position, 0), this->myProjtileVector[i]->getPosition());
-					this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 500.f, -sin(angle) * 500.f), true);
+					this->myProjtileVector[i]->getHitbox()->getBody()->ApplyForceToCenter(b2Vec2(cos(angle) * 125.f, -sin(angle) * 125.f), true);
 				}
 			}
 		}

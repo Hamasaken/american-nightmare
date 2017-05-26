@@ -72,7 +72,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		else if (enemy)
 		{
 			player->setContactWithEnemy(enemy);
-			float angle = getAngleFromTwoPoints(player->getPosition(), player->getPosition());
+			float angle = getAngleFromTwoPoints(enemy->getPosition(), player->getPosition());
 			if (angle < 0 && angle > -3.14) player->setHasJumped(false);
 		}
 		else if (vacuum)
