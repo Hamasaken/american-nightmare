@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "../Enemy.h"
 #include "../vacuum.h"
+#include "StructReg.h"
 
 // KEYS DEFAULTS
 #define KEY_LEFT sf::Keyboard::Key::A
@@ -71,8 +72,9 @@ private:
 	//Variables for handling projectile/Weapon
 	int ammo;
 	const int ammoCap = 5;
+	vector<ProjectileData> ammoList;
 	glm::vec2 fireDirection;
-	void initiateProjectile();
+	void initiateProjectile(MeshManager* meshManager, MaterialManager* materialManager);
 
 	//variable & function for cursor
 	SDL_Cursor* cursor;
@@ -127,7 +129,7 @@ public:
 	Player(const Player& other);
 	~Player();
 	 
-	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera, glm::vec2 screenPos, glm::vec2 screenSize);
+	bool Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, MeshManager* meshManager, MaterialManager* materialManager, Camera* camera, glm::vec2 screenPos, glm::vec2 screenSize);
 	//bool Start(std::string modelName, const MaterialManager::Material* material, b2World* world);
 	void Update(GLint deltaT, b2World* world);
 	//bool Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
@@ -154,6 +156,8 @@ public:
 	void setHasJumped(bool hasJumped);
 	bool getHasJumped();
 	bool getAmmoFull();
+	ProjectileData popProjectile();
+	void pushProjectile(ProjectileData projectileData);
 	
 	bool addPlayerProjectiles();
 	bool getCanShoot();
@@ -165,4 +169,5 @@ public:
 
 	void UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos);
 };
+
 #endif // !PLAYER_H

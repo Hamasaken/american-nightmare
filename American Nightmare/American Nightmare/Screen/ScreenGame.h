@@ -9,7 +9,7 @@
 #include "../Game/Particle/ParticleManager.h"
 #include "../Game/GUI/GUIManager.h"
 
-#define PAUS_TIMER 300.f 
+#define PAUS_TIMER 300.f
 
 class ScreenGame : public Screen
 {
@@ -65,13 +65,9 @@ private:
 	void DrawShadowMaps();
 
 	Button* background;
-	MeshManager* meshManager;			//< The mesh manager
-	MaterialManager* materialManager;	//< The material manager
 	GameState gameState;				//< Current State of the gameloop
 	GUIManager* guiManager;				//< Paus Meny
 	GUIManager* uiManager;				//< UI
-	ParticleManager* particleManager;	//< Manager for particle effects
-	ShaderManager* shaderManager;		//< Manager for shaderprograms
 	LevelManager* levelManager;			//< Manager for levels/maps
 	DeferredRendering drRendering;		//< Holds framebuffer for deferred rendering
 	ShadowManager shadowManager;		//< Manager for shadow maps

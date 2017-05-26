@@ -55,12 +55,14 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			if (player->addPlayerProjectiles() == true && sf::Joystick::isButtonPressed(0, 4))
 			{
 				player->addNrOfProjectiles();
+				player->pushProjectile(projectile->getProjectileData());
 				projectile->setmarked(true);
 				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 40, 0.15f);
 			}
 			else if (player->addPlayerProjectiles() == true && sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)
 			{
 				player->addNrOfProjectiles();
+				player->pushProjectile(projectile->getProjectileData());
 				projectile->setmarked(true);
 				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 40, 0.15f);
 			}
@@ -113,6 +115,9 @@ void MyContactListener::BeginContact(b2Contact* contact)
 				b2Vec2 vec = projectile->getHitbox()->getBody()->GetLinearVelocity();
 				if (abs(vec.x) > 15.f || abs(vec.y) > 15.f)
 				{
+					//Delets the projtile thats hit the enemy
+					projectile->setmarked(true);
+
 					camera->screenShake(250.f, 0.25f);
 					particleManager->EffectBloodSplatter(enemy->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
 					soundManager->playSFXOverDrive(SoundManager::SFX_HIT, 40, 0.1f);
@@ -124,6 +129,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			//			ph->getBullets()->back()->fireBullet(enemy->getPosition(), glm::vec2(rand() % 25, rand() % 25));
 			//			ph->spawnProjectile(meshManager->getMesh("quad"), materialManager->getMaterial("boxmaterial"), enemy->getPosition(), true);
 			//			ph->getBullets()->back()->fireBullet(enemy->getPosition(), glm::vec2(rand() % 25, rand() % 25));
+
 						soundManager->playSFXOverDrive(SoundManager::SFX_DEATH, 50, 0.0f);
 						particleManager->EffectExplosionLights(enemy->getPosition(), 15, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
 						particleManager->EffectBloodCloud(enemy->getPosition(), 10, glm::vec4(1.f), randBetweenF(1.f, 1.75f));

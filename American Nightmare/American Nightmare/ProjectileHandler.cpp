@@ -111,15 +111,15 @@ std::vector<Projectile*>* ProjectileHandler::getBullets()
 }
 
 
-void ProjectileHandler::spawnProjectile(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, glm::vec2 pos, bool isCircle)
+void ProjectileHandler::spawnProjectile(ProjectileData projectileData, glm::vec2 pos)
 {
-	Projectile* p = new Projectile(mesh, material, world, pos, isCircle);
+	Projectile* p = new Projectile(projectileData.mesh, projectileData.material, world, pos, projectileData.isCircle);
 	p->setShader(myShader);
 	myProjtileVector.push_back(p);
 }
 
 //void ProjectileHandler::fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, glm::vec2 pos, bool isJumping, bool isCircle, glm::vec2 fireDirection)
-void ProjectileHandler::fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, bool isJumping, bool isCircle, glm::vec2 fireDirection)
+void ProjectileHandler::fireProjectiles(ProjectileData projectileData, b2World *world, glm::vec2 pos, bool isJumping, glm::vec2 fireDirection)
 {
 
 	if (fireDirection.y > 0.f && abs(fireDirection.x) < 0.5f && !isJumping)
@@ -127,7 +127,7 @@ void ProjectileHandler::fireProjectiles(const MeshManager::Mesh* mesh, const Mat
 		return;
 	}
 
-	Projectile* p = new Projectile(mesh, material, world, pos + glm::vec2(1.35f * fireDirection.x, -(fireDirection.y) * 1.5f), isCircle);
+	Projectile* p = new Projectile(projectileData.mesh, projectileData.material, world, pos + glm::vec2(1.35f * fireDirection.x, -(fireDirection.y) * 1.5f), projectileData.isCircle);
 	p->setShader(myShader);
 	myProjtileVector.push_back(p);
 	myProjtileVector.back()->fireBullet(pos, fireDirection);

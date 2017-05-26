@@ -1,5 +1,8 @@
 #include "EntityManager.h"
 
+extern MeshManager* meshManager;
+extern MaterialManager* materialManager;
+
 EntityManager::EntityManager() { }
 
 EntityManager::EntityManager(const EntityManager & other) { }
@@ -79,7 +82,7 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 	
 	case ESpawnerType::trash:
 		{
-			ph->spawnProjectile(board.mesh, board.material, position, false);
+			ph->spawnProjectile(ProjectileData(board.mesh, board.material, false), position);
 
 			/*
 			Entity* e = new Entity();
@@ -115,12 +118,17 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 
 		if (e->getIsDead())
 		{
+			glm::vec2 temp = glm::vec2(e->getHitbox()->getBody()->GetPosition().x, e->getHitbox()->getBody()->GetPosition().y);
+
 			world->DestroyBody(e->getHitbox()->getBody());
 			e->Stop();
 			delete e;
 			e = nullptr;
 			enemyList.erase(enemyList.begin() + i);
 			i--;
+
+			ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), false), temp);
+
 		}
 
 	}

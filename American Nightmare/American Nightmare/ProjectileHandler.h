@@ -30,8 +30,8 @@ public:
 	void deleteProjects(b2World* world);
 	std::vector<Projectile*>* getBullets();
 	void UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos);
-	void spawnProjectile(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, glm::vec2 pos, bool isCircle);
-	void fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, bool isJumping, bool isCircle, glm::vec2 fireDirection);
+	void spawnProjectile(ProjectileData projectileData, glm::vec2 pos);
+	void fireProjectiles(ProjectileData projectileData, b2World *world, glm::vec2 pos, bool isJumping, glm::vec2 fireDirection);
 	//void fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, glm::vec2 pos, bool isJumping, bool isCircle, glm::vec2 fireDirection);
 };
 

@@ -1,5 +1,10 @@
 #include "ScreenGame.h"
 
+MeshManager* meshManager;			//< The mesh manager
+MaterialManager* materialManager;	//< The material manager
+ParticleManager* particleManager;	//< Manager for particle effects
+ShaderManager* shaderManager;		//< Manager for shaderprograms
+
 ScreenGame::ScreenGame() : Screen()
 {
 	particleManager = nullptr;

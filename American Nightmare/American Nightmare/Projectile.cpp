@@ -9,6 +9,8 @@ Projectile::Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Mat
 	this->damageOn = false;
 	this->marked = false;
 	this->isInVacRange = false;
+
+	this->projectileData = ProjectileData(mesh, material, isCircle);
 }
 
 Projectile::Projectile() { }
@@ -52,6 +54,11 @@ void Projectile::setmarked(bool marked)
 bool Projectile::getmarked()const
 {
 	return this->marked;
+}
+
+ProjectileData Projectile::getProjectileData()
+{
+	return projectileData;
 }
 
 void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)

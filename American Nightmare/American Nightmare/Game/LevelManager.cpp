@@ -61,7 +61,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	//Test with a player who has a gun too fire with
 	player = new Player();
 	if (player == nullptr) return false;
-	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial"), world, particleManager, soundManager, camera, screenPos, screenSize))
+	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial"), world, particleManager, soundManager, meshManager, materialManager, camera, screenPos, screenSize))
 		return false;
 	player->setShader(playerShader);
 	player->AddAnimation(materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
@@ -244,8 +244,8 @@ void LevelManager::Update(GLint deltaT)
 				wasPressed = true;
 				player->decreaseNrOfProjectiles();
 				camera->screenShake(250.0f, 0.5f);
-				if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), true, player->getFireDirection());
-				else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), false, player->getFireDirection());
+
+				myPH->fireProjectiles(player->popProjectile(), world, player->getPlayerPosAsGLM(), player->getHasJumped(), player->getFireDirection());
 			}
 		}
 		else
@@ -258,8 +258,8 @@ void LevelManager::Update(GLint deltaT)
 				wasPressed = true;
 				player->decreaseNrOfProjectiles();
 				camera->screenShake(250.0f, 0.5f);
-				if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), true, player->getFireDirection());
-				else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), false, player->getFireDirection());
+
+				myPH->fireProjectiles(player->popProjectile(), world, player->getPlayerPosAsGLM(), player->getHasJumped(), player->getFireDirection());
 			}
 		}
 	}

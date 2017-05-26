@@ -347,6 +347,9 @@
     <ClInclude Include="Game\EntityManager.h">
       <Filter>Header Files\Game\Level</Filter>
     </ClInclude>
+    <ClInclude Include="Game\StructReg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Graphics\Shaders\solid_fs.glsl">

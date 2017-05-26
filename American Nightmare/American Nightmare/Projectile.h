@@ -5,6 +5,7 @@
 #include "Game\Entity.h"
 #include <Box2D.h>
 #include "Game\Hitbox.h"
+#include "Game\StructReg.h"
 
 #define BULLET_MASS 2.0f
 #define BULLET_SIZE_X 0.5f
@@ -17,7 +18,7 @@ private:
 	std::string modelPath;
 	std::string texturePath;
 
-	MaterialManager materialManager;
+	ProjectileData projectileData;
 
 	int damage;
 	bool damageOn;
@@ -44,6 +45,8 @@ public:
 
 	void setmarked(bool marked);
 	bool getmarked()const;
+
+	ProjectileData getProjectileData();
 
 	//void Update(GLint deltaT);
 	void Update(GLint deltaT, b2World* world, glm::vec2 position);

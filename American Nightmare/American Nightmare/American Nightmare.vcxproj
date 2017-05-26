@@ -35,7 +35,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -127,6 +127,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\External\SFML\SFML-32\include;..\External\glew\include;..\External\SDL2\include;..\External\sfeMovie\sfeMovie-32\include;..\External\SDL2_ttf\SDL2_ttf-32\include;..\External\Box2D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -244,6 +245,7 @@
     <ClInclude Include="Game\QuadTree.h" />
     <ClInclude Include="Game\Shader\ShaderManager.h" />
     <ClInclude Include="Game\MaterialManager.h" />
+    <ClInclude Include="Game\StructReg.h" />
     <ClInclude Include="Game\Trigger.h" />
     <ClInclude Include="MyContactListener.h" />
     <ClInclude Include="Program.h" />

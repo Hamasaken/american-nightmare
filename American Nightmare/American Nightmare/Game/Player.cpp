@@ -15,14 +15,23 @@ void Player::initiateCursor()
 	SDL_SetCursor(cursor);
 }
 
-void Player::initiateProjectile()
+void Player::initiateProjectile(MeshManager* meshManager, MaterialManager* materialManager)
 {
 	this->ammo = 6;
 	this->fireDirection = { 0.0f, 0.0f };
+
+	for (int i = 0; i < this->ammo; i++)
+	{
+		if (i % 2 == 0)
+			this->ammoList.push_back(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), true));
+		else
+			this->ammoList.push_back(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), false));
+	}
+
 }
 
 //bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
-bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera, glm::vec2 screenPos, glm::vec2 screenSize)
+bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, MeshManager* meshManager, MaterialManager* materialManager, Camera* camera, glm::vec2 screenPos, glm::vec2 screenSize)
 {
 	//Initiates screen properties
 	this->screenPos = screenPos;
@@ -33,7 +42,8 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	initiateCursor();
 
 	//Sets variables for projectile/gun
-	initiateProjectile();
+	initiateProjectile(meshManager, materialManager);
+
 
 	// Starting entity variables (including hitbox)
 	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(PLAYER_SIZE_X * 0.45f, PLAYER_SIZE_Y * 0.9f, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_MASS, PLAYER_FRICTION);
@@ -509,6 +519,19 @@ bool Player::getAmmoFull()
 		return false;
 
 	return true;
+}
+
+ProjectileData Player::popProjectile()
+{
+	ProjectileData temp = this->ammoList.back();
+	this->ammoList.pop_back();
+	
+	return temp;
+}
+
+void Player::pushProjectile(ProjectileData projectileData)
+{
+	this->ammoList.push_back(projectileData);
 }
 
 void Player::setInvulTime(GLfloat invulTime)
