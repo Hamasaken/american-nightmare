@@ -460,7 +460,7 @@ float& Player::getPower()
 
 float& Player::getNrOfProjectiles()
 {
-	return (float&)nrOfProjectiles;
+	return (float&)ammo;
 }
 
 bool Player::getIsHovering()
