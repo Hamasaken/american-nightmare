@@ -150,16 +150,23 @@ void LevelManager::Stop()
 		entityManager = nullptr;
 	}
 
+	if (myPH != nullptr)
+	{
+		myPH->deleteProjects(world);
+		delete myPH;
+		myPH = nullptr;
+	}
+
 	if (world != nullptr)
 	{
 		b2Body* body = world->GetBodyList();
 		while (body != nullptr)
 		{
 			b2Body* extra = body->GetNext();
-		//	world->DestroyBody(body);
+			world->DestroyBody(body);
 			body = extra;
 		}
-		//	delete world;
+		delete world;
 		world = nullptr;
 	}
 
