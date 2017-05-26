@@ -17,7 +17,7 @@ void Player::initiateCursor()
 
 void Player::initiateProjectile()
 {
-	this->ammo = 15;
+	this->ammo = PLAYER_AMMO_CAP;
 	this->fireDirection = { 0.0f, 0.0f };
 }
 
@@ -517,10 +517,10 @@ bool Player::getHasJumped()
 
 bool Player::getAmmoFull()
 {
-	if (ammoCap >= ammo)
-		return false;
+	if (ammo >= ammoCap)
+		return true;
 
-	return true;
+	return false;
 }
 
 void Player::setInvulTime(GLfloat invulTime)
