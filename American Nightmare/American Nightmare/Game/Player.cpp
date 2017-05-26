@@ -431,6 +431,11 @@ float& Player::getPower()
 	return power;
 }
 
+float& Player::getNrOfProjectiles()
+{
+	return (float&)nrOfProjectiles;
+}
+
 bool Player::getIsHovering()
 {
 	return isHovering;

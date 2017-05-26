@@ -133,6 +133,8 @@ public:
 
 	float& getHP();
 	float& getPower();
+	float& getNrOfProjectiles();
+
 	bool getIsHovering();
 	bool getIsDashing();
 	b2Body* getBody();
