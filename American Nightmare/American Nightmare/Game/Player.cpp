@@ -184,44 +184,46 @@ bool Player::getIsDead()
 void Player::Walk(Direction dir)
 {
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
-	if (hasJumped)
+	if (abs(vel.x) <= PLAYER_MAX_VEL_X)
 	{
-		soundManager->stopSFX(SoundManager::SFX_STEPS);
-		switch (dir)
+		if (hasJumped)
 		{
-		case LEFT:
-			hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
-			directionIsRight = true;
-			break;
-		case RIGHT:
-			hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
-			directionIsRight = false;
-			break;
-		}
-		vel.x = hitbox->getBody()->GetLinearVelocity().x;
-		hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
-	}
-	else
-	{
-		switch (dir)
-		{
-		case LEFT:
-			hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
-			directionIsRight = true;
-			soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
-			break;
-		case RIGHT:
-			hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
-			directionIsRight = false;
-			soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
-			break;
-		case STOPPED:
 			soundManager->stopSFX(SoundManager::SFX_STEPS);
-			hitbox->getBody()->SetLinearVelocity(b2Vec2(0, vel.y));
-			break;
+			switch (dir)
+			{
+			case LEFT:
+				hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
+				directionIsRight = true;
+				break;
+			case RIGHT:
+				hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
+				directionIsRight = false;
+				break;
+			}
+			vel.x = hitbox->getBody()->GetLinearVelocity().x;
+			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+		}
+		else
+		{
+			switch (dir)
+			{
+			case LEFT:
+				hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
+				directionIsRight = true;
+				soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
+				break;
+			case RIGHT:
+				hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
+				directionIsRight = false;
+				soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
+				break;
+			case STOPPED:
+				soundManager->stopSFX(SoundManager::SFX_STEPS);
+				hitbox->getBody()->SetLinearVelocity(b2Vec2(0, vel.y));
+				break;
+			}
 		}
 	}
-	
 }
 
 void Player::Jump()
