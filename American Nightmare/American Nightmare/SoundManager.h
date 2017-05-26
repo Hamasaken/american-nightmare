@@ -12,8 +12,8 @@
 #define VOLUME_SFX		70
 
 // Turn Music & SFX on/off
-#define MUSIC_ON		false	
-#define SFX_ON			false
+#define MUSIC_ON		true	
+#define SFX_ON			true
 
 class SoundManager
 {
@@ -23,7 +23,7 @@ public:
 	{
 		SFX_BIP, 
 		SFX_HIT,
-		SFX_POWERUP,
+		SFX_UNLOCK,
 		SFX_BTN,
 		SFX_LtoR,
 		SFX_RtoL,
@@ -38,8 +38,9 @@ public:
 		SFX_JUMP,
 		SFX_HURT, 
 		SFX_HOVER, 
-		SFX_LASER, 
-		SFX_DEATH
+		SFX_LASER,
+		SFX_DEATH,
+		SFX_GAMEOVER
 	};
 
 	// Put song names here, and then load them in the loadSongs functions
@@ -48,7 +49,8 @@ public:
 		FOX_BOOGIE,
 		URANIUM_FEVER,
 		GOOD_ROCKIN_TONIGHT, 
-		JAZZY_INTERLUDE
+		JAZZY_INTERLUDE, 
+		RHYTM_FOR_YOU
 	};
 
 	SoundManager();

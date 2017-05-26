@@ -13,14 +13,17 @@
 class MyContactListener : public b2ContactListener
 {
 private:
+	MaterialManager* materialManager;
+	MeshManager* meshManager;
 	ParticleManager* particleManager;
 	SoundManager* soundManager;
 	Camera* camera;
+	ProjectileHandler* ph;
 public:
 	MyContactListener();
 	~MyContactListener();
 
-	void Start(ParticleManager* particleManager, SoundManager* soundManager, Camera* camera);
+	void Start(ParticleManager* particleManager, SoundManager* soundManager, ProjectileHandler* ph, MaterialManager* materialManager, MeshManager* meshManager, Camera* camera);
 
 	void BeginContact(b2Contact* contact);
 	void EndContact(b2Contact* contact);

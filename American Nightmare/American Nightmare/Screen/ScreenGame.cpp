@@ -66,6 +66,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
 	materialManager->AddMaterial("bloodmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "bloodtexture", TEXTURE_PATH "blood.png");
 	materialManager->AddMaterial("boltmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "bolttexture", TEXTURE_PATH "bolt.jpg");
+	materialManager->AddMaterial("boxmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "boxtexture", TEXTURE_PATH "box.jpg");
 	for (int i = 1; i < 11; i++) materialManager->AddMaterial("postermaterial_" + std::to_string(i), glm::vec3(1.f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "poster_" + std::to_string(i), (POSTER_PATH "poster_" + std::to_string(i) + ".jpg"));
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 	if (materialManager->getMaterial("GUI_bar_blue") == nullptr) printf("Button Material not found\n");
@@ -77,6 +78,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (materialManager->getMaterial("backgroundmaterial") == nullptr) printf("Background Material not found\n");
 	if (materialManager->getMaterial("smokematerial") == nullptr) printf("Smoke Material not found\n");
 	if (materialManager->getMaterial("boltmaterial") == nullptr) printf("Bolt Material not found\n");
+	if (materialManager->getMaterial("boxmaterial") == nullptr) printf("Box Material not found\n");
 
 	////////////////////////////////////////////////////////////
 	// Creating Particle Manager
@@ -218,7 +220,7 @@ void ScreenGame::Draw()
 	//for(Projectile* proj : levelManager->getProj())
 	//	DrawObjectGeometryPass(proj, shaderManager);
 
-	for (Projectile* projectiles : levelManager->getProjectiles())
+	for (Projectile* projectiles : *levelManager->getProjectiles())
 		if (abs(projectiles->getPosition().x - playerX) < 35.f)
 			DrawObjectGeometryPass(projectiles, shaderManager);
 
@@ -360,7 +362,7 @@ void ScreenGame::DrawShadowMaps()
 			if (abs(entity->getPosition().x - playerX) < 35.f)
 				DrawObjectDirShadowMap(entity, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
-		for (Projectile* projectiles : levelManager->getProjectiles())
+		for (Projectile* projectiles : *levelManager->getProjectiles())
 			if (abs(projectiles->getPosition().x - playerX) < 35.f)
 				DrawObjectDirShadowMap(projectiles, shaderManager, shadowManager.getDirectionalShadowMapList()[i]->lightSpaceMatrix);
 
@@ -404,7 +406,7 @@ void ScreenGame::DrawShadowMaps()
 		for (Entity* entity : *levelManager->getEntityManager()->getEntityList())
 			DrawObjectPointShadowMap(entity, shaderManager, shadowManager.getPointShadowMapList()[i]);
 
-		for (Projectile* projectiles : levelManager->getProjectiles())
+		for (Projectile* projectiles : *levelManager->getProjectiles())
 			DrawObjectPointShadowMap(projectiles, shaderManager, shadowManager.getPointShadowMapList()[i]);
 
 
@@ -487,7 +489,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 		particleManager->EffectNutsAndBolts(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("boltmaterial")->getTextureID(), 5);
 
 	// Updating particles effects
-	particleManager->Update(deltaT);
+	particleManager->Update(deltaT, levelManager->getPlayer()->getPosition());
 
 	// Updating map objects
 	levelManager->Update(deltaT);

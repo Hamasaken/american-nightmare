@@ -114,7 +114,7 @@ public:
 	void ShaderPair(GLuint shader, ParticleType type);
 	void setDefaultTextures(GLuint smokeTexture, GLuint bloodTexture);
 	GLuint getShaderFromPair(ParticleType type);
-	void Update(GLfloat deltaT);
+	void Update(GLfloat deltaT, glm::vec2 playerPos = glm::vec2(0, 0));
 
 	std::vector<ParticleEmitter*>* getEmitters();
 

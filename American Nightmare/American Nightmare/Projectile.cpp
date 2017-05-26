@@ -15,7 +15,7 @@ Projectile::Projectile() { }
 
 Projectile::~Projectile() { }
 
-void Projectile::fireBullet(b2World* world, glm::vec2 position, glm::vec2 direction)
+void Projectile::fireBullet(glm::vec2 position, glm::vec2 direction)
 {	
 	hitbox->getBody()->ApplyLinearImpulseToCenter({direction.x * 250.f, direction.y * 250.f }, true);
 }

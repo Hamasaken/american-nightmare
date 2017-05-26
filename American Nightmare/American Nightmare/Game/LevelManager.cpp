@@ -41,7 +41,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	popupActive = false;
 
 	// Starting contact manager
-	contactManager.Start(particleManager, soundManager, camera);
+	contactManager.Start(particleManager, soundManager, myPH, materialManager, meshManager, camera);
 
 	// Starting world 
 	world = new b2World(b2Vec2(NULL, GRAVITY * GRAVITY_SCALE));
@@ -67,18 +67,25 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	player->AddAnimation(materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
 
 	////////////////////////////////////////////////////////////
+	// Creating Projectile Handler
+	////////////////////////////////////////////////////////////
+	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, soundManager, particleManager, player->getPlayerPosAsGLM(), mapShader, screenPos, screenSize);
+	this->wasPressed = false;
+	this->isPressed = false;
+
+	////////////////////////////////////////////////////////////
 	// Creating the Entity Manager (Enemies/Trash/etc)
 	////////////////////////////////////////////////////////////
 	tempNomralMapIndex = materialManager->AddTexture("zombie1walknormalmap", TEXTURE_PATH "Zombie1WalkN.png");
 
 	entityManager = new EntityManager();
 	if (entityManager == nullptr) return false;
-	if (!entityManager->Start(world, soundManager, screenSize)) return false;
+	if (!entityManager->Start(world, soundManager, myPH, screenSize)) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::zombie1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::zombie2, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::skater1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::flying1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::trash, mapShader, meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"))) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::trash, mapShader, meshManager->getMesh("quad"), materialManager->getMaterial("boxmaterial"))) return false;
 
 	////////////////////////////////////////////////////////////
 	// Creating the Quad Tree Object
@@ -86,10 +93,6 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	quadTree = new QuadTree();
 	if (quadTree == nullptr) return false;
 	if (!quadTree->Start(screenSize)) return false;
-
-	this->myPH = new ProjectileHandler(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, soundManager, particleManager, player->getPlayerPosAsGLM(), mapShader);
-	this->wasPressed = false;
-	this->isPressed = false;
 
 	return true;
 }
@@ -206,7 +209,7 @@ void LevelManager::StopMap()
 	triggers.clear();
 
 	// Removes the world object
-	std::vector<Projectile*> p = myPH->getBullets();
+	std::vector<Projectile*> p = *myPH->getBullets();
 	for (int i = 0; i < p.size(); i++)
 		p[i]->setmarked(true);
 	myPH->deleteProjects(world);
@@ -247,6 +250,7 @@ void LevelManager::Update(GLint deltaT)
 				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 				wasPressed = true;
 				player->decreaseNrOfProjectiles();
+				camera->screenShake(250.0f, 0.5f);
 				if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), true, player->getFireDirection());
 				else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), false, player->getFireDirection());
 			}
@@ -341,8 +345,8 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	player->setStartingPosition(start);
 
 	// Music
-	soundManager->playSong(SoundManager::SONG::JAZZY_INTERLUDE);
-	soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BIRDS, 100.f, 0);
+	soundManager->playSong(SoundManager::SONG::RHYTM_FOR_YOU);
+	soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BIRDS, 90.f, 0);
 	
 	// Dust effect
 	particleManager->EffectLightDust(glm::vec3(0, 10, 0));
@@ -768,7 +772,7 @@ void LevelManager::CheckTriggers()
 			case Trigger::POSTER:
 				remove = true;
 				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 50, glm::vec4(0.25, 1, 0.25, 1));
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_POWERUP, 50, 0.05f);
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_UNLOCK, 65, 0.05f);
 				UnlockPoster(atoi(trigger->getData().c_str()) - 1);
 				ActivatePopup("You unlocked a poster!", 3000.f);
 				break;
@@ -806,7 +810,7 @@ void LevelManager::CheckTriggers()
 			case Trigger::SPAWN:
 
 				// Temporary sound effect
-				soundManager->playSFX(SoundManager::SFX::SFX_POWERUP);
+				soundManager->playSFX(SoundManager::SFX::SFX_UNLOCK);
 			{
 				Entity* moveble = new Entity();
 				moveble->setShader(map[0]->getShader());
@@ -874,9 +878,9 @@ std::vector<Object*> LevelManager::getMap()
 	return map;
 }
 
-std::vector<Projectile*> LevelManager::getProjectiles()
+std::vector<Projectile*>* LevelManager::getProjectiles()
 {
-	return this->myPH->getBullets();
+	return (myPH->getBullets());
 }
 
 const LightManager* LevelManager::getLightManager() const {	return lightManager; }
