@@ -147,8 +147,7 @@ void ParticleEmitter::Update(GLfloat deltaT, glm::vec2 playerPos)
 			particles.erase(particles.begin() + i);
 		}
 	} 
-	if (abs(playerPos.x - position.x) < 25.f)
-		MakeVertices(); 
+	MakeVertices();
 }
 
 void ParticleEmitter::MakeVertices()
@@ -266,6 +265,5 @@ void IncreasingParticleEmitter::Update(GLfloat deltaT, glm::vec2 playerPos)
 /*	for (int i = 0; i < particles.size(); i++)
 		particles[i]->Update(deltaT);
 	
-	if (abs(playerPos.x - position.x) < 25.f)
-		MakeVertices(); */
+	MakeVertices(); */
 }
