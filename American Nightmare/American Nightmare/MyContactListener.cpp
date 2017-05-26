@@ -65,7 +65,9 @@ void MyContactListener::BeginContact(b2Contact* contact)
 				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 40, 0.15f);
 			}
 			float angle = getAngleFromTwoPoints(projectile->getPosition(), player->getPosition());
-			if (angle < 0 && angle > -3.14) player->setHasJumped(false);
+			if (angle < 0 && angle > -3.14) {
+				player->setHasJumped(false);
+			}
 		}
 		else if (enemy)
 		{
