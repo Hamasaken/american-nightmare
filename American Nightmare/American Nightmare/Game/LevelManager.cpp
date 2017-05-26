@@ -754,7 +754,7 @@ void LevelManager::CheckTriggers()
 			case Trigger::POSTER:
 				remove = true;
 				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 50, glm::vec4(0.25, 1, 0.25, 1));
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_POWERUP, 50, 0.05f);
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_UNLOCK, 65, 0.05f);
 				UnlockPoster(atoi(trigger->getData().c_str()) - 1);
 				ActivatePopup("You unlocked a poster!", 3000.f);
 				break;
@@ -792,7 +792,7 @@ void LevelManager::CheckTriggers()
 			case Trigger::SPAWN:
 
 				// Temporary sound effect
-				soundManager->playSFX(SoundManager::SFX::SFX_POWERUP);
+				soundManager->playSFX(SoundManager::SFX::SFX_UNLOCK);
 			{
 				Entity* moveble = new Entity();
 				moveble->setShader(map[0]->getShader());

@@ -35,7 +35,7 @@ void SoundManager::loadSFXs()
 	// Load every SFX here
 	sfx[SFX_BIP] = loadSFX(pathToFolder + "sfx_bip.wav");
 	sfx[SFX_HIT] = loadSFX(pathToFolder + "sfx_hit.wav");
-	sfx[SFX_POWERUP] = loadSFX(pathToFolder + "sfx_powerup.wav");
+	sfx[SFX_UNLOCK] = loadSFX(pathToFolder + "sfx_unlock.wav");
 	sfx[SFX_BTN] = loadSFX(pathToFolder + "sfx_btn.wav");
 	sfx[SFX_LtoR] = loadSFX(pathToFolder + "sfx_leftToRight.wav");
 	sfx[SFX_RtoL] = loadSFX(pathToFolder + "sfx_rightToLeft.wav");
@@ -52,6 +52,7 @@ void SoundManager::loadSFXs()
 	sfx[SFX_HURT] = loadSFX(pathToFolder + "sfx_hurt.ogg");
 	sfx[SFX_HOVER] = loadSFX(pathToFolder + "sfx_hover.wav");
 	sfx[SFX_DEATH] = loadSFX(pathToFolder + "sfx_death.wav");
+	sfx[SFX_GAMEOVER] = loadSFX(pathToFolder + "sfx_gameover.ogg");
 
 	// Setting every sfx at deicided volume
 	for (sf::Sound& s : sfx)

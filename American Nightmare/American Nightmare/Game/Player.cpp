@@ -169,6 +169,7 @@ void Player::TakeDamage(float dmg)
 
 		this->getBody()->SetLinearVelocity({ 0, 0 });
 		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_DEATH, 50, 0.f);
+		soundManager->playModifiedSFX(SoundManager::SFX_GAMEOVER, 50, 0.f);
 		particleManager->EffectExplosionLights(position, 50, glm::vec4(0.4f, 0.05f, 0.025f, 1.f));
 		particleManager->EffectBloodCloud(position, 10, glm::vec4(1.f), randBetweenF(1.f, 1.75f));
 		contactWithEnemy = nullptr;

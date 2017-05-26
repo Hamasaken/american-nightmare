@@ -23,7 +23,7 @@ public:
 	{
 		SFX_BIP, 
 		SFX_HIT,
-		SFX_POWERUP,
+		SFX_UNLOCK,
 		SFX_BTN,
 		SFX_LtoR,
 		SFX_RtoL,
@@ -38,8 +38,9 @@ public:
 		SFX_JUMP,
 		SFX_HURT, 
 		SFX_HOVER, 
-		SFX_LASER, 
-		SFX_DEATH
+		SFX_LASER,
+		SFX_DEATH,
+		SFX_GAMEOVER
 	};
 
 	// Put song names here, and then load them in the loadSongs functions
