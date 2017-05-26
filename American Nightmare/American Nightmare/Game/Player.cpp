@@ -285,14 +285,26 @@ void Player::Dash(sf::Keyboard::Key inKey)
 		//float angle = (directionIsRight) ? -glm::pi<float>() * 0.5f : glm::pi<float>() * 0.5f;
 
 		float angle;
-		if (inKey == key_left)
-			angle = -glm::pi<float>() * 0.5f;
-		else if (inKey == key_right)
-			angle = glm::pi<float>() * 0.5f;
-		else if (inKey == key_jump)
-			angle = glm::pi<float>();
+		if (sf::Keyboard::isKeyPressed(key_jump))
+		{
+			if (inKey == key_left)
+				angle = -glm::pi<float>() * 0.75f;
+			else if (inKey == key_right)
+				angle = glm::pi<float>() * 0.75f;
+			else
+				angle = glm::pi<float>();
 
-		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(sin(angle) * PLAYER_DASH_VEL, (cos(angle) * PLAYER_DASH_VEL) * 0.25), true);
+			hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2((sin(angle) * PLAYER_DASH_VEL) * 0.25, (cos(angle) * PLAYER_DASH_VEL) * 0.25), true);
+		}
+		else
+		{
+			if (inKey == key_left)
+				angle = -glm::pi<float>() * 0.5f;
+			else if (inKey == key_right)
+				angle = glm::pi<float>() * 0.5f;
+
+			hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(sin(angle) * PLAYER_DASH_VEL, 0.f), true);
+		}
 	}
 }
 
