@@ -1,4 +1,4 @@
-#version 430
+#version 440 core
 
 // Input
 in vec2 textureUV;

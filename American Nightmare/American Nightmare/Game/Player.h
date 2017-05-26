@@ -23,13 +23,14 @@
 #define PLAYER_SIZE_Y 2.f
 #define PLAYER_SIZE_Z 1.f
 #define PLAYER_MASS 70.f
-#define PLAYER_FRICTION 1.f
-#define PLAYER_VEL_X 100000.f
-#define PLAYER_VEL_Y 3000.f
+#define PLAYER_FRICTION 0.f
+#define PLAYER_VEL_X 25000.f
+#define PLAYER_VEL_Y 750.f
 #define PLAYER_MAX_VEL_X 7.0f
 #define PLAYER_MAX_VEL_Y 18.f
 #define PLAYER_HP 6
 #define PLAYER_INVULNERABILITY_TIME 2.f
+#define PLAYER_AMMO_CAP 15.f
 
 // Power 
 #define PLAYER_POWER_MAX 100.f
@@ -41,13 +42,13 @@
 
 // Dash
 #define PLAYER_POWER_COST_DASH 25.f
-#define PLAYER_DASH_VEL 15000.f
+#define PLAYER_DASH_VEL 3125.f
 #define PLAYER_DASH_CD 1000.f
 
 // Shockwave
 #define PLAYER_SHOCKWAVE_CD 1500.f
 #define PLAYER_POWER_COST_SHOCKWAVE 80.f
-#define PLAYER_SHOCKWAVE_POWER 12500.f
+#define PLAYER_SHOCKWAVE_POWER 3125.f
 
 // XBOX CONTROLLER
 #define CONTROLLER_ON true
@@ -71,7 +72,7 @@ private:
 
 	//Variables for handling projectile/Weapon
 	int ammo;
-	const int ammoCap = 5;
+	const int ammoCap = PLAYER_AMMO_CAP;
 	vector<ProjectileData> ammoList;
 	glm::vec2 fireDirection;
 	void initiateProjectile(MeshManager* meshManager, MaterialManager* materialManager);

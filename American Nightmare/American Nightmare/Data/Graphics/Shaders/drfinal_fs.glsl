@@ -1,4 +1,4 @@
-#version 430 core
+#version 440 core
 
 struct PointLight
 {
@@ -155,7 +155,7 @@ void main () {
 
 	vec4 result = vec4(0);
 
-	if(fragPos.z == -30.f)
+	if(fragPos.z == -130.f)
 	{
 		fragment_color = vec4(0.f, 0.f, 0.f, 0.f);
 		return;

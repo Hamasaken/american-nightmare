@@ -154,9 +154,6 @@ void Player::Update(GLint deltaT, b2World* world)
 	if (vel.x < -PLAYER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
 	if (vel.y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, PLAYER_MAX_VEL_Y));
 	if (vel.y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, -PLAYER_MAX_VEL_Y));
-	
-
-	
 
 	// Updating animation texture
 	updateAnimation(deltaT);
@@ -225,44 +222,46 @@ bool Player::getIsDead()
 void Player::Walk(Direction dir)
 {
 	b2Vec2 vel = hitbox->getBody()->GetLinearVelocity();
-	if (hasJumped)
+	if (abs(vel.x) <= PLAYER_MAX_VEL_X)
 	{
-		soundManager->stopSFX(SoundManager::SFX_STEPS);
-		switch (dir)
+		if (hasJumped)
 		{
-		case LEFT:
-			hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
-			directionIsRight = true;
-			break;
-		case RIGHT:
-			hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
-			directionIsRight = false;
-			break;
-		}
-		vel.x = hitbox->getBody()->GetLinearVelocity().x;
-		hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
-	}
-	else
-	{
-		switch (dir)
-		{
-		case LEFT:
-			hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
-			directionIsRight = true;
-			soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
-			break;
-		case RIGHT:
-			hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
-			directionIsRight = false;
-			soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
-			break;
-		case STOPPED:
 			soundManager->stopSFX(SoundManager::SFX_STEPS);
-			hitbox->getBody()->SetLinearVelocity(b2Vec2(0, vel.y));
-			break;
+			switch (dir)
+			{
+			case LEFT:
+				hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
+				directionIsRight = true;
+				break;
+			case RIGHT:
+				hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
+				directionIsRight = false;
+				break;
+			}
+			vel.x = hitbox->getBody()->GetLinearVelocity().x;
+			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
+		}
+		else
+		{
+			switch (dir)
+			{
+			case LEFT:
+				hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
+				directionIsRight = true;
+				soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
+				break;
+			case RIGHT:
+				hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
+				directionIsRight = false;
+				soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
+				break;
+			case STOPPED:
+				soundManager->stopSFX(SoundManager::SFX_STEPS);
+				hitbox->getBody()->SetLinearVelocity(b2Vec2(0, vel.y));
+				break;
+			}
 		}
 	}
-	
 }
 
 void Player::Jump()
@@ -271,6 +270,7 @@ void Player::Jump()
 
 	if (!hasJumped && vel.y > -0.5f)
 	{
+		hitbox->getBody()->GetFixtureList()->SetFriction(0.f);
 		soundManager->stopSFX(SoundManager::SFX_STEPS);
 		soundManager->playSFXOverDrive(SoundManager::SFX_JUMP, 80.f);
 		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);
@@ -295,14 +295,26 @@ void Player::Dash(sf::Keyboard::Key inKey)
 		//float angle = (directionIsRight) ? -glm::pi<float>() * 0.5f : glm::pi<float>() * 0.5f;
 
 		float angle;
-		if (inKey == key_left)
-			angle = -glm::pi<float>() * 0.5f;
-		else if (inKey == key_right)
-			angle = glm::pi<float>() * 0.5f;
-		else if (inKey == key_jump)
-			angle = glm::pi<float>();
+		if (sf::Keyboard::isKeyPressed(key_jump))
+		{
+			if (inKey == key_left)
+				angle = -glm::pi<float>() * 0.75f;
+			else if (inKey == key_right)
+				angle = glm::pi<float>() * 0.75f;
+			else
+				angle = glm::pi<float>();
 
-		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(sin(angle) * PLAYER_DASH_VEL, (cos(angle) * PLAYER_DASH_VEL) * 0.25), true);
+			hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2((sin(angle) * PLAYER_DASH_VEL) * 0.25, (cos(angle) * PLAYER_DASH_VEL) * 0.25), true);
+		}
+		else
+		{
+			if (inKey == key_left)
+				angle = -glm::pi<float>() * 0.5f;
+			else if (inKey == key_right)
+				angle = glm::pi<float>() * 0.5f;
+
+			hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(sin(angle) * PLAYER_DASH_VEL, 0.f), true);
+		}
 	}
 }
 
@@ -515,10 +527,10 @@ bool Player::getHasJumped()
 
 bool Player::getAmmoFull()
 {
-	if (ammoCap > ammo)
-		return false;
+	if (ammo >= ammoCap)
+		return true;
 
-	return true;
+	return false;
 }
 
 ProjectileData Player::popProjectile()

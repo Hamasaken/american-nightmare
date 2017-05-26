@@ -238,6 +238,7 @@ void LevelManager::Update(GLint deltaT)
 		if (sf::Joystick::isConnected(0))
 		{
 			isPressed = sf::Joystick::isButtonPressed(0, BTN_RB);
+			if (!player->getCanShoot() && isPressed && !wasPressed) soundManager->playSFXOverDrive(SoundManager::SFX_EMPTY, 25, 0.15f);
 			if (isPressed && !wasPressed && player->getCanShoot() == true)
 			{
 				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
@@ -251,9 +252,9 @@ void LevelManager::Update(GLint deltaT)
 		else
 		{
 			isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+			if (!player->getCanShoot() && isPressed && !wasPressed) soundManager->playSFXOverDrive(SoundManager::SFX_EMPTY, 25, 0.15f);
 			if (isPressed && !wasPressed && player->getCanShoot() == true)
 			{
-				cout << "Something" << endl;
 				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 				wasPressed = true;
 				player->decreaseNrOfProjectiles();
@@ -366,8 +367,8 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	Object* background = new Object();
 	background->setShader(mapShader);
 	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
-	background->setScale(glm::vec3(192, 96, 1));
-	background->setPosition(glm::vec3(0, 0, -30));
+	background->setScale(glm::vec3(340, 96, 1));
+	background->setPosition(glm::vec3(40, 32, -130));
 	map.push_back(background);
 
 

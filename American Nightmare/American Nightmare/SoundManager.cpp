@@ -51,6 +51,7 @@ void SoundManager::loadSFXs()
 	sfx[SFX_HOVER] = loadSFX(SFX_PATH "sfx_hover.wav");
 	sfx[SFX_DEATH] = loadSFX(SFX_PATH "sfx_death.wav");
 	sfx[SFX_GAMEOVER] = loadSFX(SFX_PATH "sfx_gameover.ogg");
+	sfx[SFX_EMPTY] = loadSFX(SFX_PATH "sfx_empty.wav");
 
 	// Setting every sfx at deicided volume
 	for (sf::Sound& s : sfx)
