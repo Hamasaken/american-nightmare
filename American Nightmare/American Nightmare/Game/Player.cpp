@@ -145,9 +145,6 @@ void Player::Update(GLint deltaT, b2World* world)
 	if (vel.y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, PLAYER_MAX_VEL_Y));
 	if (vel.y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, -PLAYER_MAX_VEL_Y));
 	
-
-	
-
 	// Updating animation texture
 	updateAnimation(deltaT);
 
@@ -263,6 +260,7 @@ void Player::Jump()
 
 	if (!hasJumped && vel.y > -0.5f)
 	{
+		hitbox->getBody()->GetFixtureList()->SetFriction(0.f);
 		soundManager->stopSFX(SoundManager::SFX_STEPS);
 		soundManager->playSFXOverDrive(SoundManager::SFX_JUMP, 80.f);
 		hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(0, -PLAYER_VEL_Y), true);

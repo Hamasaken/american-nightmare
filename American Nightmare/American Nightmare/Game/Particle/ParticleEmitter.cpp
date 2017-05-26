@@ -4,6 +4,8 @@ ParticleEmitter::ParticleEmitter()
 {
 	isComplete = false;
 	texture = -1;
+	vertexArray = -1;
+	vertexBuffer = -1;
 }
 
 ParticleEmitter::ParticleEmitter(const ParticleEmitter & other) { }
@@ -18,7 +20,7 @@ void ParticleEmitter::LightExplosion(glm::vec3 position, glm::vec4 color, glm::v
 		Particle* particle = new Particle;
 		particle->Start(position, color, size);
 		particles.push_back(particle);
-	}
+	} 
 }
 
 void ParticleEmitter::BloodSplatter(glm::vec3 position, float angle, float strength, glm::vec4 color, glm::vec2 size, int amount)
@@ -29,7 +31,7 @@ void ParticleEmitter::BloodSplatter(glm::vec3 position, float angle, float stren
 		BloodParticle* particle = new BloodParticle;
 		particle->Start(position, color, size, angle, strength);
 		particles.push_back(particle);
-	}
+	} 
 }
 
 void ParticleEmitter::SmokeCloud(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount)
@@ -41,7 +43,7 @@ void ParticleEmitter::SmokeCloud(glm::vec3 position, GLuint texture, glm::vec4 c
 		TextureParticle* particle = new TextureParticle;
 		particle->Start(position, color, size);
 		particles.push_back(particle);
-	}
+	} 
 }
 
 void ParticleEmitter::NutsAndBolts(glm::vec3 position, GLuint texture, glm::vec2 size, int amount)
@@ -54,7 +56,7 @@ void ParticleEmitter::NutsAndBolts(glm::vec3 position, GLuint texture, glm::vec2
 		NutsAndBolt* particle = new NutsAndBolt;
 		particle->Start(position, color, size);
 		particles.push_back(particle);
-	}
+	} 
 }
 
 void ParticleEmitter::ConstantSmoke(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount)
@@ -66,7 +68,7 @@ void ParticleEmitter::ConstantSmoke(glm::vec3 position, GLuint texture, glm::vec
 		SmokeParticle* particle = new SmokeParticle;
 		particle->Start(position, color, size);
 		particles.push_back(particle);
-	}
+	} 
 }
 
 void ParticleEmitter::LightDust(glm::vec3 center, glm::vec3 dimensions, glm::vec4 color, glm::vec2 size, int amount)
@@ -83,7 +85,7 @@ void ParticleEmitter::LightDust(glm::vec3 center, glm::vec3 dimensions, glm::vec
 
 		particle->Start(pos, color, size);
 		particles.push_back(particle);
-	}
+	} 
 }
 
 void ParticleEmitter::Stop()
@@ -102,23 +104,38 @@ void ParticleEmitter::Stop()
 	isComplete = true;
 
 	// Disable the attributes
-	glBindVertexArray(vertexArray);
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
-	glDisableVertexAttribArray(3);
+	if (vertexArray != -1)
+	{
+		glBindVertexArray(vertexArray);
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+		glDisableVertexAttribArray(3);
+	}
 
-	// Deleteing buffers
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glDeleteBuffers(1, &vertexBuffer);
+	if (vertexBuffer != -1)
+	{
+		// Deleteing buffers
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+		glDeleteBuffers(1, &vertexBuffer);
+	}
 
-	// Deleting vertex array
-	glBindVertexArray(vertexArray);
-	glDeleteVertexArrays(1, &vertexArray);
+	if (vertexArray != -1)
+	{
+		// Deleting vertex array
+		glBindVertexArray(vertexArray);
+		glDeleteVertexArrays(1, &vertexArray);
+	}
 }
 
 void ParticleEmitter::Update(GLfloat deltaT, glm::vec2 playerPos)
 {
+	// If this emitter is out of particles, otherwise, build vertexarray
+	if (particles.size() == 0)
+	{
+		isComplete = true;
+	}
+
 	// Updating particles and checking if they are dead or not
 	for (int i = 0; i < particles.size(); i++)
 	{
@@ -129,25 +146,36 @@ void ParticleEmitter::Update(GLfloat deltaT, glm::vec2 playerPos)
 			delete particles[i];
 			particles.erase(particles.begin() + i);
 		}
-	}
-
-	// If this emitter is out of particles, otherwise, build vertexarray
-	if (particles.size() == 0)
-		isComplete = true;
-	else 
-	{
-		if (abs(playerPos.x - position.x) < 25.f)
-			MakeVertices();
-	}
+	} 
+	if (abs(playerPos.x - position.x) < 25.f)
+		MakeVertices(); 
 }
 
 void ParticleEmitter::MakeVertices()
 {
-	// Clearing previous stuff
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glDeleteBuffers(1, &vertexBuffer);
-	glBindVertexArray(vertexArray);
-	glDeleteVertexArrays(1, &vertexArray);
+	// Disable the attributes
+	if (vertexArray != -1)
+	{
+		glBindVertexArray(vertexArray);
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+		glDisableVertexAttribArray(3);
+	}
+
+	if (vertexBuffer != -1)
+	{
+		// Deleteing buffers
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+		glDeleteBuffers(1, &vertexBuffer);
+	}
+
+	if (vertexArray != -1)
+	{
+		// Deleting vertex array
+		glBindVertexArray(vertexArray);
+		glDeleteVertexArrays(1, &vertexArray);
+	}
 
 	vertices.clear();	
 	for (Particle* p : particles)
@@ -186,11 +214,14 @@ void ParticleEmitter::MakeVertices()
 
 void ParticleEmitter::Draw()
 {
-	glBindVertexArray(vertexArray);
+	if (vertexArray != -1)
+	{
+		glBindVertexArray(vertexArray);
 
-	// Render vertex buffer using index buffer
-	glDrawArrays(GL_POINTS, 0, vertexCount);
-}
+		// Render vertex buffer using index buffer
+		glDrawArrays(GL_POINTS, 0, vertexCount);
+	}
+} 
 
 void ParticleEmitter::setPosition(glm::vec3 position) { this->position = position; }
 glm::vec3 ParticleEmitter::getPosition() { return position; }
@@ -207,34 +238,34 @@ GLuint ParticleEmitter::getShader() const { return shader; }
 ////////////////////////////////////////////////////////////
 void IncreasingParticleEmitter::SignalSmoke(glm::vec3 position, GLuint texture, float angle, glm::vec4 color, glm::vec2 size, int amount)
 {
-	this->position = position;
+/*	this->position = position;
 	this->texture = texture;
 	for (int i = 0; i < amount; i++)
 	{
 		SmokeSignal* particle = new SmokeSignal();
 		particle->Start(position, color, size, angle);
 		particles.push_back(particle);
-	}
+	} */
 }
 
 void IncreasingParticleEmitter::SignalFire(glm::vec3 position, GLuint texture, float angle, glm::vec4 color, glm::vec2 size, int amount)
 {
-	this->position = position;
+/*	this->position = position;
 	this->texture = texture;
 	for (int i = 0; i < amount; i++)
 	{
 	//	FireParticle* particle = new FireParticle;
 	//	particle->Start(position, color, size, angle);
 	//	particles.push_back(particle);
-	}
+	} */
 }
 
 void IncreasingParticleEmitter::Update(GLfloat deltaT, glm::vec2 playerPos)
 {
 	// Updating particles and checking if they are dead or not
-	for (int i = 0; i < particles.size(); i++)
+/*	for (int i = 0; i < particles.size(); i++)
 		particles[i]->Update(deltaT);
 	
 	if (abs(playerPos.x - position.x) < 25.f)
-		MakeVertices();
+		MakeVertices(); */
 }

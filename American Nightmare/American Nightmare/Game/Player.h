@@ -22,7 +22,7 @@
 #define PLAYER_SIZE_Y 2.f
 #define PLAYER_SIZE_Z 1.f
 #define PLAYER_MASS 70.f
-#define PLAYER_FRICTION 1.f
+#define PLAYER_FRICTION 0.f
 #define PLAYER_VEL_X 100000.f
 #define PLAYER_VEL_Y 3000.f
 #define PLAYER_MAX_VEL_X 7.0f
