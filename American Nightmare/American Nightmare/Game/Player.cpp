@@ -17,7 +17,7 @@ void Player::initiateCursor()
 
 void Player::initiateProjectile()
 {
-	this->ammo = 6;
+	this->ammo = 15;
 	this->fireDirection = { 0.0f, 0.0f };
 }
 
@@ -507,7 +507,7 @@ bool Player::getHasJumped()
 
 bool Player::getAmmoFull()
 {
-	if (ammoCap > ammo)
+	if (ammoCap >= ammo)
 		return false;
 
 	return true;
