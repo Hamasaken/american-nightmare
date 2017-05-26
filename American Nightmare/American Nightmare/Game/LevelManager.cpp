@@ -230,7 +230,7 @@ void LevelManager::Update(GLint deltaT)
 		soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 10, 0.1f);
 		wasPressed = true;
 		player->decreaseNrOfProjectiles();
-		if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), true);
+		if (rand() % 2 + 1 == 1) myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("boltmaterial"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), true);
 		else myPH->fireProjectiles(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), world, player->getPlayerPosAsGLM(), player->getHasJumped(), false);
 	}
 

@@ -501,6 +501,9 @@ void Player::setStartingPosition(glm::vec3 position)
 
 bool Player::addPlayerProjectiles()
 {
+	return true;
+
+	/*
 	if (this->nrOfProjectiles <= this->CAP)
 	{
 		return false;
@@ -509,6 +512,7 @@ bool Player::addPlayerProjectiles()
 	{
 		return true;
 	}
+	*/
 }
 
 bool Player::getCanShoot()

@@ -40,7 +40,7 @@
 
 // Dash
 #define PLAYER_POWER_COST_DASH 25.f
-#define PLAYER_DASH_VEL 8000.f
+#define PLAYER_DASH_VEL 15000.f
 #define PLAYER_DASH_CD 1000.f
 
 // Shockwave
