@@ -10,7 +10,6 @@ public:
 	Model(const Model& other);
 	~Model();
 
-	void BuildCubeTexture();
 	void BuildQuadTexture();
 	void BuildQuadTextureBig();
 	

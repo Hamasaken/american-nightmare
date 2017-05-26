@@ -107,13 +107,6 @@ void MeshManager::MakeDefaultQuad()
 
 void MeshManager::MakeDefaultCube()
 {
-	Model* model;
-	model = new Model();
-	model->BuildCubeTexture();
-
-	Mesh* mesh;
-	mesh = new Mesh("cube", model);
-	meshList.push_back(mesh);
 }
 
 void MeshManager::MakeDefaultSphere()
