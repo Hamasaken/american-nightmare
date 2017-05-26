@@ -163,10 +163,10 @@ void LevelManager::Stop()
 		while (body != nullptr)
 		{
 			b2Body* extra = body->GetNext();
-		//	world->DestroyBody(body);
+			world->DestroyBody(body);
 			body = extra;
 		}
-		//	delete world;
+		delete world;
 		world = nullptr;
 	}
 
