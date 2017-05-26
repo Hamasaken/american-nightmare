@@ -253,7 +253,6 @@ void LevelManager::Update(GLint deltaT)
 			isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 			if (isPressed && !wasPressed && player->getCanShoot() == true)
 			{
-				cout << "Something" << endl;
 				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 				wasPressed = true;
 				player->decreaseNrOfProjectiles();
