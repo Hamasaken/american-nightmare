@@ -37,7 +37,7 @@
 #define PLAYER_POWER_RECHARGE 25.f
 
 // Hover
-#define PLAYER_POWER_COST_HOVER 25.f
+#define PLAYER_POWER_COST_HOVER 50.f
 #define PLAYER_HOVER_POWER 3500.f
 
 // Dash
