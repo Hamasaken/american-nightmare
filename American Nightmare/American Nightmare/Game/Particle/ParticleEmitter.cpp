@@ -151,6 +151,7 @@ void ParticleEmitter::Update(GLfloat deltaT, glm::vec2 playerPos)
 	if (particles.size() == 0)
 	{
 		isComplete = true;
+		texture = -1;
 	}
 
 	// Updating particles and checking if they are dead or not
@@ -203,7 +204,12 @@ void ParticleEmitter::MakeVertices()
 	vertexCount = vertices.size();
 
 	// If the emitters are active but empty
-	if (vertexCount == 0) return;
+	if (vertexCount == 0)
+	{
+		isComplete = true;
+		texture = -1;
+		return;
+	}
 
 	// Creating the vertex buffer that will hold the buffers
 	glGenVertexArrays(1, &vertexArray);

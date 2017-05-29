@@ -35,6 +35,7 @@
 // Power 
 #define PLAYER_POWER_MAX 100.f
 #define PLAYER_POWER_RECHARGE 25.f
+#define PLAYER_POWER_RECHARGE_COOLDOWN 1.f
 
 // Hover
 #define PLAYER_POWER_COST_HOVER 50.f
@@ -104,6 +105,7 @@ private:
 	bool hasDashed;				//< If the player have dashed or not
 	bool isDashing;				//< If the player is currently dashing
 	bool isHovering;			//< If the player is currently hovering
+	GLfloat powerRefillCD;		//< Cooldown for power refill
 	GLfloat invulTime;			//< Player invulnerability timer after being hit
 	Enemy* contactWithEnemy;	//< If player is in contact with an enemy;
 	glm::vec3 startPosition;	//< The save station or the starting point on level
