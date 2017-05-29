@@ -5,6 +5,7 @@
 #include "BloodParticle.h"
 #include "TextureParticle.h"
 #include "DustParticle.h"
+#include "MusicParticle.h"
 
 class ParticleEmitter
 {
@@ -19,6 +20,7 @@ public:
 	void NutsAndBolts(glm::vec3 position, GLuint texture, glm::vec2 size, int amount);
 	void ConstantSmoke(glm::vec3 position, GLuint texture, glm::vec4 color, glm::vec2 size, int amount);
 	void LightDust(glm::vec3 center, glm::vec3 dimensions, glm::vec4 color, glm::vec2 size, int amount);
+	void MusicLines(glm::vec3 position, float angle, float strength, glm::vec4 color, glm::vec2 size, int amount);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads every particle in this vector
@@ -33,7 +35,7 @@ public:
 	virtual void Update(GLfloat deltaT, glm::vec2 playerPos);
 
 	void MakeVertices();
-	void Draw();
+	virtual void Draw();
 
 	// Get & Set functions
 	void setPosition(glm::vec3 position);

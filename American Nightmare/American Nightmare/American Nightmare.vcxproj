@@ -179,6 +179,7 @@
     <ClCompile Include="Game\Object.cpp" />
     <ClCompile Include="Game\Particle\BloodParticle.cpp" />
     <ClCompile Include="Game\Particle\DustParticle.cpp" />
+    <ClCompile Include="Game\Particle\MusicParticle.cpp" />
     <ClCompile Include="Game\Particle\Particle.cpp" />
     <ClCompile Include="Game\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Game\Particle\ParticleManager.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="Game\Object.h" />
     <ClInclude Include="Game\Particle\BloodParticle.h" />
     <ClInclude Include="Game\Particle\DustParticle.h" />
+    <ClInclude Include="Game\Particle\MusicParticle.h" />
     <ClInclude Include="Game\Particle\Particle.h" />
     <ClInclude Include="Game\Particle\ParticleEmitter.h" />
     <ClInclude Include="Game\Particle\ParticleManager.h" />
@@ -285,6 +287,9 @@
     <None Include="Data\Graphics\Shaders\particle_light_fs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_light_gs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_light_vs.glsl" />
+    <None Include="Data\Graphics\Shaders\particle_lines_fs.glsl" />
+    <None Include="Data\Graphics\Shaders\particle_lines_gs.glsl" />
+    <None Include="Data\Graphics\Shaders\particle_lines_vs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_texture_fs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_texture_gs.glsl" />
     <None Include="Data\Graphics\Shaders\particle_texture_vs.glsl" />

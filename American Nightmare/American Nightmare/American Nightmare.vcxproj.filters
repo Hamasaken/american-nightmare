@@ -207,6 +207,9 @@
     <ClCompile Include="Game\EntityManager.cpp">
       <Filter>Source Files\Game\Level</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Particle\MusicParticle.cpp">
+      <Filter>Source Files\Game\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h">
@@ -350,6 +353,9 @@
     <ClInclude Include="Game\StructReg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Particle\MusicParticle.h">
+      <Filter>Header Files\Game\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Graphics\Shaders\solid_fs.glsl">
@@ -434,6 +440,15 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Data\Graphics\Shaders\particle_cube_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_lines_gs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_lines_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Graphics\Shaders\particle_lines_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

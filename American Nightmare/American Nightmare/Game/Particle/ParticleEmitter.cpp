@@ -15,6 +15,7 @@ ParticleEmitter::~ParticleEmitter() { }
 void ParticleEmitter::LightExplosion(glm::vec3 position, glm::vec4 color, glm::vec2 size, int amount)
 {
 	this->position = position;
+	this->texture = -1;
 	for (int i = 0; i < amount; i++)
 	{
 		Particle* particle = new Particle;
@@ -26,6 +27,7 @@ void ParticleEmitter::LightExplosion(glm::vec3 position, glm::vec4 color, glm::v
 void ParticleEmitter::BloodSplatter(glm::vec3 position, float angle, float strength, glm::vec4 color, glm::vec2 size, int amount)
 {
 	this->position = position;
+	this->texture = -1;
 	for (int i = 0; i < amount; i++)
 	{
 		BloodParticle* particle = new BloodParticle;
@@ -74,6 +76,7 @@ void ParticleEmitter::ConstantSmoke(glm::vec3 position, GLuint texture, glm::vec
 void ParticleEmitter::LightDust(glm::vec3 center, glm::vec3 dimensions, glm::vec4 color, glm::vec2 size, int amount)
 {
 	this->position = position;
+	this->texture = -1;
 	for (int i = 0; i < amount; i++)
 	{
 		DustParticle* particle = new DustParticle;
@@ -86,6 +89,18 @@ void ParticleEmitter::LightDust(glm::vec3 center, glm::vec3 dimensions, glm::vec
 		particle->Start(pos, color, size);
 		particles.push_back(particle);
 	} 
+}
+
+void ParticleEmitter::MusicLines(glm::vec3 position, float angle, float strength, glm::vec4 color, glm::vec2 size, int amount)
+{
+	this->position = position;
+	this->texture = -1;
+	for (int i = 0; i < amount; i++)
+	{
+		MusicParticle* particle = new MusicParticle;
+		particle->Start(position, color, size, angle, strength);
+		particles.push_back(particle);
+	}
 }
 
 void ParticleEmitter::Stop()
@@ -126,6 +141,8 @@ void ParticleEmitter::Stop()
 		glBindVertexArray(vertexArray);
 		glDeleteVertexArrays(1, &vertexArray);
 	}
+
+	this->texture = -1;
 }
 
 void ParticleEmitter::Update(GLfloat deltaT, glm::vec2 playerPos)
@@ -147,7 +164,9 @@ void ParticleEmitter::Update(GLfloat deltaT, glm::vec2 playerPos)
 			particles.erase(particles.begin() + i);
 		}
 	} 
-	MakeVertices();
+
+	if (!isComplete)
+		MakeVertices();
 }
 
 void ParticleEmitter::MakeVertices()
@@ -213,7 +232,7 @@ void ParticleEmitter::MakeVertices()
 
 void ParticleEmitter::Draw()
 {
-	if (vertexArray != -1)
+	if (vertexArray != -1 && !isComplete)
 	{
 		glBindVertexArray(vertexArray);
 

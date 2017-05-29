@@ -17,7 +17,7 @@ void Player::initiateCursor()
 
 void Player::initiateProjectile(MeshManager* meshManager, MaterialManager* materialManager)
 {
-	this->ammo = 6;
+	this->ammo = PLAYER_AMMO_CAP / 2;
 	this->fireDirection = { 0.0f, 0.0f };
 
 	for (int i = 0; i < this->ammo; i++)
@@ -36,7 +36,6 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	//Initiates screen properties
 	this->screenPos = screenPos;
 	this->screenSize = screenSize;
-
 
 	//Sets the cursor for the player
 	initiateCursor();
@@ -96,6 +95,10 @@ void Player::Update(GLint deltaT, b2World* world)
 		this->fireDirection = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y - 150), screenSize, screenPos);
 		this->fireDirection = glm::normalize(fireDirection);
 	}
+
+	// Getting the direction of the player from the aiming direction
+	if (fireDirection.x < 0) directionIsRight = true;
+	else directionIsRight = false;
 
 	// Update player invulnerability time
 	if (invulTime > 0.f)
@@ -230,12 +233,14 @@ void Player::Walk(Direction dir)
 			switch (dir)
 			{
 			case LEFT:
+				if (!directionIsRight) isReversed = true;
+				else isReversed = false;
 				hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
-				directionIsRight = true;
 				break;
 			case RIGHT:
+				if (directionIsRight) isReversed = true;
+				else isReversed = false;
 				hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
-				directionIsRight = false;
 				break;
 			}
 			vel.x = hitbox->getBody()->GetLinearVelocity().x;
@@ -247,12 +252,14 @@ void Player::Walk(Direction dir)
 			{
 			case LEFT:
 				hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
-				directionIsRight = true;
+				if (!directionIsRight) isReversed = true;
+				else isReversed = false;
 				soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 				break;
 			case RIGHT:
 				hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
-				directionIsRight = false;
+				if (directionIsRight) isReversed = true;
+				else isReversed = false;
 				soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 				break;
 			case STOPPED:
@@ -493,6 +500,11 @@ float& Player::getPower()
 float& Player::getNrOfProjectiles()
 {
 	return (float&)ammo;
+}
+
+bool Player::getIsFacingRight()
+{
+	return directionIsRight;
 }
 
 bool Player::getIsHovering()

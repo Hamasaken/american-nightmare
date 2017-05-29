@@ -97,6 +97,19 @@ void ParticleManager::EffectBloodCloud(glm::vec3 position, int amount, glm::vec4
 	emitters.push_back(emitter);
 }
 
+void ParticleManager::EffectMusicLines(glm::vec3 position, float angle, float strength, int amount, glm::vec4 color, float size)
+{
+	// Creating a emmiter with a specific type
+	ParticleEmitter* emitter = new ParticleEmitter();
+	emitter->setType(ParticleType::MUSIC);
+	emitter->setShader(getShaderFromPair(emitter->getType()));
+
+	// Creating particles with inputted variables into emitter
+	glm::vec2 s(size, size);
+	emitter->MusicLines(position, angle, strength, color, s, amount);
+	emitters.push_back(emitter);
+}
+
 void ParticleManager::EffectNutsAndBolts(glm::vec3 position, GLuint texture, int amount, float size)
 {
 	// Creating a emmiter with a specific type

@@ -80,7 +80,6 @@ private:
 	//variable & function for cursor
 	SDL_Cursor* cursor;
 	void initiateCursor();
-
 	Vacuum* vac;
 
 	// Interactions with player
@@ -144,6 +143,7 @@ public:
 	float& getPower();
 	float& getNrOfProjectiles();
 
+	bool getIsFacingRight();
 	bool getIsHovering();
 	bool getIsDashing();
 	b2Body* getBody();

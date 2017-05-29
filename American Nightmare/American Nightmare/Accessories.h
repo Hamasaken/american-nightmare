@@ -73,7 +73,8 @@ enum ParticleType
 	TEXTURE,
 	SMOKE,
 	LIGHT_DUST, 
-	NUTSBOLTS
+	NUTSBOLTS,
+	MUSIC
 };
 
 // Game State

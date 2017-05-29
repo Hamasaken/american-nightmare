@@ -37,6 +37,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	shaderManager->AddShader("particle_light", SHADER_PATH "particle_light_vs.glsl", SHADER_PATH "particle_light_gs.glsl", SHADER_PATH "particle_light_fs.glsl");
 	shaderManager->AddShader("particle_texture", SHADER_PATH "particle_texture_vs.glsl", SHADER_PATH "particle_texture_gs.glsl", SHADER_PATH "particle_texture_fs.glsl");
 	shaderManager->AddShader("particle_cube", SHADER_PATH "particle_cube_vs.glsl", SHADER_PATH "particle_cube_gs.glsl", SHADER_PATH "particle_cube_fs.glsl");
+	shaderManager->AddShader("particle_lines", SHADER_PATH "particle_lines_vs.glsl", SHADER_PATH "particle_lines_gs.glsl", SHADER_PATH "particle_lines_fs.glsl");
 	shaderManager->AddShader("deferred", SHADER_PATH "dr_vs.glsl", SHADER_PATH "dr_fs.glsl");
 	shaderManager->AddShader("deferred_final", SHADER_PATH "drfinal_vs.glsl", SHADER_PATH "drfinal_fs.glsl");
 	shaderManager->AddShader("shadowdir", SHADER_PATH "shadowmap_dir_vs.glsl", SHADER_PATH "shadowmap_dir_fs.glsl");
@@ -65,6 +66,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	materialManager->AddMaterial("GUI_bar_white", glm::vec3(0.1f), glm::vec3(0.8, 0.8, 0.8), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
 	materialManager->AddMaterial("playermaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.5f), 0.01f, "playertexture", TEXTURE_PATH "Walk01.png");
 	materialManager->AddMaterial("zombie1material", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.5f), 0.01f, "zombie1walk", TEXTURE_PATH "Zombie1Walk.png");
+	materialManager->AddMaterial("zombieheadmaterial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "zombieheadtexture", TEXTURE_PATH "zombie_head.png");
 	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "lighttexture", TEXTURE_PATH "gammal-dammsugare.jpg");
 	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "groundtexture", TEXTURE_PATH "temp_ground.jpg");
 	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "backgroundtexture", TEXTURE_PATH "temp_background.jpg");
@@ -96,6 +98,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::TEXTURE);
 	particleManager->ShaderPair(shaderManager->getShader("particle_texture"), ParticleType::SMOKE);
 	particleManager->ShaderPair(shaderManager->getShader("particle_cube"), ParticleType::NUTSBOLTS);
+	particleManager->ShaderPair(shaderManager->getShader("particle_lines"), ParticleType::MUSIC);
 	particleManager->setDefaultTextures(materialManager->getTextureID("smoketexture"), materialManager->getTextureID("bloodtexture"));
 
 	////////////////////////////////////////////////////////////
@@ -497,7 +500,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::I))
 		particleManager->EffectSmokeCloud(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 8);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::O))
-		particleManager->EffectConstantSmoke(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 5);
+		particleManager->EffectMusicLines(levelManager->getPlayer()->getPosition(), 0);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K))
 		particleManager->EffectNutsAndBolts(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("boltmaterial")->getTextureID(), 5);
 
