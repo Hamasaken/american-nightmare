@@ -21,6 +21,7 @@
 #define SCREEN_DEPTH		50.f
 #define SCREEN_NEAR			0.1f
 #define VSYNC_ON			true
+#define TICK_INTERVAL		17
 
 class Program
 {
