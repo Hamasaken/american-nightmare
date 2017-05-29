@@ -135,7 +135,7 @@ void Player::Update(GLint deltaT, b2World* world)
 	{
 		InputKeyboard(deltaT);
 		InputMouse();
-		InputTesting(); 
+	//	InputTesting(); 
 		InputController(deltaT);
 		//if (CONTROLLER_ON) InputController(deltaT);
 	}

@@ -34,7 +34,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	// Popup Settings
 	popup = new Text();
 	if (popup == nullptr) return false;
-	if (!popup->Start(screenSize, FONT_PATH INGAME_FONT, 60.f, glm::vec3(0, 0.5f, 0))) return false;
+	if (!popup->Start(screenSize, FONT_PATH INGAME_FONT, 35.f, glm::vec3(0, 0.5f, 0))) return false;
 	popup->setShader(guiShader);
 	popup->CreateText("Popup!", glm::vec4(0.f));
 	popupAlpha = 0.0f;
@@ -786,7 +786,7 @@ void LevelManager::CheckTriggers()
 			////////////////////////////////////////////////////////////
 			case Trigger::POSTER:
 				remove = true;
-				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 50, glm::vec4(0.25, 1, 0.25, 1));
+				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 40, glm::vec4(0.8f));
 				soundManager->playModifiedSFX(SoundManager::SFX::SFX_UNLOCK, 65, 0.05f);
 				UnlockPoster(atoi(trigger->getData().c_str()) - 1);
 				ActivatePopup("You unlocked a poster!", 3000.f);

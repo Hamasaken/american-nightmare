@@ -1,5 +1,7 @@
 #include "ScreenOptions.h"
 
+extern std::vector<uint16_t> unlockedPosters;
+
 ScreenOptions::ScreenOptions() : Screen()
 {
 	shaderManager = nullptr;
@@ -71,7 +73,7 @@ bool ScreenOptions::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	guiManager->AddButton(GUIManager::OPTION_SHADOWS, glm::vec3(0, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "shadows - High", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.f, 1, 0.3f, 1));
 	guiManager->AddButton(GUIManager::OPTION_QUALITY, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Quality - High", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.f, 1, 0.3f, 1));
 	guiManager->AddButton(GUIManager::OPTION_REBIND, glm::vec3(0, -0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Rebind keys", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
-//	guiManager->AddButton(GUIManager::OPTION_, glm::vec3(0, -0.40f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Rebind keys", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::OPTION_RESET, glm::vec3(0, -0.40f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Reset Data", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
 	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.80f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
 	guiManager->AddText(glm::vec3(0.f, 0.60f, 0.f), 80.f, "Options", FONT_PATH INGAME_FONT);
 
@@ -180,6 +182,11 @@ void ScreenOptions::Update(GLint deltaT)
 				break;
 			case GUIManager::Action::CANCEL:
 				guiManager->setCenter(glm::vec2(0, 0));
+				break;
+			case GUIManager::Action::OPTION_RESET:
+				remove(ARCHIVE_PATH"savedata.fu");
+				for (uint16_t& i : unlockedPosters) i = 0;
+				printf("Data reset\n");
 				break;
 			case GUIManager::Action::OPTION_QUALITY:
 				{
