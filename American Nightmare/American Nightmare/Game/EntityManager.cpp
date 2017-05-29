@@ -126,36 +126,36 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 			i--;
 
 			float speed = 0.40f;
-			int r = rand() % 6 + 1;
+			int r = rand() % 100 + 1;
 			
 			if (r > 0)
 			{
 				ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombieheadmaterial"), true), temp);
 				ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-speed, speed), randBetweenF(-speed, 0)));
 			}
-			if (r > 1)
+			if (r > 10)
 			{
 				ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombiehandmaterial"), false), temp);
 				ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-speed, speed), randBetweenF(-speed, 0)));
 			}
 			
-			if (r > 2)
+			if (r > 35)
 			{
 				ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombiefootmaterial"), false), temp);
 				ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-speed, speed), randBetweenF(-speed, 0)));
 			}
-			if (r > 3)
+			if (r > 65)
 			{
 				ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombiehandmaterial"), false), temp);
 				ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-speed, speed), randBetweenF(-speed, 0)));
 
 			}
-			if (r > 4)
+			if (r > 80)
 			{
 				ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombiefootmaterial"), false), temp);
 				ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-speed, speed), randBetweenF(-speed, 0)));
 			}
-			if (r > 5)
+			if (r > 90)
 			{
 				ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombiebodymaterial"), false), temp);
 				ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-speed, speed), randBetweenF(-speed, 0)));
