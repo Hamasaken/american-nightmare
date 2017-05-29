@@ -307,7 +307,6 @@ void Player::Dash(sf::Keyboard::Key inKey)
 			b2Vec2 angle = b2Vec2(sf::Joystick::getAxisPosition(0, sf::Joystick::X), sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
 			angle.Normalize();
 			hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2((angle.x * PLAYER_DASH_VEL) * 0.5, (angle.y * PLAYER_DASH_VEL) * 0.25), true);
-			//b2Vec2((sin(angle.x) * PLAYER_DASH_VEL) * 0.25, (cos(angle.y) * PLAYER_DASH_VEL) * 0.25), true)
 		}
 		else
 		{
@@ -438,10 +437,12 @@ void Player::InputKeyboard(GLint deltaT)
 	if (sf::Keyboard::isKeyPressed(key_jump)) 
 	{
 		Jump();
-		if (sf::Keyboard::isKeyPressed(key_dash) && power >= PLAYER_POWER_COST_DASH) Dash(key_jump);
+		if (sf::Keyboard::isKeyPressed(key_dash) && power >= PLAYER_POWER_COST_DASH) 
+			Dash(key_jump);
 	}
 
-	if (sf::Keyboard::isKeyPressed(key_hover) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
+	if (sf::Keyboard::isKeyPressed(key_hover) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) 
+  		Hover(deltaT);
 	else isHovering = false;
 }
 
@@ -450,10 +451,12 @@ void Player::InputController(GLint deltaT)
 	sf::Joystick::update();
 	if (sf::Joystick::isConnected(0))
 	{
-		cout << "KLSAda" << endl;
 		if (sf::Joystick::isButtonPressed(0, BTN_A)) Jump();
 
-		if (sf::Joystick::isButtonPressed(0, BTN_X) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
+		if (sf::Joystick::isButtonPressed(0, BTN_X) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER)
+		{
+			Hover(deltaT);
+		}
 		else isHovering = false;
 
 		if (sf::Joystick::isButtonPressed(0, BTN_Y) && power >= PLAYER_POWER_COST_SHOCKWAVE)
@@ -469,7 +472,6 @@ void Player::InputController(GLint deltaT)
 		if (sf::Joystick::isButtonPressed(0, BTN_BACK))
 			printf("Back.\n");
 		if (sf::Joystick::isButtonPressed(0, BTN_START))
-	
 			printf("start.\n");
 		if (sf::Joystick::isButtonPressed(0, BTN_LT))
 			printf("LT.\n");

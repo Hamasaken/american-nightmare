@@ -4,7 +4,7 @@
 #include "Particle.h"
 
 // BLOOD PARTICLES DEFAULTS
-#define BLOOD_DEFAULT_COLOR		glm::vec4(0.80f, 0.1f, 0.05f, 1.f)
+#define BLOOD_DEFAULT_COLOR		glm::vec4(0.50f, 0.05f, 0.05f, 1.f)
 #define BLOOD_DEFAULT_AMOUNT	25
 #define BLOOD_DEFAULT_STRENGTH	0.08f
 #define BLOOD_SIZE				randBetweenF(0.4f, 0.9f)
