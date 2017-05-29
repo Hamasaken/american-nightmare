@@ -88,6 +88,17 @@ void ParticleEmitter::LightDust(glm::vec3 center, glm::vec3 dimensions, glm::vec
 	} 
 }
 
+void ParticleEmitter::MusicLines(glm::vec3 position, float angle, float strength, glm::vec4 color, glm::vec2 size, int amount)
+{
+	this->position = position;
+	for (int i = 0; i < amount; i++)
+	{
+		MusicParticle* particle = new MusicParticle;
+		particle->Start(position, color, size, angle, strength);
+		particles.push_back(particle);
+	}
+}
+
 void ParticleEmitter::Stop()
 {
 	// Erasing everything in vector
@@ -213,7 +224,7 @@ void ParticleEmitter::MakeVertices()
 
 void ParticleEmitter::Draw()
 {
-	if (vertexArray != -1)
+	if (vertexArray != -1 && !isComplete)
 	{
 		glBindVertexArray(vertexArray);
 

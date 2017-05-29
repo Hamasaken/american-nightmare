@@ -289,13 +289,15 @@ void LevelManager::Update(GLint deltaT)
 	// Updating UI popup text
 	if (popupActive)
 	{
+		
 		glm::vec4 color = popup->getColor();
 		float currentAlpha = color.a;
 		currentAlpha += (popupAlpha - currentAlpha) * 0.1f;
 		popup->setColor(glm::vec4(currentAlpha));
 		popupTimer -= deltaT;
+		if (currentAlpha > 0.1f) particleManager->EffectMusicLines(player->getPosition(), player->getIsFacingRight() ? 0 : glm::pi<float>(), 0.012, 1);
 		if (popupTimer < NULL)	popupAlpha = -0.05f;
-		else if (currentAlpha < 0.f) popupActive = false;
+		else if (currentAlpha <= 0.0f) popupActive = false;
 	}
 
 	// Checking triggers

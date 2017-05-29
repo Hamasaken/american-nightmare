@@ -64,6 +64,20 @@ public:
 		float size = TEXTURE_SIZE);
 
 	////////////////////////////////////////////////////////////
+	// \brief Creates an explosion with small lines (for the radio)
+	// \param position The position of impact
+	// \param angle The direction of the most blood splatter
+	// \optional strength The power of the impact (defaults as 0.5f)
+	// \optional amount The amount of spawned blood particles
+	// \optional color The color of the most blood
+	////////////////////////////////////////////////////////////
+	void EffectMusicLines(glm::vec3 position, float angle,
+		float strength = MUSIC_DEFAULT_STRENGTH,
+		int amount = MUSIC_DEFAULT_AMOUNT,
+		glm::vec4 color = MUSIC_DEFAULT_COLOR,
+		float size = MUSIC_SIZE);
+
+	////////////////////////////////////////////////////////////
 	// \brief Creates an explosion of nuts and bolts with given texture (gravity is really high)
 	// \param position The position of explosion
 	// \param texture The texture of each bolt
