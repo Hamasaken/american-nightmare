@@ -31,6 +31,9 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	this->screenSize = screenSize;
 	this->screenPos = screenPos;
 
+	player = new Player();
+	if (player == nullptr) return false;
+
 	// Popup Settings
 	popup = new Text();
 	if (popup == nullptr) return false;
@@ -41,7 +44,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	popupActive = false;
 
 	// Starting contact manager
-	contactManager.Start(particleManager, soundManager, myPH, materialManager, meshManager, camera);
+	contactManager.Start(particleManager, soundManager, myPH, materialManager, meshManager, camera, player);
 
 	// Starting world 
 	world = new b2World(b2Vec2(NULL, GRAVITY * GRAVITY_SCALE));
@@ -59,8 +62,6 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	GLint tempNomralMapIndex = materialManager->AddTexture("playernormalmap", TEXTURE_PATH "Walk01_nor.png");
 
 	//Test with a player who has a gun too fire with
-	player = new Player();
-	if (player == nullptr) return false;
 	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial"), world, particleManager, soundManager, meshManager, materialManager, camera, screenPos, screenSize))
 		return false;
 	player->setShader(playerShader);
@@ -308,6 +309,7 @@ void LevelManager::Update(GLint deltaT)
 
 void LevelManager::ActivatePopup(std::string text, GLfloat timer)
 {
+	soundManager->playModifiedSFX(SoundManager::SFX_STATIC, 100, 0.f);
 	popup->setString(text);
 	popupActive = true;
 	popupAlpha = 1.f;
@@ -764,12 +766,29 @@ void LevelManager::CheckTriggers()
 				// Checks if the door have a level file
 				if (!trigger->getData().empty())
 				{
+					// Saving old data
+					glm::vec2 ss = screenSize;
+					glm::vec2 sp = screenPos;
+					GLuint ps = playerShader;
+					GLuint ms = mapShader;
+					GLuint gs = guiShader;
+					MaterialManager* mm = materialManager;
+					MeshManager* mm2 = meshManager;
+					ParticleManager* pm = particleManager;
+					SoundManager* sm = soundManager;
+					Camera* c = camera;
+					std::string archive = trigger->getData();
+					std::string level = trigger->getData();
 
-			//		Stop();
-			//		Start(screenSize, screenPos, playerShader, mapShader, guiShader, materialManager, meshManager, particleManager, soundManager, camera);
+					// Deleting EVERYTHING
+					Stop();
+
+					// Starting a new level
+					Start(ss, sp, ps, ms, gs, mm, mm2, pm, sm, c);
+					player->Reset();
 
 					// Loads new level with the current player's shader
-					LoadLevel(trigger->getData(), trigger->getData());
+					LoadLevel(level, archive);
 				} 
 				break;
 
@@ -778,7 +797,7 @@ void LevelManager::CheckTriggers()
 			////////////////////////////////////////////////////////////
 			case Trigger::POPUP:
 				remove = true;
-				ActivatePopup(trigger->getData(), 3000.f);
+				ActivatePopup(trigger->getData(), 4250.f);
 				break;
 
 			////////////////////////////////////////////////////////////
@@ -787,9 +806,9 @@ void LevelManager::CheckTriggers()
 			case Trigger::POSTER:
 				remove = true;
 				particleManager->EffectExplosionLights(glm::vec3(trigger->getPosition(), 0), 40, glm::vec4(0.8f));
-				soundManager->playModifiedSFX(SoundManager::SFX::SFX_UNLOCK, 65, 0.05f);
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_UNLOCK, 50, 0.05f);
 				UnlockPoster(atoi(trigger->getData().c_str()) - 1);
-				ActivatePopup("You unlocked a poster!", 3000.f);
+				ActivatePopup("You unlocked a poster!", 4250.f);
 				break;
 
 			////////////////////////////////////////////////////////////
@@ -840,7 +859,7 @@ void LevelManager::CheckTriggers()
 			// Save - Save station for the player, saves the game
 			////////////////////////////////////////////////////////////
 			case Trigger::SAVE:
-				ActivatePopup("Saved.", 2000.f);
+				ActivatePopup("Saved.", 4250.f);
 				break;
 
 			////////////////////////////////////////////////////////////

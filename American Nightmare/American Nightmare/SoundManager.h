@@ -12,7 +12,7 @@
 #define VOLUME_SFX		70
 
 // Turn Music & SFX on/off
-#define MUSIC_ON		false	
+#define MUSIC_ON		true	
 #define SFX_ON			true
 
 class SoundManager
@@ -41,7 +41,8 @@ public:
 		SFX_LASER,
 		SFX_DEATH,
 		SFX_GAMEOVER,
-		SFX_EMPTY
+		SFX_EMPTY,
+		SFX_STATIC
 	};
 
 	// Put song names here, and then load them in the loadSongs functions

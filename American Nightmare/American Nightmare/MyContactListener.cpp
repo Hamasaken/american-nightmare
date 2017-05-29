@@ -13,7 +13,7 @@ MyContactListener::~MyContactListener()
 	camera = nullptr;
 }
 
-void MyContactListener::Start(ParticleManager* particleManager, SoundManager* soundManager, ProjectileHandler* ph, MaterialManager* materialManager, MeshManager* meshManager, Camera* camera)
+void MyContactListener::Start(ParticleManager* particleManager, SoundManager* soundManager, ProjectileHandler* ph, MaterialManager* materialManager, MeshManager* meshManager, Camera* camera, Player* player)
 {
 	// Getting different managers parameters
 	this->particleManager = particleManager;
@@ -22,6 +22,7 @@ void MyContactListener::Start(ParticleManager* particleManager, SoundManager* so
 	this->materialManager = materialManager;
 	this->meshManager = meshManager;
 	this->ph = ph;
+	this->player = player;
 }
 
 void MyContactListener::BeginContact(b2Contact* contact)
@@ -132,6 +133,8 @@ void MyContactListener::BeginContact(b2Contact* contact)
 					enemy->TakeDamage(enemy->getDamage());
 					if (enemy->getIsDead())
 					{
+						if (enemy == player->getContactWithEnemy())
+							player->setContactWithEnemy(nullptr);
 						camera->screenShake(750.f, 1.f); 
 						soundManager->playSFXOverDrive(SoundManager::SFX_DEATH, 50, 0.0f);
 						particleManager->EffectExplosionLights(enemy->getPosition(), 15, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
