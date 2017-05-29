@@ -17,7 +17,7 @@ bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 
 bool Entity::Start(b2World* world, b2Body* player)
 {
-	//Object::Start(mesh, material);
+	Object::Start(mesh, material);
 	this->world = world;
 
 	hitbox = new Hitbox();
