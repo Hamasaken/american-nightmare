@@ -23,6 +23,8 @@ in vec3 normal;
 
 void main () {
 	vec4 tex = texture2D(texture, vec2(textureUV.x, 1.f - textureUV.y));
+	if (tex.a < 0.5f)
+		discard;
 	out_position = position;
 	out_normal = normalize(normal);
 	out_ambient = tex * vec4(material.ambient, 1.f);
