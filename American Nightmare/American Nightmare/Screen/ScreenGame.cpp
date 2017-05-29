@@ -66,9 +66,9 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	materialManager->AddMaterial("GUI_bar_white", glm::vec3(0.1f), glm::vec3(0.8, 0.8, 0.8), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
 	materialManager->AddMaterial("playermaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.5f), 0.01f, "playertexture", TEXTURE_PATH "Walk01.png");
 	materialManager->AddMaterial("zombie1material", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.5f), 0.01f, "zombie1walk", TEXTURE_PATH "Zombie1Walk.png");
-	materialManager->AddMaterial("zombieheadmaterial", glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(0.f), 0.01f, "zombieheadtexture", TEXTURE_PATH "zombie_head.png");
-	materialManager->AddMaterial("zombiehandmaterial", glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(0.f), 0.01f, "zombiehandtexture", TEXTURE_PATH "zombie_hand.png");
-	materialManager->AddMaterial("zombiefootmaterial", glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(0.f), 0.01f, "zombiefoottexture", TEXTURE_PATH "zombie_foot.png");
+	materialManager->AddMaterial("zombieheadmaterial", glm::vec3(0.25f), glm::vec3(0.5f), glm::vec3(0.f), 0.01f, "zombieheadtexture", TEXTURE_PATH "zombie_head.png");
+	materialManager->AddMaterial("zombiehandmaterial", glm::vec3(0.25f), glm::vec3(0.5f), glm::vec3(0.f), 0.01f, "zombiehandtexture", TEXTURE_PATH "zombie_hand.png");
+	materialManager->AddMaterial("zombiefootmaterial", glm::vec3(0.25f), glm::vec3(0.5f), glm::vec3(0.f), 0.01f, "zombiefoottexture", TEXTURE_PATH "zombie_foot.png");
 	materialManager->AddMaterial("lightmaterial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "lighttexture", TEXTURE_PATH "gammal-dammsugare.jpg");
 	materialManager->AddMaterial("groundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "groundtexture", TEXTURE_PATH "temp_ground.jpg");
 	materialManager->AddMaterial("backgroundmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.f), 0.01f, "backgroundtexture", TEXTURE_PATH "temp_background.jpg");
