@@ -140,14 +140,14 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (uiManager == nullptr) return false;
 	if (!uiManager->Start(screenSize, screenPosition)) return false;
 	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.89f, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Pause", FONT_PATH INGAME_FONT, 17.5f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
-	
+
 	// Bars
 	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(-0.3f, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_red"), meshManager->getMesh("quadbig"));
 	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(0.3, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_green"), meshManager->getMesh("quadbig"));
-	uiManager->AddBar(levelManager->getPlayer()->getNrOfProjectiles(), levelManager->getPlayer()->getNrOfProjectiles(), glm::vec3(-0.9, -0.85, 0), glm::vec2(0.15, 0.10), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quadbig"));
+	uiManager->AddBar(levelManager->getPlayer()->getNrOfProjectiles(), PLAYER_AMMO_CAP, glm::vec3(0.0, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quadbig"));
 	uiManager->AddText(glm::vec3(-0.3, -0.95, 0.f), 30.f, "Health", FONT_PATH INGAME_FONT);
 	uiManager->AddText(glm::vec3(0.3, -0.95, 0.f), 30.f, "Power", FONT_PATH INGAME_FONT);
-	uiManager->AddText(glm::vec3(-0.9, -0.85, 0.f), 30.f, "Scrap", FONT_PATH INGAME_FONT);
+	uiManager->AddText(glm::vec3(0.0, -0.95, 0.f), 30.f, "Scrap", FONT_PATH INGAME_FONT);
 
 	// Death Screen
 	uiManager->AddText(glm::vec3(0.f, 2.5, 0.f), 50.f, "You died", FONT_PATH INGAME_FONT);
@@ -159,7 +159,6 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager->getBar(0)->setAlpha(1.f);
 	uiManager->getBar(1)->setAlpha(1.f);
 	uiManager->getBar(2)->setAlpha(1.f);
-	uiManager->getBar(2)->setRotation(glm::vec3(0, 0, 3.14 * 0.5f));
 
 	uiManager->setShader(shaderManager->getShader("texture"));
 	uiManager->setInstantCenter(glm::vec2(0, 0));
