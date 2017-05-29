@@ -63,12 +63,12 @@ void Entity::Update(GLint deltaT)
 	// Update the texture position
 	position.x = hitbox->getPosition().x;
 	position.y = hitbox->getPosition().y;
-	rotation.z = hitbox->getBody()->GetAngle();
+	rotation.z = -hitbox->getBody()->GetAngle();
 
 	Object::Update(deltaT);
 }
 
-void Entity::setPosition(glm::vec3 position) { this->position = position; hitbox->getBody()->SetTransform(b2Vec2(position.x, position.y), hitbox->getBody()->GetAngle()); }
+void Entity::setPosition(glm::vec3 position) { this->position = position; hitbox->getBody()->SetTransform(b2Vec2(position.x, position.y), -hitbox->getBody()->GetAngle()); }
 void Entity::setScale(glm::vec3 scale) { 
 	this->scale = scale; 
 //	hitbox->getBody()->DestroyFixture(hitbox->getBody()->GetFixtureList());

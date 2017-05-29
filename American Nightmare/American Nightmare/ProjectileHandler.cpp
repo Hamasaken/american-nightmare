@@ -38,8 +38,8 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position,
 	for (int i = 0; i < this->myProjtileVector.size(); i++)
 	{
 		Projectile* p = myProjtileVector[i];
-		if (abs(p->getHitbox()->getBody()->GetLinearVelocity().x) > 5.f && rand() % 2 == 1)
-			particleManager->EffectSmokeCloud(p->getPosition(), 0, 1);
+		if (abs(p->getHitbox()->getBody()->GetLinearVelocity().x) > 5.f && rand() % 4 == 1)
+			particleManager->EffectSmokeCloud(p->getPosition(), 0, 1, glm::vec4(0.9f), randBetweenF(0.1f, 0.35f));
 
 		float dist = abs(p->getHitbox()->getBody()->GetPosition().x - position.x);
 		b2Body* body = p->getHitbox()->getBody();
@@ -94,7 +94,6 @@ void ProjectileHandler::deleteProjects(b2World* world)
 		if (this->myProjtileVector[i]->getmarked() == true)
 		{
 			Projectile* temp = this->myProjtileVector[i];
-			world->DestroyBody(temp->getHitbox()->getBody());
 			temp->Stop();
 			delete temp;
 			temp = nullptr;

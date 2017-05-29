@@ -512,6 +512,7 @@ void Screen::DrawParticles(ParticleEmitter* particleEmitter, ShaderManager *shad
 	shaderManager->setShader(particleEmitter->getShader());
 	shaderManager->SetParameters(world, view, projection);
 
+	glBindTexture(GL_TEXTURE_2D, 0);
 	if (particleEmitter->getTexture() != -1)
 	{
 		glEnable(GL_TEXTURE_2D);
@@ -519,10 +520,11 @@ void Screen::DrawParticles(ParticleEmitter* particleEmitter, ShaderManager *shad
 		glBindTexture(GL_TEXTURE_2D, particleEmitter->getTexture());
 		glUniform1i(glGetUniformLocation(particleEmitter->getShader(), "texture"), 0);
 	}
-
+	
 	glDisable(GL_DEPTH_TEST);
 	particleEmitter->Draw();
 	glEnable(GL_DEPTH_TEST);
+
 	glDisable(GL_BLEND);
 }
 

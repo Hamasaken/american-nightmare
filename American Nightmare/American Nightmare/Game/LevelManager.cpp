@@ -225,6 +225,7 @@ void LevelManager::StopMap()
 void LevelManager::Update(GLint deltaT)
 {
 	// Updating physics
+	//world->Step(deltaT * 0.001f, 10, 10);
 	world->Step(1 / 60.f, 10, 10);
 
 	// Updating player
@@ -285,17 +286,18 @@ void LevelManager::Update(GLint deltaT)
 			if (!trigger->getIsTriggered())
 				trigger->CheckCollision(player->getBody());
 
-		// Updating UI popup text
-		if (popupActive)
-		{
-			glm::vec4 color = popup->getColor();
-			float currentAlpha = color.a;
-			currentAlpha += (popupAlpha - currentAlpha) * 0.1f;
-			popup->setColor(glm::vec4(currentAlpha));
-			popupTimer -= deltaT;
-			if (popupTimer < NULL)	popupAlpha = -0.05f;
-			else if (currentAlpha < 0.f) popupActive = false;
-		}
+	// Updating UI popup text
+	if (popupActive)
+	{
+		glm::vec4 color = popup->getColor();
+		float currentAlpha = color.a;
+		currentAlpha += (popupAlpha - currentAlpha) * 0.1f;
+		popup->setColor(glm::vec4(currentAlpha));
+		popupTimer -= deltaT;
+		if (currentAlpha > 0.1f && (rand() % 5) == 1) particleManager->EffectMusicLines(player->getPosition(), player->getIsFacingRight() ? 0 : glm::pi<float>(), 0.012, 1);
+		if (popupTimer < NULL)	popupAlpha = -0.05f;
+		else if (currentAlpha <= 0.0f) popupActive = false;
+	}
 
 		// Checking triggers
 		CheckTriggers();
@@ -329,16 +331,20 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	// Loading Level
 	////////////////////////////////////////////////////////////
 	levelFile.readFromFile(levelPath.c_str());
-	/* std::vector<CharData> archivePaths;
-	for (int i = 0; i < archivePaths.size(); i++)
+
+/*	std::vector<AArchiveHandler> archives;
+	for (int i = 0; i < levelFile.archives.size(); i++)
 	{
-		CharData path = archivePaths[i];
+		CharData path = levelFile.archives[i];
 		AArchiveHandler tempArchive;
 		tempArchive.readFromFile(path.data);
 		LoadArchiveTextures(tempArchive.textures);
 		LoadArchiveMaterials(tempArchive.materials);
 		LoadArchiveMeshes(tempArchive.meshes);
-	} */
+		archives.push_back(tempArchive);
+	} 
+	*/
+
 	LoadLevelMeshes(levelFile.meshes);
 	LoadLevelLights(levelFile.lights);
 	LoadLevelHitboxes(levelFile.hitboxes);

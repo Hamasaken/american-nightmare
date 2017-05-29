@@ -71,7 +71,7 @@ void Hitbox::Stop(b2World* world)
 	if (body != nullptr)
 	{
 		body->SetUserData(nullptr);
-	//	world->DestroyBody(body);
+		world->DestroyBody(body);
 		body = nullptr;
 	}
 }
