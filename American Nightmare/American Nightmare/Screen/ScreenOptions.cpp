@@ -71,7 +71,8 @@ bool ScreenOptions::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State*
 	guiManager->AddButton(GUIManager::OPTION_SHADOWS, glm::vec3(0, 0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "shadows - High", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.f, 1, 0.3f, 1));
 	guiManager->AddButton(GUIManager::OPTION_QUALITY, glm::vec3(0, 0.f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Quality - High", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.f, 1, 0.3f, 1));
 	guiManager->AddButton(GUIManager::OPTION_REBIND, glm::vec3(0, -0.20f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Rebind keys", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
-	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.60f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+//	guiManager->AddButton(GUIManager::OPTION_, glm::vec3(0, -0.40f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Rebind keys", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	guiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0, -0.80f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Back", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
 	guiManager->AddText(glm::vec3(0.f, 0.60f, 0.f), 80.f, "Options", FONT_PATH INGAME_FONT);
 
 	// Options rebind keys
