@@ -60,9 +60,9 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	// Loading materials
 	materialManager->AddMaterial("missingmaterial", glm::vec3(1.f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "missingtexture", TEXTURE_PATH "MissingTexture.png");
 	materialManager->AddMaterial("GUI_1_mat", glm::vec3(0.1f), glm::vec3(0.75, 0.75, 0.75), glm::vec3(1.f), 1.f, "GUI_1_tex", TEXTURE_PATH "GUI_btn_1.png");
-	materialManager->AddMaterial("GUI_bar_blue", glm::vec3(0.1f), glm::vec3(0.5, 0.5, 0.7), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.jpg");
-	materialManager->AddMaterial("GUI_bar_red", glm::vec3(0.1f), glm::vec3(0.7, 0.5, 0.5), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
-	materialManager->AddMaterial("GUI_bar_green", glm::vec3(0.1f), glm::vec3(0.5, 0.7, 0.5), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
+	materialManager->AddMaterial("GUI_bar_blue", glm::vec3(0.1f), glm::vec3(0.4, 0.4, 0.7), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.jpg");
+	materialManager->AddMaterial("GUI_bar_red", glm::vec3(0.1f), glm::vec3(0.8, 0.2, 0.2), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
+	materialManager->AddMaterial("GUI_bar_green", glm::vec3(0.1f), glm::vec3(0.2, 1.f, 0.2), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
 	materialManager->AddMaterial("GUI_bar_white", glm::vec3(0.1f), glm::vec3(0.8, 0.8, 0.8), glm::vec3(1.f), 1.f, "GUI_2_tex", TEXTURE_PATH "GUI_bar_1.png");
 	materialManager->AddMaterial("playermaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.5f), 0.01f, "playertexture", TEXTURE_PATH "Walk01.png");
 	materialManager->AddMaterial("zombie1material", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(0.5f), 0.01f, "zombie1walk", TEXTURE_PATH "Zombie1Walk.png");
@@ -143,8 +143,8 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	
 	// Bars
 	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(-0.3f, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_red"), meshManager->getMesh("quadbig"));
-	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(0.3, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quadbig"));
-	uiManager->AddBar(levelManager->getPlayer()->getNrOfProjectiles(), levelManager->getPlayer()->getNrOfProjectiles(), glm::vec3(-0.9, -0.85, 0), glm::vec2(0.15, 0.10), materialManager->getMaterial("GUI_bar_green"), meshManager->getMesh("quadbig"));
+	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(0.3, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_green"), meshManager->getMesh("quadbig"));
+	uiManager->AddBar(levelManager->getPlayer()->getNrOfProjectiles(), levelManager->getPlayer()->getNrOfProjectiles(), glm::vec3(-0.9, -0.85, 0), glm::vec2(0.15, 0.10), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quadbig"));
 	uiManager->AddText(glm::vec3(-0.3, -0.95, 0.f), 30.f, "Health", FONT_PATH INGAME_FONT);
 	uiManager->AddText(glm::vec3(0.3, -0.95, 0.f), 30.f, "Power", FONT_PATH INGAME_FONT);
 	uiManager->AddText(glm::vec3(-0.9, -0.85, 0.f), 30.f, "Scrap", FONT_PATH INGAME_FONT);
@@ -156,9 +156,9 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	uiManager->setAlpha(1.f);
 
 	// Bar modifications
-	uiManager->getBar(0)->setAlpha(0.35f);
-	uiManager->getBar(1)->setAlpha(0.35f);
-	uiManager->getBar(2)->setAlpha(0.35f);
+	uiManager->getBar(0)->setAlpha(1.f);
+	uiManager->getBar(1)->setAlpha(1.f);
+	uiManager->getBar(2)->setAlpha(1.f);
 	uiManager->getBar(2)->setRotation(glm::vec3(0, 0, 3.14 * 0.5f));
 
 	uiManager->setShader(shaderManager->getShader("texture"));
