@@ -62,6 +62,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	hasDashed = false;
 	isHovering = false;
 	isDashing = false;
+	powerRefillCD = 0.f;
 	invulTime = 0.f;
 	shockwaveCooldown = 0.f;
 	contactWithEnemy = nullptr;
@@ -105,6 +106,12 @@ void Player::Update(GLint deltaT, b2World* world)
 	{
 		invulTime -= deltaT * 0.001f;
 	}
+	// Update player power refill cd
+	if (powerRefillCD > 0.f)
+	{
+		powerRefillCD -= deltaT * 0.001f;
+	}
+
 	// Quick fix enemy continuous collision
 	else if (contactWithEnemy)
 	{
@@ -141,7 +148,7 @@ void Player::Update(GLint deltaT, b2World* world)
 	}
 
 	// Recharging power meter
-	if (!isHovering)
+	if (powerRefillCD <= 0.f && !isHovering)
 	{
 		soundManager->stopSFX(SoundManager::SFX_HOVER);
 
@@ -296,6 +303,7 @@ void Player::Dash(sf::Keyboard::Key inKey)
 		if (inKey == key_jump) sfx = SoundManager::SFX::SFX_DASH;
 		soundManager->playSFXOverDrive(sfx, 50.f);
 		power -= PLAYER_POWER_COST_DASH;
+		powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
 		isDashing = true;
 		hasDashed = true;
 		dashCooldown = PLAYER_DASH_CD;
@@ -345,6 +353,7 @@ void Player::Hover(GLint deltaT)
 		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
 		hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, 0.f));
 		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
+		powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
 	}
 	else if (hasJumped)
 	{
@@ -352,6 +361,7 @@ void Player::Hover(GLint deltaT)
 		yPos = hitbox->getBody()->GetPosition().y;
 		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
 		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
+		powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
 	}
 }
 
@@ -389,6 +399,7 @@ void Player::Shockwave()
 			contact = contact->next;
 		}
 		power -= PLAYER_POWER_COST_SHOCKWAVE;
+		powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
 		shockwaveCooldown = PLAYER_SHOCKWAVE_CD;
 	}
 }
