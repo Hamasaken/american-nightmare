@@ -101,7 +101,7 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 	return success;
 }
 
-void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool playerDead)
+void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool playerDead, b2World* world)
 {
 	for (int i = 0; i < enemyList.size(); i++)
 	{
