@@ -125,11 +125,11 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 			enemyList.erase(enemyList.begin() + i);
 			i--;
 
-			ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), false), temp);
+			ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombieheadmaterial"), true), temp);
 			ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-0.25f, 0.25f), randBetweenF(-0.25f, 0)));
-			ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), false), temp);
+			ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombieheadmaterial"), true), temp);
 			ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-0.25f, 0.25f), randBetweenF(-0.25f, 0)));
-			ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), false), temp);
+			ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombieheadmaterial"), true), temp);
 			ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-0.25f, 0.25f), randBetweenF(-0.25f, 0)));
 
 		}
