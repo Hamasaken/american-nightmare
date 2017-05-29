@@ -4,15 +4,11 @@
 #include "Particle.h"
 
 // MUSIC PARTICLES DEFAULTS
-#define MUSIC_DEFAULT_COLOR		glm::vec4(0.70f, 0.50f, 0.10f, 0.8f)
+#define MUSIC_DEFAULT_COLOR		glm::vec4(0.5f)
 #define MUSIC_DEFAULT_AMOUNT	1
-#define MUSIC_DEFAULT_STRENGTH	0.00000001f
-#define MUSIC_SIZE				randBetweenF(0.2f, 0.4f)
-#define MUSIC_VELOCITY			randBetweenF(-0.00001f, 0.00001f)
-#define MUSIC_VELOCITY_FALL_OFF	randBetweenF(0.003f, 0.005f)
-#define MUSIC_LIFETIME			randBetweenF(175.f, 375.f)
-#define MUSIC_ROTATION			randBetweenF(-0.0020f, 0.0020f)
-#define MUSIC_ROTATION_FALL_OFF	randBetweenF(0.005f, 0.005f)
+#define MUSIC_DEFAULT_STRENGTH	0.f
+#define MUSIC_SIZE				randBetweenF(0.30f, 0.47f)
+#define MUSIC_LIFETIME			randBetweenF(275.f, 456.f)
 
 class MusicParticle : public Particle
 {
@@ -35,11 +31,6 @@ public:
 	// \param deltaT The time between each frame in milliseconds
 	////////////////////////////////////////////////////////////
 	virtual void Update(GLfloat deltaT);
-
-protected:
-	float angle;
-	float rotation;
-	float rotationSpeed;
 };
 
 #endif // !MUSICPARTICLE_H
