@@ -112,11 +112,9 @@ std::vector<Projectile*>* ProjectileHandler::getBullets()
 
 void ProjectileHandler::spawnProjectile(ProjectileData projectileData, glm::vec2 pos)
 {
-	cout << "first" << myProjtileVector.size() << endl;
 	Projectile*	p = new Projectile(projectileData.mesh, projectileData.material, world, pos, projectileData.isCircle);
 	p->setShader(myShader);
 	myProjtileVector.push_back(p);
-	cout << "after" << myProjtileVector.size() << endl;
 }
 
 

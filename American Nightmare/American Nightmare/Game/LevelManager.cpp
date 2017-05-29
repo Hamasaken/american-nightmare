@@ -764,9 +764,23 @@ void LevelManager::CheckTriggers()
 				// Checks if the door have a level file
 				if (!trigger->getData().empty())
 				{
+					// Saving old data
+					glm::vec2 ss = screenSize;
+					glm::vec2 sp = screenPos;
+					GLuint ps = playerShader;
+					GLuint ms = mapShader;
+					GLuint gs = guiShader;
+					MaterialManager* mm = materialManager;
+					MeshManager* mm2 = meshManager;
+					ParticleManager* pm = particleManager;
+					SoundManager* sm = soundManager;
+					Camera* c = camera;
 
-			//		Stop();
-			//		Start(screenSize, screenPos, playerShader, mapShader, guiShader, materialManager, meshManager, particleManager, soundManager, camera);
+					// Deleting EVERYTHING
+					Stop();
+
+					// Starting a new level
+					Start(ss, sp, ps, ms, gs, mm, mm2, pm, sm, c);
 
 					// Loads new level with the current player's shader
 					LoadLevel(trigger->getData(), trigger->getData());

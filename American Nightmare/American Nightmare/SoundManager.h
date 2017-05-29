@@ -12,7 +12,7 @@
 #define VOLUME_SFX		70
 
 // Turn Music & SFX on/off
-#define MUSIC_ON		false	
+#define MUSIC_ON		true	
 #define SFX_ON			true
 
 class SoundManager
