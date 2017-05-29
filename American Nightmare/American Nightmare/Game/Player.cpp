@@ -43,7 +43,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	//Sets variables for projectile/gun
 	initiateProjectile(meshManager, materialManager);
 
-
+	
 	// Starting entity variables (including hitbox)
 	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(PLAYER_SIZE_X * 0.45f, PLAYER_SIZE_Y * 0.9f, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_MASS, PLAYER_FRICTION);
 
@@ -302,25 +302,35 @@ void Player::Dash(sf::Keyboard::Key inKey)
 		//float angle = (directionIsRight) ? -glm::pi<float>() * 0.5f : glm::pi<float>() * 0.5f;
 
 		float angle;
-		if (sf::Keyboard::isKeyPressed(key_jump))
+		if (sf::Joystick::isConnected(0))
 		{
-			if (inKey == key_left)
-				angle = -glm::pi<float>() * 0.75f;
-			else if (inKey == key_right)
-				angle = glm::pi<float>() * 0.75f;
-			else
-				angle = glm::pi<float>();
-
-			hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2((sin(angle) * PLAYER_DASH_VEL) * 0.25, (cos(angle) * PLAYER_DASH_VEL) * 0.25), true);
+			b2Vec2 angle = b2Vec2(sf::Joystick::getAxisPosition(0, sf::Joystick::X), sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
+			angle.Normalize();
+			hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2((angle.x * PLAYER_DASH_VEL) * 0.5, (angle.y * PLAYER_DASH_VEL) * 0.25), true);
+			//b2Vec2((sin(angle.x) * PLAYER_DASH_VEL) * 0.25, (cos(angle.y) * PLAYER_DASH_VEL) * 0.25), true)
 		}
 		else
 		{
-			if (inKey == key_left)
-				angle = -glm::pi<float>() * 0.5f;
-			else if (inKey == key_right)
-				angle = glm::pi<float>() * 0.5f;
+			if (sf::Keyboard::isKeyPressed(key_jump))
+			{
+				if (inKey == key_left)
+					angle = -glm::pi<float>() * 0.75f;
+				else if (inKey == key_right)
+					angle = glm::pi<float>() * 0.75f;
+				else
+					angle = glm::pi<float>();
 
-			hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(sin(angle) * PLAYER_DASH_VEL, 0.f), true);
+				hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2((sin(angle) * PLAYER_DASH_VEL) * 0.25, (cos(angle) * PLAYER_DASH_VEL) * 0.25), true);
+			}
+			else
+			{
+				if (inKey == key_left)
+					angle = -glm::pi<float>() * 0.5f;
+				else if (inKey == key_right)
+					angle = glm::pi<float>() * 0.5f;
+
+				hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2(sin(angle) * PLAYER_DASH_VEL, 0.f), true);
+			}
 		}
 	}
 }
@@ -430,6 +440,7 @@ void Player::InputKeyboard(GLint deltaT)
 		Jump();
 		if (sf::Keyboard::isKeyPressed(key_dash) && power >= PLAYER_POWER_COST_DASH) Dash(key_jump);
 	}
+
 	if (sf::Keyboard::isKeyPressed(key_hover) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
 	else isHovering = false;
 }
@@ -439,12 +450,18 @@ void Player::InputController(GLint deltaT)
 	sf::Joystick::update();
 	if (sf::Joystick::isConnected(0))
 	{
+		cout << "KLSAda" << endl;
 		if (sf::Joystick::isButtonPressed(0, BTN_A)) Jump();
 
 		if (sf::Joystick::isButtonPressed(0, BTN_X) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) Hover(deltaT);
+		else isHovering = false;
 
-		if (sf::Joystick::isButtonPressed(0, BTN_Y))
+		if (sf::Joystick::isButtonPressed(0, BTN_Y) && power >= PLAYER_POWER_COST_SHOCKWAVE)
+		{
+			Shockwave();
 			printf("Y.\n");
+		}
+		
 		if (sf::Joystick::isButtonPressed(0, BTN_LB))
 			printf("LB.\n");
 		if (sf::Joystick::isButtonPressed(0, BTN_RB))
@@ -452,7 +469,8 @@ void Player::InputController(GLint deltaT)
 		if (sf::Joystick::isButtonPressed(0, BTN_BACK))
 			printf("Back.\n");
 		if (sf::Joystick::isButtonPressed(0, BTN_START))
-			printf("Start.\n");
+	
+			printf("start.\n");
 		if (sf::Joystick::isButtonPressed(0, BTN_LT))
 			printf("LT.\n");
 		if (sf::Joystick::isButtonPressed(0, BTN_RT))
@@ -474,6 +492,13 @@ void Player::InputController(GLint deltaT)
 			}
 		}
 		else Walk(STOPPED);
+
+		float yAxis = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Y) / 100.f;
+		if (yAxis < 0.1f && sf::Joystick::isButtonPressed(0, BTN_B)) // Controller offset
+		{
+			Dash(key_jump);	
+		}
+
 	}
 }
 

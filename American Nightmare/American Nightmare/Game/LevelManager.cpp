@@ -260,32 +260,31 @@ void LevelManager::Update(GLint deltaT)
 				wasPressed = true;
 				player->decreaseNrOfProjectiles();
 				camera->screenShake(250.0f, 0.5f);
-
 				myPH->fireProjectiles(player->popProjectile(), world, player->getPlayerPosAsGLM(), player->getHasJumped(), player->getFireDirection());
 			}
 		}
-	}
-	//Update Projectile
-	myPH->Update(deltaT, world, player->getPlayerPosAsGLM(), player->getAmmoFull());
+		}
+		//Update Projectile
+		myPH->Update(deltaT, world, player->getPlayerPosAsGLM(), player->getAmmoFull());
 
-	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
+		//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
 
-	// Updating every entity
-	entityManager->Update(deltaT, player->getPosition(), player->getIsDead());
+		// Updating every entity
+		entityManager->Update(deltaT, player->getPosition(), player->getIsDead(), world);
 
-	// Updating every object on map
-	//deleteProjects(world);
+		// Updating every object on map
+		//deleteProjects(world);
 
-	for (Projectile* proj : projectiles)
-		proj->Update(deltaT, world, player->getPlayerPosAsGLM());
+		for (Projectile* proj : projectiles)
+			proj->Update(deltaT, world, player->getPlayerPosAsGLM());
 
-	for (Object* object : map)
-		object->Update(deltaT);
+		for (Object* object : map)
+			object->Update(deltaT);
 
-	// Updating triggers and checking for collisions
-	for (Trigger* trigger : triggers)
-		if (!trigger->getIsTriggered())
-			trigger->CheckCollision(player->getBody());
+		// Updating triggers and checking for collisions
+		for (Trigger* trigger : triggers)
+			if (!trigger->getIsTriggered())
+				trigger->CheckCollision(player->getBody());
 
 	// Updating UI popup text
 	if (popupActive)
@@ -300,11 +299,11 @@ void LevelManager::Update(GLint deltaT)
 		else if (currentAlpha <= 0.0f) popupActive = false;
 	}
 
-	// Checking triggers
-	CheckTriggers();
+		// Checking triggers
+		CheckTriggers();
 
-	//Resets variables for projectileHandler
-	this->wasPressed = isPressed;
+		//Resets variables for projectileHandler
+		this->wasPressed = isPressed;
 }
 
 void LevelManager::ActivatePopup(std::string text, GLfloat timer)
