@@ -137,8 +137,7 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 			{
 				ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombiehandmaterial"), false), temp);
 				ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-speed, speed), randBetweenF(-speed, 0)));
-			}
-			
+			}	
 			if (r > 2)
 			{
 				ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombiefootmaterial"), false), temp);
@@ -148,7 +147,6 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 			{
 				ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombiehandmaterial"), false), temp);
 				ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-speed, speed), randBetweenF(-speed, 0)));
-
 			}
 			if (r > 4)
 			{
