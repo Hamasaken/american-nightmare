@@ -66,7 +66,21 @@ void Program::StartSDLWindow()
 	context = SDL_GL_CreateContext(window);
 
 	// Activate v-sync
-	SDL_GL_SetSwapInterval(1);
+	if (VSYNC_ON)
+	{
+		if (SDL_GL_SetSwapInterval(1))
+		{
+			printf("%s\n", SDL_GetError());
+		}
+	}
+	else
+	{
+		if (SDL_GL_SetSwapInterval(0))
+		{
+			printf("%s\n", SDL_GetError());
+		}
+	}
+	
 
 	// Getting Windowhandl
 	SDL_SysWMinfo systemInfo;
