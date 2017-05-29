@@ -61,12 +61,24 @@ void Program::StartSDLWindow()
 		window = SDL_CreateWindow(appName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenSize.x, screenSize.y, SDL_WINDOW_OPENGL);
 	}
 
-
-
 	context = SDL_GL_CreateContext(window);
 
 	// Activate v-sync
-	SDL_GL_SetSwapInterval(1);
+	if (VSYNC_ON)
+	{
+		if (SDL_GL_SetSwapInterval(1))
+		{
+			printf("%s\n", SDL_GetError());
+		}
+	}
+	else
+	{
+		if (SDL_GL_SetSwapInterval(0))
+		{
+			printf("%s\n", SDL_GetError());
+		}
+	}
+	
 
 	// Getting Windowhandl
 	SDL_SysWMinfo systemInfo;
@@ -131,13 +143,28 @@ bool Program::Run()
 
 	GLint deltaT = 0;
 	Uint32 lastFrameTime = 0;
+	Uint32 nextTime = SDL_GetTicks() + TICK_INTERVAL;
 
 	bool done = false;
 	while (!done)
 	{
+		// Contstant fps
 		Uint32 currentTime = SDL_GetTicks();
+		if (SDL_GL_GetSwapInterval() != 1)
+		{
+			if (!(nextTime < currentTime))
+				SDL_Delay(nextTime - currentTime);
+			currentTime = SDL_GetTicks();
+			nextTime = currentTime + TICK_INTERVAL;
+		}
+		
+		// Delta Time
 		deltaT = (currentTime - lastFrameTime);
 		lastFrameTime = currentTime;
+		
+		// FPS counter
+		//printf("fps: %f\n", 1 / (0.001 * deltaT));
+		//printf("delta time: %d\n", deltaT);
 
 		while (SDL_PollEvent(&event))
 		{
