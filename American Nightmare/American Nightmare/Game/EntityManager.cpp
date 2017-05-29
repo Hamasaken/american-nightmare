@@ -82,7 +82,7 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 	
 	case ESpawnerType::trash:
 		{
-			ph->spawnProjectile(ProjectileData(board.mesh, board.material, false), position, world);
+			ph->spawnProjectile(ProjectileData(board.mesh, board.material, false), position);
 
 			/*
 			Entity* e = new Entity();

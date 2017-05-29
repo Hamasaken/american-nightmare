@@ -110,7 +110,7 @@ std::vector<Projectile*>* ProjectileHandler::getBullets()
 }
 
 
-void ProjectileHandler::spawnProjectile(ProjectileData projectileData, glm::vec2 pos, b2World* world)
+void ProjectileHandler::spawnProjectile(ProjectileData projectileData, glm::vec2 pos)
 {
 	cout << "first" << myProjtileVector.size() << endl;
 	Projectile*	p = new Projectile(projectileData.mesh, projectileData.material, world, pos, projectileData.isCircle);
