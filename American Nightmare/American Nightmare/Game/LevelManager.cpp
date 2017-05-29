@@ -31,6 +31,9 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	this->screenSize = screenSize;
 	this->screenPos = screenPos;
 
+	player = new Player();
+	if (player == nullptr) return false;
+
 	// Popup Settings
 	popup = new Text();
 	if (popup == nullptr) return false;
@@ -41,7 +44,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	popupActive = false;
 
 	// Starting contact manager
-	contactManager.Start(particleManager, soundManager, myPH, materialManager, meshManager, camera);
+	contactManager.Start(particleManager, soundManager, myPH, materialManager, meshManager, camera, player);
 
 	// Starting world 
 	world = new b2World(b2Vec2(NULL, GRAVITY * GRAVITY_SCALE));
@@ -59,8 +62,6 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	GLint tempNomralMapIndex = materialManager->AddTexture("playernormalmap", TEXTURE_PATH "Walk01_nor.png");
 
 	//Test with a player who has a gun too fire with
-	player = new Player();
-	if (player == nullptr) return false;
 	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial"), world, particleManager, soundManager, meshManager, materialManager, camera, screenPos, screenSize))
 		return false;
 	player->setShader(playerShader);
@@ -776,6 +777,8 @@ void LevelManager::CheckTriggers()
 					ParticleManager* pm = particleManager;
 					SoundManager* sm = soundManager;
 					Camera* c = camera;
+					std::string archive = trigger->getData();
+					std::string level = trigger->getData();
 
 					// Deleting EVERYTHING
 					Stop();
@@ -785,7 +788,7 @@ void LevelManager::CheckTriggers()
 					player->Reset();
 
 					// Loads new level with the current player's shader
-					LoadLevel(trigger->getData(), trigger->getData());
+					LoadLevel(level, archive);
 				} 
 				break;
 

@@ -19,11 +19,12 @@ private:
 	SoundManager* soundManager;
 	Camera* camera;
 	ProjectileHandler* ph;
+	Player* player;
 public:
 	MyContactListener();
 	~MyContactListener();
 
-	void Start(ParticleManager* particleManager, SoundManager* soundManager, ProjectileHandler* ph, MaterialManager* materialManager, MeshManager* meshManager, Camera* camera);
+	void Start(ParticleManager* particleManager, SoundManager* soundManager, ProjectileHandler* ph, MaterialManager* materialManager, MeshManager* meshManager, Camera* camera, Player* player);
 
 	void BeginContact(b2Contact* contact);
 	void EndContact(b2Contact* contact);
