@@ -75,7 +75,8 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	materialManager->AddMaterial("smokematerial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "smoketexture", TEXTURE_PATH "smoke.png");
 	materialManager->AddMaterial("bloodmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "bloodtexture", TEXTURE_PATH "blood.png");
 	materialManager->AddMaterial("boltmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "bolttexture", TEXTURE_PATH "bolt.jpg");
-	materialManager->AddMaterial("boxmaterial", glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "boxtexture", TEXTURE_PATH "box.jpg");
+	materialManager->AddMaterial("boxmaterial", glm::vec3(0.1f), glm::vec3(0.7f), glm::vec3(1.f), 1.f, "boxtexture", TEXTURE_PATH "box.jpg");
+	materialManager->AddMaterial("garbagematerial", glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.f), 1.f, "garbagetexture", TEXTURE_PATH "garbage.png");
 	for (int i = 1; i < 11; i++) materialManager->AddMaterial("postermaterial_" + std::to_string(i), glm::vec3(1.f), glm::vec3(1.f), glm::vec3(1.f), 1.f, "poster_" + std::to_string(i), (POSTER_PATH "poster_" + std::to_string(i) + ".jpg"));
 	if (materialManager->getMaterial("GUI_1_mat") == nullptr) printf("Button Material not found\n");
 	if (materialManager->getMaterial("GUI_bar_blue") == nullptr) printf("Button Material not found\n");

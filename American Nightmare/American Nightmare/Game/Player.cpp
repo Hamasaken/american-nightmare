@@ -23,9 +23,9 @@ void Player::initiateProjectile(MeshManager* meshManager, MaterialManager* mater
 	for (int i = 0; i < this->ammo; i++)
 	{
 		if (i % 2 == 0)
-			this->ammoList.push_back(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), true));
+			this->ammoList.push_back(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("boxmaterial"), false));
 		else
-			this->ammoList.push_back(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("GUI_bar_white"), false));
+			this->ammoList.push_back(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("garbagematerial"), true));
 	}
 
 }
