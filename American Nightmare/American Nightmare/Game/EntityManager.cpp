@@ -118,9 +118,7 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 
 		if (e->getIsDead())
 		{
-			glm::vec2 temp = glm::vec2(e->getHitbox()->getBody()->GetPosition().x, e->getHitbox()->getBody()->GetPosition().y);
-
-			world->DestroyBody(e->getHitbox()->getBody());
+			glm::vec2 temp = glm::vec2(e->getPosition());
 			e->Stop();
 			delete e;
 			e = nullptr;
@@ -128,6 +126,11 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 			i--;
 
 			ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), false), temp);
+			ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-0.25f, 0.25f), randBetweenF(-0.25f, 0)));
+			ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), false), temp);
+			ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-0.25f, 0.25f), randBetweenF(-0.25f, 0)));
+			ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), false), temp);
+			ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-0.25f, 0.25f), randBetweenF(-0.25f, 0)));
 
 		}
 

@@ -225,6 +225,7 @@ void LevelManager::StopMap()
 void LevelManager::Update(GLint deltaT)
 {
 	// Updating physics
+	//world->Step(deltaT * 0.001f, 10, 10);
 	world->Step(1 / 60.f, 10, 10);
 
 	// Updating player
