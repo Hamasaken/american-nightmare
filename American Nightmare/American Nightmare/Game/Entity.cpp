@@ -33,7 +33,7 @@ bool Entity::Start(b2World* world, b2Body* player)
 bool Entity::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material * material, b2World * world, glm::vec2 position, glm::vec3 size, b2BodyType type, b2Shape::Type shapeType, bool fixedRotate, float mass, float friction)
 {
 	Object::Start(mesh, material);
-	this->world = world;
+	//this->world = world;
 
 	hitbox = new Hitbox();
 	if (hitbox == nullptr) return false;

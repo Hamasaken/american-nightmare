@@ -1,4 +1,8 @@
 #include "MyContactListener.h"
+#include "Game\StructReg.h"
+
+extern MeshManager* meshManager;
+extern MaterialManager* materialManager;
 
 MyContactListener::MyContactListener() { }
 
@@ -128,12 +132,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 					enemy->TakeDamage(enemy->getDamage());
 					if (enemy->getIsDead())
 					{
-						camera->screenShake(750.f, 1.f);
-			//			ph->spawnProjectile(meshManager->getMesh("quad"), materialManager->getMaterial("boxmaterial"), glm::vec2(enemy->getPosition()), true);
-			//			ph->getBullets()->back()->fireBullet(enemy->getPosition(), glm::vec2(rand() % 25, rand() % 25));
-			//			ph->spawnProjectile(meshManager->getMesh("quad"), materialManager->getMaterial("boxmaterial"), enemy->getPosition(), true);
-			//			ph->getBullets()->back()->fireBullet(enemy->getPosition(), glm::vec2(rand() % 25, rand() % 25));
-
+						camera->screenShake(750.f, 1.f); 
 						soundManager->playSFXOverDrive(SoundManager::SFX_DEATH, 50, 0.0f);
 						particleManager->EffectExplosionLights(enemy->getPosition(), 15, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
 						particleManager->EffectBloodCloud(enemy->getPosition(), 10, glm::vec4(1.f), randBetweenF(1.f, 1.75f));

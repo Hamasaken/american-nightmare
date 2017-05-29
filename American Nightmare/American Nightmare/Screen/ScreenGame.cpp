@@ -486,7 +486,7 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 	}
 
 	// Unpause
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P)) Pause();
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P) || sf::Joystick::isButtonPressed(0,6)) Pause();
 }
 
 void ScreenGame::UpdatePlaying(GLint deltaT)
@@ -540,7 +540,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 		bars[0][i]->Update(deltaT);
 
 	// Check if user is pausing
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P)) Pause();
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P) || sf::Joystick::isButtonPressed(0,6)) Pause();
 }
 
 void ScreenGame::UpdatePausing(GLint deltaT)

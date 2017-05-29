@@ -82,7 +82,7 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 	
 	case ESpawnerType::trash:
 		{
-			ph->spawnProjectile(ProjectileData(board.mesh, board.material, false), position);
+			ph->spawnProjectile(ProjectileData(board.mesh, board.material, false), position, world);
 
 			/*
 			Entity* e = new Entity();
@@ -101,7 +101,7 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 	return success;
 }
 
-void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool playerDead)
+void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool playerDead, b2World* world)
 {
 	for (int i = 0; i < enemyList.size(); i++)
 	{
@@ -118,7 +118,7 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 
 		if (e->getIsDead())
 		{
-			glm::vec2 temp = glm::vec2(e->getHitbox()->getBody()->GetPosition().x, e->getHitbox()->getBody()->GetPosition().y);
+			glm::vec2 temp = glm::vec2(e->getHitbox()->getBody()->GetPosition().x, -e->getHitbox()->getBody()->GetPosition().y);
 
 			world->DestroyBody(e->getHitbox()->getBody());
 			e->Stop();
@@ -127,8 +127,9 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 			enemyList.erase(enemyList.begin() + i);
 			i--;
 
-			ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), false), temp);
-
+			
+			//for(int i=1; i < randVal; i++)
+				this->ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"), false), temp, world);
 		}
 
 	}
