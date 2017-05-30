@@ -316,7 +316,20 @@ void Player::Walk(Direction dir)
 			{
 			case LEFT:
 				hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
-				if (directionIsRight)
+				if (shockwaveCooldown > PLAYER_SHOCKWAVE_CD * 0.75f)
+				{
+					if (directionIsRight)
+					{
+						if (getActiveAnimationIndex() != 11)
+							changeActiveAnimation(11);
+					}
+					else
+					{
+						if (getActiveAnimationIndex() != 10)
+							changeActiveAnimation(10);
+					}
+				}
+				else if (directionIsRight)
 				{
 					isReversed = true;
 					if (getActiveAnimationIndex() != 3)
@@ -332,7 +345,20 @@ void Player::Walk(Direction dir)
 				break;
 			case RIGHT:
 				hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
-				if (!directionIsRight)
+				if (shockwaveCooldown > PLAYER_SHOCKWAVE_CD * 0.75f)
+				{
+					if (!directionIsRight)
+					{
+						if (getActiveAnimationIndex() != 10)
+							changeActiveAnimation(10);
+					}
+					else
+					{
+						if (getActiveAnimationIndex() != 11)
+							changeActiveAnimation(11);
+					}
+				}
+				else if (!directionIsRight)
 				{
 					isReversed = true;
 					if (getActiveAnimationIndex() != 2)
@@ -347,7 +373,20 @@ void Player::Walk(Direction dir)
 				soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 				break;
 			case STOPPED:
-				if (directionIsRight)
+				if (shockwaveCooldown > PLAYER_SHOCKWAVE_CD * 0.75f)
+				{
+					if (directionIsRight)
+					{
+						if (getActiveAnimationIndex() != 11)
+							changeActiveAnimation(11);
+					}
+					else
+					{
+						if (getActiveAnimationIndex() != 10)
+							changeActiveAnimation(10);
+					}
+				}
+				else if (directionIsRight)
 				{
 					if (getActiveAnimationIndex() != 1)
 						changeActiveAnimation(1);
@@ -526,7 +565,7 @@ void Player::InputTesting()
 
 void Player::InputMouse() 
 {
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle) && power >= PLAYER_POWER_COST_SHOCKWAVE)
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle) && !hasJumped && power >= PLAYER_POWER_COST_SHOCKWAVE)
 	{
 		Shockwave();
 	}
