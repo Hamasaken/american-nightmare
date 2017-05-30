@@ -63,8 +63,6 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	////////////////////////////////////////////////////////////
 	// Creating the Player object
 	////////////////////////////////////////////////////////////
-	GLint tempNomralMapIndex = materialManager->AddTexture("playernormalmap", TEXTURE_PATH "Walk01_nor.png");
-
 	GLint janeIdleL = materialManager->AddTexture("janeidlel", TEXTURE_PATH "janeIdleL.png");
 	GLint janeIdleLN = materialManager->AddTexture("janeidleln", TEXTURE_PATH "janeIdleL_norm.png");
 	GLint janeIdleR = materialManager->AddTexture("janeidler", TEXTURE_PATH "janeIdleR.png");
@@ -86,7 +84,6 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial"), world, particleManager, soundManager, meshManager, materialManager, camera, screenPos, screenSize))
 		return false;
 	player->setShader(playerShader);
-	//player->AddAnimation(materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
 	player->AddAnimation(materialManager->getTextureID(janeIdleL), materialManager->getTextureID(janeIdleLN), ANIMATION_PATH "janeidlel.txt");
 	player->AddAnimation(materialManager->getTextureID(janeIdleR), materialManager->getTextureID(janeIdleRN), ANIMATION_PATH "janeidler.txt");
 	player->AddAnimation(materialManager->getTextureID(janeRunL), materialManager->getTextureID(janeRunLN), ANIMATION_PATH "janerunl.txt");
@@ -107,7 +104,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	////////////////////////////////////////////////////////////
 	// Creating the Entity Manager (Enemies/Trash/etc)
 	////////////////////////////////////////////////////////////
-	tempNomralMapIndex = materialManager->AddTexture("zombie1walknormalmap", TEXTURE_PATH "Zombie1WalkN.png");
+	GLuint tempNomralMapIndex = materialManager->AddTexture("zombie1walknormalmap", TEXTURE_PATH "Zombie1WalkN.png");
 
 	entityManager = new EntityManager();
 	if (entityManager == nullptr) return false;
