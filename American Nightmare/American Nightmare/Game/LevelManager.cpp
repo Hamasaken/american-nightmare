@@ -81,6 +81,14 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	GLint janeDashLN = materialManager->AddTexture("janedashln", TEXTURE_PATH "janeDashL_norm.png");
 	GLint janeDashR = materialManager->AddTexture("janedashr", TEXTURE_PATH "janeDashR.png");
 	GLint janeDashRN = materialManager->AddTexture("janedashrn", TEXTURE_PATH "janeDashR_norm.png");
+	GLint janeHoverL = materialManager->AddTexture("janehoverl", TEXTURE_PATH "janeHoverL.png");
+	GLint janeHoverLN = materialManager->AddTexture("janehoverln", TEXTURE_PATH "janeHoverL_norm.png");
+	GLint janeHoverR = materialManager->AddTexture("janehoverr", TEXTURE_PATH "janeHoverR.png");
+	GLint janeHoverRN = materialManager->AddTexture("janehoverrn", TEXTURE_PATH "janeHoverR_norm.png");
+	GLint janeShockL = materialManager->AddTexture("janeshockl", TEXTURE_PATH "janeShockL.png");
+	GLint janeShockLN = materialManager->AddTexture("janeshockln", TEXTURE_PATH "janeShockL_norm.png");
+	GLint janeShockR = materialManager->AddTexture("janeshockr", TEXTURE_PATH "janeShockR.png");
+	GLint janeShockRN = materialManager->AddTexture("janeshockrn", TEXTURE_PATH "janeShockR_norm.png");
 
 	//Test with a player who has a gun too fire with
 	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial"), world, particleManager, soundManager, meshManager, materialManager, camera, screenPos, screenSize))
@@ -94,6 +102,10 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	player->AddAnimation(materialManager->getTextureID(janeJumpR), materialManager->getTextureID(janeJumpRN), ANIMATION_PATH "janejumpr.txt");
 	player->AddAnimation(materialManager->getTextureID(janeDashL), materialManager->getTextureID(janeDashLN), ANIMATION_PATH "janedashl.txt");
 	player->AddAnimation(materialManager->getTextureID(janeDashR), materialManager->getTextureID(janeDashRN), ANIMATION_PATH "janedashr.txt");
+	player->AddAnimation(materialManager->getTextureID(janeHoverL), materialManager->getTextureID(janeHoverLN), ANIMATION_PATH "janehoverl.txt");
+	player->AddAnimation(materialManager->getTextureID(janeHoverR), materialManager->getTextureID(janeHoverRN), ANIMATION_PATH "janehoverr.txt");
+	player->AddAnimation(materialManager->getTextureID(janeShockL), materialManager->getTextureID(janeShockLN), ANIMATION_PATH "janeshockl.txt");
+	player->AddAnimation(materialManager->getTextureID(janeShockR), materialManager->getTextureID(janeShockRN), ANIMATION_PATH "janeshockr.txt");
 	player->changeActiveAnimation(0);
 
 	////////////////////////////////////////////////////////////
@@ -270,8 +282,8 @@ void LevelManager::Update(GLint deltaT)
 		if (sf::Joystick::isConnected(0))
 		{
 			isPressed = sf::Joystick::isButtonPressed(0, BTN_RB);
-			if (!player->getCanShoot() && isPressed && !wasPressed) soundManager->playSFXOverDrive(SoundManager::SFX_EMPTY, 25, 0.15f);
-			if (isPressed && !wasPressed && player->getCanShoot() == true)
+			if (!player->getIsHovering() && !player->getCanShoot() && isPressed && !wasPressed) soundManager->playSFXOverDrive(SoundManager::SFX_EMPTY, 25, 0.15f);
+			if (!player->getIsHovering() && isPressed && !wasPressed && player->getCanShoot() == true)
 			{
 				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 				wasPressed = true;
@@ -284,8 +296,8 @@ void LevelManager::Update(GLint deltaT)
 		else
 		{
 			isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-			if (!player->getCanShoot() && isPressed && !wasPressed) soundManager->playSFXOverDrive(SoundManager::SFX_EMPTY, 25, 0.15f);
-			if (isPressed && !wasPressed && player->getCanShoot() == true)
+			if (!player->getIsHovering() && !player->getCanShoot() && isPressed && !wasPressed) soundManager->playSFXOverDrive(SoundManager::SFX_EMPTY, 25, 0.15f);
+			if (!player->getIsHovering() && isPressed && !wasPressed && player->getCanShoot() == true)
 			{
 				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 				wasPressed = true;
