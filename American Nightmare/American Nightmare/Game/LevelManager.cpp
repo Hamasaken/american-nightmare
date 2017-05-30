@@ -34,6 +34,8 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	this->nextArchivePath = "";
 	this->nextLevelPath = "";
 	this->nextLevelTrigger = false;
+	this->nextLevelTimer = 0;
+	this->nextLevelCameraTrigger = false;
 
 	player = new Player();
 	if (player == nullptr) return false;
@@ -268,28 +270,29 @@ void LevelManager::Update(GLint deltaT)
 				myPH->fireProjectiles(player->popProjectile(), world, player->getPlayerPosAsGLM(), player->getHasJumped(), player->getFireDirection());
 			}
 		}
-		}
-		//Update Projectile
-		myPH->Update(deltaT, world, player->getPlayerPosAsGLM(), player->getAmmoFull());
+	}
 
-		//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
+	//Update Projectile
+	myPH->Update(deltaT, world, player->getPlayerPosAsGLM(), player->getAmmoFull());
 
-		// Updating every entity
-		entityManager->Update(deltaT, player->getPosition(), player->getIsDead(), world);
+	//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
 
-		// Updating every object on map
-		//deleteProjects(world);
+	// Updating every entity
+	entityManager->Update(deltaT, player->getPosition(), player->getIsDead(), world);
 
-		for (Projectile* proj : projectiles)
-			proj->Update(deltaT, world, player->getPlayerPosAsGLM());
+	// Updating every object on map
+	//deleteProjects(world);
 
-		for (Object* object : map)
-			object->Update(deltaT);
+	for (Projectile* proj : projectiles)
+		proj->Update(deltaT, world, player->getPlayerPosAsGLM());
 
-		// Updating triggers and checking for collisions
-		for (Trigger* trigger : triggers)
-			if (!trigger->getIsTriggered())
-				trigger->CheckCollision(player->getBody());
+	for (Object* object : map)
+		object->Update(deltaT);
+
+	// Updating triggers and checking for collisions
+	for (Trigger* trigger : triggers)
+		if (!trigger->getIsTriggered())
+			trigger->CheckCollision(player->getBody());
 
 	// Updating UI popup text
 	if (popupActive)
@@ -304,11 +307,21 @@ void LevelManager::Update(GLint deltaT)
 		else if (currentAlpha <= 0.0f) popupActive = false;
 	}
 
-		// Checking triggers
-		CheckTriggers();
+	if (nextLevelCameraTrigger)
+	{
+		nextLevelTimer -= deltaT;
+		if (nextLevelTimer < 0.f)
+		{
+			nextLevelTrigger = true;
+			nextLevelCameraTrigger = false;
+		}
+	}
 
-		//Resets variables for projectileHandler
-		this->wasPressed = isPressed;
+	// Checking triggers
+	CheckTriggers();
+
+	//Resets variables for projectileHandler
+	this->wasPressed = isPressed;
 }
 
 void LevelManager::ActivatePopup(std::string text, GLfloat timer)
@@ -770,6 +783,10 @@ void LevelManager::CheckTriggers()
 				// Checks if the door have a level file
 				if (!trigger->getData().empty())
 				{
+			//		camera->setFinishPosition(glm::vec3(trigger->getPosition(), 0));
+			//		camera->activateFinishAnimation();
+			//		nextLevelCameraTrigger = true;	
+			//		nextLevelTimer = 2000.f;
 					nextLevelTrigger = true;
 					nextLevelPath = trigger->getData();
 					nextArchivePath = trigger->getData();
