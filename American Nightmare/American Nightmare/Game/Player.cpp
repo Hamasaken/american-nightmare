@@ -105,8 +105,7 @@ void Player::Update(GLint deltaT, b2World* world)
 	{
 		invulTime -= deltaT * 0.001f;
 	}
-	// Quick fix enemy continuous collision
-	else if (contactWithEnemy)
+	else if (contactWithEnemy) // Quick fix enemy continuous collision
 	{
 		invulTime = PLAYER_INVULNERABILITY_TIME;
 		camera->screenShake(600.f, 0.6f);
