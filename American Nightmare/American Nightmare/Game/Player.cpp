@@ -134,8 +134,7 @@ void Player::Update(GLint deltaT, b2World* world)
 	// Getting user input
 	if (!isDead)
 	{
-		sf::Joystick::update();
-		cout << CONTROLLER_ON << endl;
+		sf::Joystick::update(); //Needs to be  here in order to check if the player uses a controller of the keyboard
 		if (CONTROLLER_ON)
 		{
 			InputController(deltaT);
