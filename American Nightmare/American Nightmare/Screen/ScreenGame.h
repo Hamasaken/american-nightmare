@@ -32,9 +32,9 @@ public:
 	void Stop();
 
 	////////////////////////////////////////////////////////////
-	// \brief Set hardcoded stuff (camera start, ui)
+	// \brief Set hardcoded stuff (camera start, ui) & loading map
 	////////////////////////////////////////////////////////////
-	void SetStartVariables();
+	void SetStartVariables(std::string levelPath, std::string archivePath);
 
 	////////////////////////////////////////////////////////////
 	// \brief Update game screen
@@ -62,6 +62,8 @@ private:
 	void UpdatePausing(GLint deltaT);
 	void UpdateUnpausing(GLint deltaT);
 
+	bool SetupUI();
+	bool ResetLevel();
 	void DrawShadowMaps();
 
 	Button* background;

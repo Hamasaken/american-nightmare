@@ -31,6 +31,10 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	this->screenSize = screenSize;
 	this->screenPos = screenPos;
 
+	this->nextArchivePath = "";
+	this->nextLevelPath = "";
+	this->nextLevelTrigger = false;
+
 	player = new Player();
 	if (player == nullptr) return false;
 
@@ -766,29 +770,9 @@ void LevelManager::CheckTriggers()
 				// Checks if the door have a level file
 				if (!trigger->getData().empty())
 				{
-					// Saving old data
-					glm::vec2 ss = screenSize;
-					glm::vec2 sp = screenPos;
-					GLuint ps = playerShader;
-					GLuint ms = mapShader;
-					GLuint gs = guiShader;
-					MaterialManager* mm = materialManager;
-					MeshManager* mm2 = meshManager;
-					ParticleManager* pm = particleManager;
-					SoundManager* sm = soundManager;
-					Camera* c = camera;
-					std::string archive = trigger->getData();
-					std::string level = trigger->getData();
-
-					// Deleting EVERYTHING
-					Stop();
-
-					// Starting a new level
-					Start(ss, sp, ps, ms, gs, mm, mm2, pm, sm, c);
-					player->Reset();
-
-					// Loads new level with the current player's shader
-					LoadLevel(level, archive);
+					nextLevelTrigger = true;
+					nextLevelPath = trigger->getData();
+					nextArchivePath = trigger->getData();
 				} 
 				break;
 
@@ -929,6 +913,21 @@ Text* LevelManager::getPopup()
 ProjectileHandler * LevelManager::getPH()
 {
 	return myPH;
+}
+
+bool LevelManager::getNextLevelTrigger()
+{
+	return nextLevelTrigger;
+}
+
+std::string LevelManager::getNextLevelPath()
+{
+	return nextLevelPath;
+}
+
+std::string LevelManager::getNextArchivePath()
+{
+	return nextArchivePath;
 }
 
 //ProjectileHandler* LevelManager::getProjectiles() { return myPH; }
