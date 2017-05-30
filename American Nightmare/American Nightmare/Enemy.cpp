@@ -87,6 +87,23 @@ bool Enemy::getIsDead()const
 	return this->isDead;
 }
 
+bool ZombieRoller::Start(const MeshManager::Mesh * mesh, const MaterialManager::Material * material, b2World * world)
+{
+	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(ENEMY_SIZE_X * 0.7f, ENEMY_SIZE_Y * 0.7f, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, ENEMY_MASS, 0.f);
+
+	// Setting starting variables
+	position = glm::vec3(0, 0, 0);
+	rotation = glm::vec3(0, 0, 0);
+	scale = glm::vec3(ENEMY_SIZE_X * 0.7, ENEMY_SIZE_Y * 0.7, ENEMY_SIZE_Z);
+	damage = 2.f;
+	hp = 4;
+	isDead = false;
+	// Setting a self-pointer for collision detection
+	hitbox->getBody()->SetUserData(this);
+
+	return true;
+}
+
 void ZombieRoller::Movement(b2Vec2 playerPos)
 {
 	if (playerPos.x < hitbox->getBody()->GetPosition().x - 0.3f)

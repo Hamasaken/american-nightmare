@@ -62,10 +62,11 @@ bool EntityManager::AddEntityBoard(ESpawnerType type, GLuint shader, const MeshM
 
 bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 {
+	if (type != ESpawnerType::trash)
+		type = ((rand() % 2) == 0) ? ESpawnerType::zombie1 : ESpawnerType::skater1;
 	EntityBoard board = getBoard(type);
 	GLboolean success = true;
 
-	type = ((rand() % 2) == 0) ? ESpawnerType::zombie1: ESpawnerType::skater1;
 
 	switch (type)
 	{	
