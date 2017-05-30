@@ -144,7 +144,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	// Bars
 	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(-0.3f, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_red"), meshManager->getMesh("quadbig"));
 	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(0.3, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_green"), meshManager->getMesh("quadbig"));
-	uiManager->AddBar(levelManager->getPlayer()->getNrOfProjectiles(), PLAYER_AMMO_CAP, glm::vec3(0.0, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quadbig"));
+	uiManager->AddBar((float&)(levelManager->getPlayer()->getNrOfProjectiles()), PLAYER_AMMO_CAP, glm::vec3(0.0, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quadbig"));
 	uiManager->AddText(glm::vec3(-0.3, -0.95, 0.f), 30.f, "Health", FONT_PATH INGAME_FONT);
 	uiManager->AddText(glm::vec3(0.3, -0.95, 0.f), 30.f, "Power", FONT_PATH INGAME_FONT);
 	uiManager->AddText(glm::vec3(0.0, -0.95, 0.f), 30.f, "Scrap", FONT_PATH INGAME_FONT);

@@ -47,9 +47,9 @@
 #define PLAYER_DASH_CD 1000.f
 
 // Shockwave
-#define PLAYER_SHOCKWAVE_CD 1500.f
-#define PLAYER_POWER_COST_SHOCKWAVE 80.f
-#define PLAYER_SHOCKWAVE_POWER 3125.f
+#define PLAYER_SHOCKWAVE_CD 1300.f
+#define PLAYER_POWER_COST_SHOCKWAVE 70.f
+#define PLAYER_SHOCKWAVE_POWER 4000.f
 
 // XBOX CONTROLLER
 #define CONTROLLER_ON true
@@ -72,7 +72,7 @@ private:
 	enum Direction { LEFT, RIGHT, STOPPED };
 
 	//Variables for handling projectile/Weapon
-	int ammo;
+	float ammo;
 	const int ammoCap = PLAYER_AMMO_CAP;
 	vector<ProjectileData> ammoList;
 	glm::vec2 fireDirection;
