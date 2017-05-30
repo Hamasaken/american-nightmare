@@ -106,6 +106,29 @@ bool ZombieRoller::Start(const MeshManager::Mesh * mesh, const MaterialManager::
 
 void ZombieRoller::Movement(b2Vec2 playerPos)
 {
+	static bool isGoingLeft = false;
+	float speedX = hitbox->getBody()->GetLinearVelocity().x;
+
+	if (speedX == 0 ||
+		isGoingLeft && speedX > 0 ||
+		!isGoingLeft && speedX < 0)
+	{
+		isGoingLeft = !isGoingLeft;
+	}
+
+	if (isGoingLeft)
+	{
+		hitbox->getBody()->ApplyForceToCenter(b2Vec2(-ROLLER_VEL_X, hitbox->getBody()->GetLinearVelocity().y), true);
+		directionIsRight = false;
+	}
+	else
+	{
+		hitbox->getBody()->ApplyForceToCenter(b2Vec2(ROLLER_VEL_X, hitbox->getBody()->GetLinearVelocity().y), true);
+		directionIsRight = true;
+	}
+
+
+	/*
 	if (playerPos.x < hitbox->getBody()->GetPosition().x - 0.3f)
 	{
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2(-ROLLER_VEL_X, hitbox->getBody()->GetLinearVelocity().y), true);
@@ -116,6 +139,7 @@ void ZombieRoller::Movement(b2Vec2 playerPos)
 		hitbox->getBody()->ApplyForceToCenter(b2Vec2(ROLLER_VEL_X, hitbox->getBody()->GetLinearVelocity().y), true);
 		directionIsRight = true;
 	}
+	*/
 
 	// Thresholds in velocity
 	if (hitbox->getBody()->GetLinearVelocity().x > ROLLER_MAX_VEL_X) hitbox->getBody()->SetLinearVelocity(b2Vec2(ROLLER_MAX_VEL_X, hitbox->getBody()->GetLinearVelocity().y));
