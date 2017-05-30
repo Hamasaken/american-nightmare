@@ -465,7 +465,9 @@ void Player::InputController(GLint deltaT)
 
 		if (sf::Joystick::isButtonPressed(0, BTN_X) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER)
 		{
+			cout << "something special" << endl;
 			Hover(deltaT);
+			isHovering = true;
 		}
 		else isHovering = false;
 
