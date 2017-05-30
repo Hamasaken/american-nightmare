@@ -49,7 +49,6 @@ public:
 
 	ProjectileData getProjectileData();
 
-	//void Update(GLint deltaT);
 	void Update(GLint deltaT, b2World* world, glm::vec2 position);
 
 	bool getIsZombiePart() const;

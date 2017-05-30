@@ -215,7 +215,6 @@ void ScreenManager::Update(GLint deltaT)
 {
 	if(sf::Joystick::isConnected(0))
 		sf::Joystick::update();
-
 	
 	// Temporary state switching
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F1)) { goToState(Game); }
@@ -227,11 +226,11 @@ void ScreenManager::Update(GLint deltaT)
 	prevState = currentState;
 	switch (currentState)
 	{
-	case State::Game: screenGame->Update(deltaT); break;
-	case State::StartMeny: screenStart->Update(deltaT); break;
-	case State::Cutscene: screenCutscene->Update(deltaT); break;
-	case State::Options: screenOptions->Update(deltaT); break;
-	case State::Posters: screenPosters->Update(deltaT); break;
+		case State::Game: screenGame->Update(deltaT); break;
+		case State::StartMeny: screenStart->Update(deltaT); break;
+		case State::Cutscene: screenCutscene->Update(deltaT); break;
+		case State::Options: screenOptions->Update(deltaT); break;
+		case State::Posters: screenPosters->Update(deltaT); break;
 	}
 
 	if (prevState != currentState)
@@ -248,11 +247,11 @@ void ScreenManager::Draw(SDL_Window* window, glm::vec4 color)
 
 	switch (currentState)
 	{
-	case State::Game: screenGame->Draw(); break;
-	case State::StartMeny: screenStart->Draw(); break;
-	case State::Cutscene: screenCutscene->Draw(); break;
-	case State::Options: screenOptions->Draw(); break;
-	case State::Posters: screenPosters->Draw(); break;
+		case State::Game: screenGame->Draw(); break;
+		case State::StartMeny: screenStart->Draw(); break;
+		case State::Cutscene: screenCutscene->Draw(); break;
+		case State::Options: screenOptions->Draw(); break;
+		case State::Posters: screenPosters->Draw(); break;
 	}
 
 	SDL_GL_SwapWindow(window);
@@ -265,11 +264,11 @@ void ScreenManager::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 scree
 
 	switch (currentState)
 	{
-	case State::Game: screenGame->UpdateScreenProperties(screenSize, screenPos); break;
-	case State::StartMeny: screenStart->UpdateScreenProperties(screenSize, screenPos); break;
-	case State::Cutscene: screenCutscene->UpdateScreenProperties(screenSize, screenPos); break;
-	case State::Options: screenOptions->UpdateScreenProperties(screenSize, screenPos); break;
-	case State::Posters: screenPosters->UpdateScreenProperties(screenSize, screenPos); break;
+		case State::Game: screenGame->UpdateScreenProperties(screenSize, screenPos); break;
+		case State::StartMeny: screenStart->UpdateScreenProperties(screenSize, screenPos); break;
+		case State::Cutscene: screenCutscene->UpdateScreenProperties(screenSize, screenPos); break;
+		case State::Options: screenOptions->UpdateScreenProperties(screenSize, screenPos); break;
+		case State::Posters: screenPosters->UpdateScreenProperties(screenSize, screenPos); break;
 	}
 }
 

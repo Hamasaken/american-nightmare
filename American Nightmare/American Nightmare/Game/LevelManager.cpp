@@ -298,13 +298,9 @@ void LevelManager::Update(GLint deltaT)
 		//Update Projectile
 		myPH->Update(deltaT, world, player->getPlayerPosAsGLM(), player->getAmmoFull());
 
-		//myProjectile->Update(deltaT, world, player->getPlayerPosAsGLM());
-
 		// Updating every entity
 		entityManager->Update(deltaT, player->getPosition(), player->getIsDead(), world);
 
-		// Updating every object on map
-		//deleteProjects(world);
 
 		for (Projectile* proj : projectiles)
 			proj->Update(deltaT, world, player->getPlayerPosAsGLM());
@@ -955,6 +951,3 @@ std::string LevelManager::getNextArchivePath()
 {
 	return nextArchivePath;
 }
-
-//ProjectileHandler* LevelManager::getProjectiles() { return myPH; }
-//Projectile* LevelManager::getProjectile() { return moveble; }
