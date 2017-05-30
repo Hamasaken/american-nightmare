@@ -12,6 +12,11 @@ Projectile::Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Mat
 	this->damageOn = false;
 	this->marked = false;
 	this->isInVacRange = false;
+	this->isZombiePart = false;
+
+	// If the material is in anyway a zombie part (for blood smoke instead of smoke smoke)
+	if (material->name.find("zombie") != std::string::npos)
+		isZombiePart = true;
 
 	this->projectileData = ProjectileData(mesh, material, isCircle);
 }
@@ -67,6 +72,11 @@ ProjectileData Projectile::getProjectileData()
 void Projectile::Update(GLint deltaT,b2World* world, glm::vec2 position)
 {
 	Entity::Update(deltaT);
+}
+
+bool Projectile::getIsZombiePart() const
+{
+	return isZombiePart;
 }
 
 void Projectile::setIsFired(bool isProjectileFired)
