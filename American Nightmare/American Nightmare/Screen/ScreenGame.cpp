@@ -140,7 +140,7 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	background->setShader(shaderManager->getShader("texture"));
 
 	// Setting startvariables
-	SetStartVariables(LEVEL_PATH "Level1.anl", ARCHIVE_PATH "Level1.ana");
+	SetStartVariables(FIRST_LEVELFILE, FIRST_ARCHIVEFILE);
 
 	return true;
 }
@@ -154,7 +154,7 @@ void ScreenGame::SetStartVariables(std::string levelPath, std::string archivePat
 	camera->setPosition(glm::vec3(0, 0, 16.0f));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(levelPath, archivePath);
+	levelManager->LoadLevel(LEVEL_PATH + levelPath, ARCHIVE_PATH + archivePath);
 
 	// Adding shadow
 	// flyttade upp till start functionen
@@ -386,7 +386,7 @@ bool ScreenGame::ResetLevel()
 	if (!SetupUI()) 
 		return false;
 
-	SetStartVariables(level, archive);
+	SetStartVariables(FIRST_LEVELFILE, FIRST_ARCHIVEFILE);
 
 	return true;
 }
