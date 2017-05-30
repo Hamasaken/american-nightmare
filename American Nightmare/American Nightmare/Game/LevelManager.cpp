@@ -407,6 +407,12 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 
+	//lightManager->Clear();
+
+	//lightManager->AddDirectionalLight(glm::vec4(5, 20, 10, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
+	lightManager->AddPointLight(glm::vec4(-5, 5, -5, 1), glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 1, 1), 200, 1, 10.f, 1.f);
+	lightManager->AddPointLight(glm::vec4(5, 5, 0, 1), glm::vec4(0, 0, 1, 1), glm::vec4(1, 1, 1, 1), 200, 1, 1.f, 10.f);
+
 	Object* background = new Object();
 	background->setShader(mapShader);
 	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
@@ -530,14 +536,14 @@ void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 			dir = glm::rotateY(dir, glm::radians(l.rotation[1]));
 			dir = glm::rotateZ(dir, glm::radians(l.rotation[2]));
 
-		//	lightManager->AddDirectionalLight(glm::vec4(1.f), glm::vec4(dir, 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.01f);
+			lightManager->AddDirectionalLight(glm::vec4(1.f), glm::vec4(dir, 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.01f);
 		}
 		else
 		{
-			if (light->decayType == EDecayType::eLinear)
-				lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 2.f, 1, 10.f, 1.f);
-			else if (light->decayType == EDecayType::eQuadratic)
+			if (light->decayType == EDecayType::eQuadratic)
 				lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 2.f, 1, 1.f, 10.f);
+			else
+				lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 2.f, 1, 10.f, 1.f);
 		}
 	}
 }
