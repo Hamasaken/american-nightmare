@@ -117,7 +117,8 @@ void Player::Update(GLint deltaT, b2World* world)
 	}
 
 	// Are we currently hovering?
-	//isHovering = false;
+	if (isHovering)
+		hasJumped = true;
 	isDashing = false;
 
 	// Dash cooldown
@@ -241,7 +242,13 @@ void Player::Walk(Direction dir)
 			switch (dir)
 			{
 			case LEFT:
-				if (directionIsRight)
+				if (isHovering)
+				{
+					directionIsRight = false;
+					if (getActiveAnimationIndex() != 8)
+						changeActiveAnimation(8);
+				}
+				else if (directionIsRight)
 				{
 					if (getActiveAnimationIndex() != 5)
 						changeActiveAnimation(5);
@@ -254,7 +261,13 @@ void Player::Walk(Direction dir)
 				hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
 				break;
 			case RIGHT:
-				if (!directionIsRight)
+				if (isHovering)
+				{
+					directionIsRight = true;
+					if (getActiveAnimationIndex() != 9)
+						changeActiveAnimation(9);
+				}
+				else if (!directionIsRight)
 				{
 					if (getActiveAnimationIndex() != 4)
 						changeActiveAnimation(4);
@@ -269,13 +282,29 @@ void Player::Walk(Direction dir)
 			case STOPPED:
 				if (directionIsRight)
 				{
-					if (getActiveAnimationIndex() != 5)
-						changeActiveAnimation(5);
+					if (isHovering)
+					{
+						if (getActiveAnimationIndex() != 9)
+							changeActiveAnimation(9);
+					}
+					else
+					{
+						if (getActiveAnimationIndex() != 5)
+							changeActiveAnimation(5);
+					}
 				}
 				else
 				{
-					if (getActiveAnimationIndex() != 4)
-						changeActiveAnimation(4);
+					if (isHovering)
+					{
+						if (getActiveAnimationIndex() != 8)
+							changeActiveAnimation(8);
+					}
+					else
+					{
+						if (getActiveAnimationIndex() != 4)
+							changeActiveAnimation(4);
+					}
 				}
 			}
 			vel.x = hitbox->getBody()->GetLinearVelocity().x;
@@ -287,7 +316,20 @@ void Player::Walk(Direction dir)
 			{
 			case LEFT:
 				hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
-				if (directionIsRight)
+				if (shockwaveCooldown > PLAYER_SHOCKWAVE_CD * 0.75f)
+				{
+					if (directionIsRight)
+					{
+						if (getActiveAnimationIndex() != 11)
+							changeActiveAnimation(11);
+					}
+					else
+					{
+						if (getActiveAnimationIndex() != 10)
+							changeActiveAnimation(10);
+					}
+				}
+				else if (directionIsRight)
 				{
 					isReversed = true;
 					if (getActiveAnimationIndex() != 3)
@@ -303,7 +345,20 @@ void Player::Walk(Direction dir)
 				break;
 			case RIGHT:
 				hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
-				if (!directionIsRight)
+				if (shockwaveCooldown > PLAYER_SHOCKWAVE_CD * 0.75f)
+				{
+					if (!directionIsRight)
+					{
+						if (getActiveAnimationIndex() != 10)
+							changeActiveAnimation(10);
+					}
+					else
+					{
+						if (getActiveAnimationIndex() != 11)
+							changeActiveAnimation(11);
+					}
+				}
+				else if (!directionIsRight)
 				{
 					isReversed = true;
 					if (getActiveAnimationIndex() != 2)
@@ -318,7 +373,20 @@ void Player::Walk(Direction dir)
 				soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 				break;
 			case STOPPED:
-				if (directionIsRight)
+				if (shockwaveCooldown > PLAYER_SHOCKWAVE_CD * 0.75f)
+				{
+					if (directionIsRight)
+					{
+						if (getActiveAnimationIndex() != 11)
+							changeActiveAnimation(11);
+					}
+					else
+					{
+						if (getActiveAnimationIndex() != 10)
+							changeActiveAnimation(10);
+					}
+				}
+				else if (directionIsRight)
 				{
 					if (getActiveAnimationIndex() != 1)
 						changeActiveAnimation(1);
@@ -497,7 +565,7 @@ void Player::InputTesting()
 
 void Player::InputMouse() 
 {
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle) && power >= PLAYER_POWER_COST_SHOCKWAVE)
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle) && !hasJumped && power >= PLAYER_POWER_COST_SHOCKWAVE)
 	{
 		Shockwave();
 	}

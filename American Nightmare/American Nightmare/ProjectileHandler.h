@@ -21,7 +21,6 @@ private:
 	void initiateProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, GLuint shader);
 
 public:
-	//ProjectileHandler(b2World* world, GLuint shader, int CAP = 10);
 	ProjectileHandler(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, SoundManager* soundManager, ParticleManager* particleManager, glm::vec2 pos, GLuint shader);
 	ProjectileHandler();
 	~ProjectileHandler();
@@ -29,10 +28,8 @@ public:
 	void Update(GLint deltaT, b2World* world, glm::vec2 position, bool ammoFull);
 	void deleteProjects(b2World* world);
 	std::vector<Projectile*>* getBullets();
-	void UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 screenPos);
 	void spawnProjectile(ProjectileData projectileData, glm::vec2 pos);
 	void fireProjectiles(ProjectileData projectileData, b2World *world, glm::vec2 pos, bool isJumping, glm::vec2 fireDirection);
-	//void fireProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, glm::vec2 pos, bool isJumping, bool isCircle, glm::vec2 fireDirection);
 };
 
 #endif

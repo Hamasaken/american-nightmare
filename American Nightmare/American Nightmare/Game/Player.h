@@ -30,7 +30,7 @@
 #define PLAYER_MAX_VEL_Y 18.f
 #define PLAYER_HP 6
 #define PLAYER_INVULNERABILITY_TIME 2.f
-#define PLAYER_AMMO_CAP 15.f
+#define PLAYER_AMMO_CAP 16.f
 
 // Power 
 #define PLAYER_POWER_MAX 100.f

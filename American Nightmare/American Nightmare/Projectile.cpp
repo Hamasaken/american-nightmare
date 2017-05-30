@@ -23,7 +23,7 @@ Projectile::Projectile(const MeshManager::Mesh* mesh, const MaterialManager::Mat
 
 Projectile::Projectile() {}
 
-Projectile::~Projectile() { }
+Projectile::~Projectile() {}
 
 void Projectile::fireBullet(glm::vec2 position, glm::vec2 direction)
 {	
