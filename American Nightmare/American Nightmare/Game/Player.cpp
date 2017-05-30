@@ -190,7 +190,7 @@ void Player::Reset()
 	hasDashed = false;
 	isHovering = false;
 	isDashing = false;
-	invulTime = 0.f;
+	invulTime = PLAYER_INVULNERABILITY_TIME;
 	contactWithEnemy = nullptr;
 }
 
