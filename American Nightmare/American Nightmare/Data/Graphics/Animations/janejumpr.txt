@@ -1,0 +1,4 @@
+name janejumpr
+tf 1
+dim 1 1
+fps 1

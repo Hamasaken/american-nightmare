@@ -1,0 +1,4 @@
+name janerunl
+tf 24
+dim 5 5
+fps 32
