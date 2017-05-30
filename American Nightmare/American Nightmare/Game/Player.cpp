@@ -105,14 +105,7 @@ void Player::Update(GLint deltaT, b2World* world)
 	{
 		invulTime -= deltaT * 0.001f;
 	}
-	// Update player power refill cd
-	if (powerRefillCD > 0.f)
-	{
-		powerRefillCD -= deltaT * 0.001f;
-	}
-
-	// Quick fix enemy continuous collision
-	else if (contactWithEnemy)
+	else if (contactWithEnemy) // Quick fix enemy continuous collision
 	{
 		invulTime = PLAYER_INVULNERABILITY_TIME;
 		camera->screenShake(600.f, 0.6f);
@@ -120,6 +113,12 @@ void Player::Update(GLint deltaT, b2World* world)
 		soundManager->playSFX(SoundManager::SFX_HIT);
 		soundManager->playSFXOverDrive(SoundManager::SFX_HURT, 50.f);
 		TakeDamage(contactWithEnemy->getDamage());
+	}
+
+	// Update player power refill cd
+	if (powerRefillCD > 0.f)
+	{
+		powerRefillCD -= deltaT * 0.001f;
 	}
 
 	// Are we currently hovering?
