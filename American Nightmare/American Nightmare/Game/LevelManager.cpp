@@ -19,6 +19,13 @@ LevelManager::~LevelManager() { }
 
 bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playerShader, GLuint mapShader, GLuint guiShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
+	// Refresh rate of current monitor for b2world->Step()
+	/*DEVMODE* displaySettings;
+	memset(&displaySettings, 1, sizeof(DEVMODE));
+	displaySettings->dmSize = sizeof(DEVMODE);
+	displaySettings->dmDriverExtra = 0;
+	EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, displaySettings);*/
+
 	// Getting parameters
 	this->materialManager = materialManager;
 	this->meshManager = meshManager;
@@ -269,7 +276,7 @@ void LevelManager::Update(GLint deltaT)
 {
 	// Updating physics
 	//world->Step(deltaT * 0.001f, 10, 10);
-	world->Step(1 / 60.f, 10, 10);
+	world->Step(1.f / 60.f, 10, 10);
 
 	// Updating player
 	player->Update(deltaT, world);

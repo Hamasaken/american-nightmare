@@ -160,6 +160,7 @@ private:
 
 	glm::vec2 screenSize;
 	glm::vec2 screenPos;
+	GLint displayRefresh;
 	// Lägg till en bool i screengame som ska resettas EFTER collisionen för att undvika crash
 
 };
