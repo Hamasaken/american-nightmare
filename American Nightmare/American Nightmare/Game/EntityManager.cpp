@@ -66,31 +66,33 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 	GLboolean success = true;
 
 	switch (type)
-	{
-	case ESpawnerType::zombie1:
+	{	
 	case ESpawnerType::zombie2:
-	case ESpawnerType::skater1:
 	case ESpawnerType::flying1:
-		{
-			Enemy* e = new Enemy();
-			e->Start(board.mesh, board.material, world);
-			e->setShader(board.shader);
-			e->AddAnimation(board.textureID, board.normalMap, board.animationFile);
-			e->setPosition(glm::vec3(position.x, -position.y, 0));
-			enemyList.push_back(e);
-		} break;
+	case ESpawnerType::zombie1:
+	{
+		Enemy* e = new Enemy();
+		e->Start(board.mesh, board.material, world);
+		e->setShader(board.shader);
+		e->AddAnimation(board.textureID, board.normalMap, board.animationFile);
+		e->setPosition(glm::vec3(position.x, -position.y, 0));
+		enemyList.push_back(e);
+	} break;
+
+	case ESpawnerType::skater1:
+	{
+		Enemy* e = new ZombieRoller();
+		e->Start(board.mesh, board.material, world);
+		e->setShader(board.shader);
+		e->AddAnimation(board.textureID, board.normalMap, board.animationFile);
+		e->setPosition(glm::vec3(position.x, -position.y, 0));
+		enemyList.push_back(e);
+	} break;
+
 	
 	case ESpawnerType::trash:
 		{
 			ph->spawnProjectile(ProjectileData(board.mesh, board.material, false), position);
-
-			/*
-			Entity* e = new Entity();
-			e->Start(board.mesh, board.material, world, position, glm::vec3(1, 1, 1), b2BodyType::b2_dynamicBody);
-			e->setShader(board.shader);
-			e->setPosition(glm::vec3(position.x, -position.y, 0));
-			entityList.push_back(e);
-			*/
 		} break;
 
 	default: 
