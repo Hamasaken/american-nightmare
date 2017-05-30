@@ -389,7 +389,8 @@ bool ScreenGame::ResetLevel()
 	if (!SetupUI()) 
 		return false;
 
-	SetStartVariables(FIRST_LEVELFILE, FIRST_ARCHIVEFILE);
+//	SetStartVariables(level, archive);
+	SetStartVariables("Level2.anl", "Level2.ana");
 
 	return true;
 }

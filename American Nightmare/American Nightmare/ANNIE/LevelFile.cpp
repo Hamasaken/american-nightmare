@@ -53,7 +53,7 @@ void LLevelHandler::writeToFile(const char* path) const
 	//Write header
 	out.write(reinterpret_cast<const char*>(&levelHeader), sizeof(LLevelHeader));
 
-	//Write everything
+	//Write everything (almost)
 	out.write(reinterpret_cast<const char*>(archives.data()), sizeof(CharData) * levelHeader.nrOfArchives);
 	out.write(reinterpret_cast<const char*>(meshes.data()), sizeof(LMesh) * levelHeader.nrOfMeshes);
 	out.write(reinterpret_cast<const char*>(lights.data()), sizeof(LLight) * levelHeader.nrOfLights);
@@ -78,13 +78,7 @@ void LLevelHandler::writeToFile(const char* path) const
 	}
 
 	//Write effects
-	for (int i = 0; i < levelHeader.nrOfEffects; i++)
-	{
-		out.write(reinterpret_cast<const char*>(&effects[i].effectType), sizeof(EEffectType));
-		out.write(reinterpret_cast<const char*>(&effects[i].data.size), sizeof(StringData::size));
-		out.write(reinterpret_cast<const char*>(effects[i].data.data.data()), sizeof(char) * effects[i].data.size);
-		out.write(reinterpret_cast<const char*>(&effects[i].position), sizeof(LEffect::position));
-	}
+	out.write(reinterpret_cast<const char*>(effects.data()), sizeof(LEffect) * levelHeader.nrOfEffects);
 
 	out.close(); //Close the file
 }
@@ -147,14 +141,7 @@ void LLevelHandler::readFromFile(const char* path)
 
 		//Read effects
 		effects.resize(levelHeader.nrOfEffects);
-		for (int i = 0; i < levelHeader.nrOfEffects; i++)
-		{
-			in.read(reinterpret_cast<char*>(&effects[i].effectType), sizeof(EEffectType));
-			in.read(reinterpret_cast<char*>(&effects[i].data.size), sizeof(StringData::size));
-			effects[i].data.data.resize(effects[i].data.size);
-			in.read(reinterpret_cast<char*>(&effects[i].data.data[0]), sizeof(char) * effects[i].data.size);
-			in.read(reinterpret_cast<char*>(&effects[i].position), sizeof(LEffect::position));
-		}
+		in.read((reinterpret_cast<char*>(effects.data())), sizeof(LEffect) * levelHeader.nrOfEffects);
 	}
 }
 

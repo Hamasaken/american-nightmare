@@ -363,31 +363,18 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	StopMap();
 
 	////////////////////////////////////////////////////////////
-	// Loading Archive
+	// Loading Level
 	////////////////////////////////////////////////////////////
+	levelFile.readFromFile(levelPath.c_str());
+
+	// Loading archive from level
+//	archive.readFromFile(levelFile.archives[0].data); // Remove under row and uncomment this when updated level file is uploaded
 	archive.readFromFile(archivePath.c_str());
 	LoadArchiveTextures(archive.textures);
 	LoadArchiveMaterials(archive.materials);
 	LoadArchiveMeshes(archive.meshes);
 
-	////////////////////////////////////////////////////////////
-	// Loading Level
-	////////////////////////////////////////////////////////////
-	levelFile.readFromFile(levelPath.c_str());
-
-/*	std::vector<AArchiveHandler> archives;
-	for (int i = 0; i < levelFile.archives.size(); i++)
-	{
-		CharData path = levelFile.archives[i];
-		AArchiveHandler tempArchive;
-		tempArchive.readFromFile(path.data);
-		LoadArchiveTextures(tempArchive.textures);
-		LoadArchiveMaterials(tempArchive.materials);
-		LoadArchiveMeshes(tempArchive.meshes);
-		archives.push_back(tempArchive);
-	} 
-	*/
-
+	// Loading current level stuff
 	LoadLevelMeshes(levelFile.meshes);
 	LoadLevelLights(levelFile.lights);
 	LoadLevelHitboxes(levelFile.hitboxes);
@@ -535,14 +522,14 @@ void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 			dir = glm::rotateY(dir, glm::radians(l.rotation[1]));
 			dir = glm::rotateZ(dir, glm::radians(l.rotation[2]));
 
-			lightManager->AddDirectionalLight(glm::vec4(1.f), glm::vec4(dir, 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.01f);
+		//	lightManager->AddDirectionalLight(glm::vec4(1.f), glm::vec4(dir, 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.01f);
 		}
 		else
 		{
 			if (light->decayType == EDecayType::eLinear)
-				lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.1f, 1, 10.f, 1.f);
+				lightManager->AddPointLight(glm::vec4(1.f), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 5, 1, 10.f, 1.f);
 			else if (light->decayType == EDecayType::eQuadratic)
-				lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 0.1f, 1, 1.f, 10.f);
+				lightManager->AddPointLight(glm::vec4(1.f), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 5, 1, 1.f, 10.f);
 		}
 	}
 }
@@ -574,7 +561,12 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 		{
 		case ETriggerType::poster:		
 		{	
-			if (unlockedPosters[atoi(trigger.data.data.c_str()) - 1] == 0)
+			if (trigger.data.data.empty())
+			{
+				printf("No number on the poster data\n");
+				outTriggerType = Trigger::NOTHING;
+			}
+			else if (unlockedPosters[atoi(trigger.data.data.c_str()) - 1] == 0)
 			{
 				outTriggerType = Trigger::POSTER;
 				Poster* poster = new Poster();
@@ -600,7 +592,15 @@ void LevelManager::LoadLevelTriggers(std::vector<LTrigger> triggers)
 			break;
 		case ETriggerType::message:		
 			outTriggerType = Trigger::POPUP; 
-			outTrigger->setData(trigger.data.data);
+			if (trigger.data.data.empty())
+			{
+				printf("No text in message data\n");
+				outTriggerType = Trigger::NOTHING;
+			}
+			else
+			{
+				outTrigger->setData(trigger.data.data);
+			}
 			break;
 		case ETriggerType::door:	
 			outTriggerType = Trigger::DOOR;

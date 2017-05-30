@@ -18,7 +18,8 @@ enum class ESpawnerType
 	zombie2,
 	skater1,
 	flying1,
-	trash
+	trash,
+	box
 };
 
 enum class EEffectType
@@ -93,7 +94,6 @@ struct LSpawner
 struct LEffect
 {
 	EEffectType effectType;
-	StringData data;
 
 	float position[2];
 };
