@@ -135,7 +135,6 @@ void Player::Update(GLint deltaT, b2World* world)
 	if (!isDead)
 	{
 		sf::Joystick::update();
-		cout << CONTROLLER_ON << endl;
 		if (CONTROLLER_ON)
 		{
 			InputController(deltaT);
@@ -454,9 +453,7 @@ void Player::InputKeyboard(GLint deltaT)
 
 	if (sf::Keyboard::isKeyPressed(key_hover) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) 
 	{
-		cout << isHovering << endl;
 		Hover(deltaT);
-		cout << isHovering << endl;
 	}
 	else isHovering = false;
 }
