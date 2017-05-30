@@ -16,7 +16,14 @@ SoundManager::SoundManager()
 
 SoundManager::SoundManager(const SoundManager& other) { }
 
-SoundManager::~SoundManager() { }
+SoundManager::~SoundManager()
+{
+	for (int i = 0; i < nrOfSound; i++)
+	{
+		sfx[i].stop();
+		sfx[i].resetBuffer();
+	}
+}
 
 sf::Sound SoundManager::loadSFX(std::string path)
 {
