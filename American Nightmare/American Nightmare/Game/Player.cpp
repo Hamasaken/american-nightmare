@@ -334,7 +334,7 @@ void Player::Walk(Direction dir)
 			}
 		}
 	}
-	else
+	else if (abs(vel.x) >= PLAYER_MAX_VEL_X + 1.f)
 	{
 		if (vel.x < 0)
 		{
@@ -348,7 +348,6 @@ void Player::Walk(Direction dir)
 			if (getActiveAnimationIndex() != 7)
 				changeActiveAnimation(7);
 		}
-		
 	}
 }
 
