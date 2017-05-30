@@ -16,6 +16,11 @@
 #define ENEMY_MAX_VEL_X 2.25f
 #define ENEMY_MAX_VEL_Y 20.f
 
+#define ROLLER_VEL_X 2000.f  //20000.f
+#define ROLLER_VEL_Y 100.f
+#define ROLLER_MAX_VEL_X 3.5f
+#define ROLLER_MAX_VEL_Y 10.f
+
 class Enemy: public Animation
 {
 public:
@@ -30,7 +35,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Gets input from user and moves accordingly
 	////////////////////////////////////////////////////////////
-	void Movement(b2Vec2 playerPos);
+	virtual void Movement(b2Vec2 playerPos);
 	int hp;
 	float getDamage();
 	void TakeDamage(float dmg);
@@ -40,6 +45,12 @@ public:
 private:
 	float damage;
 	b2Body* getBody();
+};
+
+class ZombieRoller : public Enemy
+{
+public:
+	void Movement(b2Vec2 playerPos);
 };
 
 #endif // !ENEMY_H

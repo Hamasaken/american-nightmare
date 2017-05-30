@@ -52,12 +52,24 @@ public:
 	////////////////////////////////////////////////////////////
 	glm::vec3 getPosition();
 
+	////////////////////////////////////////////////////////////
+	// \brief Sets the level position
+	////////////////////////////////////////////////////////////
+	void setFinishPosition(glm::vec3 position);
+	void activateFinishAnimation();
+
 private:
+	glm::vec3 lookUp;
+	glm::vec3 lookAt;
 	glm::mat4 viewMatrix;	//< The camera's view matrix
 	glm::vec3 position;		//< Position of the camera
 	bool screenShakeActive;
 	float screenShakeTime;
 	float screenShakePower;
+
+	float finishTimer;
+	bool isFinishing;
+	glm::vec3 finishPosition;
 };
 
 #endif // !CAMERA_H
