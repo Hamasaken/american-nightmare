@@ -65,6 +65,8 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 	EntityBoard board = getBoard(type);
 	GLboolean success = true;
 
+	type = ((rand() % 2) == 0) ? ESpawnerType::zombie1: ESpawnerType::skater1;
+
 	switch (type)
 	{	
 	case ESpawnerType::zombie2:

@@ -109,15 +109,16 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	////////////////////////////////////////////////////////////
 	// Creating the Entity Manager (Enemies/Trash/etc)
 	////////////////////////////////////////////////////////////
-	tempNomralMapIndex = materialManager->AddTexture("zombie1walknormalmap", TEXTURE_PATH "Zombie1WalkN.png");
+	GLint tempZombieNormal = materialManager->AddTexture("zombie1walknormalmap", TEXTURE_PATH "Zombie1WalkN.png");
+	GLint tempSkaterNormal = materialManager->AddTexture("skaternormalmap", TEXTURE_PATH "skater_normal_L.png");
 
 	entityManager = new EntityManager();
 	if (entityManager == nullptr) return false;
 	if (!entityManager->Start(world, soundManager, myPH, screenSize)) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::zombie1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walk.txt")) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::zombie2, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walk.txt")) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::skater1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walk.txt")) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::flying1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walk.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::zombie1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempZombieNormal), ANIMATION_PATH "zombie1walk.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::zombie2, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempZombieNormal), ANIMATION_PATH "zombie1walk.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::skater1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("skatermaterial"), materialManager->getMaterial("skatermaterial")->getTextureID(), materialManager->getTextureID(tempSkaterNormal), ANIMATION_PATH "skater.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::flying1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempZombieNormal), ANIMATION_PATH "zombie1walk.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::trash, mapShader, meshManager->getMesh("quad"), materialManager->getMaterial("boxmaterial"))) return false;
 
 	////////////////////////////////////////////////////////////
