@@ -1,8 +1,6 @@
 #include "Player.h"
 
-Player::Player(): Animation() 
-{
-}
+Player::Player(): Animation() {}
 
 Player::Player(const Player & other) { }
 
@@ -27,10 +25,8 @@ void Player::initiateProjectile(MeshManager* meshManager, MaterialManager* mater
 		else
 			this->ammoList.push_back(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("garbagematerial"), true));
 	}
-
 }
 
-//bool Player::Start(std::string modelName, const MaterialManager::Material* material, b2World* world)
 bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world, ParticleManager* particleManager, SoundManager* soundManager, MeshManager* meshManager, MaterialManager* materialManager, Camera* camera, glm::vec2 screenPos, glm::vec2 screenSize)
 {
 	//Initiates screen properties
@@ -42,7 +38,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 
 	//Sets variables for projectile/gun
 	initiateProjectile(meshManager, materialManager);
-	
+
 	// Starting entity variables (including hitbox)
 	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(PLAYER_SIZE_X * 0.45f, PLAYER_SIZE_Y * 0.9f, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_MASS, PLAYER_FRICTION);
 
@@ -138,11 +134,18 @@ void Player::Update(GLint deltaT, b2World* world)
 	// Getting user input
 	if (!isDead)
 	{
-		InputKeyboard(deltaT);
-		InputMouse();
+		sf::Joystick::update();
+		cout << CONTROLLER_ON << endl;
+		if (CONTROLLER_ON)
+		{
+			InputController(deltaT);
+		}
+		else
+		{
+			InputKeyboard(deltaT);
+			InputMouse();
+		}
 	//	InputTesting(); 
-		InputController(deltaT);
-		//if (CONTROLLER_ON) InputController(deltaT);
 	}
 
 	// Recharging power meter
@@ -343,7 +346,6 @@ void Player::Dash(sf::Keyboard::Key inKey)
 void Player::Hover(GLint deltaT)
 {
 	static float yPos;
-
 	soundManager->playModifiedSFX(SoundManager::SFX_HOVER, 30, 0.01);
 
 	if (isHovering)
@@ -451,22 +453,25 @@ void Player::InputKeyboard(GLint deltaT)
 	}
 
 	if (sf::Keyboard::isKeyPressed(key_hover) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) 
-  		Hover(deltaT);
+	{
+		cout << isHovering << endl;
+		Hover(deltaT);
+		cout << isHovering << endl;
+	}
 	else isHovering = false;
 }
 
-void Player::InputController(GLint deltaT)
+void Player::InputController(GLint deltaT)                          
 {
-	sf::Joystick::update();
 	if (sf::Joystick::isConnected(0))
 	{
 		if (sf::Joystick::isButtonPressed(0, BTN_A)) Jump();
 
 		if (sf::Joystick::isButtonPressed(0, BTN_X) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER)
 		{
-			cout << "something special" << endl;
+			cout << isHovering << endl;
 			Hover(deltaT);
-			isHovering = true;
+			cout << isHovering << endl;
 		}
 		else isHovering = false;
 
