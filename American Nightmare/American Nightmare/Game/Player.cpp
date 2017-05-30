@@ -62,7 +62,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	hasDashed = false;
 	isHovering = false;
 	isDashing = false;
-	powerRefillCD = 0.f;
+	//powerRefillCD = 0.f;
 	invulTime = 0.f;
 	shockwaveCooldown = 0.f;
 	contactWithEnemy = nullptr;
@@ -353,7 +353,7 @@ void Player::Hover(GLint deltaT)
 		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
 		hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, 0.f));
 		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
-		powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
+		//powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
 	}
 	else if (hasJumped)
 	{
@@ -361,7 +361,7 @@ void Player::Hover(GLint deltaT)
 		yPos = hitbox->getBody()->GetPosition().y;
 		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
 		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
-		powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
+		//powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
 	}
 }
 
