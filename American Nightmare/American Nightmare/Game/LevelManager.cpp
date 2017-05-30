@@ -326,7 +326,7 @@ void LevelManager::Update(GLint deltaT)
 		currentAlpha += (popupAlpha - currentAlpha) * 0.1f;
 		popup->setColor(glm::vec4(currentAlpha));
 		popupTimer -= deltaT;
-		if (currentAlpha > 0.1f && (rand() % 5) == 1) particleManager->EffectMusicLines(player->getPosition(), player->getIsFacingRight() ? 0 : glm::pi<float>(), 0.012, 1);
+		if (currentAlpha > 0.1f && (rand() % 5) == 1) particleManager->EffectMusicLines(player->getPosition(), player->getIsFacingRight() ? glm::pi<float>() : 0, 0.013, 1);
 		if (popupTimer < NULL)	popupAlpha = -0.05f;
 		else if (currentAlpha <= 0.0f) popupActive = false;
 	}

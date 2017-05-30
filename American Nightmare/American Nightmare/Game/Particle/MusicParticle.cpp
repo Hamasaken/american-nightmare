@@ -6,7 +6,7 @@ void MusicParticle::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size, f
 	isDead = false;
 	float randomizedAngle = angle + randBetweenF(-0.45f, 0.45f);
 
-	vertex.setPosition(glm::vec3(position.x + cos(randomizedAngle) * randBetweenF(0.65f, 1.0f), position.y + sin(randomizedAngle) * randBetweenF(0.65f, 1.0f), 0));
+	vertex.setPosition(glm::vec3(position.x + cos(randomizedAngle) * randBetweenF(1.05f, 1.25f), position.y + sin(randomizedAngle) * randBetweenF(1.05f, 1.25f), 0));
 	vertex.setColor(color);
 	vertex.setSize(size);
 	vertex.setRotation(-randomizedAngle);
