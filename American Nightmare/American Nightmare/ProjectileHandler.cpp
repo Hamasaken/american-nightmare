@@ -1,6 +1,8 @@
 #include "ProjectileHandler.h"
 #include <iostream>
 
+extern MaterialManager* materialManager;
+
 void ProjectileHandler::initiateProjectiles(const MeshManager::Mesh* mesh, const MaterialManager::Material*  material, b2World *world, glm::vec2 pos, GLuint shader)
 {
 	this->world = world;
@@ -39,7 +41,12 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position,
 	{
 		Projectile* p = myProjtileVector[i];
 		if (abs(p->getHitbox()->getBody()->GetLinearVelocity().x) > 5.f && rand() % 4 == 1)
-			particleManager->EffectSmokeCloud(p->getPosition(), 0, 1, glm::vec4(0.9f), randBetweenF(0.1f, 0.35f));
+		{
+			if (!p->getIsZombiePart())
+				particleManager->EffectSmokeCloud(p->getPosition(), materialManager->getTextureID("smoketexture"), 1, glm::vec4(0.9f), randBetweenF(0.1f, 0.35f));
+			else
+				particleManager->EffectSmokeCloud(p->getPosition(), materialManager->getTextureID("bloodtexture"), 1, glm::vec4(1.f), randBetweenF(0.15f, 0.35f));
+		}
 
 		float dist = abs(p->getHitbox()->getBody()->GetPosition().x - position.x);
 		b2Body* body = p->getHitbox()->getBody();

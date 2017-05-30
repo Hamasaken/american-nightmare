@@ -24,6 +24,7 @@ private:
 	bool damageOn;
 	bool marked;
 	bool isProjectileFired;
+	bool isZombiePart;
 
 	glm::vec2 playerPosition;
 
@@ -51,6 +52,7 @@ public:
 	//void Update(GLint deltaT);
 	void Update(GLint deltaT, b2World* world, glm::vec2 position);
 
+	bool getIsZombiePart() const;
 	void setIsFired(bool isProjectileFired);
 	bool getIsFired()const;
 	void setIsInVacRange(bool change);

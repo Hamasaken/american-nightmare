@@ -352,6 +352,8 @@ bool ScreenGame::SetupUI()
 
 	uiManager->setShader(shaderManager->getShader("texture"));
 	uiManager->setInstantCenter(glm::vec2(0, 0));
+
+	return true;
 }
 
 bool ScreenGame::ResetLevel()

@@ -128,7 +128,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 					projectile->setmarked(true);
 
 					camera->screenShake(250.f, 0.25f);
-					particleManager->EffectBloodSplatter(enemy->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
+					particleManager->EffectBloodSplatter(enemy->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25);
 					soundManager->playSFXOverDrive(SoundManager::SFX_HIT, 40, 0.1f);
 					enemy->TakeDamage(enemy->getDamage());
 					if (enemy->getIsDead())
@@ -137,7 +137,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 							player->setContactWithEnemy(nullptr);
 						camera->screenShake(750.f, 1.f); 
 						soundManager->playSFXOverDrive(SoundManager::SFX_DEATH, 50, 0.0f);
-						particleManager->EffectExplosionLights(enemy->getPosition(), 15, glm::vec4(0.67f, 0.1f, 0.05f, 1.f));
+						particleManager->EffectExplosionLights(enemy->getPosition(), 15, glm::vec4(0.5f, 0.05f, 0.05f, 1.f), randBetweenF(0.4f, 0.8f));
 						particleManager->EffectBloodCloud(enemy->getPosition(), 10, glm::vec4(1.f), randBetweenF(1.f, 1.75f));
 					}
 				}
