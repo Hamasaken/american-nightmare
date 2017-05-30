@@ -11,6 +11,9 @@
 
 #define PAUS_TIMER 300.f
 
+#define FIRST_LEVELFILE "Level1.anl"
+#define FIRST_ARCHIVEFILE "Level1.ana"
+
 class ScreenGame : public Screen
 {
 private:

@@ -385,13 +385,13 @@ void Player::Shockwave()
 				{
 					pos = contact->contact->GetFixtureB()->GetBody()->GetPosition();
 					angle = getAngleFromTwoPoints(glm::vec3(pos.x, pos.y, 0.f), position);
-					contact->contact->GetFixtureB()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * PLAYER_SHOCKWAVE_POWER, sin(angle) * PLAYER_SHOCKWAVE_POWER), true);
+					contact->contact->GetFixtureB()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * PLAYER_SHOCKWAVE_POWER * 2, sin(angle) * PLAYER_SHOCKWAVE_POWER * 0.4f), true);
 				}
 				else
 				{
 					pos = contact->contact->GetFixtureA()->GetBody()->GetPosition();
 					angle = getAngleFromTwoPoints(glm::vec3(pos.x, pos.y, 0.f), position);
-					contact->contact->GetFixtureA()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * PLAYER_SHOCKWAVE_POWER, sin(angle) * PLAYER_SHOCKWAVE_POWER), true);
+					contact->contact->GetFixtureA()->GetBody()->ApplyForceToCenter(b2Vec2(cos(angle) * PLAYER_SHOCKWAVE_POWER * 2, sin(angle) * PLAYER_SHOCKWAVE_POWER * 0.4f), true);
 				}
 			}
 			contact = contact->next;
