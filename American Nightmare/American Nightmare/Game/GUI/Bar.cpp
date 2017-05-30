@@ -12,18 +12,18 @@ bool Bar::Start(float &value, float maxValue, glm::vec3 position, glm::vec2 size
 	if (!Object::Start(mesh, material))
 		return false;
 
+	// Procent
+	this->value = &value;
+	this->maxValue = maxValue;
+	this->procent = value / maxValue;
+	this->showProcent = 0;
+
 	// Visual placement
 	this->startPosition = position;
 	this->startSize = size;
 	this->position = position;
 	this->rotation = glm::vec3(0, 0, 0);
-	this->scale = glm::vec3(1 * size.x, 1 * size.y, 1);
-
-	// Procent
-	this->value = &value;
-	this->maxValue = maxValue;
-	this->procent = 0;
-	this->showProcent = 0;
+	this->scale = glm::vec3(size * procent, 1);
 
 	return true;
 }

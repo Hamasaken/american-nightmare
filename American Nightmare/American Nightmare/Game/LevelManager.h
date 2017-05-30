@@ -85,6 +85,10 @@ public:
 	//Projectile* getProjectile();
 	//ProjectileHandler* getProjectiles();
 
+	bool getNextLevelTrigger();
+	std::string getNextLevelPath();
+	std::string getNextArchivePath();
+
 	//////////////////////////////////////////////////////////////
 	// Shoot something
 	/////////////////////////////////////////////////////////////
@@ -116,6 +120,10 @@ private:
 	std::vector<Trigger*> triggers;
 	std::vector<Projectile*> projectiles;
 	Player* player;				//< The player object
+
+	bool nextLevelTrigger;
+	std::string nextLevelPath;
+	std::string nextArchivePath;
 
 	AArchiveHandler archive;
 	LLevelHandler levelFile;

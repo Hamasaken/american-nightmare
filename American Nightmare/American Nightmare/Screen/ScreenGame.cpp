@@ -133,47 +133,19 @@ bool ScreenGame::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* st
 	if (!levelManager->Start(screenSize, screenPosition, shaderManager->getShader("texture_animation_normal"), shaderManager->getShader("deferred"), shaderManager->getShader("texture"), materialManager, meshManager, particleManager, soundManager, camera))
 		return false;
 
-	////////////////////////////////////////////////////////////
-	// Creating a UI manager	
-	////////////////////////////////////////////////////////////
-	uiManager = new GUIManager();
-	if (uiManager == nullptr) return false;
-	if (!uiManager->Start(screenSize, screenPosition)) return false;
-	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.89f, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Pause", FONT_PATH INGAME_FONT, 17.5f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
-
-	// Bars
-	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(-0.3f, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_red"), meshManager->getMesh("quadbig"));
-	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(0.3, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_green"), meshManager->getMesh("quadbig"));
-	uiManager->AddBar(levelManager->getPlayer()->getNrOfProjectiles(), PLAYER_AMMO_CAP, glm::vec3(0.0, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quadbig"));
-	uiManager->AddText(glm::vec3(-0.3, -0.95, 0.f), 30.f, "Health", FONT_PATH INGAME_FONT);
-	uiManager->AddText(glm::vec3(0.3, -0.95, 0.f), 30.f, "Power", FONT_PATH INGAME_FONT);
-	uiManager->AddText(glm::vec3(0.0, -0.95, 0.f), 30.f, "Scrap", FONT_PATH INGAME_FONT);
-
-	// Death Screen
-	uiManager->AddText(glm::vec3(0.f, 2.5, 0.f), 50.f, "You died", FONT_PATH INGAME_FONT);
-	uiManager->AddButton(GUIManager::PLAY, glm::vec3(0.0, 2.0f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Try again", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
-	uiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0.0, 1.8f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Meny", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
-	uiManager->setAlpha(1.f);
-
-	// Bar modifications
-	uiManager->getBar(0)->setAlpha(1.f);
-	uiManager->getBar(1)->setAlpha(1.f);
-	uiManager->getBar(2)->setAlpha(1.f);
-
-	uiManager->setShader(shaderManager->getShader("texture"));
-	uiManager->setInstantCenter(glm::vec2(0, 0));
+	SetupUI();
 
 	background = new Button();
 	background->Start(screenSize, glm::vec3(0.f, 0.f, 0.f), glm::vec2(1), materialManager->getMaterial("backgroundmaterial"), meshManager->getMesh("quadbig"));
 	background->setShader(shaderManager->getShader("texture"));
 
 	// Setting startvariables
-	SetStartVariables();
+	SetStartVariables(LEVEL_PATH "Level1.anl", ARCHIVE_PATH "Level1.ana");
 
 	return true;
 }
 
-void ScreenGame::SetStartVariables()
+void ScreenGame::SetStartVariables(std::string levelPath, std::string archivePath)
 {
 	// Setting game state
 	gameState = PLAYING;
@@ -182,7 +154,7 @@ void ScreenGame::SetStartVariables()
 	camera->setPosition(glm::vec3(0, 0, 16.0f));
 
 	// Making wall & floor bigger
-	levelManager->LoadLevel(LEVEL_PATH "Level1.anl", ARCHIVE_PATH "Level1.ana");
+	levelManager->LoadLevel(levelPath, archivePath);
 
 	// Adding shadow
 	// flyttade upp till start functionen
@@ -346,6 +318,77 @@ void ScreenGame::Draw()
 		glEnable(GL_DEPTH_TEST);
 	}*/
 	
+}
+
+bool ScreenGame::SetupUI()
+{
+	if (levelManager == nullptr) return false;
+	if (levelManager->getPlayer() == nullptr) return false;
+
+	// STarting UI manager
+	uiManager = new GUIManager();
+	if (uiManager == nullptr) return false;
+	if (!uiManager->Start(screenSize, screenPosition)) return false;
+	uiManager->AddButton(GUIManager::PAUSE, glm::vec3(0.89f, -0.97, 0), glm::vec2(0.1125, 0.0297777778), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Pause", FONT_PATH INGAME_FONT, 17.5f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+
+	// Bars
+	uiManager->AddBar(levelManager->getPlayer()->getHP(), levelManager->getPlayer()->getHP(), glm::vec3(-0.3f, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_red"), meshManager->getMesh("quadbig"));
+	uiManager->AddBar(levelManager->getPlayer()->getPower(), levelManager->getPlayer()->getPower(), glm::vec3(0.3, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_green"), meshManager->getMesh("quadbig"));
+	uiManager->AddBar((float&)(levelManager->getPlayer()->getNrOfProjectiles()), PLAYER_AMMO_CAP, glm::vec3(0.0, -0.95, 0), glm::vec2(0.15, 0.05), materialManager->getMaterial("GUI_bar_blue"), meshManager->getMesh("quadbig"));
+	uiManager->AddText(glm::vec3(-0.3, -0.95, 0.f), 30.f, "Health", FONT_PATH INGAME_FONT);
+	uiManager->AddText(glm::vec3(0.3, -0.95, 0.f), 30.f, "Power", FONT_PATH INGAME_FONT);
+	uiManager->AddText(glm::vec3(0.0, -0.95, 0.f), 30.f, "Scrap", FONT_PATH INGAME_FONT);
+
+	// Death Screen
+	uiManager->AddText(glm::vec3(0.f, 2.5, 0.f), 50.f, "You died", FONT_PATH INGAME_FONT);
+	uiManager->AddButton(GUIManager::PLAY, glm::vec3(0.0, 2.0f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Try again", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	uiManager->AddButton(GUIManager::STARTMENY, glm::vec3(0.0, 1.8f, 0), glm::vec2(0.225f, 0.05955), materialManager->getMaterial("GUI_1_mat"), meshManager->getMesh("quadbig"), "Meny", FONT_PATH INGAME_FONT, 28.f, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	uiManager->setAlpha(1.f);
+
+	// Bar modifications
+	uiManager->getBar(0)->setAlpha(1.f);
+	uiManager->getBar(1)->setAlpha(1.f);
+	uiManager->getBar(2)->setAlpha(1.f);
+
+	uiManager->setShader(shaderManager->getShader("texture"));
+	uiManager->setInstantCenter(glm::vec2(0, 0));
+}
+
+bool ScreenGame::ResetLevel()
+{
+	// Saving next level paths
+	std::string level = levelManager->getNextLevelPath();
+	std::string archive = levelManager->getNextArchivePath();
+
+	// Stopping level manager
+	levelManager->Stop();
+	delete levelManager;
+	levelManager = nullptr;
+
+	// Stopping ui
+	if (uiManager != nullptr)
+	{
+		uiManager->Stop();
+		delete uiManager;
+		uiManager = nullptr;
+	}
+
+	// Removing current shadowmap
+	shadowManager.Stop();
+
+	// Restarting levelManager
+	levelManager = new LevelManager();
+	if (levelManager == nullptr) return false;
+	if (!levelManager->Start(screenSize, screenPosition, shaderManager->getShader("texture_animation_normal"), shaderManager->getShader("deferred"), shaderManager->getShader("texture"), materialManager, meshManager, particleManager, soundManager, camera))
+		return false;
+
+	// Creating a new UI with new adresses
+	if (!SetupUI()) 
+		return false;
+
+	SetStartVariables(level, archive);
+
+	return true;
 }
 
 void ScreenGame::DrawShadowMaps()
@@ -547,6 +590,15 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	// Check if user is pausing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P) || sf::Joystick::isButtonPressed(0,6)) Pause();
+
+	// If we have finished the level or not
+	if (levelManager->getNextLevelTrigger())
+	{
+		if (!ResetLevel())
+			printf("Error in opeing next map");
+		else
+			printf("Next level loaded");
+	}
 }
 
 void ScreenGame::UpdatePausing(GLint deltaT)

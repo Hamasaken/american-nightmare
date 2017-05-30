@@ -45,7 +45,7 @@ public:
 	// \brief Initializing starting variables, like camera position
 	// \note Should be called in the end of Start function
 	////////////////////////////////////////////////////////////
-	virtual void SetStartVariables() = 0;
+	virtual void SetStartVariables() { }
 
 	////////////////////////////////////////////////////////////
 	// \brief Updating the screen

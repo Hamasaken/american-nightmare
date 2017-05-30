@@ -36,6 +36,8 @@ void ShadowManager::Stop()
 
 	directionalShadowMapList.clear();
 	pointShadowMapList.clear();
+
+	useShadows = false;
 }
 
 void ShadowManager::AddDirectional(LightManager::DirectionalLight* light, glm::vec3 offset, glm::vec2 resolution, glm::vec2 size, GLfloat nearPlane, GLfloat farPlane)
