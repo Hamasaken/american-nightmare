@@ -465,36 +465,26 @@ void Player::InputController(GLint deltaT)
 {
 	if (sf::Joystick::isConnected(0))
 	{
-		if (sf::Joystick::isButtonPressed(0, BTN_A)) Jump();
+		if (sf::Joystick::isButtonPressed(0, BTN_A)) Jump(); //Jump
 
-		if (sf::Joystick::isButtonPressed(0, BTN_X) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER)
-		{
-			cout << isHovering << endl;
-			Hover(deltaT);
-			cout << isHovering << endl;
-		}
+		if (sf::Joystick::isButtonPressed(0, BTN_X) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) {Hover(deltaT);} // Hover
 		else isHovering = false;
 
-		if (sf::Joystick::isButtonPressed(0, BTN_Y) && power >= PLAYER_POWER_COST_SHOCKWAVE)
-		{
-			Shockwave();
-			printf("Y.\n");
-		}
+		if (sf::Joystick::isButtonPressed(0, BTN_Y) && power >= PLAYER_POWER_COST_SHOCKWAVE) {Shockwave();} // schockwave
 		
-		if (sf::Joystick::isButtonPressed(0, BTN_LB))
+		if (sf::Joystick::isButtonPressed(0, BTN_LB)) // Reload the gun
 			printf("LB.\n");
-		if (sf::Joystick::isButtonPressed(0, BTN_RB))
+		if (sf::Joystick::isButtonPressed(0, BTN_RB)) // fire the gun
 			printf("RB.\n");
-		if (sf::Joystick::isButtonPressed(0, BTN_BACK))
+		if (sf::Joystick::isButtonPressed(0, BTN_BACK)) // Pauses the game
 			printf("Back.\n");
-		if (sf::Joystick::isButtonPressed(0, BTN_START))
+		if (sf::Joystick::isButtonPressed(0, BTN_START)) // Go to the main menu
 			printf("start.\n");
-		if (sf::Joystick::isButtonPressed(0, BTN_LT))
+		if (sf::Joystick::isButtonPressed(0, BTN_LT)) //This is an axis and doesn't do anything at the moment
 			printf("LT.\n");
-		if (sf::Joystick::isButtonPressed(0, BTN_RT))
+		if (sf::Joystick::isButtonPressed(0, BTN_RT)) //This is an axis and doesn't do anything at the moment
 			printf("RT.\n");
 
-		
 		float leftAxis = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X) / 100.f;
 		if (leftAxis < -0.1f || leftAxis > 0.1f) // Controller offset
 		{
@@ -516,7 +506,6 @@ void Player::InputController(GLint deltaT)
 		{
 			Dash(key_jump);	
 		}
-
 	}
 }
 
