@@ -134,7 +134,9 @@ void Player::Update(GLint deltaT, b2World* world)
 	// Getting user input
 	if (!isDead)
 	{
-		if (sf::Joystick::isConnected(0))
+		sf::Joystick::update();
+		cout << CONTROLLER_ON << endl;
+		if (CONTROLLER_ON)
 		{
 			InputController(deltaT);
 		}
@@ -461,7 +463,6 @@ void Player::InputKeyboard(GLint deltaT)
 
 void Player::InputController(GLint deltaT)                          
 {
-	sf::Joystick::update();
 	if (sf::Joystick::isConnected(0))
 	{
 		if (sf::Joystick::isButtonPressed(0, BTN_A)) Jump();

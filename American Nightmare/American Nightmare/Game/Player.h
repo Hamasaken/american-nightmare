@@ -52,7 +52,7 @@
 #define PLAYER_SHOCKWAVE_POWER 4000.f
 
 // XBOX CONTROLLER
-#define CONTROLLER_ON true
+#define CONTROLLER_ON sf::Joystick::isConnected(0)
 #define BTN_A 0
 #define BTN_B 1
 #define BTN_X 2
