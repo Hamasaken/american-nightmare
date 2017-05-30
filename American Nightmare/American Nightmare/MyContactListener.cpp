@@ -84,7 +84,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		}
 		else if (vacuum)
 		{
-
+			//Should there be something here???
 		}
 		else if (entity)
 		{
