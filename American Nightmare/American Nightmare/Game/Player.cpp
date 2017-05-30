@@ -134,11 +134,16 @@ void Player::Update(GLint deltaT, b2World* world)
 	// Getting user input
 	if (!isDead)
 	{
-		InputKeyboard(deltaT);
-		InputMouse();
+		if (sf::Joystick::isConnected(0))
+		{
+			InputController(deltaT);
+		}
+		else
+		{
+			InputKeyboard(deltaT);
+			InputMouse();
+		}
 	//	InputTesting(); 
-		InputController(deltaT);
-		//if (CONTROLLER_ON) InputController(deltaT);
 	}
 
 	// Recharging power meter
@@ -341,43 +346,20 @@ void Player::Hover(GLint deltaT)
 	static float yPos;
 	soundManager->playModifiedSFX(SoundManager::SFX_HOVER, 30, 0.01);
 
-	if (sf::Joystick::isConnected(0))
+	if (isHovering)
 	{
-		if (isHovering)
-		{
-			cout << "Yeess!!!" << endl;
-		}
-		else if (hasJumped)
-		{
-			cout << "Nooo!!!" << endl;
-			isHovering = true;
-			/*  yPos = hitbox->getBody()->GetPosition().y;
-				hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
-				power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
-				powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;*/
-		}
-		else
-			isHovering = false;
+		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
+		hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, 0.f));
+		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
+		powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
 	}
-	else
+	else if (hasJumped)
 	{
-		if (isHovering)
-		{
-			cout << "Yeess!!!" << endl;
-			hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
-			hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, 0.f));
-			power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
-			powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
-		}
-		else if (hasJumped)
-		{
-			cout << "Nooo!!!" << endl;
-			isHovering = true;
-			yPos = hitbox->getBody()->GetPosition().y;
-			hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
-			power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
-			powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
-		}
+		isHovering = true;
+		yPos = hitbox->getBody()->GetPosition().y;
+		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
+		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
+		powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
 	}
 }
 
@@ -469,7 +451,11 @@ void Player::InputKeyboard(GLint deltaT)
 	}
 
 	if (sf::Keyboard::isKeyPressed(key_hover) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) 
-  		Hover(deltaT);
+	{
+		cout << isHovering << endl;
+		Hover(deltaT);
+		cout << isHovering << endl;
+	}
 	else isHovering = false;
 }
 
@@ -480,10 +466,13 @@ void Player::InputController(GLint deltaT)
 	{
 		if (sf::Joystick::isButtonPressed(0, BTN_A)) Jump();
 
-		if (sf::Joystick::isButtonPressed(0, BTN_X))
+		if (sf::Joystick::isButtonPressed(0, BTN_X) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER)
 		{
+			cout << isHovering << endl;
 			Hover(deltaT);
+			cout << isHovering << endl;
 		}
+		else isHovering = false;
 
 		if (sf::Joystick::isButtonPressed(0, BTN_Y) && power >= PLAYER_POWER_COST_SHOCKWAVE)
 		{
