@@ -67,11 +67,37 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	////////////////////////////////////////////////////////////
 	GLint tempNomralMapIndex = materialManager->AddTexture("playernormalmap", TEXTURE_PATH "Walk01_nor.png");
 
+	GLint janeIdleL = materialManager->AddTexture("janeidlel", TEXTURE_PATH "janeIdleL.png");
+	GLint janeIdleLN = materialManager->AddTexture("janeidleln", TEXTURE_PATH "janeIdleL_norm.png");
+	GLint janeIdleR = materialManager->AddTexture("janeidler", TEXTURE_PATH "janeIdleR.png");
+	GLint janeIdleRN = materialManager->AddTexture("janeidlern", TEXTURE_PATH "janeIdleR_norm.png");
+	GLint janeRunL = materialManager->AddTexture("janerunl", TEXTURE_PATH "JaneRunL.png");
+	GLint janeRunLN = materialManager->AddTexture("janerunln", TEXTURE_PATH "JaneNorm_L.png");
+	GLint janeRunR = materialManager->AddTexture("janerunr", TEXTURE_PATH "JaneRunR.png");
+	GLint janeRunRN = materialManager->AddTexture("janerunrn", TEXTURE_PATH "JaneNorm_R.png");
+	GLint janeJumpL = materialManager->AddTexture("janejumpl", TEXTURE_PATH "janeJumpL.png");
+	GLint janeJumpLN = materialManager->AddTexture("janejumpln", TEXTURE_PATH "janeJumpL_norm.png");
+	GLint janeJumpR = materialManager->AddTexture("janejumpr", TEXTURE_PATH "janeJumpR.png");
+	GLint janeJumpRN = materialManager->AddTexture("janejumprn", TEXTURE_PATH "janeJumpR_norm.png");
+	GLint janeDashL = materialManager->AddTexture("janedashl", TEXTURE_PATH "janeDashL.png");
+	GLint janeDashLN = materialManager->AddTexture("janedashln", TEXTURE_PATH "janeDashL_norm.png");
+	GLint janeDashR = materialManager->AddTexture("janedashr", TEXTURE_PATH "janeDashR.png");
+	GLint janeDashRN = materialManager->AddTexture("janedashrn", TEXTURE_PATH "janeDashR_norm.png");
+
 	//Test with a player who has a gun too fire with
 	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial"), world, particleManager, soundManager, meshManager, materialManager, camera, screenPos, screenSize))
 		return false;
 	player->setShader(playerShader);
-	player->AddAnimation(materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
+	//player->AddAnimation(materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
+	player->AddAnimation(materialManager->getTextureID(janeIdleL), materialManager->getTextureID(janeIdleLN), ANIMATION_PATH "janeidlel.txt");
+	player->AddAnimation(materialManager->getTextureID(janeIdleR), materialManager->getTextureID(janeIdleRN), ANIMATION_PATH "janeidler.txt");
+	player->AddAnimation(materialManager->getTextureID(janeRunL), materialManager->getTextureID(janeRunLN), ANIMATION_PATH "janerunl.txt");
+	player->AddAnimation(materialManager->getTextureID(janeRunR), materialManager->getTextureID(janeRunRN), ANIMATION_PATH "janerunr.txt");
+	player->AddAnimation(materialManager->getTextureID(janeJumpL), materialManager->getTextureID(janeJumpLN), ANIMATION_PATH "janejumpl.txt");
+	player->AddAnimation(materialManager->getTextureID(janeJumpR), materialManager->getTextureID(janeJumpRN), ANIMATION_PATH "janejumpr.txt");
+	player->AddAnimation(materialManager->getTextureID(janeDashL), materialManager->getTextureID(janeDashLN), ANIMATION_PATH "janedashl.txt");
+	player->AddAnimation(materialManager->getTextureID(janeDashR), materialManager->getTextureID(janeDashRN), ANIMATION_PATH "janedashr.txt");
+	player->changeActiveAnimation(0);
 
 	////////////////////////////////////////////////////////////
 	// Creating Projectile Handler

@@ -25,11 +25,13 @@ public:
 	FrameUV* getCurrentFrameUV();
 	GLuint getAnimationTexture() const;
 	GLuint getAnimationNormal() const;
+	GLuint getActiveAnimationIndex() const;
 	bool isDirectionRight();
 
-protected:
 	bool changeActiveAnimation(std::string name);
 	bool changeActiveAnimation(GLuint index);
+
+protected:
 	void updateAnimation(GLfloat deltaT);
 	bool directionIsRight;
 	bool isLooping;
@@ -59,6 +61,7 @@ private:
 
 	std::vector<AnimationSegment> animationList;
 	AnimationSegment* currentAnimation;
+	GLuint currentAnimationIndex;
 	FrameUV currentFrameUV;
 };
 

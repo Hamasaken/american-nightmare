@@ -92,7 +92,7 @@ void Player::Update(GLint deltaT, b2World* world)
 	}
 
 	// Getting the direction of the player from the aiming direction
-	if (fireDirection.x < 0) directionIsRight = true;
+	if (fireDirection.x > 0) directionIsRight = true;
 	else directionIsRight = false;
 
 	// Update player invulnerability time
@@ -133,7 +133,7 @@ void Player::Update(GLint deltaT, b2World* world)
 	// Getting user input
 	if (!isDead)
 	{
-		sf::Joystick::update();
+		sf::Joystick::update(); //Needs to be  here in order to check if the player uses a controller of the keyboard
 		if (CONTROLLER_ON)
 		{
 			InputController(deltaT);
@@ -147,7 +147,7 @@ void Player::Update(GLint deltaT, b2World* world)
 	}
 
 	// Recharging power meter
-	if (powerRefillCD <= 0.f && !isHovering)
+	if (powerRefillCD <= 0.f)
 	{
 		soundManager->stopSFX(SoundManager::SFX_HOVER);
 
@@ -241,15 +241,42 @@ void Player::Walk(Direction dir)
 			switch (dir)
 			{
 			case LEFT:
-				if (!directionIsRight) isReversed = true;
-				else isReversed = false;
+				if (directionIsRight)
+				{
+					if (getActiveAnimationIndex() != 5)
+						changeActiveAnimation(5);
+				}
+				else
+				{
+					if (getActiveAnimationIndex() != 4)
+						changeActiveAnimation(4);
+				}
 				hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
 				break;
 			case RIGHT:
-				if (directionIsRight) isReversed = true;
-				else isReversed = false;
+				if (!directionIsRight)
+				{
+					if (getActiveAnimationIndex() != 4)
+						changeActiveAnimation(4);
+				}
+				else
+				{
+					if (getActiveAnimationIndex() != 5)
+						changeActiveAnimation(5);
+				}
 				hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
 				break;
+			case STOPPED:
+				if (directionIsRight)
+				{
+					if (getActiveAnimationIndex() != 5)
+						changeActiveAnimation(5);
+				}
+				else
+				{
+					if (getActiveAnimationIndex() != 4)
+						changeActiveAnimation(4);
+				}
 			}
 			vel.x = hitbox->getBody()->GetLinearVelocity().x;
 			hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x * 0.90f, vel.y));
@@ -260,22 +287,68 @@ void Player::Walk(Direction dir)
 			{
 			case LEFT:
 				hitbox->getBody()->SetLinearVelocity({ -PLAYER_MAX_VEL_X, vel.y });
-				if (!directionIsRight) isReversed = true;
-				else isReversed = false;
+				if (directionIsRight)
+				{
+					isReversed = true;
+					if (getActiveAnimationIndex() != 3)
+						changeActiveAnimation(3);
+				}
+				else
+				{
+					isReversed = false;
+					if (getActiveAnimationIndex() != 2)
+						changeActiveAnimation(2);
+				}
 				soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 				break;
 			case RIGHT:
 				hitbox->getBody()->SetLinearVelocity({ PLAYER_MAX_VEL_X, vel.y });
-				if (directionIsRight) isReversed = true;
-				else isReversed = false;
+				if (!directionIsRight)
+				{
+					isReversed = true;
+					if (getActiveAnimationIndex() != 2)
+						changeActiveAnimation(2);
+				}
+				else
+				{
+					isReversed = false;
+					if (getActiveAnimationIndex() != 3)
+						changeActiveAnimation(3);
+				}
 				soundManager->playModifiedSFX(SoundManager::SFX_STEPS, 25, 0.15f);
 				break;
 			case STOPPED:
+				if (directionIsRight)
+				{
+					if (getActiveAnimationIndex() != 1)
+						changeActiveAnimation(1);
+				}
+				else
+				{
+					if (getActiveAnimationIndex() != 0)
+						changeActiveAnimation(0);
+				}
 				soundManager->stopSFX(SoundManager::SFX_STEPS);
 				hitbox->getBody()->SetLinearVelocity(b2Vec2(0, vel.y));
 				break;
 			}
 		}
+	}
+	else
+	{
+		if (vel.x < 0)
+		{
+			directionIsRight = false;
+			if (getActiveAnimationIndex() != 6)
+				changeActiveAnimation(6);
+		}
+		else
+		{
+			directionIsRight = true;
+			if (getActiveAnimationIndex() != 7)
+				changeActiveAnimation(7);
+		}
+		
 	}
 }
 

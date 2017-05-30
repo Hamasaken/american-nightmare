@@ -40,6 +40,7 @@ void Animation::AddAnimation(GLuint textureID, GLuint normalMap, std::string ani
 	if (currentAnimation == nullptr)
 	{
 		currentAnimation = &(animationList[0]);
+		currentAnimationIndex = 0;
 	}
 }
 
@@ -121,6 +122,7 @@ bool Animation::changeActiveAnimation(std::string name)
 	{
 		currentAnimation->currentFrame = 0;
 		currentAnimation = &(animationList[index]);
+		currentAnimationIndex = index;
 		currentAnimation->currentFrame = 0;
 		return true;
 	}
@@ -133,6 +135,7 @@ bool Animation::changeActiveAnimation(GLuint index)
 	{
 		currentAnimation->currentFrame = 0;
 		currentAnimation = &(animationList[index]);
+		currentAnimationIndex = index;
 		currentAnimation->currentFrame = 0;
 		return true;
 	}
@@ -198,5 +201,6 @@ Animation::FrameUV* Animation::getCurrentFrameUV() { return &currentFrameUV; }
 
 GLuint Animation::getAnimationTexture() const { return currentAnimation->textureID; }
 GLuint Animation::getAnimationNormal() const { return currentAnimation->normalID; }
+GLuint Animation::getActiveAnimationIndex() const {	return currentAnimationIndex; }
 
 bool Animation::isDirectionRight() { return directionIsRight; }

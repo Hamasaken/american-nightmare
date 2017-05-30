@@ -290,7 +290,7 @@ void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderMa
 
 	const MaterialManager::Material* tmpMaterial = animatedObj->getMaterial();
 
-	glEnable(GL_TEXTURE_2D);
+ 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, animatedObj->getAnimationTexture());
 	glActiveTexture(GL_TEXTURE1);
