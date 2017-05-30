@@ -9,15 +9,6 @@ void ProjectileHandler::initiateProjectiles(const MeshManager::Mesh* mesh, const
 	this->myShader = shader;
 	this->myMesh =  const_cast<MeshManager::Mesh*>(mesh);
 	this->myMaterial = const_cast<MaterialManager::Material*>(material);
-	/*this->mymaterial = const_cast<Materialmanager::Material*>(material);*/
-	
-	/*for (int i = 0; i < 10; i++)
-	{
-		Projectile* p = new Projectile(mesh, material, world, pos);
-		p->setShader(shader);
-		myProjtileVector.push_back(p);
-	}*/
-	//	myProjtileVector.push_back(new Projectile(world, myShader, pos));
 }
 
 ProjectileHandler::ProjectileHandler() {}
@@ -30,13 +21,11 @@ ProjectileHandler::ProjectileHandler(const MeshManager::Mesh* mesh, const Materi
 	this->soundManager = soundManager;
 }
 
-ProjectileHandler::~ProjectileHandler()
-{
-}
+ProjectileHandler::~ProjectileHandler() {}
 
 void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position, bool ammoFull)
 {
-	deleteProjects(world);
+	deleteProjects(world); //Only deletes projectiles if they are marked by the Contactlistener.
 	for (int i = 0; i < this->myProjtileVector.size(); i++)
 	{
 		Projectile* p = myProjtileVector[i];
@@ -90,7 +79,6 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position,
 				}
 			}
 		}
-		
 	}
 }
 
@@ -110,12 +98,10 @@ void ProjectileHandler::deleteProjects(b2World* world)
 	}
 }
 
-
 std::vector<Projectile*>* ProjectileHandler::getBullets()
 {
 	return &myProjtileVector;
 }
-
 
 void ProjectileHandler::spawnProjectile(ProjectileData projectileData, glm::vec2 pos)
 {
@@ -123,7 +109,6 @@ void ProjectileHandler::spawnProjectile(ProjectileData projectileData, glm::vec2
 	p->setShader(myShader);
 	myProjtileVector.push_back(p);
 }
-
 
 void ProjectileHandler::fireProjectiles(ProjectileData projectileData, b2World *world, glm::vec2 pos, bool isJumping, glm::vec2 fireDirection)
 {

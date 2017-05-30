@@ -74,7 +74,6 @@ public:
 	// \brief Get the vector of objects to draw or do something with
 	///////////////////////////////////////////////////////////
 	std::vector<Object*> getMap();
-	//std::vector<Projectile*> getProj();
 	std::vector<Projectile*>* getProjectiles();
 
 	const LightManager* getLightManager() const;
