@@ -334,7 +334,7 @@ void Player::Walk(Direction dir)
 			}
 		}
 	}
-	else
+	else if (abs(vel.x) >= PLAYER_MAX_VEL_X + 1.f)
 	{
 		if (vel.x < 0)
 		{
@@ -348,7 +348,6 @@ void Player::Walk(Direction dir)
 			if (getActiveAnimationIndex() != 7)
 				changeActiveAnimation(7);
 		}
-		
 	}
 }
 
@@ -551,9 +550,9 @@ void Player::InputController(GLint deltaT)
 			printf("Back.\n");
 		if (sf::Joystick::isButtonPressed(0, BTN_START)) // Go to the main menu
 			printf("start.\n");
-		if (sf::Joystick::isButtonPressed(0, BTN_LT)) //This is an axis and doesn't do anything at the moment
+		if (sf::Joystick::isButtonPressed(0, BTN_LT)) //This is the left-thumbstick bytton
 			printf("LT.\n");
-		if (sf::Joystick::isButtonPressed(0, BTN_RT)) //This is an axis and doesn't do anything at the moment
+		if (sf::Joystick::isButtonPressed(0, BTN_RT)) //This is the right-thumbstick bytton
 			printf("RT.\n");
 
 		float leftAxis = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X) / 100.f;

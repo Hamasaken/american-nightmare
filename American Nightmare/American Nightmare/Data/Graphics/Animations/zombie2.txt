@@ -1,0 +1,4 @@
+name zombie2
+tf 1
+dim 1 1
+fps 1
