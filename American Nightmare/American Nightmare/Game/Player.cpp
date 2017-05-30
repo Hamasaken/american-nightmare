@@ -15,9 +15,6 @@ void Player::initiateCursor()
 
 void Player::initiateProjectile(MeshManager* meshManager, MaterialManager* materialManager)
 {
-	this->ammo = PLAYER_AMMO_CAP / 2;
-	this->fireDirection = { 0.0f, 0.0f };
-
 	for (int i = 0; i < this->ammo; i++)
 	{
 		if (i % 2 == 0)
@@ -37,6 +34,8 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	initiateCursor();
 
 	//Sets variables for projectile/gun
+	this->ammo = PLAYER_AMMO_CAP / 2;
+	this->fireDirection = { 0.0f, 0.0f };
 	initiateProjectile(meshManager, materialManager);
 
 	// Starting entity variables (including hitbox)
@@ -182,6 +181,8 @@ void Player::Reset()
 	hitbox->getBody()->SetAwake(true);
 
 	// Resetting variables
+	ammo = PLAYER_AMMO_CAP / 2;
+	fireDirection = { 0.0f, 0.0f };
 	hp = PLAYER_HP;
 	isDead = false;
 	power = PLAYER_POWER_MAX;
@@ -453,9 +454,7 @@ void Player::InputKeyboard(GLint deltaT)
 
 	if (sf::Keyboard::isKeyPressed(key_hover) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) 
 	{
-		cout << isHovering << endl;
 		Hover(deltaT);
-		cout << isHovering << endl;
 	}
 	else isHovering = false;
 }
