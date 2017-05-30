@@ -120,6 +120,8 @@ private:
 	std::vector<Projectile*> projectiles;
 	Player* player;				//< The player object
 
+	bool nextLevelCameraTrigger;
+	GLfloat nextLevelTimer;
 	bool nextLevelTrigger;
 	std::string nextLevelPath;
 	std::string nextArchivePath;

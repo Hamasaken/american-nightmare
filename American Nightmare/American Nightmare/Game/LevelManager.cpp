@@ -34,6 +34,8 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	this->nextArchivePath = "";
 	this->nextLevelPath = "";
 	this->nextLevelTrigger = false;
+	this->nextLevelTimer = 0;
+	this->nextLevelCameraTrigger = false;
 
 	player = new Player();
 	if (player == nullptr) return false;
@@ -63,8 +65,6 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	////////////////////////////////////////////////////////////
 	// Creating the Player object
 	////////////////////////////////////////////////////////////
-	GLint tempNomralMapIndex = materialManager->AddTexture("playernormalmap", TEXTURE_PATH "Walk01_nor.png");
-
 	GLint janeIdleL = materialManager->AddTexture("janeidlel", TEXTURE_PATH "janeIdleL.png");
 	GLint janeIdleLN = materialManager->AddTexture("janeidleln", TEXTURE_PATH "janeIdleL_norm.png");
 	GLint janeIdleR = materialManager->AddTexture("janeidler", TEXTURE_PATH "janeIdleR.png");
@@ -86,7 +86,6 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	if (!player->Start(meshManager->getMesh("quad"), materialManager->getMaterial("playermaterial"), materialManager->getMaterial("playermaterial"), world, particleManager, soundManager, meshManager, materialManager, camera, screenPos, screenSize))
 		return false;
 	player->setShader(playerShader);
-	//player->AddAnimation(materialManager->getMaterial("playermaterial")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "testanimationnormalmap.txt");
 	player->AddAnimation(materialManager->getTextureID(janeIdleL), materialManager->getTextureID(janeIdleLN), ANIMATION_PATH "janeidlel.txt");
 	player->AddAnimation(materialManager->getTextureID(janeIdleR), materialManager->getTextureID(janeIdleRN), ANIMATION_PATH "janeidler.txt");
 	player->AddAnimation(materialManager->getTextureID(janeRunL), materialManager->getTextureID(janeRunLN), ANIMATION_PATH "janerunl.txt");
@@ -107,15 +106,16 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	////////////////////////////////////////////////////////////
 	// Creating the Entity Manager (Enemies/Trash/etc)
 	////////////////////////////////////////////////////////////
-	tempNomralMapIndex = materialManager->AddTexture("zombie1walknormalmap", TEXTURE_PATH "Zombie1WalkN.png");
+	GLint tempZombieNormal = materialManager->AddTexture("zombie1walknormalmap", TEXTURE_PATH "Zombie1WalkN.png");
+	GLint tempSkaterNormal = materialManager->AddTexture("skaternormalmap", TEXTURE_PATH "skater_normal_L.png");
 
 	entityManager = new EntityManager();
 	if (entityManager == nullptr) return false;
 	if (!entityManager->Start(world, soundManager, myPH, screenSize)) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::zombie1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::zombie2, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::skater1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::flying1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempNomralMapIndex), ANIMATION_PATH "zombie1walkanimation.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::zombie1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempZombieNormal), ANIMATION_PATH "zombie1walk.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::zombie2, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempZombieNormal), ANIMATION_PATH "zombie1walk.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::skater1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("skatermaterial"), materialManager->getMaterial("skatermaterial")->getTextureID(), materialManager->getTextureID(tempSkaterNormal), ANIMATION_PATH "skater.txt")) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::flying1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempZombieNormal), ANIMATION_PATH "zombie1walk.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::trash, mapShader, meshManager->getMesh("quad"), materialManager->getMaterial("boxmaterial"))) return false;
 
 	////////////////////////////////////////////////////////////
@@ -294,24 +294,25 @@ void LevelManager::Update(GLint deltaT)
 				myPH->fireProjectiles(player->popProjectile(), world, player->getPlayerPosAsGLM(), player->getHasJumped(), player->getFireDirection());
 			}
 		}
-		}
-		//Update Projectile
-		myPH->Update(deltaT, world, player->getPlayerPosAsGLM(), player->getAmmoFull());
+	}
+
+	//Update Projectile
+	myPH->Update(deltaT, world, player->getPlayerPosAsGLM(), player->getAmmoFull());
 
 		// Updating every entity
 		entityManager->Update(deltaT, player->getPosition(), player->getIsDead(), world);
 
 
-		for (Projectile* proj : projectiles)
-			proj->Update(deltaT, world, player->getPlayerPosAsGLM());
+	for (Projectile* proj : projectiles)
+		proj->Update(deltaT, world, player->getPlayerPosAsGLM());
 
-		for (Object* object : map)
-			object->Update(deltaT);
+	for (Object* object : map)
+		object->Update(deltaT);
 
-		// Updating triggers and checking for collisions
-		for (Trigger* trigger : triggers)
-			if (!trigger->getIsTriggered())
-				trigger->CheckCollision(player->getBody());
+	// Updating triggers and checking for collisions
+	for (Trigger* trigger : triggers)
+		if (!trigger->getIsTriggered())
+			trigger->CheckCollision(player->getBody());
 
 	// Updating UI popup text
 	if (popupActive)
@@ -326,11 +327,21 @@ void LevelManager::Update(GLint deltaT)
 		else if (currentAlpha <= 0.0f) popupActive = false;
 	}
 
-		// Checking triggers
-		CheckTriggers();
+	if (nextLevelCameraTrigger)
+	{
+		nextLevelTimer -= deltaT;
+		if (nextLevelTimer < 0.f)
+		{
+			nextLevelTrigger = true;
+			nextLevelCameraTrigger = false;
+		}
+	}
 
-		//Resets variables for projectileHandler
-		this->wasPressed = isPressed;
+	// Checking triggers
+	CheckTriggers();
+
+	//Resets variables for projectileHandler
+	this->wasPressed = isPressed;
 }
 
 void LevelManager::ActivatePopup(std::string text, GLfloat timer)
@@ -792,6 +803,10 @@ void LevelManager::CheckTriggers()
 				// Checks if the door have a level file
 				if (!trigger->getData().empty())
 				{
+			//		camera->setFinishPosition(glm::vec3(trigger->getPosition(), 0));
+			//		camera->activateFinishAnimation();
+			//		nextLevelCameraTrigger = true;	
+			//		nextLevelTimer = 2000.f;
 					nextLevelTrigger = true;
 					nextLevelPath = trigger->getData();
 					nextArchivePath = trigger->getData();
