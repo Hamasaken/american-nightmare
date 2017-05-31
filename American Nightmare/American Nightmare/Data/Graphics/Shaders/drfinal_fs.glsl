@@ -156,7 +156,7 @@ void main () {
 
 	vec4 result = vec4(0);
 
-	if(fragPos.z == -130.f)
+	if(fragPos.z < -125.f)
 	{
 		fragment_color = vec4(0.f, 0.f, 0.f, 0.f);
 		return;
