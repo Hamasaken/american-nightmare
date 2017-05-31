@@ -197,7 +197,9 @@ void ScreenGame::Draw()
 	glBindFramebuffer(GL_FRAMEBUFFER, drRendering.getDRFBO());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	float playerX = levelManager->getPlayer()->getPosition().x;
+	Player* player = levelManager->getPlayer();
+
+	float playerX = player->getPosition().x;
 
 	// Drawing map
 	for (Object* object : levelManager->getMap())
@@ -228,7 +230,6 @@ void ScreenGame::Draw()
 	//DrawObject(levelManager->getProjectile(), shaderManager);
 	//DrawObject(levelManager->getProjectiles(), shaderManager);
 
-
 	// Transfer deferred rendering depth buffer to forward rendering
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, drRendering.getDRFBO());
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -239,7 +240,6 @@ void ScreenGame::Draw()
 	// Reenable Blend
 	glEnable(GL_BLEND);
 
-	//DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 	// DR: Light pass
 	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
@@ -247,21 +247,24 @@ void ScreenGame::Draw()
 	for (ParticleEmitter* emitter : *particleManager->getEmitters())
 		DrawParticles(emitter, shaderManager);
 
+	// Bind lights and shadowmaps for all animated objects
+	GLint textureCounter = bindLightsShadowsAnimation(player->getShader(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
+
 	// Drawing player
-	if (!levelManager->getPlayer()->getIsDead())
+	if (!player->getIsDead())
 	{
-		if (levelManager->getPlayer()->getInvulTime() > 0.f)
+		if (player->getInvulTime() > 0.f)
 		{
-			if ((int)(levelManager->getPlayer()->getInvulTime() * 10.f) % 2 == 0)
-				DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
+			if ((int)(player->getInvulTime() * 10.f) % 2 == 0)
+				DrawObjectAnimation(player, shaderManager, textureCounter);
 		}
 		else
-			DrawObjectAnimation(levelManager->getPlayer(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
+			DrawObjectAnimation(player, shaderManager, textureCounter);
 	}
 
 	// Draw Enemies
 	for (Enemy* enemy : *levelManager->getEntityManager()->getEnemyList())
-		DrawObjectAnimation(enemy, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
+		DrawObjectAnimation(enemy, shaderManager, textureCounter);
 
 	// Drawing gui Manager if we're paused
 	if (gameState != PLAYING)
