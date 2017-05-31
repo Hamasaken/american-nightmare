@@ -433,6 +433,23 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	background->setPosition(glm::vec3(40, 32, -130));
 	map.push_back(background);
 
+	/*Object* test = new Object();
+	test->setShader(mapShader);
+	test->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
+	test->setScale(glm::vec3(1, 1, 1));
+	test->setPosition(glm::vec3(-5, 3, 2));
+	map.push_back(test);
+
+	Object* test2 = new Object();
+	test2->setShader(mapShader);
+	test2->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
+	test2->setScale(glm::vec3(1, 1, 1));
+	test2->setPosition(glm::vec3(5, 3, 2));
+	map.push_back(test2);
+
+	lightManager->Clear();
+	lightManager->AddPointLight(glm::vec4(-5, 3, 2, 1), glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 1, 1), 100, 1, 10.f, 1.f);
+	lightManager->AddPointLight(glm::vec4(5, 3, 2, 1), glm::vec4(0, 0, 1, 1), glm::vec4(1, 1, 1, 1), 100, 1, 10.f, 1.f);*/
 
 	// Loading temp level
 	//LoadTempLevel(shader);
@@ -554,9 +571,9 @@ void LevelManager::LoadLevelLights(std::vector<LLight> lights)
 		else
 		{
 			if (light->decayType == EDecayType::eQuadratic)
-				lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 2.f, 1, 1.f, 10.f);
+				lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity, 1, 1.f, 10.f);
 			else
-				lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity * 2.f, 1, 10.f, 1.f);
+				lightManager->AddPointLight(glm::vec4(arrayToVec3(lights[i].position), 1), glm::vec4(arrayToVec3(light->color), 1), glm::vec4(1, 1, 1, 1), light->intensity, 1, 10.f, 1.f);
 		}
 	}
 }
