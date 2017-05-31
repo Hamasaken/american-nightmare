@@ -143,22 +143,12 @@ bool Program::Run()
 
 	GLint deltaT = 0;
 	Uint32 lastFrameTime = 0;
-	Uint32 nextTime = SDL_GetTicks() + TICK_INTERVAL;
 
 	bool done = false;
 	while (!done)
 	{
-		// Contstant fps
-		Uint32 currentTime = SDL_GetTicks();
-		if (SDL_GL_GetSwapInterval() != 1)
-		{
-			if (!(nextTime < currentTime))
-				SDL_Delay(nextTime - currentTime);
-			currentTime = SDL_GetTicks();
-			nextTime = currentTime + TICK_INTERVAL;
-		}
-		
 		// Delta Time
+		Uint32 currentTime = SDL_GetTicks();
 		deltaT = (currentTime - lastFrameTime);
 		lastFrameTime = currentTime;
 		
