@@ -145,7 +145,8 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	if (!entityManager->AddEntityBoard(ESpawnerType::zombie2, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempZombieNormal), ANIMATION_PATH "zombie1walk.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::skater1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("skatermaterial"), materialManager->getMaterial("skatermaterial")->getTextureID(), materialManager->getTextureID(tempSkaterNormal), ANIMATION_PATH "skater.txt")) return false;
 	if (!entityManager->AddEntityBoard(ESpawnerType::flying1, playerShader, meshManager->getMesh("quad"), materialManager->getMaterial("zombie1material"), materialManager->getMaterial("zombie1material")->getTextureID(), materialManager->getTextureID(tempZombieNormal), ANIMATION_PATH "zombie1walk.txt")) return false;
-	if (!entityManager->AddEntityBoard(ESpawnerType::trash, mapShader, meshManager->getMesh("quad"), materialManager->getMaterial("boxmaterial"))) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::trash, mapShader, meshManager->getMesh("quad"), materialManager->getMaterial("garbagematerial"))) return false;
+	if (!entityManager->AddEntityBoard(ESpawnerType::box, mapShader, meshManager->getMesh("quad"), materialManager->getMaterial("boxmaterial"))) return false;
 
 	////////////////////////////////////////////////////////////
 	// Creating the Quad Tree Object
@@ -413,7 +414,7 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	player->setStartingPosition(start);
 
 	// Music
-	soundManager->playSong(SoundManager::SONG::RHYTM_FOR_YOU);
+	soundManager->playSong(SoundManager::SONG::JAZZY_INTERLUDE);
 	soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BIRDS, 90.f, 0);
 	
 	// Dust effect
