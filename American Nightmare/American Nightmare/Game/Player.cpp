@@ -1,5 +1,8 @@
 #include "Player.h"
 
+extern MaterialManager* materialManager;
+extern MeshManager* meshManager;
+
 Player::Player(): Animation() {}
 
 Player::Player(const Player & other) { }
@@ -183,6 +186,8 @@ void Player::Reset()
 
 	// Resetting variables
 	ammo = PLAYER_AMMO_CAP / 2;
+	ammoList.clear();
+	initiateProjectile(meshManager, materialManager);
 	fireDirection = { 0.0f, 0.0f };
 	hp = PLAYER_HP;
 	isDead = false;
