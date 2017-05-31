@@ -303,7 +303,7 @@ void ScreenGame::Draw()
 	DrawObjectGUI(levelManager->getPopup(), shaderManager);
 
 	// Temp shadow map debug
-	if (shadowManager.getUseShadows())
+	/*if (shadowManager.getUseShadows())
 	{
 		shaderManager->setShader("debug");
 
@@ -320,8 +320,7 @@ void ScreenGame::Draw()
 		glDisable(GL_DEPTH_TEST);
 		drRendering.getFinalRenderQuad()->Draw();
 		glEnable(GL_DEPTH_TEST);
-	}
-	
+	}*/
 }
 
 bool ScreenGame::SetupUI()
