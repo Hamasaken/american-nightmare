@@ -393,8 +393,8 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	levelFile.readFromFile(levelPath.c_str());
 
 	// Loading archive from level
-//	archive.readFromFile(levelFile.archives[0].data); // Remove under row and uncomment this when updated level file is uploaded
-	archive.readFromFile(archivePath.c_str());
+	archive.readFromFile((ARCHIVE_PATH + std::string(levelFile.archives[0].data)).c_str()); // Remove under row and uncomment this when updated level file is uploaded
+//	archive.readFromFile(archivePath.c_str());
 	LoadArchiveTextures(archive.textures);
 	LoadArchiveMaterials(archive.materials);
 	LoadArchiveMeshes(archive.meshes);

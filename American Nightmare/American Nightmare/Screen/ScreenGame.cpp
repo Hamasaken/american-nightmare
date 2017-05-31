@@ -303,7 +303,7 @@ void ScreenGame::Draw()
 	DrawObjectGUI(levelManager->getPopup(), shaderManager);
 
 	// Temp shadow map debug
-	/*if (shadowManager.getUseShadows())
+	if (shadowManager.getUseShadows())
 	{
 		shaderManager->setShader("debug");
 
@@ -320,7 +320,7 @@ void ScreenGame::Draw()
 		glDisable(GL_DEPTH_TEST);
 		drRendering.getFinalRenderQuad()->Draw();
 		glEnable(GL_DEPTH_TEST);
-	}*/
+	}
 	
 }
 
@@ -406,7 +406,7 @@ void ScreenGame::DrawShadowMaps()
 		// Set Viewport to resolution of shadow map
 		glViewport(0, 0, shadowManager.getDirectionalShadowMapList()[i]->resolution.x, shadowManager.getDirectionalShadowMapList()[i]->resolution.y);
 
-		shadowManager.getDirectionalShadowMapList()[i]->UpdateLightSpace(camera->getPosition(), glm::vec2(40, 20), -2.f, 30.f);
+		shadowManager.getDirectionalShadowMapList()[i]->UpdateLightSpace(camera->getPosition(), glm::vec2(40, 20), -5.f, 30.f);
 		// Bind depth FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, shadowManager.getDirectionalShadowMapList()[i]->shadowFBO);
 
