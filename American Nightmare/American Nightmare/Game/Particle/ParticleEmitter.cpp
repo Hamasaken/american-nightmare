@@ -147,13 +147,6 @@ void ParticleEmitter::Stop()
 
 void ParticleEmitter::Update(GLfloat deltaT, glm::vec2 playerPos)
 {
-	// If this emitter is out of particles, otherwise, build vertexarray
-	if (particles.size() == 0)
-	{
-		isComplete = true;
-		texture = -1;
-	}
-
 	// Updating particles and checking if they are dead or not
 	for (int i = 0; i < particles.size(); i++)
 	{
@@ -163,9 +156,18 @@ void ParticleEmitter::Update(GLfloat deltaT, glm::vec2 playerPos)
 			particles[i]->Stop();
 			delete particles[i];
 			particles.erase(particles.begin() + i);
+			i--;
 		}
 	} 
 
+	// If this emitter is out of particles, otherwise, build vertexarray
+	if (particles.size() == 0)
+	{
+		isComplete = true;
+		texture = -1;
+	}
+
+	// Only makes vertices if not completed
 	if (!isComplete)
 		MakeVertices();
 }

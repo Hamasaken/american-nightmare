@@ -6,7 +6,7 @@ ParticleManager::ParticleManager(const ParticleManager & other) { }
 
 ParticleManager::~ParticleManager() { }
 
-void ParticleManager::ShaderPair(GLuint shader,  ParticleType type)
+void ParticleManager::ShaderPair(GLuint shader, ParticleType type)
 {
 	shaderPairs.push_back(std::pair<ParticleType, GLuint>(type, shader));
 }
@@ -21,8 +21,6 @@ GLuint ParticleManager::getShaderFromPair(ParticleType type)
 
 	printf("Effect does not have a shader set.\n");
 	return this->shader;
-
-	return 0;
 }
 
 void ParticleManager::Stop()

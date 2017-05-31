@@ -262,7 +262,6 @@ void ScreenGame::Draw()
 	for (Enemy* enemy : *levelManager->getEntityManager()->getEnemyList())
 		DrawObjectAnimation(enemy, shaderManager, textureCounter);
 
-
 	// Drawing particles
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
