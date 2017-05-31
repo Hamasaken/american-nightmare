@@ -54,7 +54,8 @@ public:
 		JAZZY_INTERLUDE, 
 		RHYTM_FOR_YOU,
 		MOSCOW_MULE, 
-		SING_SING_SING
+		SING_SING_SING, 
+		LIBELLA_SWING
 	};
 
 	SoundManager();

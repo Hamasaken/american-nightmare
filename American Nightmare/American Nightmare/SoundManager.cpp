@@ -76,6 +76,7 @@ void SoundManager::loadSongs()
 	song[RHYTM_FOR_YOU].openFromFile(MUSIC_PATH "Rhythm for You.ogg");
 	song[MOSCOW_MULE].openFromFile(MUSIC_PATH "Skeewiff - Moscow Mule.ogg");
 	song[SING_SING_SING].openFromFile(MUSIC_PATH "Benny Goodman Orchestra - Sing Sing Sing.ogg");
+	song[LIBELLA_SWING].openFromFile(MUSIC_PATH "Parov Stelar - Libella Swing.ogg");
 
 	// Setting every song as looping and setting volume
 	for (sf::Music& m : song)
