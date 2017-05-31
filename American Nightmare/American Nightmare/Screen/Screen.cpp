@@ -510,9 +510,6 @@ void Screen::DrawParticles(ParticleEmitter* particleEmitter, ShaderManager *shad
 	glm::mat4 view = camera->getViewMatrix();
 	glm::mat4 projection = projectionMatrix;
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	shaderManager->setShader(particleEmitter->getShader());
 	shaderManager->SetParameters(world, view, projection);
 
@@ -525,11 +522,7 @@ void Screen::DrawParticles(ParticleEmitter* particleEmitter, ShaderManager *shad
 		glUniform1i(glGetUniformLocation(particleEmitter->getShader(), "texture"), 0);
 	}
 	
-	glDisable(GL_DEPTH_TEST);
 	particleEmitter->Draw();
-	glEnable(GL_DEPTH_TEST);
-
-	glDisable(GL_BLEND);
 }
 
 void Screen::Stop()

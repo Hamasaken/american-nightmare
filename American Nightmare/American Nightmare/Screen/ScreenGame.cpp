@@ -243,10 +243,6 @@ void ScreenGame::Draw()
 	// DR: Light pass
 	DrawObjectLightPass(&drRendering, shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
-	// Drawing particles
-	for (ParticleEmitter* emitter : *particleManager->getEmitters())
-		DrawParticles(emitter, shaderManager);
-
 	// Bind lights and shadowmaps for all animated objects
 	GLint textureCounter = bindLightsShadowsAnimation(player->getShader(), shaderManager, levelManager->getLightManager()->getPointLightList(), levelManager->getLightManager()->getDirectionalLightList(), shadowManager.getDirectionalShadowMapList(), shadowManager.getPointShadowMapList(), shadowManager.getUseShadows());
 
@@ -265,6 +261,16 @@ void ScreenGame::Draw()
 	// Draw Enemies
 	for (Enemy* enemy : *levelManager->getEntityManager()->getEnemyList())
 		DrawObjectAnimation(enemy, shaderManager, textureCounter);
+
+
+	// Drawing particles
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_DEPTH_TEST);
+	for (ParticleEmitter* emitter : *particleManager->getEmitters())
+		DrawParticles(emitter, shaderManager);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
 
 	// Drawing gui Manager if we're paused
 	if (gameState != PLAYING)
