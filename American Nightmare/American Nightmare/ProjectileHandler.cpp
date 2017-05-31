@@ -26,15 +26,22 @@ ProjectileHandler::~ProjectileHandler() {}
 void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position, bool ammoFull)
 {
 	deleteProjects(world); //Only deletes projectiles if they are marked by the Contactlistener.
+
+	GLuint smoke = materialManager->getTextureID("smoketexture");
+	GLuint blood = materialManager->getTextureID("bloodtexture");
+	float size = randBetweenF(0.15f, 0.35f);
+
 	for (int i = 0; i < this->myProjtileVector.size(); i++)
 	{
 		Projectile* p = myProjtileVector[i];
-		if (abs(p->getHitbox()->getBody()->GetLinearVelocity().x) > 5.f && rand() % 4 == 1)
+		
+		if (abs(p->getHitbox()->getBody()->GetLinearVelocity().x) > 5.f)
 		{
-			if (!p->getIsZombiePart())
-				particleManager->EffectSmokeCloud(p->getPosition(), materialManager->getTextureID("smoketexture"), 1, glm::vec4(0.9f), randBetweenF(0.1f, 0.35f));
-			else
-				particleManager->EffectSmokeCloud(p->getPosition(), materialManager->getTextureID("bloodtexture"), 1, glm::vec4(1.f), randBetweenF(0.15f, 0.35f));
+			if (rand() % 2 == 1)
+			{
+				GLuint texture = (!p->getIsZombiePart()) ? smoke : blood;
+				particleManager->EffectSmokeCloud(p->getPosition(), texture, 1, glm::vec4(0.9f), size);
+			}
 		}
 
 		float dist = abs(p->getHitbox()->getBody()->GetPosition().x - position.x);
