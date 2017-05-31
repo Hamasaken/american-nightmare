@@ -95,6 +95,10 @@ bool EntityManager::SpawnEntity(ESpawnerType type, glm::vec2 position)
 			ph->spawnProjectile(ProjectileData(board.mesh, board.material, false), position);
 		} break;
 
+	case ESpawnerType::box:
+		{
+			ph->spawnProjectile(ProjectileData(board.mesh, board.material, false), position);
+		} break;
 	default: 
 		success = false;
 		break;
