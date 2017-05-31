@@ -114,14 +114,6 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 		Enemy* e = enemyList[i];
 
 		// Check if enemy is on screen
-		if (std::abs(playerPosition.x - e->getPosition().x) < ENEMY_UPDATE_DISTANCE)
-		{
-			e->Update(deltaT, b2Vec2(playerPosition.x, playerPosition.y), playerDead);
-
-			SoundManager::SFX sfx = (rand() % 2) ? SoundManager::SFX_ZOMBIE_1 : SoundManager::SFX_ZOMBIE_2;
-			soundManager->playModifiedSFX(sfx, 10, 0.05f);
-		}
-
 		if (e->getIsDead())
 		{
 			glm::vec2 temp = glm::vec2(e->getPosition());
@@ -133,7 +125,7 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 
 			float speed = 0.40f;
 			int r = rand() % 100 + 1;
-			
+
 			if (r > 0)
 			{
 				ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombieheadmaterial"), true), temp);
@@ -144,7 +136,7 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 				ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombiehandmaterial"), false), temp);
 				ph->getBullets()->back()->fireBullet(temp, glm::vec2(randBetweenF(-speed, speed), randBetweenF(-speed, 0)));
 			}
-			
+
 			if (r > 25)
 			{
 				ph->spawnProjectile(ProjectileData(meshManager->getMesh("quad"), materialManager->getMaterial("zombiefootmaterial"), false), temp);
@@ -167,7 +159,13 @@ void EntityManager::Update(GLfloat deltaT, glm::vec3 playerPosition, bool player
 			}
 
 		}
+		else if (std::abs(playerPosition.x - e->getPosition().x) < ENEMY_UPDATE_DISTANCE)
+		{
+			e->Update(deltaT, b2Vec2(playerPosition.x, playerPosition.y), playerDead);
 
+			SoundManager::SFX sfx = (rand() % 2) ? SoundManager::SFX_ZOMBIE_1 : SoundManager::SFX_ZOMBIE_2;
+			soundManager->playModifiedSFX(sfx, 10, 0.05f);
+		}
 	}
 
 	for (Entity* e : entityList)
