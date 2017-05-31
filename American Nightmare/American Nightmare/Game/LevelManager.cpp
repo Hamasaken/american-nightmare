@@ -426,11 +426,13 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
 
+
+
 	Object* background = new Object();
 	background->setShader(mapShader);
 	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
-	background->setScale(glm::vec3(340, 96, 1));
-	background->setPosition(glm::vec3(40, 32, -130));
+	background->setScale(glm::vec3(2048, 1024, 1));
+	background->setPosition(glm::vec3(450, 300, -130));
 	map.push_back(background);
 
 	/*Object* test = new Object();

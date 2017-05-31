@@ -523,6 +523,9 @@ void ScreenGame::Pause()
 
 void ScreenGame::UpdatePaused(GLint deltaT)
 {
+	camera->smoothToPausePosition(levelManager->getPlayer()->getPosition());
+	camera->buildViewMatrix();
+
 	// Updating Buttons
 	guiManager->Update(deltaT);
 	uiManager->Update(deltaT);
@@ -552,73 +555,80 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 
 void ScreenGame::UpdatePlaying(GLint deltaT)
 {
-	// Particle Managare Testing
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
-		particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.60f, 0.80f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::I))
-		particleManager->EffectSmokeCloud(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 8);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::O))
-	{
-		particleManager->EffectSmokeSignal(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), glm::pi<float>() * 0.5f, 5);
-		particleManager->EffectSmokeSignal(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("firematerial")->getTextureID(), glm::pi<float>() * 0.5f, 30);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K))
-		particleManager->EffectNutsAndBolts(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("boltmaterial")->getTextureID(), 5);
-
-	// Updating particles effects
-	particleManager->Update(deltaT, levelManager->getPlayer()->getPosition());
-
-	// Updating map objects
-	levelManager->Update(deltaT);
-
 	// Moving the camera to follow player object
 	camera->smoothToPosition(glm::vec3(levelManager->getPlayer()->getPosition().x, levelManager->getPlayer()->getPosition().y, camera->getPosition().z));
 	camera->Update(deltaT);
 
-	// Updating UI presses
-	uiManager->Update(deltaT);
-	if (levelManager->getPlayer()->getIsDead()) uiManager->setCenter(glm::vec2(0, 2));
-	std::vector<std::pair<Button*, GUIManager::Action>>* buttons = uiManager->getButtonList();
-	for (int i = 0; i < buttons->size(); i++)
+	if (!camera->getUnlocked())
 	{
-		Button* btn = buttons[0][i].first;
-		GUIManager::Action action = buttons[0][i].second;
-		if (btn->getPressed())
+		// Particle Managare Testing
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
+			particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.60f, 0.80f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::I))
+			particleManager->EffectSmokeCloud(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 8);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::O))
 		{
-			soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
-			switch (action)
+			particleManager->EffectSmokeSignal(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), glm::pi<float>() * 0.5f, 5);
+			particleManager->EffectSmokeSignal(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("firematerial")->getTextureID(), glm::pi<float>() * 0.5f, 30);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K))
+			particleManager->EffectNutsAndBolts(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("boltmaterial")->getTextureID(), 5);
+
+		// Updating particles effects
+		particleManager->Update(deltaT, levelManager->getPlayer()->getPosition());
+
+		// Updating map objects
+		levelManager->Update(deltaT);
+
+		// Updating UI presses
+		uiManager->Update(deltaT);
+		if (levelManager->getPlayer()->getIsDead()) uiManager->setCenter(glm::vec2(0, 2));
+		std::vector<std::pair<Button*, GUIManager::Action>>* buttons = uiManager->getButtonList();
+		for (int i = 0; i < buttons->size(); i++)
+		{
+			Button* btn = buttons[0][i].first;
+			GUIManager::Action action = buttons[0][i].second;
+			if (btn->getPressed())
 			{
-			case GUIManager::Action::PAUSE: Pause(); break;
-			case GUIManager::Action::PLAY: 
-				uiManager->setCenter(glm::vec2(0, 0));
-				levelManager->getPlayer()->Reset();
-				break; 
-			case GUIManager::STARTMENY: *state = State::StartMeny;
-				break;
+				soundManager->playModifiedSFX(SoundManager::SFX::SFX_BTN, 50, 0.2f);
+				switch (action)
+				{
+				case GUIManager::Action::PAUSE: Pause(); break;
+				case GUIManager::Action::PLAY:
+					uiManager->setCenter(glm::vec2(0, 0));
+					levelManager->getPlayer()->Reset();
+					break;
+				case GUIManager::STARTMENY: *state = State::StartMeny;
+					break;
+				}
+				btn->setPressed(false);
 			}
-			btn->setPressed(false);
+		}
+		std::vector<Bar*>* bars = uiManager->getBarList();
+		for (int i = 0; i < bars->size(); i++)
+			bars[0][i]->Update(deltaT);
+
+		// Check if user is pausing
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape) || sf::Joystick::isButtonPressed(0, 6)) Pause();
+
+		// If we have finished the level or not
+		if (levelManager->getNextLevelTrigger())
+		{
+			if (!ResetLevel())
+				printf("Error in opeing next map");
+			else
+				printf("Next level loaded");
 		}
 	}
-	std::vector<Bar*>* bars = uiManager->getBarList();
-	for (int i = 0; i < bars->size(); i++)
-		bars[0][i]->Update(deltaT);
-
-	// Check if user is pausing
 	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape) || sf::Joystick::isButtonPressed(0,6)) Pause();
-
-	// If we have finished the level or not
-	if (levelManager->getNextLevelTrigger())
-	{
-		if (!ResetLevel())
-			printf("Error in opeing next map");
-		else
-			printf("Next level loaded");
-	}
 }
 
 void ScreenGame::UpdatePausing(GLint deltaT)
 {
+	camera->smoothToPausePosition(levelManager->getPlayer()->getPosition());
+	camera->buildViewMatrix();
+
 	static GLint pausTimer = 0.f;
 	pausTimer += deltaT;
 	if (pausTimer >= PAUS_TIMER)
@@ -632,6 +642,9 @@ void ScreenGame::UpdatePausing(GLint deltaT)
 
 void ScreenGame::UpdateUnpausing(GLint deltaT)
 {
+	camera->smoothToPosition(levelManager->getPlayer()->getPosition());
+	camera->buildViewMatrix();
+
 	static GLint unpausTimer = PAUS_TIMER;
 	unpausTimer -= deltaT;
 	if (unpausTimer <= NULL)

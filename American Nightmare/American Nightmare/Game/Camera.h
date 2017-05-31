@@ -28,6 +28,7 @@ public:
 	// \note Needs to be called multiple times to get effect
 	////////////////////////////////////////////////////////////
 	void smoothToPosition(glm::vec3 position);
+	void smoothToPausePosition(glm::vec3 position);
 
 	////////////////////////////////////////////////////////////
 	// \brief Screenshake
@@ -58,6 +59,8 @@ public:
 	void setFinishPosition(glm::vec3 position);
 	void activateFinishAnimation();
 
+	bool getUnlocked() const;
+
 private:
 	glm::vec3 lookUp;
 	glm::vec3 lookAt;
@@ -70,6 +73,8 @@ private:
 	float finishTimer;
 	bool isFinishing;
 	glm::vec3 finishPosition;
+
+	bool unlock;
 };
 
 #endif // !CAMERA_H
