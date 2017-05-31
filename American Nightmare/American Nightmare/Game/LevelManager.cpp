@@ -679,8 +679,8 @@ void LevelManager::LoadLevelEffects(std::vector<LEffect> effects)
 			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 30);
 			break;
 		case EEffectType::dust:
-			particleManager->EffectSmokeSignal(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("firetexture"), glm::pi<float>() * 0.5f, 10);
-			particleManager->EffectSmokeSignal(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("firetexture"), glm::pi<float>() * 0.5f, 10);
+			particleManager->EffectSmokeSignal(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("firetexture"), glm::pi<float>() * 0.5f, 25);
+			particleManager->EffectSmokeSignal(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), glm::pi<float>() * 0.5f, 15);
 			break;
 		case EEffectType::steam:
 			particleManager->EffectConstantSmoke(glm::vec3(effect.position[0], effect.position[1], 0), materialManager->getTextureID("smoketexture"), 30, glm::vec4(0.3f, 0.30f, 0.5f, 0.7f));

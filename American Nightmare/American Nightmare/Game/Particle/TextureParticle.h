@@ -24,8 +24,8 @@
 #define SIGNAL_LIFETIME				randBetweenF(1500.f, 3000.f)
 #define SIGNAL_DEFAULT_SIZE			randBetweenF(1.f, 1.25f)
 #define SIGNAL_DEFAULT_AMOUNT		25
-#define SIGNAL_DEFAULT_VELOCITY		randBetweenF(0.f, 0.0350f)
-#define SIGNAL_SIZE_MULTIPLIER		0.965f
+#define SIGNAL_DEFAULT_VELOCITY		randBetweenF(0.f, 0.0080f)
+#define SIGNAL_SIZE_MULTIPLIER		0.935f
 
 // NUTS AND BOLTS DEFAULTS
 #define NUTS_DEFAULT_COLOR			glm::vec4(0.45f, 0.45f, 0.45f, 1.f)
@@ -82,6 +82,7 @@ private:
 	glm::vec2 startSize;
 	glm::vec3 startPosition;
 	float startAngle;
+	float startOffset;
 };
 
 

@@ -80,7 +80,7 @@ void SmokeSignal::Reset()
 	// Setting some random variablesr
 	rotation = rand() % 360 + 1;
 	rotationSpeed = TEXTURE_ROTATION;
-	velocity = glm::vec3(SIGNAL_DEFAULT_VELOCITY * cos(startAngle), SIGNAL_DEFAULT_VELOCITY * sin(startAngle), randBetweenF(-0.00075f, 0.00075f));
+	velocity = glm::vec3(SIGNAL_DEFAULT_VELOCITY * cos(startAngle + randBetweenF(-0.45f, 0.45f)), SIGNAL_DEFAULT_VELOCITY * sin(startAngle + randBetweenF(-0.45f, 0.45f)), randBetweenF(-0.00075f, 0.00075f));
 
 	lifeTime = lifeTimeStart;
 	vertex.setPosition(startPosition);
@@ -104,7 +104,8 @@ void SmokeSignal::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size, flo
 	lifeTime = SIGNAL_LIFETIME;
 	rotationSpeed = TEXTURE_ROTATION;
 	lifeTimeStart = lifeTime;
-	velocity = glm::vec3(SIGNAL_DEFAULT_VELOCITY * cos(angle), SIGNAL_DEFAULT_VELOCITY * sin(angle), randBetweenF(-0.00075f, 0.00075f));
+	startOffset = randBetweenF(-0.45f, 0.45f);
+	velocity = glm::vec3(SIGNAL_DEFAULT_VELOCITY * cos(angle + startOffset), SIGNAL_DEFAULT_VELOCITY * sin(angle + startOffset), randBetweenF(-0.00075f, 0.00075f));
 
 	this->startAngle = angle;
 	this->startSize = size;
@@ -127,6 +128,8 @@ void SmokeSignal::Update(GLfloat deltaT)
 	vertex.h *= SIGNAL_SIZE_MULTIPLIER;
 
 	velocity += (glm::vec3(0, 0, 0) - velocity) * TEXTURE_VELOCITY_FALL_OFF;
+	velocity.x *= 1 - abs(startOffset);
+
 	rotation += rotationSpeed * deltaT;
 
 	// Moves the particle with velocity & rotation

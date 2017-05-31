@@ -559,8 +559,8 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 		particleManager->EffectSmokeCloud(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 8);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::O))
 	{
-		particleManager->EffectSmokeSignal(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), glm::pi<float>() * 0.5f, 15);
-		particleManager->EffectSmokeSignal(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("firematerial")->getTextureID(), glm::pi<float>() * 0.5f, 25);
+		particleManager->EffectSmokeSignal(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), glm::pi<float>() * 0.5f, 5);
+		particleManager->EffectSmokeSignal(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("firematerial")->getTextureID(), glm::pi<float>() * 0.5f, 30);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K))
 		particleManager->EffectNutsAndBolts(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("boltmaterial")->getTextureID(), 5);
