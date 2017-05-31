@@ -15,8 +15,9 @@
 #define KEY_LEFT sf::Keyboard::Key::A
 #define KEY_RIGHT sf::Keyboard::Key::D
 #define KEY_JUMP sf::Keyboard::Key::W
-#define KEY_DASH sf::Keyboard::Key::LControl
+#define KEY_DASH sf::Keyboard::Key::LShift
 #define KEY_HOVER sf::Keyboard::Key::Space
+#define KEY_SHOCK sf::Keyboard::Key::Q
 
 // DEFAULT VALUES
 #define PLAYER_SIZE_X 2.f
@@ -120,6 +121,7 @@ private:
 	sf::Keyboard::Key key_jump;
 	sf::Keyboard::Key key_hover;
 	sf::Keyboard::Key key_dash;
+	sf::Keyboard::Key key_shock;
 
 	//Screen properties
 	glm::vec2 screenPos;
@@ -137,7 +139,7 @@ public:
 	//bool Start(std::string modelName, const MaterialManager::Material* material, const MaterialManager::Material* material2, b2World* world);
 
 	void Reset();
-	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash);
+	void RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash, sf::Keyboard::Key key_shock);
 	void TakeDamage(float dmg);
 	bool getIsDead();
 

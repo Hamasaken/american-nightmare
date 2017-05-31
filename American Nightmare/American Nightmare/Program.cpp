@@ -207,10 +207,6 @@ void Program::StopWindow()
 
 bool Program::Update(GLint deltaT)
 {
-	// Check if user exits
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
-		return false;
-
 	if (screenManager->getState() == Exit)
 		return false;
 
