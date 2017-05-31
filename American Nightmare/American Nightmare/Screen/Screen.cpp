@@ -16,14 +16,15 @@ bool Screen::Restart()
 	Stop();
 
 	// Trying to restart
-	if (!Start(screenSize, screenPosition, state, soundManager))
+	if (!Start(window, screenSize, screenPosition, state, soundManager))
 		return false;
 
 	return true;
 }
 
-bool Screen::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager)
+bool Screen::Start(SDL_Window* window, glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager)
 {
+	
 	// Getting screensize
 	this->screenSize = screenSize;
 	this->screenPosition = screenPosition;
@@ -35,10 +36,10 @@ bool Screen::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state,
 
 	// Building a projection matrix
 	float fov = glm::radians(45.f);
-	projectionMatrix = glm::perspective(fov, screenSize.x / screenSize.y, 0.1f, 300.f);
+	projectionMatrix = glm::perspective(fov, screenSize.x / screenSize.y, 0.1f, 200.f);
 
 	// Creating Camera Object
-	camera = new Camera();
+	camera = new Camera(window, screenSize);
 	if (camera == nullptr) return false;
 
 	return true;

@@ -2,13 +2,16 @@
 #define CAMERA_H
 
 #include "../Accessories.h"
+#include <SDL_mouse.h>
 
 #define CAMERA_SPEED 0.09f
+#define CAMERA_MOUSE_SPEED 0.07f
 
 class Camera
 {
 public:
 	Camera();
+	Camera(SDL_Window* window, glm::vec2 screenSize);
 	Camera(const Camera& other);
 	~Camera();
 
@@ -39,6 +42,7 @@ public:
 	// \brief Updates screenshake and moves to center
 	////////////////////////////////////////////////////////////
 	void Update(float deltaT);
+	void UpdateUnlocked(GLint deltaT);
 
 	////////////////////////////////////////////////////////////
 	// \brief Gets the current view matrix
@@ -62,10 +66,14 @@ public:
 	bool getUnlocked() const;
 
 private:
+	SDL_Window* window;
+	glm::vec2 screenSize;
 	glm::vec3 lookUp;
 	glm::vec3 lookAt;
 	glm::mat4 viewMatrix;	//< The camera's view matrix
 	glm::vec3 position;		//< Position of the camera
+	float pitch;
+	float yaw;
 	bool screenShakeActive;
 	float screenShakeTime;
 	float screenShakePower;

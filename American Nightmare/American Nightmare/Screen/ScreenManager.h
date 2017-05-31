@@ -29,7 +29,7 @@ public:
 	// \param screenPosition The position of the screen in pixels, upper left corner
 	// \param hwnd The window properties
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, glm::vec2 screenPosition, HWND hwnd);
+	bool Start(SDL_Window* window, glm::vec2 screenSize, glm::vec2 screenPosition, HWND hwnd);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads every screen
@@ -81,6 +81,7 @@ public:
 	////////////////////////////////////////////////////////////
 	State getState();
 private:
+	SDL_Window* window;				//< Pointer to current window
 	glm::vec2 screenSize;			//< The current screenSize
 	glm::vec2 screenPosition;		//< The current screenPosition
 	HWND hwnd;						//< Saving the HWND for error msg boxes output

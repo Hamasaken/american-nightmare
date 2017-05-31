@@ -1,11 +1,29 @@
 #include "Camera.h"
 
-Camera::Camera() 
+Camera::Camera()
 {
+	window = nullptr;
+	screenSize = glm::vec2(0.f);
 	screenShakeActive = false;
 	isFinishing = false;
 	finishTimer = 0.f;
 	unlock = false;
+	pitch = 0.f;
+	yaw = -90.f;
+	lookUp = glm::vec3(0, 1, 0);
+	lookAt = glm::vec3(0, 0, -1);
+}
+
+Camera::Camera(SDL_Window* window, glm::vec2 screenSize)
+{
+	this->window = window;
+	this->screenSize = screenSize;
+	screenShakeActive = false;
+	isFinishing = false;
+	finishTimer = 0.f;
+	unlock = false;
+	pitch = 0.f;
+	yaw = -90.f;
 	lookUp = glm::vec3(0, 1, 0);
 	lookAt = glm::vec3(0, 0, -1);
 }
@@ -25,6 +43,7 @@ void Camera::smoothToPosition(glm::vec3 position)
 		this->position.z += (16.f - this->position.z) * CAMERA_SPEED;
 		this->lookAt.x += (0 - this->lookAt.x) * CAMERA_SPEED;
 		this->lookAt.y += (0 - this->lookAt.y) * CAMERA_SPEED * 3;
+		this->lookAt.z += (-1.f - this->lookAt.z) * CAMERA_SPEED;
 	}
 }
 
@@ -69,47 +88,70 @@ void Camera::Update(float deltaT)
 		unlock = !unlock;
 	}
 
-
 	if (unlock)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		{
-			lookAt.y += 0.01f;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		{
-			lookAt.y -= 0.01f;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			lookAt.x -= 0.05f;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-			lookAt.x += 0.05f;
-		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		{
-			position.z -= 0.25f;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		{
-			position.z += 0.25f;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		{
-			position.x -= 0.25f;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		{
-			position.x += 0.25f;
-		}
+		UpdateUnlocked(deltaT);
 	}
 	
 
 	// Updating viewMatrix
 	buildViewMatrix();
+}
+
+void Camera::UpdateUnlocked(GLint deltaT)
+{
+	int tmpX, tmpY;
+	SDL_GetMouseState(&tmpX, &tmpY);
+
+	yaw += CAMERA_MOUSE_SPEED * (tmpX - (screenSize.x * 0.5f));
+	pitch += CAMERA_MOUSE_SPEED * ((screenSize.y * 0.5f) - tmpY);
+
+	// Lock camera
+	if (pitch > 89)
+		pitch = 89;
+	if (pitch < -89)
+		pitch = -89;
+	if (yaw < 0.f)
+		yaw += 360.f;
+	if (yaw > 360.f)
+		yaw -= 360.f;
+
+	// pitch and yaw
+	glm::vec3 direction;
+	direction.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+	direction.y = sin(glm::radians(pitch));
+	direction.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+
+	lookAt = glm::normalize(direction);
+
+	// reset mouse to center
+	SDL_WarpMouseInWindow(window, screenSize.x * 0.5f, screenSize.y * 0.5f);
+
+	// keyboard movement
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	{
+		position += 2.f * CAMERA_MOUSE_SPEED * lookAt;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	{
+		position -= 2.f * CAMERA_MOUSE_SPEED * lookAt;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		position -= glm::normalize(glm::cross(lookAt, lookUp)) * CAMERA_MOUSE_SPEED * 2.f;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		position += glm::normalize(glm::cross(lookAt, lookUp)) * CAMERA_MOUSE_SPEED * 2.f;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	{
+		position += lookUp * CAMERA_MOUSE_SPEED * 2.f;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+	{
+		position += -lookUp * CAMERA_MOUSE_SPEED * 2.f;
+	}
 }
 
 void Camera::screenShake(float time, float power)

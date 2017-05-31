@@ -24,7 +24,7 @@ public:
 	// \brief Loads all needed objects, also runs SetStartVariables
 	// \return Returrns true if every object could be created
 	////////////////////////////////////////////////////////////
-	virtual bool Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager);
+	virtual bool Start(SDL_Window* window, glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager);
 	
 	////////////////////////////////////////////////////////////
 	// \brief A combined function that runs both Stop & Start
@@ -83,6 +83,7 @@ protected:
 	SoundManager* soundManager; // Sound Manager
 	State* state;
 
+	SDL_Window* window;
 	glm::vec2 screenSize;
 	glm::vec2 screenPosition;
 	glm::mat4 worldMatrix;

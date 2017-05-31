@@ -16,12 +16,13 @@ ScreenManager::ScreenManager(const ScreenManager & other) { }
 
 ScreenManager::~ScreenManager() { }
 
-bool ScreenManager::Start(glm::vec2 screenSize, glm::vec2 screenPosition, HWND hwnd)
+bool ScreenManager::Start(SDL_Window* window, glm::vec2 screenSize, glm::vec2 screenPosition, HWND hwnd)
 {
 	// Get parameters
 	this->hwnd = hwnd;
 	this->screenSize = screenSize;
 	this->screenPosition = screenPosition;
+	this->window = window;
 
 	// Checking to see how many unlocked posters we have
 	unlockedPosters.resize(10);
@@ -96,7 +97,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::Game: 
 		screenGame = new ScreenGame();
 		if (screenGame == nullptr) return false;
-		if (!screenGame->Start(screenSize, screenPosition, &currentState, soundManager))
+		if (!screenGame->Start(window, screenSize, screenPosition, &currentState, soundManager))
 		{
 			MessageBox(hwnd, L"Could not start Game Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
@@ -105,7 +106,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::StartMeny:
 		screenStart = new ScreenStart();
 		if (screenStart == nullptr) return false;
-		if (!screenStart->Start(screenSize, screenPosition, &currentState, soundManager))
+		if (!screenStart->Start(window, screenSize, screenPosition, &currentState, soundManager))
 		{
 			MessageBox(hwnd, L"Could not start Start Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
@@ -114,7 +115,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::Cutscene:
 		screenCutscene = new ScreenCutscene();
 		if (screenCutscene == nullptr) return false;
-		if (!screenCutscene->Start(screenSize, screenPosition, &currentState, soundManager))
+		if (!screenCutscene->Start(window, screenSize, screenPosition, &currentState, soundManager))
 		{
 			MessageBox(hwnd, L"Could not start Cutscene Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
@@ -123,7 +124,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::Options:
 		screenOptions = new ScreenOptions();
 		if (screenOptions == nullptr) return false;
-		if (!screenOptions->Start(screenSize, screenPosition, &currentState, soundManager))
+		if (!screenOptions->Start(window, screenSize, screenPosition, &currentState, soundManager))
 		{
 			MessageBox(hwnd, L"Could not start Options Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
@@ -132,7 +133,7 @@ bool ScreenManager::StartCurrentScreen()
 	case State::Posters:
 		screenPosters = new ScreenPosters();
 		if (screenPosters == nullptr) return false;
-		if (!screenPosters->Start(screenSize, screenPosition, &currentState, soundManager))
+		if (!screenPosters->Start(window, screenSize, screenPosition, &currentState, soundManager))
 		{
 			MessageBox(hwnd, L"Could not start Posters Screen class.", L"Woops", MB_OKCANCEL);
 			return false;

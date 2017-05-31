@@ -18,7 +18,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Loads Screen specific things like buttons/logo
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager);
+	bool Start(SDL_Window* window, glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager);
 
 	////////////////////////////////////////////////////////////
 	// \brief Unloads Screen specific things like buttons/logo

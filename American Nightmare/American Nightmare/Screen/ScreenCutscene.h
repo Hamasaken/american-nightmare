@@ -21,7 +21,7 @@ public:
 	////////////////////////////////////////////////////////////
 	// \brief Initializes every object
 	////////////////////////////////////////////////////////////
-	bool Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager);
+	bool Start(SDL_Window* window, glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager);
 
 	////////////////////////////////////////////////////////////
 	// \brief Deletes everything active on screen

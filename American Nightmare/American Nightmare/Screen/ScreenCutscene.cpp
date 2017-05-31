@@ -10,9 +10,9 @@ ScreenCutscene::ScreenCutscene(const ScreenCutscene& other) { }
 
 ScreenCutscene::~ScreenCutscene() { }
 
-bool ScreenCutscene::Start(glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager)
+bool ScreenCutscene::Start(SDL_Window* window, glm::vec2 screenSize, glm::vec2 screenPosition, State* state, SoundManager* soundManager)
 {
-	Screen::Start(screenSize, screenPosition, state, soundManager);
+	Screen::Start(window, screenSize, screenPosition, state, soundManager);
 
 	SetStartVariables();
 
