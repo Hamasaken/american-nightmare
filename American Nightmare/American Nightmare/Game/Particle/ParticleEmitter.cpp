@@ -264,33 +264,37 @@ GLuint ParticleEmitter::getShader() const { return shader; }
 ////////////////////////////////////////////////////////////
 void IncreasingParticleEmitter::SignalSmoke(glm::vec3 position, GLuint texture, float angle, glm::vec4 color, glm::vec2 size, int amount)
 {
-/*	this->position = position;
+	this->position = position;
 	this->texture = texture;
 	for (int i = 0; i < amount; i++)
 	{
 		SmokeSignal* particle = new SmokeSignal();
 		particle->Start(position, color, size, angle);
 		particles.push_back(particle);
-	} */
+	} 
 }
 
 void IncreasingParticleEmitter::SignalFire(glm::vec3 position, GLuint texture, float angle, glm::vec4 color, glm::vec2 size, int amount)
 {
-/*	this->position = position;
+	this->position = position;
 	this->texture = texture;
 	for (int i = 0; i < amount; i++)
 	{
 	//	FireParticle* particle = new FireParticle;
 	//	particle->Start(position, color, size, angle);
 	//	particles.push_back(particle);
-	} */
+	} 
 }
 
 void IncreasingParticleEmitter::Update(GLfloat deltaT, glm::vec2 playerPos)
 {
 	// Updating particles and checking if they are dead or not
-/*	for (int i = 0; i < particles.size(); i++)
+	for (int i = 0; i < particles.size(); i++)
+	{
 		particles[i]->Update(deltaT);
-	
-	MakeVertices(); */
+	}
+
+	// Only makes vertices if not completed
+	if (!isComplete)
+		MakeVertices();
 }

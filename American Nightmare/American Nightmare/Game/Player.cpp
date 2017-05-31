@@ -45,7 +45,7 @@ bool Player::Start(const MeshManager::Mesh* mesh, const MaterialManager::Materia
 	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(PLAYER_SIZE_X * 0.45f, PLAYER_SIZE_Y * 0.9f, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, PLAYER_MASS, PLAYER_FRICTION);
 
 	// Set default keys
-	RebindKeys(KEY_LEFT, KEY_RIGHT, KEY_JUMP, KEY_HOVER, KEY_DASH);
+	RebindKeys(KEY_LEFT, KEY_RIGHT, KEY_JUMP, KEY_HOVER, KEY_DASH, KEY_SHOCK);
 
 	// Setting starting variables
 	hp = PLAYER_HP;
@@ -200,13 +200,14 @@ void Player::Reset()
 	contactWithEnemy = nullptr;
 }
 
-void Player::RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash)
+void Player::RebindKeys(sf::Keyboard::Key key_left, sf::Keyboard::Key key_right, sf::Keyboard::Key key_jump, sf::Keyboard::Key key_hover, sf::Keyboard::Key key_dash, sf::Keyboard::Key key_shock)
 {
 	this->key_left = key_left;
 	this->key_right = key_right;
 	this->key_jump = key_jump;
 	this->key_hover = key_hover;
 	this->key_dash = key_dash;
+	this->key_shock = key_shock;
 }
 
 void Player::TakeDamage(float dmg)
@@ -570,12 +571,7 @@ void Player::InputTesting()
 }
 
 void Player::InputMouse() 
-{
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle) && !hasJumped && power >= PLAYER_POWER_COST_SHOCKWAVE)
-	{
-		Shockwave();
-	}
-}
+{ }
 
 void Player::InputKeyboard(GLint deltaT)
 {
@@ -603,6 +599,11 @@ void Player::InputKeyboard(GLint deltaT)
 		Hover(deltaT);
 	}
 	else isHovering = false;
+
+	if (sf::Keyboard::isKeyPressed(key_shock) && !hasJumped && power >= PLAYER_POWER_COST_SHOCKWAVE)
+	{
+		Shockwave();
+	}
 }
 
 void Player::InputController(GLint deltaT)                          
@@ -614,7 +615,7 @@ void Player::InputController(GLint deltaT)
 		if (sf::Joystick::isButtonPressed(0, BTN_X) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) {Hover(deltaT);} // Hover
 		else isHovering = false;
 
-		if (sf::Joystick::isButtonPressed(0, BTN_Y) && power >= PLAYER_POWER_COST_SHOCKWAVE) {Shockwave();} // schockwave
+		if (sf::Joystick::isButtonPressed(0, BTN_Y) && power >= PLAYER_POWER_COST_SHOCKWAVE) Shockwave(); // schockwave
 		
 		if (sf::Joystick::isButtonPressed(0, BTN_LB)) // Reload the gun
 			printf("LB.\n");

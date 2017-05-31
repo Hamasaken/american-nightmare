@@ -546,7 +546,7 @@ void ScreenGame::UpdatePaused(GLint deltaT)
 	}
 
 	// Unpause
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P) || sf::Joystick::isButtonPressed(0,6)) Pause();
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape) || sf::Joystick::isButtonPressed(0,6)) Pause();
 }
 
 void ScreenGame::UpdatePlaying(GLint deltaT)
@@ -557,7 +557,7 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::I))
 		particleManager->EffectSmokeCloud(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 8);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::O))
-		particleManager->EffectMusicLines(levelManager->getPlayer()->getPosition(), 0);
+		particleManager->EffectSmokeSignal(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), glm::pi<float>() * 0.5f, 25);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K))
 		particleManager->EffectNutsAndBolts(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("boltmaterial")->getTextureID(), 5);
 
@@ -600,7 +600,8 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 		bars[0][i]->Update(deltaT);
 
 	// Check if user is pausing
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P) || sf::Joystick::isButtonPressed(0,6)) Pause();
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape) || sf::Joystick::isButtonPressed(0,6)) Pause();
 
 	// If we have finished the level or not
 	if (levelManager->getNextLevelTrigger())

@@ -11,7 +11,7 @@
 #include <SDL_opengl.h>
 #include <Windows.h>
 
-#define START_STATE 0 // 0 = Game, 1 = Startmeny
+#define START_STATE 1 // 0 = Game, 1 = Startmeny
 
 class ScreenManager
 {

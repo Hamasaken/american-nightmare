@@ -9,7 +9,7 @@ Enemy::~Enemy() { }
 bool Enemy::Start(const MeshManager::Mesh* mesh, const MaterialManager::Material* material, b2World* world)
 {
 	// Starting entity variables (including hitbox)
-	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, ENEMY_MASS, ENEMY_FRICTION);
+	Entity::Start(mesh, material, world, glm::vec2(0, 20), glm::vec3(ENEMY_SIZE_X * 0.7, ENEMY_SIZE_Y * 1.f, 1.f), b2_dynamicBody, b2Shape::e_polygon, true, ENEMY_MASS, ENEMY_FRICTION);
 
 	// Setting starting variables
 	position = glm::vec3(0, 0, 0);
