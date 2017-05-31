@@ -473,6 +473,7 @@ void Player::Dash(sf::Keyboard::Key inKey)
 				else
 					angle = glm::pi<float>();
 
+				hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, 0.f));
 				hitbox->getBody()->ApplyLinearImpulseToCenter(b2Vec2((sin(angle) * PLAYER_DASH_VEL) * 0.25, (cos(angle) * PLAYER_DASH_VEL) * 0.25), true);
 			}
 			else
