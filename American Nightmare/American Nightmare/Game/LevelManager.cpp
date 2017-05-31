@@ -20,11 +20,21 @@ LevelManager::~LevelManager() { }
 bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playerShader, GLuint mapShader, GLuint guiShader, MaterialManager* materialManager, MeshManager* meshManager, ParticleManager* particleManager, SoundManager* soundManager, Camera* camera)
 {
 	// Refresh rate of current monitor for b2world->Step()
-	/*DEVMODE* displaySettings;
-	memset(&displaySettings, 1, sizeof(DEVMODE));
-	displaySettings->dmSize = sizeof(DEVMODE);
-	displaySettings->dmDriverExtra = 0;
-	EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, displaySettings);*/
+	DEVMODE displaySettings;
+	ZeroMemory(&displaySettings, sizeof(DEVMODE));
+	displaySettings.dmSize = sizeof(DEVMODE);
+	displaySettings.dmDriverExtra = 0;
+	
+	/* int i = 0; 
+	while (EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &displaySettings))
+	{
+		printf("Screen Display Setting number: %d, with refresh rate: %d and size: %d, %d\n", i, displaySettings.dmDisplayFrequency, displaySettings.dmPelsWidth, displaySettings.dmPelsHeight);
+		i++;
+	} */
+	
+	EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &displaySettings);
+	displayRefresh = displaySettings.dmDisplayFrequency;
+	printf("Current display: with refresh rate: %d and size: %d, %d\n", displaySettings.dmDisplayFrequency, displaySettings.dmPelsWidth, displaySettings.dmPelsHeight);
 
 	// Getting parameters
 	this->materialManager = materialManager;
@@ -276,7 +286,7 @@ void LevelManager::Update(GLint deltaT)
 {
 	// Updating physics
 	//world->Step(deltaT * 0.001f, 10, 10);
-	world->Step(1.f / 60.f, 10, 10);
+	world->Step(1.f / displayRefresh, 10, 10);
 
 	// Updating player
 	player->Update(deltaT, world);
