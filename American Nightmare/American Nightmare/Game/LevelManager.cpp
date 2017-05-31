@@ -414,7 +414,8 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	player->setStartingPosition(start);
 
 	// Music
-	soundManager->playSong(SoundManager::SONG::JAZZY_INTERLUDE);
+//	soundManager->playSong(SoundManager::SONG::JAZZY_INTERLUDE);
+	soundManager->playSong(SoundManager::SONG::SING_SING_SING);
 	soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BIRDS, 90.f, 0);
 	
 	// Dust effect

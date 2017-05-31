@@ -90,7 +90,7 @@ void Player::Update(GLint deltaT, b2World* world)
 	}
 	else //This is for the mouse
 	{
-		this->fireDirection = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y - 150), screenSize, screenPos);
+		this->fireDirection = fromScreenToNDC(glm::vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y - (screenSize.y * 0.20834)), screenSize, screenPos);
 		this->fireDirection = glm::normalize(fireDirection);
 	}
 

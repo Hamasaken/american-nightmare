@@ -53,7 +53,8 @@ public:
 		GOOD_ROCKIN_TONIGHT, 
 		JAZZY_INTERLUDE, 
 		RHYTM_FOR_YOU,
-		MOSCOW_MULE
+		MOSCOW_MULE, 
+		SING_SING_SING
 	};
 
 	SoundManager();
