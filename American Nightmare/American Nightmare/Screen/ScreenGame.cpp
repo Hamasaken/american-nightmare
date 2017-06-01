@@ -560,9 +560,6 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	if (!camera->getUnlocked())
 	{
-		uiManager->setCenter(glm::vec2(0, 0));
-		guiManager->setCenter(glm::vec2(0, 2));
-
 		// Particle Managare Testing
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
 			particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.60f, 0.80f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
@@ -584,7 +581,13 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 		// Updating UI presses
 		uiManager->Update(deltaT);
-		if (levelManager->getPlayer()->getIsDead()) uiManager->setCenter(glm::vec2(0, 2));
+		
+		// Check if player is dead, if so, move ui
+		if (levelManager->getPlayer()->getIsDead())
+			uiManager->setCenter(glm::vec2(0, 2));
+		else 
+			uiManager->setCenter(glm::vec2(0, 0));
+		
 		std::vector<std::pair<Button*, GUIManager::Action>>* buttons = uiManager->getButtonList();
 		for (int i = 0; i < buttons->size(); i++)
 		{
@@ -625,7 +628,6 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 	}
 	else
 	{
-		guiManager->setInstantCenter(glm::vec2(0, -5));
 		uiManager->setInstantCenter(glm::vec2(0, 5));
 	}
 }
