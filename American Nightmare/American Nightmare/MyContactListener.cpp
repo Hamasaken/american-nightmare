@@ -72,7 +72,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 				soundManager->playSFXOverDrive(SoundManager::SFX_SUCTION, 40, 0.15f);
 			}
 			float angle = getAngleFromTwoPoints(projectile->getPosition(), player->getPosition());
-			if (angle < 0 && angle > -3.14) {
+			if (sin(angle) < 0.f) {
 				player->setHasJumped(false);
 			}
 		}
@@ -80,7 +80,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		{
 			player->setContactWithEnemy(enemy);
 			float angle = getAngleFromTwoPoints(enemy->getPosition(), player->getPosition());
-			if (angle < 0 && angle > -3.14) player->setHasJumped(false);
+			if (sin(angle) < 0.f) player->setHasJumped(false);
 		}
 		else if (vacuum)
 		{
@@ -89,12 +89,12 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		else if (entity)
 		{
 			float angle = getAngleFromTwoPoints(entity->getPosition(), player->getPosition());
-			if (angle < 0 && angle > -3.14) player->setHasJumped(false);
+			if (sin(angle) < 0.f) player->setHasJumped(false);
 		}
 		else if (hitbox)
 		{
 			float angle = getAngleFromTwoPoints(glm::vec3(hitbox->getPosition(), 0), player->getPosition());
-			if (angle < 0 && angle > -3.14) player->setHasJumped(false);
+			if (sin(angle) < 0.f) player->setHasJumped(false);
 		}
 	}
 	else
