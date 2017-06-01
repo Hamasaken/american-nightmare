@@ -525,6 +525,11 @@ void Player::Shockwave()
 		particleManager->EffectSmokeCloud(position, 0, 5, glm::vec4(0.35f), 2.0f);
 		particleManager->EffectExplosionLights(position, 12, glm::vec4(0.85), randBetweenF(0.25f, 0.75f));
 		particleManager->EffectExplosionLights(position, 12, glm::vec4(0.35), randBetweenF(0.45f, 0.90f));
+		particleManager->EffectNutsAndBolts(position, -1, 10, 0.1f);
+
+		for (int i = 0; i < 8; i++)
+			particleManager->EffectSmokeCloud(position + glm::vec3(randBetweenF(-4.f, 4.f), randBetweenF(-4.f, 4.f), 0), 0, 6, glm::vec4(randBetweenF(0.1, 1.f)), randBetweenF(0.40, 1.5));
+
 		b2Vec2 pos;
 		float angle = 0.f;
 		b2ContactEdge* contact = vac->getBody()->GetContactList();

@@ -141,6 +141,14 @@ void MyContactListener::BeginContact(b2Contact* contact)
 						soundManager->playSFXOverDrive(SoundManager::SFX_DEATH, 50, 0.0f);
 						particleManager->EffectExplosionLights(enemy->getPosition(), 15, glm::vec4(0.5f, 0.05f, 0.05f, 1.f), randBetweenF(0.4f, 0.8f));
 						particleManager->EffectBloodCloud(enemy->getPosition(), 10, glm::vec4(1.f), randBetweenF(1.f, 1.75f));
+						particleManager->EffectBloodCloud(enemy->getPosition() + glm::vec3(randBetweenF(-2.f, 2.f), randBetweenF(-2.f, 2.f), 0), 6, glm::vec4(1.f), randBetweenF(0.45, 0.9));
+						particleManager->EffectBloodCloud(enemy->getPosition() + glm::vec3(randBetweenF(-2.f, 2.f), randBetweenF(-2.f, 2.f), 0), 6, glm::vec4(1.f), randBetweenF(0.45, 0.9));
+						particleManager->EffectBloodCloud(enemy->getPosition() + glm::vec3(randBetweenF(-2.f, 2.f), randBetweenF(-2.f, 2.f), 0), 6, glm::vec4(1.f), randBetweenF(0.45, 0.9));
+						particleManager->EffectBloodCloud(enemy->getPosition() + glm::vec3(randBetweenF(-2.f, 2.f), randBetweenF(-2.f, 2.f), 0), 6, glm::vec4(1.f), randBetweenF(0.45, 0.9));
+						particleManager->EffectBloodCloud(enemy->getPosition() + glm::vec3(randBetweenF(-2.f, 2.f), randBetweenF(-2.f, 2.f), 0), 6, glm::vec4(1.f), randBetweenF(0.45, 0.9));
+						particleManager->EffectBloodCloud(enemy->getPosition() + glm::vec3(randBetweenF(-2.f, 2.f), randBetweenF(-2.f, 2.f), 0), 6, glm::vec4(1.f), randBetweenF(0.45, 0.9));
+						particleManager->EffectBloodCloud(enemy->getPosition() + glm::vec3(randBetweenF(-2.f, 2.f), randBetweenF(-2.f, 2.f), 0), 6, glm::vec4(1.f), randBetweenF(0.45, 0.9));
+						particleManager->EffectBloodCloud(enemy->getPosition() + glm::vec3(randBetweenF(-2.f, 2.f), randBetweenF(-2.f, 2.f), 0), 6, glm::vec4(1.f), randBetweenF(0.45, 0.9));
 					}
 				}
 			}
