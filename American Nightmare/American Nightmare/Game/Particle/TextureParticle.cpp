@@ -75,6 +75,40 @@ void SmokeParticle::Update(GLfloat deltaT)
 	vertex.setRotation(rotation);
 }
 
+
+void SmokePuff::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size, float angle, float strength)
+{
+	// Setting parameters
+	isDead = false;
+	vertex.setPosition(position);
+	vertex.setColor(color);
+	vertex.setSize(size);
+	vertex.setRotation(0.f);
+
+	// Setting some random variables
+	lifeTime = TEXTURE_LIFETIME / 4;
+	lifeTimeStart = lifeTime;
+	velocity = glm::vec3(cos(angle + randBetweenF(-0.35f, 0.35f)) * strength / 1.5f, sin(angle + randBetweenF(-0.35f, 0.35f)) * strength / 1.5f, TEXTURE_VELOCITY);
+}
+
+void SmokePuff::Update(GLfloat deltaT)
+{
+	// Makes color alpha with the rest of lifetime
+	float alpha = (lifeTime - lifeTimeStart / 1.5f) / lifeTimeStart;
+	vertex.a = (alpha)* TEXTURE_BLENDING;
+
+	// Removes from lifetime and checks if particle is dead
+	lifeTime -= deltaT;
+	if (lifeTime < NULL)
+		isDead = true;
+
+	// Adds velocity fall-off for realistic effect
+	velocity += (glm::vec3(0, 0, 0) - velocity) * TEXTURE_VELOCITY_FALL_OFF;
+
+	// Moves the particle with velocity and frametime
+	vertex.setPosition(glm::vec3(vertex.x, vertex.y, vertex.z) + velocity * deltaT);
+}
+
 void SmokeSignal::Reset()
 {
 	// Setting some random variablesr

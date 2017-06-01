@@ -294,6 +294,7 @@ void LevelManager::Update(GLint deltaT)
 	if (player->getIsDashing()) 
 	{
 		camera->screenShake(300.f, 0.5f);
+	//	particleManager->EffectSmokeInDirection(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), (player->getIsFacingRight()) ? 180 : 0);
 		particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 15, glm::vec4(0.85f));
 	}
 	if (player->getIsHovering()) 
