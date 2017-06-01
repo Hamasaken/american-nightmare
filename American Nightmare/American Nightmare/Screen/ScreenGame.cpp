@@ -269,7 +269,6 @@ void ScreenGame::Draw()
 	glEnable(GL_DEPTH_TEST);
 	for (ParticleEmitter* emitter : *particleManager->getEmitters())
 		DrawParticles(emitter, shaderManager);
-	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 
 	// Drawing gui Manager if we're paused
