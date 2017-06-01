@@ -50,6 +50,7 @@
 #define INGAME_FONT "Steelworks.ttf"
 #define OPTIONS_FONT "framd.ttf"
 #define TITLE_FONT "Steelworks.ttf"
+#define POPUP_FONT "404ERROR.ttf"
 
 // Returns the angle in radians
 float getAngleFromTwoPoints(glm::vec3 p1, glm::vec3 p2);
