@@ -560,6 +560,9 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	if (!camera->getUnlocked())
 	{
+		uiManager->setCenter(glm::vec2(0, 0));
+		guiManager->setCenter(glm::vec2(0, 2));
+
 		// Particle Managare Testing
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
 			particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.60f, 0.80f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
@@ -620,7 +623,11 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 				printf("Next level loaded");
 		}
 	}
-	
+	else
+	{
+		guiManager->setInstantCenter(glm::vec2(0, -5));
+		uiManager->setInstantCenter(glm::vec2(0, 5));
+	}
 }
 
 void ScreenGame::UpdatePausing(GLint deltaT)

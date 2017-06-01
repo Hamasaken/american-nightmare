@@ -7,7 +7,6 @@ ScreenManager::ScreenManager()
 	// Setting every screen as nullptrs
 	screenGame = nullptr;
 	screenStart = nullptr;
-	screenCutscene = nullptr;
 	screenOptions = nullptr;
 	screenPosters = nullptr;
 }
@@ -62,13 +61,6 @@ void ScreenManager::Stop()
 		screenStart = nullptr;
 	}
 
-	if (screenCutscene != nullptr)
-	{
-		screenCutscene->Stop();
-		delete screenCutscene;
-		screenCutscene = nullptr;
-	}
-
 	if (screenOptions != nullptr)
 	{
 		screenOptions->Stop();
@@ -109,15 +101,6 @@ bool ScreenManager::StartCurrentScreen()
 		if (!screenStart->Start(window, screenSize, screenPosition, &currentState, soundManager))
 		{
 			MessageBox(hwnd, L"Could not start Start Screen class.", L"Woops", MB_OKCANCEL);
-			return false;
-		}
-		break;
-	case State::Cutscene:
-		screenCutscene = new ScreenCutscene();
-		if (screenCutscene == nullptr) return false;
-		if (!screenCutscene->Start(window, screenSize, screenPosition, &currentState, soundManager))
-		{
-			MessageBox(hwnd, L"Could not start Cutscene Screen class.", L"Woops", MB_OKCANCEL);
 			return false;
 		}
 		break;
@@ -162,14 +145,6 @@ void ScreenManager::StopScreen(State state)
 			screenStart->Stop();
 			delete screenStart;
 			screenStart = nullptr;
-		}
-		break;
-	case State::Cutscene:
-		if (screenCutscene != nullptr)
-		{
-			screenCutscene->Stop();
-			delete screenCutscene;
-			screenCutscene = nullptr;
 		}
 		break;
 	case State::Options:
@@ -222,14 +197,12 @@ void ScreenManager::Update(GLint deltaT)
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F2) || sf::Joystick::isButtonPressed(0, 7)) { goToState(StartMeny);}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F3)) { goToState(Options); }
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F4)) {goToState(Posters);}
-//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F5))	{ goToState(Cutscene); }
 
 	prevState = currentState;
 	switch (currentState)
 	{
 		case State::Game: screenGame->Update(deltaT); break;
 		case State::StartMeny: screenStart->Update(deltaT); break;
-		case State::Cutscene: screenCutscene->Update(deltaT); break;
 		case State::Options: screenOptions->Update(deltaT); break;
 		case State::Posters: screenPosters->Update(deltaT); break;
 	}
@@ -250,7 +223,6 @@ void ScreenManager::Draw(SDL_Window* window, glm::vec4 color)
 	{
 		case State::Game: screenGame->Draw(); break;
 		case State::StartMeny: screenStart->Draw(); break;
-		case State::Cutscene: screenCutscene->Draw(); break;
 		case State::Options: screenOptions->Draw(); break;
 		case State::Posters: screenPosters->Draw(); break;
 	}
@@ -267,7 +239,6 @@ void ScreenManager::UpdateScreenProperties(glm::vec2 screenSize, glm::vec2 scree
 	{
 		case State::Game: screenGame->UpdateScreenProperties(screenSize, screenPos); break;
 		case State::StartMeny: screenStart->UpdateScreenProperties(screenSize, screenPos); break;
-		case State::Cutscene: screenCutscene->UpdateScreenProperties(screenSize, screenPos); break;
 		case State::Options: screenOptions->UpdateScreenProperties(screenSize, screenPos); break;
 		case State::Posters: screenPosters->UpdateScreenProperties(screenSize, screenPos); break;
 	}

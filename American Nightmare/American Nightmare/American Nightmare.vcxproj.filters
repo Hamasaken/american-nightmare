@@ -123,9 +123,6 @@
     <ClCompile Include="Game\GUI\Button.cpp">
       <Filter>Source Files\Game\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Screen\ScreenCutscene.cpp">
-      <Filter>Source Files\Screen</Filter>
-    </ClCompile>
     <ClCompile Include="Screen\Rendering\DeferredRendering.cpp">
       <Filter>Source Files\Screen\Rendering</Filter>
     </ClCompile>
@@ -259,9 +256,6 @@
     </ClInclude>
     <ClInclude Include="Game\GUI\Button.h">
       <Filter>Header Files\Game\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Screen\ScreenCutscene.h">
-      <Filter>Header Files\Screen</Filter>
     </ClInclude>
     <ClInclude Include="Game\GUI\Text.h">
       <Filter>Header Files\Game\GUI</Filter>

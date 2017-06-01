@@ -4,7 +4,6 @@
 #include "ScreenGame.h"
 #include "ScreenStart.h"
 #include "ScreenPosters.h"
-#include "ScreenCutscene.h"
 #include "ScreenOptions.h"
 #include "../SoundManager.h"
 #include <SDL.h>
@@ -88,7 +87,6 @@ private:
 	SoundManager* soundManager;		//< Manages the sfx and music
 	ScreenGame* screenGame;			//< The game screen
 	ScreenStart* screenStart;		//< The start meny screen
-	ScreenCutscene* screenCutscene; //< The screen for cutscenes
 	ScreenOptions* screenOptions;	//< The screen for the options
 	ScreenPosters* screenPosters;	//< The screen for posters
 };
