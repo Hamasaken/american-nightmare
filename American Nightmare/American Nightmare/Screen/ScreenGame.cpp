@@ -162,7 +162,7 @@ void ScreenGame::SetStartVariables(std::string levelPath, std::string archivePat
 	// flyttade upp till start functionen
 	if (levelManager->getLightManager()->getDirectionalLightList().size() > 0)
 	{
-		shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], glm::vec3(5.f, 5.f, -10.f), glm::vec2(screenSize.x * 0.5, screenSize.y * 0.5), glm::vec2(60, 30), 5.f, 40);
+		shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[0], glm::vec3(5.f, 5.f, -10.f), glm::vec2(screenSize.x, screenSize.y), glm::vec2(60, 30), 5.f, 40);
 		//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[1], screenSize, glm::vec2(60, 30), -30.f, 50);
 		//shadowManager.AddDirectional(levelManager->getLightManager()->getDirectionalLightList()[2], screenSize, glm::vec2(60, 30), -30.f, 50);
 		//shadowManager.AddPoint(levelManager->getLightManager()->getPointLightList()[1], glm::vec2(256, 256), 45, 0.1f);
@@ -422,7 +422,6 @@ void ScreenGame::DrawShadowMaps()
 
 		//glCullFace(GL_FRONT);
 		
-
 		float playerX = levelManager->getPlayer()->getPosition().x;
 
 		// Drawing shadowmap
