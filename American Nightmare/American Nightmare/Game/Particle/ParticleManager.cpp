@@ -82,6 +82,24 @@ void ParticleManager::EffectSmokeCloud(glm::vec3 position, GLuint texture, int a
 	emitters.push_back(emitter);
 }
 
+void ParticleManager::EffectSmokeInDirection(glm::vec3 position, GLuint texture, float angle, float strength, int amount, glm::vec4 color, float size)
+{
+	// Creating a emmiter with a specific type
+	ParticleEmitter* emitter = new ParticleEmitter();
+	emitter->setType(ParticleType::TEXTURE);
+	emitter->setShader(getShaderFromPair(emitter->getType()));
+
+	// Checking if caller can't reach material manager
+	GLuint finalTexture = texture;
+	if (finalTexture == 0)
+		finalTexture = smokeTexture;
+
+	// Creating particles with inputted variables into emitter
+	glm::vec2 s(size, size);
+	emitter->SmokeInDir(position, finalTexture, angle, strength, color, s, amount);
+	emitters.push_back(emitter);
+}
+
 void ParticleManager::EffectBloodCloud(glm::vec3 position, int amount, glm::vec4 color, float size)
 {
 	// Creating a emmiter with a specific type

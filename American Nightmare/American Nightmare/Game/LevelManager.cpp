@@ -294,6 +294,7 @@ void LevelManager::Update(GLint deltaT)
 	if (player->getIsDashing()) 
 	{
 		camera->screenShake(300.f, 0.5f);
+	//	particleManager->EffectSmokeInDirection(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), (player->getIsFacingRight()) ? 180 : 0);
 		particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 15, glm::vec4(0.85f));
 	}
 	if (player->getIsHovering()) 
@@ -426,7 +427,7 @@ bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
 	soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BIRDS, 90.f, 0);
 	
 	// Dust effect
-	particleManager->EffectLightDust(glm::vec3(0, 10, 0));
+	particleManager->EffectLightDust(glm::vec3(50, 7.5, 0), glm::vec3(100, 15, 0), 125, glm::vec4(0.67f), 0.07f);
 
 	// Temp directional light for shadows
 	//lightManager->AddDirectionalLight(glm::vec4(5, 20, 10, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);

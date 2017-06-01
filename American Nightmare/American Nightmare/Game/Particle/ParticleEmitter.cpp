@@ -48,6 +48,18 @@ void ParticleEmitter::SmokeCloud(glm::vec3 position, GLuint texture, glm::vec4 c
 	} 
 }
 
+void ParticleEmitter::SmokeInDir(glm::vec3 position, GLuint texture, float angle, float strength, glm::vec4 color, glm::vec2 size, int amount)
+{
+	this->position = position;
+	this->texture = texture;
+	for (int i = 0; i < amount; i++)
+	{
+		SmokePuff* particle = new SmokePuff;
+		particle->Start(position, color, size, angle, strength);
+		particles.push_back(particle);
+	}
+}
+
 void ParticleEmitter::NutsAndBolts(glm::vec3 position, GLuint texture, glm::vec2 size, int amount)
 {
 	this->position = position;

@@ -52,6 +52,21 @@ public:
 		float size = TEXTURE_SIZE);
 
 	////////////////////////////////////////////////////////////
+	// \brief Creates an explosion with given texture and in a direction
+	// \param position The position of impact
+	// \param texture The texture of each pixels (smoke/blood/whatevs)
+	// \param angle The direction of the most blood splatter
+	// \optional strength The power of the impact (defaults as 0.5f)
+	// \optional amount The amount of spawned blood particles
+	// \optional color The color of the most blood
+	////////////////////////////////////////////////////////////
+	void EffectSmokeInDirection(glm::vec3 position, GLuint texture, float angle,
+		float strength = 0.01,
+		int amount = BLOOD_DEFAULT_AMOUNT,
+		glm::vec4 color = TEXTURE_DEFAULT_COLOR,
+		float size = TEXTURE_SIZE);
+
+	////////////////////////////////////////////////////////////
 	// \brief Creates an explosion with blood
 	// \param position The position of explosion
 	// \optional amount The amount of spawned blood particles

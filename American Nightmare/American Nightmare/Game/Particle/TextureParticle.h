@@ -85,6 +85,12 @@ private:
 	float startOffset;
 };
 
+class SmokePuff : public TextureParticle
+{
+public:
+	void Start(glm::vec3 position, glm::vec4 color, glm::vec2 size, float angle, float strength);
+	void Update(GLfloat deltaT);
+};
 
 class NutsAndBolt : public TextureParticle
 {
