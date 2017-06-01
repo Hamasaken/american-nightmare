@@ -599,7 +599,10 @@ void Player::InputKeyboard(GLint deltaT)
 	{
 		Hover(deltaT);
 	}
-	else isHovering = false;
+	else {
+		isHovering = false;
+		soundManager->stopSFX(SoundManager::SFX_HOVER);
+	}
 
 	if (sf::Keyboard::isKeyPressed(key_shock) && !hasJumped && power >= PLAYER_POWER_COST_SHOCKWAVE)
 	{
@@ -614,7 +617,10 @@ void Player::InputController(GLint deltaT)
 		if (sf::Joystick::isButtonPressed(0, BTN_A)) Jump(); //Jump
 
 		if (sf::Joystick::isButtonPressed(0, BTN_X) && power >= deltaT * 0.001 * PLAYER_POWER_COST_HOVER) {Hover(deltaT);} // Hover
-		else isHovering = false;
+		else {
+			isHovering = false;
+			soundManager->stopSFX(SoundManager::SFX_HOVER);
+		}
 
 		if (sf::Joystick::isButtonPressed(0, BTN_Y) && power >= PLAYER_POWER_COST_SHOCKWAVE) Shockwave(); // schockwave
 		

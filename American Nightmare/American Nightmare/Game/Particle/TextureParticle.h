@@ -21,10 +21,10 @@
 #define SMOKE_TEXTURE_ALPHA			randBetweenF(0.025f, 0.10f)
 
 // TEXTURE SMOKE SIGNAL DEFAULTS
-#define SIGNAL_LIFETIME				randBetweenF(1500.f, 3000.f)
-#define SIGNAL_DEFAULT_SIZE			randBetweenF(1.f, 1.25f)
+#define SIGNAL_LIFETIME				randBetweenF(1500.f, 2800.f)
+#define SIGNAL_DEFAULT_SIZE			randBetweenF(0.80f, 1.10f)
 #define SIGNAL_DEFAULT_AMOUNT		25
-#define SIGNAL_DEFAULT_VELOCITY		randBetweenF(0.f, 0.0080f)
+#define SIGNAL_DEFAULT_VELOCITY		randBetweenF(0.f, 0.0060f)
 #define SIGNAL_SIZE_MULTIPLIER		0.935f
 
 // NUTS AND BOLTS DEFAULTS
