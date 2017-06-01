@@ -493,7 +493,6 @@ void Player::Dash(sf::Keyboard::Key inKey)
 void Player::Hover(GLint deltaT)
 {
 	static float yPos;
-	soundManager->playModifiedSFX(SoundManager::SFX_HOVER, 30, 0.01);
 
 	if (isHovering)
 	{
@@ -501,6 +500,7 @@ void Player::Hover(GLint deltaT)
 		hitbox->getBody()->SetLinearVelocity(b2Vec2(hitbox->getBody()->GetLinearVelocity().x, 0.f));
 		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
 		powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
+		soundManager->playModifiedSFX(SoundManager::SFX_HOVER, 30, 0.01);
 	}
 	else if (hasJumped)
 	{
@@ -509,6 +509,7 @@ void Player::Hover(GLint deltaT)
 		hitbox->getBody()->SetTransform(b2Vec2(hitbox->getBody()->GetPosition().x, yPos), 0.f);
 		power -= deltaT * 0.001 * PLAYER_POWER_COST_HOVER;
 		powerRefillCD = PLAYER_POWER_RECHARGE_COOLDOWN;
+		soundManager->playModifiedSFX(SoundManager::SFX_HOVER, 30, 0.01);
 	}
 }
 
