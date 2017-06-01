@@ -131,6 +131,8 @@ void MyContactListener::BeginContact(b2Contact* contact)
 					particleManager->EffectBloodSplatter(enemy->getPosition(), getAngleFromTwoPoints(bodyA->getCenter(), bodyB->getCenter()), 0.08f, 25);
 					soundManager->playSFXOverDrive(SoundManager::SFX_HIT, 40, 0.1f);
 					enemy->TakeDamage(enemy->getDamage());
+					glm::vec4 color = projectile->getIsZombiePart() ? glm::vec4(0.4f, 0.05f, 0.05f, 1.f) : glm::vec4(0.3f);
+					particleManager->EffectBloodSplatter(projectile->getPosition(), getAngleFromTwoPoints(bodyB->getCenter(), bodyA->getCenter()), 0.045, 10, color, randBetweenF(0.3f, 0.5));
 					if (enemy->getIsDead())
 					{
 						if (enemy == player->getContactWithEnemy())
