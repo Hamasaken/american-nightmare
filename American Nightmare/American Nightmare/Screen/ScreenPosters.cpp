@@ -127,7 +127,7 @@ void ScreenPosters::SetStartVariables()
 	particleManager->EffectConstantSmoke(glm::vec3(-2, 1.25, 12.5f), materialManager->getTextureID("smoketexture"), 10, glm::vec4(0.8));
 
 	// Dust effect
-	particleManager->EffectLightDust(glm::vec3(0.f, 3, 0.f), glm::vec3(8, 8, 2), 40, glm::vec4(0.33f));
+	particleManager->EffectLightDust(glm::vec3(0.f, 3, 0.f), glm::vec3(10, 6, 2), 25, glm::vec4(0.90f), 0.07f);
 }
 
 void ScreenPosters::Update(GLint deltaT)
