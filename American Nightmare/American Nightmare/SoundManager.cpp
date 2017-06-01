@@ -183,21 +183,21 @@ void SoundManager::mute()
 		stopSFX(SFX(nrOfMusicPlayingCurrently));
 		pauseMusic();
 		this->volumeMusic = 0;
-		this->volumeEffect = 0;
-		listener.setGlobalVolume(0);
+	//	this->volumeEffect = 0;
+	//	listener.setGlobalVolume(0);
 	}
 	else
 	{
 		this->volumeMusic = VOLUME_MUSIC;
-		this->volumeEffect = VOLUME_SFX;
+	//	this->volumeEffect = VOLUME_SFX;
 		listener.setGlobalVolume(100);
 		continueMusic();
 	}
 
 	for (sf::Music& m : song)
 		m.setVolume(volumeMusic);
-	for (sf::Sound& s : sfx)
-		s.setVolume(volumeEffect);
+//	for (sf::Sound& s : sfx)
+//		s.setVolume(volumeEffect);
 }
 
 int SoundManager::getVolumeMusic() const { return volumeMusic; }
