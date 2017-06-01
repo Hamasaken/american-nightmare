@@ -185,16 +185,16 @@ void NutsAndBolt::Start(glm::vec3 position, glm::vec4 color, glm::vec2 size)
 
 	// Setting some random variables
 	lifeTime = NUTS_LIFETIME;
-	rotationSpeed = NUTS_ROTATION;
+	rotationSpeed = NUTS_ROTATION * 2;
 	lifeTimeStart = lifeTime;
-	velocity = glm::vec3(NUTS_VELOCITY, NUTS_VELOCITY, randBetweenF(-0.035f, 0.035f));
+	velocity = glm::vec3(NUTS_VELOCITY, NUTS_VELOCITY, randBetweenF(-0.025f, 0.025f));
 }
 
 void NutsAndBolt::Update(GLfloat deltaT)
 {
 	// Makes color alpha with the rest of lifetime
-	float alpha = lifeTime / lifeTimeStart;
-	vertex.a = (alpha);
+	float alpha = (lifeTime - lifeTimeStart / 1.5f) / lifeTimeStart;
+	vertex.a = (alpha)* TEXTURE_BLENDING;
 
 	// Removes from lifetime and checks if particle is dead
 	lifeTime -= deltaT;
@@ -202,7 +202,7 @@ void NutsAndBolt::Update(GLfloat deltaT)
 		isDead = true;
 
 	// Adds velocity fall-off for realistic effect
-	rotationSpeed += (0.f - rotationSpeed) * (NUTS_ROTATION_FALL_OFF);
+	rotationSpeed += (0.f - rotationSpeed) * (NUTS_ROTATION_FALL_OFF / 3);
 	velocity += (glm::vec3(0, -0.0450, 0) - velocity) * NUTS_VELOCITY_FALL_OFF;
 
 	rotation += rotationSpeed * deltaT;
