@@ -203,7 +203,7 @@ void NutsAndBolt::Update(GLfloat deltaT)
 
 	// Adds velocity fall-off for realistic effect
 	rotationSpeed += (0.f - rotationSpeed) * (NUTS_ROTATION_FALL_OFF / 3);
-	velocity += (glm::vec3(0, -0.0450, 0) - velocity) * NUTS_VELOCITY_FALL_OFF;
+	velocity += (glm::vec3(0, -0.0350, 0) - velocity) * NUTS_VELOCITY_FALL_OFF;
 
 	rotation += rotationSpeed * deltaT;
 
