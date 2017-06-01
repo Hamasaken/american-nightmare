@@ -60,7 +60,7 @@ bool LevelManager::Start(glm::vec2 screenSize, glm::vec2 screenPos, GLuint playe
 	// Popup Settings
 	popup = new Text();
 	if (popup == nullptr) return false;
-	if (!popup->Start(screenSize, FONT_PATH POPUP_FONT, 35.f, glm::vec3(0, 0.5f, 0))) return false;
+	if (!popup->Start(screenSize, FONT_PATH POPUP_FONT, 35.f, glm::vec3(0, 0.35f, 0))) return false;
 	popup->setShader(guiShader);
 	popup->CreateText("Popup!", glm::vec4(0.f));
 	popupAlpha = 0.0f;
