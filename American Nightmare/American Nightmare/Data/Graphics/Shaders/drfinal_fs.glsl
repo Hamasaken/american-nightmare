@@ -71,7 +71,7 @@ layout(location = 0) out vec4 fragment_color;
 
 float calculateDirShadow(vec3 lightSpacePos, vec3 normal, int shadowMapIndex)
 {
-	float bias = max(0.01 * (1.0 - dot(normal, lightSpace[shadowMapIndex].direction.xyz)), 0.005);
+	float bias = max(0.0009 * (1.0 - dot(normal, lightSpace[shadowMapIndex].direction.xyz)), 0.000045);
   
 	float currentDepth = lightSpacePos.z;
 	//float closestDepth = texture2D(dirShadowMaps[shadowMapIndex], lightSpacePos.xy).r; 
