@@ -168,6 +168,8 @@ void Player::Update(GLint deltaT, b2World* world)
 	if (vel.y > PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, PLAYER_MAX_VEL_Y));
 	if (vel.y < -PLAYER_MAX_VEL_Y) hitbox->getBody()->SetLinearVelocity(b2Vec2(vel.x, -PLAYER_MAX_VEL_Y));
 
+	if (!isHovering && hitbox->getBody()->GetLinearVelocity().y == 0) hasJumped = false;
+
 	// Updating animation texture
 	updateAnimation(deltaT);
 
