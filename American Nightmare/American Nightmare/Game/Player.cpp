@@ -12,7 +12,7 @@ Player::~Player() { }
 void Player::initiateCursor()
 {
 	SDL_ShowCursor(SDL_ENABLE);
-	this->cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_CROSSHAIR);
+	this->cursor = SDL_CreateSystemCursor(SDL_SystemCursor::SDL_SYSTEM_CURSOR_CROSSHAIR);
 	SDL_SetCursor(cursor);
 }
 

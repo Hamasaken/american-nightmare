@@ -64,9 +64,9 @@ void Screen::DrawObject(Object* object, ShaderManager* shaderManager)
 
 	// Rotating object
 	glm::vec3 rot = object->getRotation();
-	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
-	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
 	world = glm::rotate(world, rot.z, glm::vec3(0, 0, 1));
+	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
+	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
 
 	// Scaling object
 	glm::vec3 scale = object->getScale();
@@ -99,9 +99,9 @@ void Screen::DrawObjectDirShadowMap(Object* object, ShaderManager* shaderManager
 
 	// Rotating object
 	glm::vec3 rot = object->getRotation();
-	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
-	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
 	world = glm::rotate(world, rot.z, glm::vec3(0, 0, 1));
+	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
+	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
 
 	// Scaling object
 	glm::vec3 scale = object->getScale();
@@ -130,9 +130,9 @@ void Screen::DrawObjectDirShadowMapTransparent(Animation* animatedObj, ShaderMan
 
 	// Rotating object
 	glm::vec3 rot = animatedObj->getRotation();
-	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
-	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
 	world = glm::rotate(world, rot.z, glm::vec3(0, 0, 1));
+	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
+	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
 
 	// Scaling object
 	glm::vec3 scale = animatedObj->getScale();
@@ -167,9 +167,9 @@ void Screen::DrawObjectPointShadowMap(Object* object, ShaderManager* shaderManag
 
 	// Rotating object
 	glm::vec3 rot = object->getRotation();
-	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
-	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
 	world = glm::rotate(world, rot.z, glm::vec3(0, 0, 1));
+	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
+	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
 
 	// Scaling object
 	glm::vec3 scale = object->getScale();
@@ -207,9 +207,9 @@ void Screen::DrawObjectGUI(Object* object, ShaderManager * shaderManager)
 
 	// Rotating object
 	glm::vec3 rot = object->getRotation();
-	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
-	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
 	world = glm::rotate(world, rot.z, glm::vec3(0, 0, 1));
+	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
+	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
 
 	// Scaling object
 	glm::vec3 scale = object->getScale();
@@ -274,9 +274,9 @@ void Screen::DrawObjectAnimation(Animation* animatedObj, ShaderManager* shaderMa
 
 	// Rotating object
 	glm::vec3 rot = animatedObj->getRotation();
-	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
-	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
 	world = glm::rotate(world, rot.z, glm::vec3(0, 0, 1));
+	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
+	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
 
 	// Scaling object
 	glm::vec3 scale = animatedObj->getScale();
@@ -383,9 +383,9 @@ void Screen::DrawObjectGeometryPass(Object* object, ShaderManager* shaderManager
 
 	// Rotating object
 	glm::vec3 rot = object->getRotation();
-	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
-	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
 	world = glm::rotate(world, rot.z, glm::vec3(0, 0, 1));
+	world = glm::rotate(world, rot.y, glm::vec3(0, 1, 0));
+	world = glm::rotate(world, rot.x, glm::vec3(1, 0, 0));
 
 	// Scaling object
 	glm::vec3 scale = object->getScale();
