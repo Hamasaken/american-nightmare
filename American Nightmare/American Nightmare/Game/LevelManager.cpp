@@ -291,8 +291,15 @@ void LevelManager::Update(GLint deltaT)
 
 	// Updating player
 	player->Update(deltaT, world);
-	if (player->getIsDashing()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 10, glm::vec4(0.25f));
-	if (player->getIsHovering()) particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.25f));
+	if (player->getIsDashing()) 
+	{
+		camera->screenShake(300.f, 0.5f);
+		particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 1.5, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 15, glm::vec4(0.85f));
+	}
+	if (player->getIsHovering()) 
+	{
+		particleManager->EffectSmokeCloud(player->getPosition() - glm::vec3(0, player->getScale().y / 2, 0), materialManager->getMaterial("smokematerial")->getTextureID(), 1, glm::vec4(0.85f));
+	}
 
 	//For projectiles
 	if (!player->getIsDead())
@@ -306,7 +313,7 @@ void LevelManager::Update(GLint deltaT)
 				soundManager->playSFXOverDrive(SoundManager::SFX::SFX_FIRE, 30, 0.1f);
 				wasPressed = true;
 				player->decreaseNrOfProjectiles();
-				camera->screenShake(250.0f, 0.5f);
+				camera->screenShake(150.0f, 0.05f);
 
 				myPH->fireProjectiles(player->popProjectile(), world, player->getPlayerPosAsGLM(), player->getHasJumped(), player->getFireDirection());
 			}
