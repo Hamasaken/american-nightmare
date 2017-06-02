@@ -391,6 +391,82 @@ void LevelManager::ActivatePopup(std::string text, GLfloat timer)
 	popupTimer = timer;
 }
 
+bool LevelManager::LoadLevel(std::string levelPath, std::string archivePath)
+{
+	// Unload current level
+	StopMap();
+
+	////////////////////////////////////////////////////////////
+	// Loading Level
+	////////////////////////////////////////////////////////////
+	levelFile.readFromFile(levelPath.c_str());
+
+	// Loading archive from level
+	archive.readFromFile((ARCHIVE_PATH + std::string(levelFile.archives[0].data)).c_str()); // Remove under row and uncomment this when updated level file is uploaded
+//	archive.readFromFile(archivePath.c_str());
+	LoadArchiveTextures(archive.textures);
+	LoadArchiveMaterials(archive.materials);
+	LoadArchiveMeshes(archive.meshes);
+
+	// Loading current level stuff
+	LoadLevelMeshes(levelFile.meshes);
+	LoadLevelLights(levelFile.lights);
+	LoadLevelHitboxes(levelFile.hitboxes);
+	LoadLevelSpawners(levelFile.spawners);
+	LoadLevelTriggers(levelFile.triggers);
+	LoadLevelEffects(levelFile.effects);
+
+	// Setting start position
+	glm::vec3 start = glm::vec3(levelFile.levelHeader.playerSpawn[0], levelFile.levelHeader.playerSpawn[1] - 5, 0);
+	player->setPosition(start);
+	player->setStartingPosition(start);
+
+	// Music
+//	soundManager->playSong(SoundManager::SONG::JAZZY_INTERLUDE);
+	soundManager->playSong(SoundManager::SONG::SING_SING_SING);
+	soundManager->playSFXOverDrive(SoundManager::SFX::SFX_BIRDS, 90.f, 0);
+	
+	// Dust effect
+	particleManager->EffectLightDust(glm::vec3(50, 7.5, 0), glm::vec3(100, 15, 0), 125, glm::vec4(0.67f), 0.07f);
+
+	// Temp directional light for shadows
+	//lightManager->AddDirectionalLight(glm::vec4(5, 20, 10, 1), glm::vec4(-0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
+	//lightManager->AddDirectionalLight(glm::vec4(-5, 20, 20, 1), glm::vec4(0.5f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
+	//lightManager->AddDirectionalLight(glm::vec4(0, 20, 20, 1), glm::vec4(0.f, -0.5f, -1, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1.f);
+
+
+
+	Object* background = new Object();
+	background->setShader(mapShader);
+	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
+	background->setScale(glm::vec3(1024, 128, 1));
+	background->setPosition(glm::vec3(254, 64, -130));
+	map.push_back(background);
+
+	/*Object* test = new Object();
+	test->setShader(mapShader);
+	test->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
+	test->setScale(glm::vec3(1, 1, 1));
+	test->setPosition(glm::vec3(-5, 3, 2));
+	map.push_back(test);
+
+	Object* test2 = new Object();
+	test2->setShader(mapShader);
+	test2->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
+	test2->setScale(glm::vec3(1, 1, 1));
+	test2->setPosition(glm::vec3(5, 3, 2));
+	map.push_back(test2);
+
+	lightManager->Clear();
+	lightManager->AddPointLight(glm::vec4(-5, 3, 2, 1), glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 1, 1), 100, 1, 10.f, 1.f);
+	lightManager->AddPointLight(glm::vec4(5, 3, 2, 1), glm::vec4(0, 0, 1, 1), glm::vec4(1, 1, 1, 1), 100, 1, 10.f, 1.f);*/
+
+	// Loading temp level
+	//LoadTempLevel(shader);
+
+	return true;
+}
+
 void LevelManager::LoadArchiveMeshes(std::vector<AMesh> meshes)
 {
 	////////////////////////////////////////////////////////////
@@ -621,150 +697,6 @@ void LevelManager::LoadLevelEffects(std::vector<LEffect> effects)
 			break;
 		}
 	}
-}
-
-void LevelManager::LoadTempLevel()
-{
-	////////////////////////////////////////////////////////////
-	// Map Visuals
-	////////////////////////////////////////////////////////////
-	// Dammsugare in the middle of the screen
-	Entity* box = new Entity();
-	box->setShader(mapShader);
-	box->Start(meshManager->getMesh("pCube"), materialManager->getMaterial("lightmaterial"), world, glm::vec2(-10, 0), glm::vec3(8.f, 5.f, 0.5f), b2_staticBody);
-	box->setScale(glm::vec3(8, 5, 3));
-	map.push_back(box);
-
-	// Background
-	Object* background = new Object();
-	background->setShader(mapShader);
-	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
-	background->setScale(glm::vec3(40, 20, 1));
-	background->setPosition(glm::vec3(0, 10, -5));
-	map.push_back(background);
-
-	// Ground
-	background = new Object();
-	background->setShader(mapShader);
-	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"));
-	background->setScale(glm::vec3(40, 20, 1));
-	background->setPosition(glm::vec3(0, 0.5f, 0));
-	background->setRotation(glm::vec3(1.5 * 3.14, 0, 0));
-	map.push_back(background);
-
-	// Right wall
-	background = new Object();
-	background->setShader(mapShader);
-	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
-	background->setScale(glm::vec3(40, 20, 1));
-	background->setPosition(glm::vec3(19, 10, 0));
-	background->setRotation(glm::vec3(0, 1.5 * 3.14, 0));
-	map.push_back(background);
-
-	// Left wall
-	background = new Object();
-	background->setShader(mapShader);
-	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("backgroundmaterial"));
-	background->setScale(glm::vec3(40, 20, 1));
-	background->setPosition(glm::vec3(-19, 10, 0));
-	background->setRotation(glm::vec3(0, -1.5 * 3.14, 0));
-	map.push_back(background);
-
-	// Left platform
-	background = new Object();
-	background->setShader(mapShader);
-	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"));
-	background->setScale(glm::vec3(8, 5, 3));
-	background->setPosition(glm::vec3(-5, 0, 0));
-	map.push_back(background);
-
-	// Right platform cave
-	background = new Object();
-	background->setShader(mapShader);
-	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"));
-	background->setScale(glm::vec3(10.f, 15.f, 1));
-	background->setPosition(glm::vec3(10, 4.25, 0));
-	background->setRotation(glm::vec3(-45, 0, 0));
-	map.push_back(background);
-
-	////////////////////////////////////////////////////////////
-	// Fun boxes
-	////////////////////////////////////////////////////////////
-	for (int i = 0; i < 25; i++)
-	{
-		Entity* moveble = new Entity();
-		moveble->setShader(mapShader);
-		moveble->Start(meshManager->getMesh("quad"), materialManager->getMaterial("groundmaterial"), world, glm::vec2((rand() % 20) - 10, (rand() % 20)), glm::vec3(0.5f, 0.5f, 0.5f), b2_dynamicBody, b2Shape::e_polygon, false, 1.5f, 0.4f);
-		map.push_back(moveble);
-	}
-
-	////////////////////////////////////////////////////////////
-	// Map Collision (Invisible)
-	////////////////////////////////////////////////////////////
-	Hitbox* hitbox = new Hitbox();
-	hitbox->InitializeHitbox(world, glm::vec2(0, 0), glm::vec2(40.f, 1), b2_staticBody);	 // ground
-	hitboxes.push_back(hitbox);
-	hitbox = new Hitbox();
-	hitbox->InitializeHitbox(world, glm::vec2(10, 4.25f), glm::vec2(10.f, 1), b2_staticBody);	// platform
-	hitboxes.push_back(hitbox);
-	hitbox = new Hitbox();
-	hitbox->InitializeHitbox(world, glm::vec2(-19, 10), glm::vec2(1.f, 20.f), b2_staticBody);	// left wall
-	hitboxes.push_back(hitbox);
-	hitbox = new Hitbox();
-	hitbox->InitializeHitbox(world, glm::vec2(19, 10), glm::vec2(1.f, 20.f), b2_staticBody);	// right wall
-	hitboxes.push_back(hitbox);
-	hitbox = new Hitbox();
-	hitbox->InitializeHitbox(world, glm::vec2(-5, 0), glm::vec2(8.f, 5.f), b2_staticBody);	// dammsugare
-	hitboxes.push_back(hitbox);
-
-	////////////////////////////////////////////////////////////
-	// Action Triggers
-	////////////////////////////////////////////////////////////
-	Trigger* trigger = new Trigger();
-	trigger->InitializeTrigger(Trigger::EFFECT, world, glm::vec2(5, 10), glm::vec2(1.f, 1.f));
-	triggers.push_back(trigger);
-
-	trigger = new Trigger();
-	trigger->InitializeTrigger(Trigger::SPAWN, world, glm::vec2(-5, 7.5), glm::vec2(1.f, 1.f));
-	triggers.push_back(trigger);
-
-	// Triggers visual
-	background = new Object();
-	background->setShader(mapShader);
-	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
-	background->setScale(glm::vec3(1, 1, 1));
-	background->setPosition(glm::vec3(5, 10, 0));
-	background->setRotation(glm::vec3(0, 0, 0));
-	map.push_back(background);
-
-	// Trigger visual
-	background = new Object();
-	background->setShader(mapShader);
-	background->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
-	background->setScale(glm::vec3(1, 1, 1));
-	background->setPosition(glm::vec3(-5, 7.5, 0));
-	background->setRotation(glm::vec3(0, 0, 0));
-	map.push_back(background);
-
-	////////////////////////////////////////////////////////////
-	// Lights
-	////////////////////////////////////////////////////////////
-	Object* light = new Object();
-	light->setShader(mapShader);
-	light->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
-	light->setPosition(glm::vec3(-15, 1.5, -2.5));
-	map.push_back(light);
-
-	light = new Object();
-	light->setShader(mapShader);
-	light->Start(meshManager->getMesh("quad"), materialManager->getMaterial("lightmaterial"));
-	light->setPosition(glm::vec3(5, 7, 0));
-	map.push_back(light);
-
-	// Temp lights
-	lightManager->AddPointLight(glm::vec4(-15, 1.5, -2.5, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 5, 1, 0.5f, 0.5f);
-	lightManager->AddPointLight(glm::vec4(5, 7, 0, 1), glm::vec4(1, 1, 1, 1), glm::vec4(1, 1, 1, 1), 1, 1, 0.01f, 0.01f);
-
 }
 
 void LevelManager::CheckTriggers()

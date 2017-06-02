@@ -174,6 +174,12 @@ bool Program::Run()
 			}
 		}
 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F))
+		{
+			StartSDLWindow();
+		}
+
+
 		// Updating everything
 		if (!Update(deltaT))
 			done = true;
