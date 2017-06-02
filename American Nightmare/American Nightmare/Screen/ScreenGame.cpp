@@ -559,19 +559,6 @@ void ScreenGame::UpdatePlaying(GLint deltaT)
 
 	if (!camera->getUnlocked())
 	{
-		// Particle Managare Testing
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U))
-			particleManager->EffectExplosionLights(levelManager->getPlayer()->getPosition(), 10, glm::vec4(randBetweenF(0.1f, 0.25f), randBetweenF(0.60f, 0.80f), randBetweenF(0.60f, 1.f), randBetweenF(0.80f, 1)));
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::I))
-			particleManager->EffectSmokeCloud(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), 8);
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::O))
-		{
-			particleManager->EffectSmokeSignal(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("smokematerial")->getTextureID(), glm::pi<float>() * 0.5f, 5);
-			particleManager->EffectSmokeSignal(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("firematerial")->getTextureID(), glm::pi<float>() * 0.5f, 30);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K))
-			particleManager->EffectNutsAndBolts(levelManager->getPlayer()->getPosition(), materialManager->getMaterial("boltmaterial")->getTextureID(), 5);
-
 		// Updating particles effects
 		particleManager->Update(deltaT, levelManager->getPlayer()->getPosition());
 

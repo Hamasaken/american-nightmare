@@ -192,12 +192,6 @@ void ScreenManager::Update(GLint deltaT)
 	if(sf::Joystick::isConnected(0))
 		sf::Joystick::update();
 	
-	// Temporary state switching
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F1)) { goToState(Game); }
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F2) || sf::Joystick::isButtonPressed(0, 7)) { goToState(StartMeny);}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F3)) { goToState(Options); }
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F4)) {goToState(Posters);}
-
 	prevState = currentState;
 	switch (currentState)
 	{
