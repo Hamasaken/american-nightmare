@@ -37,7 +37,7 @@ void ProjectileHandler::Update(GLint deltaT, b2World* world, glm::vec2 position,
 		
 		if (abs(p->getHitbox()->getBody()->GetLinearVelocity().x) > 5.f)
 		{
-			if (rand() % 2 == 1)
+			if (rand() % 4 == 1)
 			{
 				GLuint texture = (!p->getIsZombiePart()) ? smoke : blood;
 				particleManager->EffectSmokeCloud(p->getPosition(), texture, 1, glm::vec4(0.9f), size);
